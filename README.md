@@ -11,6 +11,20 @@ TODO: Guide users through getting your code up and running on their own system. 
 # Build and Test
 TODO: Describe and show how to build your code and run the tests. 
 
+Create a .runsettings file in the solution folder. The only necessary content are settings for the two test parameters "baseUrl" and "credentialsFile", for example:
+```
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <!-- Parameters used by tests at run time -->
+  <TestRunParameters>
+    <Parameter name="baseUrl" value="https://example.proknow.com" />
+    <Parameter name="credentialsFile" value="C:/Users/user1/AppData/Local/ProKnow/credentials.json" />
+  </TestRunParameters>
+</RunSettings>
+```
+Refer to the following [instructions](https://docs.microsoft.com/en-us/visualstudio/test/configure-unit-tests-by-using-a-dot-runsettings-file) regarding how to use the .runsettings file when running tests in Visual Studio or from the command prompt.
+
+
 # Contribute
 TODO: Explain how other users and developers can contribute to make your code better. 
 
