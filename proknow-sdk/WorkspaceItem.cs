@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace proknow_sdk
+namespace ProKnow
 {
     /// <summary>
     /// Represents a workspace in a ProKnow organization

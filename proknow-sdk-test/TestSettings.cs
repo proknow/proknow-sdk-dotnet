@@ -2,7 +2,7 @@
 
 using System;
 
-namespace proknow_sdk_test
+namespace ProKnow.Test
 {
     [TestClass]
     public class TestSettings

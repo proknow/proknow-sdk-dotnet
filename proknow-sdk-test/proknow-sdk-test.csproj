@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>proknow_sdk_test</RootNamespace>
+    <RootNamespace>ProKnow.Test</RootNamespace>
     <RunSettingsFilePath>$(SolutionDir)\.runsettings</RunSettingsFilePath>
     <IsPackable>false</IsPackable>
   </PropertyGroup>

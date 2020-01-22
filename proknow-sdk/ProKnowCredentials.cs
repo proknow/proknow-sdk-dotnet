@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace proknow_sdk
+namespace ProKnow
 {
     /// <summary>
     /// POCO for contents of credentials JSON file from ProKnow

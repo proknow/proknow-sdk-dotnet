@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace proknow_sdk
+namespace ProKnow
 {
     /// <summary>
     /// Interacts with workspaces in a ProKnow organization

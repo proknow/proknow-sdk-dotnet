@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text.Json;
 
-namespace proknow_sdk
+namespace ProKnow
 {
     public class ProKnow
     {

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>proknow_sdk</RootNamespace>
+    <RootNamespace>ProKnow</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

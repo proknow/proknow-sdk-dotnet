@@ -4,7 +4,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace proknow_sdk
+namespace ProKnow
 {
     /// <summary>
     /// Issues requests to the ProKnow API
