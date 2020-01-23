@@ -19,7 +19,8 @@ Create a .runsettings file in the solution folder with the following content, ed
   <TestRunParameters>
     <Parameter name="baseUrl" value="https://example.proknow.com" />
     <Parameter name="credentialsFile" value="C:/Users/user1/AppData/Local/ProKnow/credentials.json" />
-    <Parameter name="testWorkspaceName" value="User1 Testing" />
+    <Parameter name="testWorkspaceName" value="User1 Testing Workspace" />
+    <Parameter name="testPatientName" value="User1 Testing Patient" />
   </TestRunParameters>
 </RunSettings>
 ```

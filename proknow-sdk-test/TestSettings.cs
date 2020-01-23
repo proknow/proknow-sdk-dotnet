@@ -26,6 +26,11 @@ namespace ProKnow.Test
         public static string TestWorkspaceName { get; set; }
 
         /// <summary>
+        /// The patient name for testing
+        /// </summary>
+        public static string TestPatientName { get; set; }
+
+        /// <summary>
         /// Initializes the test run
         /// </summary>
         /// <param name="context">Information that is passed to the unit tests</param>
@@ -39,6 +44,7 @@ namespace ProKnow.Test
             BaseUrl = context.Properties["baseUrl"].ToString();
             CredentialsFile = context.Properties["credentialsFile"].ToString();
             TestWorkspaceName = context.Properties["testWorkspaceName"].ToString();
+            TestPatientName = context.Properties["testPatientName"].ToString();
         }
     }
 }

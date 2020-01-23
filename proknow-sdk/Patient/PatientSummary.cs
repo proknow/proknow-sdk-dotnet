@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json;
+﻿using System.Collections.Generic;
 using ProKnow.Tools;
 
 namespace ProKnow.Patient
 {
     /// <summary>
-    /// Provides a summary of a patient in a ProKnow organization
+    /// Provides a summary of a patient in a ProKnow workspace
     /// </summary>
     public class PatientSummary
     {
