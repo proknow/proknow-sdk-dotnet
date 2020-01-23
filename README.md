@@ -11,7 +11,7 @@ TODO: Guide users through getting your code up and running on their own system. 
 # Build and Test
 TODO: Describe and show how to build your code and run the tests. 
 
-Create a .runsettings file in the solution folder. The only necessary content are settings for the two test parameters "baseUrl" and "credentialsFile", for example:
+Create a .runsettings file in the solution folder with the following content, edited appropriately:
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <RunSettings>
@@ -19,6 +19,7 @@ Create a .runsettings file in the solution folder. The only necessary content ar
   <TestRunParameters>
     <Parameter name="baseUrl" value="https://example.proknow.com" />
     <Parameter name="credentialsFile" value="C:/Users/user1/AppData/Local/ProKnow/credentials.json" />
+    <Parameter name="testWorkspaceName" value="User1 Testing" />
   </TestRunParameters>
 </RunSettings>
 ```
