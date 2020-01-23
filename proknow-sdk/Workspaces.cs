@@ -111,7 +111,7 @@ namespace ProKnow
         /// <summary>
         /// Resolves a workspace ID asynchronously
         /// </summary>
-        /// <param name="workspace">The ID of the workspace</param>
+        /// <param name="workspaceId">The ID of the workspace</param>
         /// <returns>The workspace item corresponding to the specified ID or null if no matching workspace was found</returns>
         public Task<WorkspaceItem> ResolveByIdAsync(string workspaceId)
         {
@@ -125,7 +125,7 @@ namespace ProKnow
         /// <summary>
         /// Resolves a workspace name asynchronously
         /// </summary>
-        /// <param name="workspace">The name of the workspace</param>
+        /// <param name="workspaceName">The name of the workspace</param>
         /// <returns>The workspace item corresponding to the specified name or null if no matching workspace was found</returns>
         public Task<WorkspaceItem> ResolveByNameAsync(string workspaceName)
         {
