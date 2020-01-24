@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -54,38 +53,28 @@ namespace ProKnow.Patient
         /// Creates a collection of patient summaries from their JSON representation
         /// </summary>
         /// <param name="workspaceId">ID of the workspace containing the patients</param>
-        /// <param name="patientsJson">JSON representation of a collection of patient summaries</param>
+        /// <param name="json">JSON representation of a collection of patient summaries</param>
         /// <returns>A collection of patient summaries</returns>
-        private IList<PatientSummary> DeserializePatients(string workspaceId, string patientsJson)
+        private IList<PatientSummary> DeserializePatients(string workspaceId, string json)
         {
-            var patientsData = JsonSerializer.Deserialize<IList<Dictionary<string, object>>>(patientsJson);
-            return patientsData.Select(p => new PatientSummary(this, workspaceId, p)).ToList();
+            var patientSummaries = JsonSerializer.Deserialize<IList<PatientSummary>>(json);
+            foreach (var patientSummary in patientSummaries)
+            {
+                patientSummary.PostProcessDeserialization(this, workspaceId);
+            }
+            return patientSummaries;
         }
 
         /// <summary>
         /// Creates a patient item from its JSON representation
         /// </summary>
         /// <param name="workspaceId">ID of the workspace containing the patients</param>
-        /// <param name="patientItemJson">JSON representation of the patient item</param>
+        /// <param name="json">JSON representation of the patient item</param>
         /// <returns>A patient item</returns>
-        private PatientItem DeserializePatient(string workspaceId, string patientItemJson)
+        private PatientItem DeserializePatient(string workspaceId, string json)
         {
-            var patientItem = JsonSerializer.Deserialize<PatientItem>(patientItemJson);
-            patientItem.Patients = this;
-            patientItem.WorkspaceId = workspaceId;
-
-            // Add properties that were specifically de-serialized into collection of unspecified properties de-serialized
-            patientItem.Data.Add("id", patientItem.Id);
-            patientItem.Data.Add("mrn", patientItem.Mrn);
-            patientItem.Data.Add("name", patientItem.Name);
-            patientItem.Data.Add("birth_date", patientItem.BirthDate);
-            patientItem.Data.Add("sex", patientItem.Sex);
-            patientItem.Data.Add("metadata", patientItem.Metadata);
-
-            //todo--Studies
-
-            //todo--Tasks
-
+            var patientItem = JsonSerializer.Deserialize<PatientItem>(json);
+            patientItem.PostProcessDeserialization(this, workspaceId);
             return patientItem;
         }
     }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ProKnow.Tools;
+using System.Text.Json.Serialization;
 
 namespace ProKnow.Patient
 {
@@ -12,60 +12,50 @@ namespace ProKnow.Patient
         /// <summary>
         /// The parent Patients object
         /// </summary>
+        [JsonIgnore]
         internal Patients Patients { get; set; }
+
+        /// <summary>
+        /// The workspace ID
+        /// </summary>
+        [JsonIgnore]
+        public string WorkspaceId { get; internal set; }
 
         /// <summary>
         /// The patient ProKnow ID
         /// </summary>
-        public string Id { get; internal set; }
-
-        /// <summary>
-        /// The patient workspace ID
-        /// </summary>
-        public string WorkspaceId { get; internal set; }
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
 
         /// <summary>
         /// The patient medical record number (MRN) or ID
         /// </summary>
-        public string Mrn { get; internal set; }
+        [JsonPropertyName("mrn")]
+        public string Mrn { get; set; }
 
         /// <summary>
         /// The patient name
         /// </summary>
-        public string Name { get; internal set; }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
 
         /// <summary>
         /// The patient birth date
         /// </summary>
-        public string BirthDate { get; internal set; }
+        [JsonPropertyName("birth_date")]
+        public string BirthDate { get; set; }
 
         /// <summary>
         /// The patient sex
         /// </summary>
-        public string Sex { get; internal set; }
+        [JsonPropertyName("sex")]
+        public string Sex { get; set; }
 
         /// <summary>
         /// All patient summary attributes
         /// </summary>
-        public Dictionary<string, object> Data { get; internal set; }
-
-        /// <summary>
-        /// Constructs a patient summary
-        /// </summary>
-        /// <param name="patients">The parent Patients object</param>
-        /// <param name="workspaceId">ID of the workspace containing the patient</param>
-        /// <param name="data">The patient summary attributes</param>
-        internal PatientSummary(Patients patients, string workspaceId, Dictionary<string, object> data)
-        {
-            Patients = patients;
-            Id = JsonTools.DeserializeString(data, "id");
-            WorkspaceId = workspaceId;
-            Mrn = JsonTools.DeserializeString(data, "mrn");
-            Name = JsonTools.DeserializeString(data, "name");
-            BirthDate = JsonTools.DeserializeString(data, "birth_date");
-            Sex = JsonTools.DeserializeString(data, "sex");
-            Data = data;
-        }
+        [JsonExtensionData]
+        public Dictionary<string, object> Data { get; set; }
 
         /// <summary>
         /// Asynchronously gets the corresponding patient item
@@ -74,6 +64,24 @@ namespace ProKnow.Patient
         public Task<PatientItem> GetAsync()
         {
             return Patients.GetAsync(WorkspaceId, Id);
+        }
+
+        /// <summary>
+        /// Finishes initialization of object after deserialization from JSON
+        /// </summary>
+        /// <param name="patients">The parent Patients object</param>
+        /// <param name="workspaceId">The workspace ID</param>
+        internal void PostProcessDeserialization(Patients patients, string workspaceId)
+        {
+            Patients = patients;
+            WorkspaceId = workspaceId;
+
+            // Add member properties to collection of deserialized properties that had no matching member
+            Data.Add("id", Id);
+            Data.Add("mrn", Mrn);
+            Data.Add("name", Name);
+            Data.Add("birth_date", BirthDate);
+            Data.Add("sex", Sex);
         }
     }
 }

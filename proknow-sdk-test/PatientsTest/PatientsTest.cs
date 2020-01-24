@@ -25,7 +25,7 @@ namespace ProKnow.Test
             var patientSummaries = await proKnow.Patients.QueryAsync(workspace.Id);
             var patientId = patientSummaries.First(p => p.Name == TestSettings.TestPatientName).Id;
             var patientItem = await proKnow.Patients.GetAsync(workspace.Id, patientId);
-            Assert.AreEqual(patientItem.Id, patientSummaries[0].Id);
+            Assert.AreEqual(patientItem.Id, patientId);
         }
     }
 }

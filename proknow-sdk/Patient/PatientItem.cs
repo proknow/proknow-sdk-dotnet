@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using ProKnow.Tools;
 
 namespace ProKnow.Patient
 {
@@ -63,8 +62,40 @@ namespace ProKnow.Patient
         [JsonPropertyName("metadata")]
         public Dictionary<string, object> Metadata { get; set; }
 
-        //todo--Studies
+        /// <summary>
+        /// Entities within this study
+        /// </summary>
+        [JsonPropertyName("studies")]
+        public IList<StudySummary> Studies { get; set; }
 
         //todo--Tasks
+
+        /// <summary>
+        /// Finishes initialization of object after deserialization from JSON
+        /// </summary>
+        /// <param name="patients">The parent Patients object</param>
+        /// <param name="workspaceId">The workspace ID</param>
+        internal void PostProcessDeserialization(Patients patients, string workspaceId)
+        {
+            Patients = patients;
+            WorkspaceId = workspaceId;
+
+            // Post-process deserialization of studies
+            foreach (var study in Studies)
+            {
+                study.PostProcessDeserialization(patients, workspaceId, Id);
+            }
+
+            //todo--Tasks
+
+            // Add member properties to collection of deserialized properties that had no matching member
+            Data.Add("id", Id);
+            Data.Add("mrn", Mrn);
+            Data.Add("name", Name);
+            Data.Add("birth_date", BirthDate);
+            Data.Add("sex", Sex);
+            Data.Add("metadata", Metadata);
+            Data.Add("studies", Studies);
+        }
     }
 }

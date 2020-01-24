@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -150,12 +149,16 @@ namespace ProKnow
         /// <summary>
         /// Creates a collection of workspace items from their JSON representation
         /// </summary>
-        /// <param name="workspacesJson">The JSON representation of the workspace items</param>
+        /// <param name="json">The JSON representation of the workspace items</param>
         /// <returns>A collection of workspace items</returns>
-        private IList<WorkspaceItem> DeserializeWorkspaces(string workspacesJson)
+        private IList<WorkspaceItem> DeserializeWorkspaces(string json)
         {
-            var workspaceItemsData = JsonSerializer.Deserialize<IList<Dictionary<string, object>>>(workspacesJson);
-            return workspaceItemsData.Select(w => new WorkspaceItem(this, w)).ToList();
+            var workspaceItems = JsonSerializer.Deserialize<IList<WorkspaceItem>>(json);
+            foreach (var workspaceItem in workspaceItems)
+            {
+                workspaceItem.PostProcessDeserialization(this);
+            }
+            return workspaceItems;
         }
     }
 }
