@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ProKnow.Tools;
 
 namespace ProKnow.Patient
@@ -64,6 +65,15 @@ namespace ProKnow.Patient
             BirthDate = JsonTools.DeserializeString(data, "birth_date");
             Sex = JsonTools.DeserializeString(data, "sex");
             Data = data;
+        }
+
+        /// <summary>
+        /// Asynchronously gets the corresponding patient item
+        /// </summary>
+        /// <returns>The corresponding patient item</returns>
+        public Task<PatientItem> GetAsync()
+        {
+            return Patients.GetAsync(WorkspaceId, Id);
         }
     }
 }
