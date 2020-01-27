@@ -84,7 +84,7 @@ namespace ProKnow
         /// <returns>A collection of workspace items</returns>
         public Task<IList<WorkspaceItem>> QueryAsync()
         {
-            Task<string> workspacesJson = _proKnow.Requestor.getAsync("/workspaces");
+            Task<string> workspacesJson = _proKnow.Requestor.GetAsync("/workspaces");
             return workspacesJson.ContinueWith(t => HandleQueryResponse(t.Result));
         }
 

@@ -28,8 +28,26 @@ namespace ProKnow.Patient
         /// <returns>The specified patient item or null if it was not found</returns>
         public Task<PatientItem> GetAsync(string workspaceId, string patientId)
         {
-            var patientJsonTask = _proKnow.Requestor.getAsync($"/workspaces/{workspaceId}/patients/{patientId}");
+            var patientJsonTask = _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/patients/{patientId}");
             return patientJsonTask.ContinueWith(t => DeserializePatient(workspaceId, t.Result));
+        }
+
+        /// <summary>
+        /// Looks up a collection of patients matching a given list of MRNs
+        /// </summary>
+        /// <param name="workspace">The workspace ProKnow ID</param>
+        /// <param name="mrns">The list of MRNs to look up</param>
+        /// <returns>A collection of patient summaries.  If the MRN at a given index cannot be found, the result will contain will
+        /// contain null at that index</returns>
+        public Task<IList<PatientSummary>> LookupAsync(string workspace, IList<string> mrns)
+        {
+            var workspaceItemTask = _proKnow.Workspaces.ResolveAsync(workspace);
+            return workspaceItemTask.ContinueWith(t1 =>
+            {
+                var workspaceId = t1.Result.Id;
+                var patientsJsonTask = _proKnow.Requestor.PostAsync($"/workspaces/{workspaceId}/patients/lookup", mrns);
+                return patientsJsonTask.ContinueWith(t2 => DeserializePatients(workspaceId, t2.Result));
+            }).Unwrap();
         }
 
         /// <summary>
@@ -40,11 +58,11 @@ namespace ProKnow.Patient
         /// <returns>A collection of patient summaries</returns>
         public Task<IList<PatientSummary>> QueryAsync(string workspace, string searchString = null)
         {
-            var workspaceIdTask = _proKnow.Workspaces.ResolveAsync(workspace);
-            return workspaceIdTask.ContinueWith(t1 =>
+            var workspaceItemTask = _proKnow.Workspaces.ResolveAsync(workspace);
+            return workspaceItemTask.ContinueWith(t1 =>
                 {
                     var workspaceId = t1.Result.Id;
-                    var patientsJsonTask = _proKnow.Requestor.getAsync($"/workspaces/{workspaceId}/patients");
+                    var patientsJsonTask = _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/patients");
                     return patientsJsonTask.ContinueWith(t2 => DeserializePatients(workspaceId, t2.Result));
                 }).Unwrap();
         }
@@ -60,7 +78,10 @@ namespace ProKnow.Patient
             var patientSummaries = JsonSerializer.Deserialize<IList<PatientSummary>>(json);
             foreach (var patientSummary in patientSummaries)
             {
-                patientSummary.PostProcessDeserialization(this, workspaceId);
+                if (patientSummary != null)
+                {
+                    patientSummary.PostProcessDeserialization(this, workspaceId);
+                }
             }
             return patientSummaries;
         }
