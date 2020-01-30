@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+
+using ProKnow.Patient.Entities;
 
 namespace ProKnow.Patient
 {
@@ -66,6 +70,54 @@ namespace ProKnow.Patient
         public IList<StudySummary> Studies { get; set; }
 
         //todo--Tasks
+
+        /// <summary>
+        /// Finds the entities for this patient that satisfy a predicate and/or properties
+        /// </summary>
+        /// <param name="predicate">An optional predicate for the search</param>
+        /// <param name="properties">Optional property filters (values)</param>
+        /// <returns>All of the patient entities that satisfy the predicate (if specified) and all property filters (if specified) or null
+        /// if none were found or neither a predicate nor property filters were specified</returns>
+        public IList<EntitySummary> FindEntities(Func<EntitySummary, bool> predicate = null, params KeyValuePair<string, object>[] properties)
+        {
+            IList<EntitySummary> matchingEntities = new List<EntitySummary>();
+            if (predicate == null && properties.Length == 0)
+            {
+                return matchingEntities;
+            }
+            foreach (var study in Studies)
+            {
+                foreach (var entityI in study.Entities)
+                {
+                    if (entityI.DoesMatch(predicate, properties))
+                    {
+                        matchingEntities.Add(entityI);
+                    }
+                    foreach (var entityJ in entityI.Entities)
+                    {
+                        if (entityJ.DoesMatch(predicate, properties))
+                        {
+                            matchingEntities.Add(entityJ);
+                        }
+                        foreach (var entityK in entityJ.Entities)
+                        {
+                            if (entityK.DoesMatch(predicate, properties))
+                            {
+                                matchingEntities.Add(entityK);
+                            }
+                            foreach (var entityM in entityK.Entities)
+                            {
+                                if (entityM.DoesMatch(predicate, properties))
+                                {
+                                    matchingEntities.Add(entityM);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return matchingEntities;
+        }
 
         /// <summary>
         /// Returns a string that represents the current object

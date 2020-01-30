@@ -3,7 +3,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProKnow.Test
+using ProKnow.Test;
+
+namespace ProKnow.Patient.Test
 {
     [TestClass]
     public class PatientsTest
