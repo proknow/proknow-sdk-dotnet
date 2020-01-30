@@ -49,32 +49,25 @@ namespace ProKnow
         /// Issues an asynchronous HTTP POST request
         /// </summary>
         /// <param name="route">The API route to use in the request</param>
-        /// <param name="keyValuePairs">Optional key value pairs for the content of the request body</param>
+        /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
+        /// <param name="content">Optional content for the body</param>
         /// <returns>A task that returns the response as a string</returns>
         /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
-        public Task<string> PostAsync(string route, params KeyValuePair<string, object>[] keyValuePairs)
+        public Task<string> PostAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/{route}");
-            request.Content = new StringContent(JsonSerializer.Serialize(keyValuePairs));
             request.Headers.Authorization = _authenticationHeaderValue;
-            var httpResponseMessage = _httpClient.SendAsync(request);
-            return httpResponseMessage.ContinueWith(t => HandleResponseAsync(t.Result)).Unwrap();
-        }
-
-        /// <summary>
-        /// Issues an asynchronous HTTP POST request
-        /// </summary>
-        /// <param name="route">The API route to use in the request</param>
-        /// <param name="values">A list of values for the request body</param>
-        /// <returns>A task that returns the response as a string</returns>
-        /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
-        public Task<string> PostAsync(string route, IList<string> values)
-        {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/{route}");
-            var temp1 = JsonSerializer.Serialize(values);
-            var temp2 = new StringContent(temp1, Encoding.UTF8, "application/json");
-            request.Content = temp2;
-            request.Headers.Authorization = _authenticationHeaderValue;
+            if (headerKeyValuePairs != null)
+            {
+                foreach (var kvp in headerKeyValuePairs)
+                {
+                    request.Headers.Add(kvp.Key, kvp.Value);
+                }
+            }
+            if (content != null)
+            {
+                request.Content = content;
+            }
             var httpResponseMessage = _httpClient.SendAsync(request);
             return httpResponseMessage.ContinueWith(t => HandleResponseAsync(t.Result)).Unwrap();
         }

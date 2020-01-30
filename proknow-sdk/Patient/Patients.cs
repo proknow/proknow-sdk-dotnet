@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -45,7 +47,8 @@ namespace ProKnow.Patient
             return workspaceItemTask.ContinueWith(t1 =>
             {
                 var workspaceId = t1.Result.Id;
-                var patientsJsonTask = _proKnow.Requestor.PostAsync($"/workspaces/{workspaceId}/patients/lookup", mrns);
+                var content = new StringContent(JsonSerializer.Serialize(mrns), Encoding.UTF8, "application/json");
+                var patientsJsonTask = _proKnow.Requestor.PostAsync($"/workspaces/{workspaceId}/patients/lookup", null, content);
                 return patientsJsonTask.ContinueWith(t2 => DeserializePatients(workspaceId, t2.Result));
             }).Unwrap();
         }
