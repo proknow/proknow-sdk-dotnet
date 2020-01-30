@@ -28,7 +28,7 @@ namespace ProKnow
         /// </summary>
         /// <param name="predicate">An optional predicate for the search</param>
         /// <param name="properties">Optional property filters (values)</param>
-        /// <returns>All workspace items that satisfy the predicate (if specified) and all property filters (if specified) or null
+        /// <returns>The first workspace item that satisfies the predicate (if specified) and all property filters (if specified) or null
         /// if none were found or neither a predicate nor property filters were specified</returns>
         public Task<WorkspaceItem> FindAsync(Func<WorkspaceItem, bool> predicate = null, params KeyValuePair<string, object>[] properties)
         {
@@ -37,45 +37,6 @@ namespace ProKnow
                 return QueryAsync().ContinueWith(_ => Find(predicate, properties));
             }
             return Task.FromResult(Find(predicate, properties));
-        }
-
-        /// <summary>
-        /// Finds a workspace item based on a predicate and/or properties
-        /// </summary>
-        /// <param name="predicate">An optional predicate for the search</param>
-        /// <param name="properties">Optional property filters (values)</param>
-        /// <returns>All workspace items that satisfy the predicate (if specified) and all property filters (if specified) or null
-        /// if none were found or neither a predicate nor property filters were specified</returns>
-        private WorkspaceItem Find(Func<WorkspaceItem, bool> predicate = null, params KeyValuePair<string, object>[] properties)
-        {
-            if (predicate == null && properties == null)
-            {
-                return null;
-            }
-            foreach (var workspaceItem in _cache)
-            {
-                bool match = true;
-                if (predicate != null && !predicate(workspaceItem))
-                {
-                    match = false;
-                }
-                else
-                {
-                    foreach (var kvp in properties)
-                    {
-                        if (!workspaceItem.Data.ContainsKey(kvp.Key) || !workspaceItem.Data[kvp.Key].Equals(kvp.Value))
-                        {
-                            match = false;
-                            break;
-                        }
-                    }
-                }
-                if (match)
-                {
-                    return workspaceItem;
-                }
-            }
-            return null;
         }
 
         /// <summary>
@@ -133,6 +94,29 @@ namespace ProKnow
                 throw new ArgumentException("The workspace name must be specified.");
             }
             return FindAsync(t => t.Name == workspaceName);
+        }
+
+        /// <summary>
+        /// Finds a workspace item based on a predicate and/or properties
+        /// </summary>
+        /// <param name="predicate">An optional predicate for the search</param>
+        /// <param name="properties">Optional property filters (values)</param>
+        /// <returns>The first workspace item that satisfies the predicate (if specified) and all property filters (if specified) or null
+        /// if none were found or neither a predicate nor property filters were specified</returns>
+        private WorkspaceItem Find(Func<WorkspaceItem, bool> predicate = null, params KeyValuePair<string, object>[] properties)
+        {
+            if (predicate == null && properties == null)
+            {
+                return null;
+            }
+            foreach (var workspaceItem in _cache)
+            {
+                if (workspaceItem.DoesMatch(predicate, properties))
+                {
+                    return workspaceItem;
+                }
+            }
+            return null;
         }
 
         /// <summary>

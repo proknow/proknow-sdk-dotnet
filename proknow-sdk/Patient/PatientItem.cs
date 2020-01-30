@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace ProKnow.Patient
@@ -8,11 +9,7 @@ namespace ProKnow.Patient
     /// </summary>
     public class PatientItem
     {
-        /// <summary>
-        /// The parent Patients object
-        /// </summary>
-        [JsonIgnore]
-        internal Patients Patients { get; set; }
+        private Requestor _requestor;
 
         /// <summary>
         /// The patient workspace ID
@@ -71,31 +68,31 @@ namespace ProKnow.Patient
         //todo--Tasks
 
         /// <summary>
+        /// Returns a string that represents the current object
+        /// </summary>
+        /// <returns>A string that represents the current object</returns>
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
+        }
+
+        /// <summary>
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
-        /// <param name="patients">The parent Patients object</param>
+        /// <param name="requestor">Issues requests to the ProKnow API</param>
         /// <param name="workspaceId">The workspace ID</param>
-        internal void PostProcessDeserialization(Patients patients, string workspaceId)
+        internal void PostProcessDeserialization(Requestor requestor, string workspaceId)
         {
-            Patients = patients;
+            _requestor = requestor;
             WorkspaceId = workspaceId;
 
             // Post-process deserialization of studies
             foreach (var study in Studies)
             {
-                study.PostProcessDeserialization(patients, workspaceId, Id);
+                study.PostProcessDeserialization(_requestor, WorkspaceId, Id);
             }
 
             //todo--Tasks
-
-            // Add member properties to collection of deserialized properties that had no matching member
-            Data.Add("id", Id);
-            Data.Add("mrn", Mrn);
-            Data.Add("name", Name);
-            Data.Add("birth_date", BirthDate);
-            Data.Add("sex", Sex);
-            Data.Add("metadata", Metadata);
-            Data.Add("studies", Studies);
         }
     }
 }

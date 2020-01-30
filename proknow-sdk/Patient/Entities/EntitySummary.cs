@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ProKnow.Patient.Entities
 {
@@ -8,11 +12,17 @@ namespace ProKnow.Patient.Entities
     /// </summary>
     public class EntitySummary
     {
-        /// <summary>
-        /// The parent Patients object
-        /// </summary>
-        [JsonIgnore]
-        internal Patients Patients { get; set; }
+        static private Dictionary<string, string> typeToRoutePartMap = new Dictionary<string, string>() {
+            { "image_set", "imagesets"},
+            { "structure_set", "structuresets" },
+            { "plan", "plans" },
+            { "dose", "doses" }
+        };
+        private const int RETRY_DELAY = 200;
+        private const int MAX_TOTAL_RETRY_DELAY = 5000;
+        private const int MAX_RETRIES = MAX_TOTAL_RETRY_DELAY / RETRY_DELAY;
+
+        private Requestor _requestor;
 
         /// <summary>
         /// The patient workspace ID
@@ -45,26 +55,105 @@ namespace ProKnow.Patient.Entities
         public IList<EntitySummary> Entities { get; set; }
 
         /// <summary>
+        /// Gets the corresponding entity item asynchronously
+        /// </summary>
+        /// <returns>The corresponding entity item</returns>
+        public async Task<EntityItem> GetAsync()
+        {
+            var numberOfRetries = 0;
+            while (true)
+            {
+                var entityItem = await GetEntityItemAsync();
+                if (entityItem.Data["status"].ToString() == "completed")
+                {
+                    return entityItem;
+                }
+                else
+                {
+                    if (numberOfRetries < MAX_RETRIES)
+                    {
+                        await Task.Delay(RETRY_DELAY);
+                        numberOfRetries++;
+                    }
+                    else
+                    {
+                        throw new TimeoutException($"Timeout while waiting for {Data["type"]} entity to reach completed status.");
+                    }
+                }
+            }
+         }
+
+        /// <summary>
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
-        /// <param name="patients">The parent Patients object</param>
+        /// <param name="requestor">Issues requests to the ProKnow API</param>
         /// <param name="workspaceId">The workspace ID</param>
         /// <param name="patientId">The patient ID</param>
-        internal void PostProcessDeserialization(Patients patients, string workspaceId, string patientId)
+        internal void PostProcessDeserialization(Requestor requestor, string workspaceId, string patientId)
         {
-            Patients = patients;
+            _requestor = requestor;
             WorkspaceId = workspaceId;
             PatientId = patientId;
 
             // Post-process deserialization of entities
             foreach (var entity in Entities)
             {
-                entity.PostProcessDeserialization(patients, workspaceId, patientId);
+                entity.PostProcessDeserialization(_requestor, WorkspaceId, PatientId);
             }
+        }
 
-            // Add member properties to collection of deserialized properties that had no matching member
-            Data.Add("id", Id);
-            Data.Add("entities", Entities);
+        /// <summary>
+        /// Returns a string that represents the current object
+        /// </summary>
+        /// <returns>A string that represents the current object</returns>
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
+        }
+
+        /// <summary>
+        /// Gets the corresponding entity item asynchronously
+        /// </summary>
+        /// <returns></returns>
+        private Task<EntityItem> GetEntityItemAsync()
+        {
+            var entityType = Data["type"].ToString();
+            if (!typeToRoutePartMap.ContainsKey(entityType))
+            {
+                throw new ArgumentOutOfRangeException("The entity 'type' must be one of 'image_set', 'structure_set', 'plan', or 'dose'.");
+            }
+            var entityRoutePart = typeToRoutePartMap[Data["type"].ToString()];
+            var entityJsonTask = _requestor.GetAsync($"/workspaces/{WorkspaceId}/{entityRoutePart}/{Id}");
+            return entityJsonTask.ContinueWith(t => DeserializeEntity(t.Result));
+        }
+
+        /// <summary>
+        /// Creates an entity item from its JSON representation
+        /// </summary>
+        /// <param name="json">JSON representation of the entity item</param>
+        /// <returns>An entity item</returns>
+        private EntityItem DeserializeEntity(string json)
+        {
+            EntityItem entityItem;
+            switch (Data["type"].ToString())
+            {
+                case "image_set":
+                    entityItem = JsonSerializer.Deserialize<ImageSetItem>(json);
+                    break;
+                case "structure_set":
+                    entityItem = JsonSerializer.Deserialize<StructureSetItem>(json);
+                    break;
+                case "plan":
+                    entityItem = JsonSerializer.Deserialize<PlanItem>(json);
+                    break;
+                case "dose":
+                    entityItem = JsonSerializer.Deserialize<DoseItem>(json);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("The entity 'type' must be one of 'image_set', 'structure_set', 'plan', or 'dose'.");
+            }
+            entityItem.PostProcessDeserialization(_requestor, WorkspaceId, PatientId);
+            return entityItem;
         }
     }
 }

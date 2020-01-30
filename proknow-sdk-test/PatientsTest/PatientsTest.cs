@@ -8,7 +8,16 @@ namespace ProKnow.Test
     [TestClass]
     public class PatientsTest
     {
-         [TestMethod]
+        [TestMethod]
+        public async Task FindAsyncTest()
+        {
+            var proKnow = new ProKnow(TestSettings.BaseUrl, TestSettings.CredentialsFile);
+            var workspace = await proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
+            var patientSummary = await proKnow.Patients.FindAsync(workspace.Id, p => p.Name == TestSettings.TestPatientName);
+            Assert.AreEqual(patientSummary.Name, TestSettings.TestPatientName);
+        }
+
+        [TestMethod]
         public async Task GetAsyncTest()
         {
             var proKnow = new ProKnow(TestSettings.BaseUrl, TestSettings.CredentialsFile);

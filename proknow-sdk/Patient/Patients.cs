@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -20,6 +21,34 @@ namespace ProKnow.Patient
         public Patients(ProKnow proKnow)
         {
             _proKnow = proKnow;
+        }
+
+        /// <summary>
+        /// Finds a patient in a workspace asynchronously based on a predicate and/or properties
+        /// </summary>
+        /// <param name="workspace">ID or name of the workspace containing the patients</param>
+        /// <param name="predicate">An optional predicate for the search</param>
+        /// <param name="properties">Optional property filters (values)</param>
+        /// <returns>The first patient that satisfies the predicate (if specified) and all property filters (if specified) or null
+        /// if none were found or neither a predicate nor property filters were specified</returns>
+        public Task<PatientSummary> FindAsync(string workspace, Func<PatientSummary, bool> predicate = null, params KeyValuePair<string, object>[] properties)
+        {
+            if (predicate == null && properties == null)
+            {
+                return null;
+            }
+            return QueryAsync(workspace).ContinueWith(patientSummariesTask =>
+            {
+                var patientSummaries = patientSummariesTask.Result;
+                foreach (var patientSummary in patientSummaries)
+                {
+                    if (patientSummary.DoesMatch(predicate, properties))
+                    {
+                        return patientSummary;
+                    }
+                }
+                return null;
+            });
         }
 
         /// <summary>
@@ -98,7 +127,7 @@ namespace ProKnow.Patient
         private PatientItem DeserializePatient(string workspaceId, string json)
         {
             var patientItem = JsonSerializer.Deserialize<PatientItem>(json);
-            patientItem.PostProcessDeserialization(this, workspaceId);
+            patientItem.PostProcessDeserialization(_proKnow.Requestor, workspaceId);
             return patientItem;
         }
     }
