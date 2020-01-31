@@ -60,63 +60,6 @@ namespace ProKnow.Patient
         public Dictionary<string, object> Data { get; set; }
 
         /// <summary>
-        /// Determines whether this object satisfies a predicate and/or specified property values
-        /// </summary>
-        /// <param name="predicate">The optional predicate</param>
-        /// <param name="properties">Optional properties</param>
-        /// <returns>True if this object satisfies the predicate (if specified) and all property filters (if specified); otherwise false</returns>
-        public bool DoesMatch(Func<PatientSummary, bool> predicate = null, params KeyValuePair<string, object>[] properties)
-        {
-            if (predicate != null && !predicate(this))
-            {
-                return false;
-            }
-            foreach (var kvp in properties)
-            {
-                switch (kvp.Key)
-                {
-                    case "id":
-                        if (!Id.Equals(kvp.Value))
-                        {
-                            return false;
-                        }
-                        break;
-                    case "mrn":
-                        if (!Mrn.Equals(kvp.Value))
-                        {
-                           return false;
-                        }
-                        break;
-                    case "name":
-                        if (!Name.Equals(kvp.Value))
-                        {
-                            return false;
-                        }
-                        break;
-                    case "birth_date":
-                        if (!BirthDate.Equals(kvp.Value))
-                        {
-                            return false;
-                        }
-                        break;
-                    case "sex":
-                        if (!Sex.Equals(kvp.Value))
-                        {
-                            return false;
-                        }
-                        break;
-                    default:
-                        if (!Data.ContainsKey(kvp.Key) || !Data[kvp.Key].Equals(kvp.Value))
-                        {
-                            return false;
-                        }
-                        break;
-                }
-            }
-            return true;
-        }
-
-        /// <summary>
         /// Asynchronously gets the corresponding patient item
         /// </summary>
         /// <returns>The corresponding patient item</returns>

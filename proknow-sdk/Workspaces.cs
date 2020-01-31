@@ -24,19 +24,18 @@ namespace ProKnow
         }
         
         /// <summary>
-        /// Finds a workspace item asynchronously based on a predicate and/or properties
+        /// Finds a workspace item asynchronously based on a predicate
         /// </summary>
-        /// <param name="predicate">An optional predicate for the search</param>
-        /// <param name="properties">Optional property filters (values)</param>
-        /// <returns>The first workspace item that satisfies the predicate (if specified) and all property filters (if specified) or null
-        /// if none were found or neither a predicate nor property filters were specified</returns>
-        public Task<WorkspaceItem> FindAsync(Func<WorkspaceItem, bool> predicate = null, params KeyValuePair<string, object>[] properties)
+        /// <param name="predicate">The predicate for the search</param>
+        /// <returns>The first workspace item that satisfies the predicate or null if the predicate was null or no workspace 
+        /// item satisfies the predicate</returns>
+        public Task<WorkspaceItem> FindAsync(Func<WorkspaceItem, bool> predicate)
         {
             if (_cache == null)
             {
-                return QueryAsync().ContinueWith(_ => Find(predicate, properties));
+                return QueryAsync().ContinueWith(_ => Find(predicate));
             }
-            return Task.FromResult(Find(predicate, properties));
+            return Task.FromResult(Find(predicate));
         }
 
         /// <summary>
@@ -97,21 +96,20 @@ namespace ProKnow
         }
 
         /// <summary>
-        /// Finds a workspace item based on a predicate and/or properties
+        /// Finds a workspace item based on a predicate
         /// </summary>
-        /// <param name="predicate">An optional predicate for the search</param>
-        /// <param name="properties">Optional property filters (values)</param>
-        /// <returns>The first workspace item that satisfies the predicate (if specified) and all property filters (if specified) or null
-        /// if none were found or neither a predicate nor property filters were specified</returns>
-        private WorkspaceItem Find(Func<WorkspaceItem, bool> predicate = null, params KeyValuePair<string, object>[] properties)
+        /// <param name="predicate">The predicate for the search</param>
+         /// <returns>The first workspace item that satisfies the predicate or null if the predicate was null or no workspace
+         /// item satisfies the predicate were found</returns>
+        private WorkspaceItem Find(Func<WorkspaceItem, bool> predicate)
         {
-            if (predicate == null && properties == null)
+            if (predicate == null)
             {
                 return null;
             }
             foreach (var workspaceItem in _cache)
             {
-                if (workspaceItem.DoesMatch(predicate, properties))
+                if (predicate(workspaceItem))
                 {
                     return workspaceItem;
                 }

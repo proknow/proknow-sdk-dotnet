@@ -24,16 +24,15 @@ namespace ProKnow.Patient
         }
 
         /// <summary>
-        /// Finds a patient in a workspace asynchronously based on a predicate and/or properties
+        /// Finds a patient in a workspace asynchronously based on a predicate
         /// </summary>
         /// <param name="workspace">ID or name of the workspace containing the patients</param>
-        /// <param name="predicate">An optional predicate for the search</param>
-        /// <param name="properties">Optional property filters (values)</param>
-        /// <returns>The first patient that satisfies the predicate (if specified) and all property filters (if specified) or null
-        /// if none were found or neither a predicate nor property filters were specified</returns>
-        public Task<PatientSummary> FindAsync(string workspace, Func<PatientSummary, bool> predicate = null, params KeyValuePair<string, object>[] properties)
+        /// <param name="predicate">The predicate for the search</param>
+        /// <returns>The first patient that satisfies the predicate or null if the predicate was null or no patient satisfies
+        /// the predicate</returns>
+        public Task<PatientSummary> FindAsync(string workspace, Func<PatientSummary, bool> predicate)
         {
-            if (predicate == null && properties == null)
+            if (predicate == null)
             {
                 return null;
             }
@@ -42,7 +41,7 @@ namespace ProKnow.Patient
                 var patientSummaries = patientSummariesTask.Result;
                 foreach (var patientSummary in patientSummaries)
                 {
-                    if (patientSummary.DoesMatch(predicate, properties))
+                    if (predicate(patientSummary))
                     {
                         return patientSummary;
                     }

@@ -57,51 +57,6 @@ namespace ProKnow.Patient.Entities
         //todo--Scorecards
 
         /// <summary>
-        /// Determines whether this object satisfies a predicate and/or specified property values
-        /// </summary>
-        /// <param name="predicate">The optional predicate</param>
-        /// <param name="properties">Optional properties</param>
-        /// <returns>True if this object satisfies the predicate (if specified) and all property filters (if specified); otherwise false</returns>
-        public virtual bool DoesMatch(Func<EntityItem, bool> predicate = null, params KeyValuePair<string, object>[] properties)
-        {
-            if (predicate != null && !predicate(this))
-            {
-                return false;
-            }
-            foreach (var kvp in properties)
-            {
-                switch (kvp.Key)
-                {
-                    case "id":
-                        if (!Id.Equals(kvp.Value))
-                        {
-                            return false;
-                        }
-                        break;
-                    case "description":
-                        if (!Description.Equals(kvp.Value))
-                        {
-                            return false;
-                        }
-                        break;
-                    case "metadata":
-                        if (!Metadata.Equals(kvp.Value))
-                        {
-                            return false;
-                        }
-                        break;
-                    default:
-                        if (!Data.ContainsKey(kvp.Key) || !Data[kvp.Key].Equals(kvp.Value))
-                        {
-                            return false;
-                        }
-                        break;
-                }
-            }
-            return true;
-        }
-
-        /// <summary>
         /// Returns a string that represents the current object
         /// </summary>
         /// <returns>A string that represents the current object</returns>
