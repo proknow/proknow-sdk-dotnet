@@ -48,6 +48,12 @@ namespace ProKnow.Patient.Entities
         [JsonPropertyName("metadata")]
         public Dictionary<string, object> Metadata { get; set; }
 
+        /// <summary>
+        /// The entity processing status
+        /// </summary>
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+
         //todo--Scorecards
 
         /// <summary>

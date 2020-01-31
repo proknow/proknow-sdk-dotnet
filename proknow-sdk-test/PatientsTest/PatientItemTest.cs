@@ -1,6 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using ProKnow.Test;
@@ -17,7 +15,7 @@ namespace ProKnow.Patients.Test
             var workspace = await proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
             var patientSummary = await proKnow.Patients.FindAsync(workspace.Id, p => p.Name == TestSettings.TestPatientName);
             var patientItem = await patientSummary.GetAsync();
-            var imageSetEntities = patientItem.FindEntities(e => e.Data["type"].ToString() == "image_set");
+            var imageSetEntities = patientItem.FindEntities(e => e.Type == "image_set");
             Assert.AreEqual(imageSetEntities.Count, 1);
         }
 
@@ -28,7 +26,7 @@ namespace ProKnow.Patients.Test
             var workspace = await proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
             var patientSummary = await proKnow.Patients.FindAsync(workspace.Id, p => p.Name == TestSettings.TestPatientName);
             var patientItem = await patientSummary.GetAsync();
-            var structureSetEntities = patientItem.FindEntities(e => e.Data["type"].ToString() == "structure_set");
+            var structureSetEntities = patientItem.FindEntities(e => e.Type == "structure_set");
             Assert.AreEqual(structureSetEntities.Count, 1);
         }
 
@@ -39,7 +37,7 @@ namespace ProKnow.Patients.Test
             var workspace = await proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
             var patientSummary = await proKnow.Patients.FindAsync(workspace.Id, p => p.Name == TestSettings.TestPatientName);
             var patientItem = await patientSummary.GetAsync();
-            var planEntities = patientItem.FindEntities(e => e.Data["type"].ToString() == "plan");
+            var planEntities = patientItem.FindEntities(e => e.Type == "plan");
             Assert.AreEqual(planEntities.Count, 1);
         }
 
@@ -50,7 +48,7 @@ namespace ProKnow.Patients.Test
             var workspace = await proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
             var patientSummary = await proKnow.Patients.FindAsync(workspace.Id, p => p.Name == TestSettings.TestPatientName);
             var patientItem = await patientSummary.GetAsync();
-            var doseEntities = patientItem.FindEntities(e => e.Data["type"].ToString() == "dose");
+            var doseEntities = patientItem.FindEntities(e => e.Type == "dose");
             Assert.AreEqual(doseEntities.Count, 1);
         }
 

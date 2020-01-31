@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ProKnow.Patient.Entities
@@ -41,6 +40,12 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         [JsonPropertyName("id")]
         public string Id { get; set; }
+
+        /// <summary>
+        /// The entity type
+        /// </summary>
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
 
         /// <summary>
         /// All entity summary attributes
@@ -97,7 +102,7 @@ namespace ProKnow.Patient.Entities
             while (true)
             {
                 var entityItem = await GetEntityItemAsync();
-                if (entityItem.Data["status"].ToString() == "completed")
+                if (entityItem.Status == "completed")
                 {
                     return entityItem;
                 }
@@ -110,7 +115,7 @@ namespace ProKnow.Patient.Entities
                     }
                     else
                     {
-                        throw new TimeoutException($"Timeout while waiting for {Data["type"]} entity to reach completed status.");
+                        throw new TimeoutException($"Timeout while waiting for {Type} entity to reach completed status.");
                     }
                 }
             }
@@ -150,12 +155,11 @@ namespace ProKnow.Patient.Entities
         /// <returns></returns>
         private Task<EntityItem> GetEntityItemAsync()
         {
-            var entityType = Data["type"].ToString();
-            if (!typeToRoutePartMap.ContainsKey(entityType))
+            if (!typeToRoutePartMap.ContainsKey(Type))
             {
                 throw new ArgumentOutOfRangeException("The entity 'type' must be one of 'image_set', 'structure_set', 'plan', or 'dose'.");
             }
-            var entityRoutePart = typeToRoutePartMap[Data["type"].ToString()];
+            var entityRoutePart = typeToRoutePartMap[Type];
             var entityJsonTask = _requestor.GetAsync($"/workspaces/{WorkspaceId}/{entityRoutePart}/{Id}");
             return entityJsonTask.ContinueWith(t => DeserializeEntity(t.Result));
         }
@@ -168,7 +172,7 @@ namespace ProKnow.Patient.Entities
         private EntityItem DeserializeEntity(string json)
         {
             EntityItem entityItem;
-            switch (Data["type"].ToString())
+            switch (Type)
             {
                 case "image_set":
                     entityItem = JsonSerializer.Deserialize<ImageSetItem>(json);
