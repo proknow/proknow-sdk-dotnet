@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace ProKnow.Patient.Entities
 {
     /// <summary>
     /// The base class for entities in a ProKnow patient
     /// </summary>
-    public class EntityItem
+    public abstract class EntityItem
     {
-        private Requestor _requestor;
+        /// <summary>
+        /// Issues requests to the ProKnow API
+        /// </summary>
+        protected Requestor _requestor;
 
         /// <summary>
         /// The patient workspace ID
@@ -31,10 +35,22 @@ namespace ProKnow.Patient.Entities
         public string Id { get; set; }
 
         /// <summary>
-        /// All entity attributes
+        /// The entity type
         /// </summary>
-        [JsonExtensionData]
-        public Dictionary<string, object> Data { get; set; }
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// The entity series instance UID (image_set types) or SOP instance UID (other types)
+        /// </summary>
+        [JsonPropertyName("uid")]
+        public string Uid { get; set; }
+
+        /// <summary>
+        /// The entity modality
+        /// </summary>
+        [JsonPropertyName("modality")]
+        public string Modality { get; set; }
 
         /// <summary>
         /// The entity description
@@ -54,7 +70,20 @@ namespace ProKnow.Patient.Entities
         [JsonPropertyName("status")]
         public string Status { get; set; }
 
+        /// <summary>
+        /// Properties encountered during deserialization without matching members
+        /// </summary>
+        [JsonExtensionData]
+        public Dictionary<string, object> ExtensionData { get; set; }
+
         //todo--Scorecards
+
+        /// <summary>
+        /// Downloads this entity as DICOM object(s) to the specified folder
+        /// </summary>
+        /// <param name="root">The full path to the destination root folder</param>
+        /// <returns>The full path to the destination folder (root or a sub-folder) to which the file(s) were downloaded</returns>
+        public abstract Task<string> Download(string root);
 
         /// <summary>
         /// Returns a string that represents the current object

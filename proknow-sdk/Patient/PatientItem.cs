@@ -27,10 +27,10 @@ namespace ProKnow.Patient
         public string Id { get; set; }
 
         /// <summary>
-        /// All patient attributes
+        /// Properties encountered during deserialization without matching members
         /// </summary>
         [JsonExtensionData]
-        public Dictionary<string, object> Data { get; set; }
+        public Dictionary<string, object> ExtensionData { get; set; }
 
         /// <summary>
         /// The patient medical record number (MRN) or ID

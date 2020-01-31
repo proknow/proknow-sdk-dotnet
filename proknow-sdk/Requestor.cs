@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -13,7 +15,10 @@ namespace ProKnow
     public class Requestor
     {
         // HttpClient is intended to be instantiated once per application, rather than per-use
-        private static readonly HttpClient _httpClient = new HttpClient();
+        private static readonly HttpClient _httpClient = new HttpClient(new HttpClientHandler()
+        {
+            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+        });
 
         private string _baseUrl;
         private AuthenticationHeaderValue _authenticationHeaderValue;
@@ -69,6 +74,31 @@ namespace ProKnow
             }
             var httpResponseMessage = _httpClient.SendAsync(request);
             return httpResponseMessage.ContinueWith(t => HandleResponseAsync(t.Result)).Unwrap();
+        }
+
+        /// <summary>
+        /// Issues an asynchronous HTTP GET request with a streaming response
+        /// </summary>
+        /// <param name="route">The API route to use in the request</param>
+        /// <param name="path">The full path to the file to which to write the response</param>
+        /// <returns>The full path to the file containing the response</returns>
+        public async Task<string> StreamAsync(string route, string path)
+        {
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}/{route}");
+            request.Headers.Authorization = _authenticationHeaderValue;
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
+            using (var httpResponseMessage = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead))
+            {
+                using (var streamToReadFrom = await httpResponseMessage.Content.ReadAsStreamAsync())
+                {
+                    using (var streamToWriteTo = File.Open(path, FileMode.Create))
+                    {
+                        await streamToReadFrom.CopyToAsync(streamToWriteTo);
+                    }
+                }
+            }
+            return path;
         }
 
         /// <summary>

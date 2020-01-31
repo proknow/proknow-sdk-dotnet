@@ -31,10 +31,10 @@ namespace ProKnow.Patient
         public string Id { get; set; }
 
         /// <summary>
-        /// All study summary attributes
+        /// Properties encountered during deserialization without matching members
         /// </summary>
         [JsonExtensionData]
-        public Dictionary<string, object> Data { get; set; }
+        public Dictionary<string, object> ExtensionData { get; set; }
 
         /// <summary>
         /// Entities within this study

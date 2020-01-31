@@ -41,10 +41,10 @@ namespace ProKnow
         public bool Protected { get; set; }
 
         /// <summary>
-        /// All workspace attributes
+        /// Properties encountered during deserialization without matching members
         /// </summary>
         [JsonExtensionData]
-        public Dictionary<string, object> Data { get; set; }
+        public Dictionary<string, object> ExtensionData { get; set; }
 
         /// <summary>
         /// Returns a string that represents the current object

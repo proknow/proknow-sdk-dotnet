@@ -54,10 +54,10 @@ namespace ProKnow.Patient
         public string Sex { get; set; }
 
         /// <summary>
-        /// All patient summary attributes
+        /// Properties encountered during deserialization without matching members
         /// </summary>
         [JsonExtensionData]
-        public Dictionary<string, object> Data { get; set; }
+        public Dictionary<string, object> ExtensionData { get; set; }
 
         /// <summary>
         /// Asynchronously gets the corresponding patient item

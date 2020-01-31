@@ -48,7 +48,7 @@ namespace ProKnow.Patient.Entities
         public string Type { get; set; }
 
         /// <summary>
-        /// The entity SOP instance UID
+        /// The entity series instance UID (image_set types) or SOP instance UID (other types)
         /// </summary>
         [JsonPropertyName("uid")]
         public string Uid { get; set; }
@@ -96,10 +96,10 @@ namespace ProKnow.Patient.Entities
         public IList<EntitySummary> Entities { get; set; }
 
         /// <summary>
-        /// All entity summary attributes
+        /// Properties encountered during deserialization without matching members
         /// </summary>
         [JsonExtensionData]
-        public Dictionary<string, object> Data { get; set; }
+        public Dictionary<string, object> ExtensionData { get; set; }
 
         /// <summary>
         /// Gets the corresponding entity item asynchronously
