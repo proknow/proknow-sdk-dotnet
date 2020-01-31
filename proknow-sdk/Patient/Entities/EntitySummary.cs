@@ -48,16 +48,58 @@ namespace ProKnow.Patient.Entities
         public string Type { get; set; }
 
         /// <summary>
-        /// All entity summary attributes
+        /// The entity SOP instance UID
         /// </summary>
-        [JsonExtensionData]
-        public Dictionary<string, object> Data { get; set; }
+        [JsonPropertyName("uid")]
+        public string Uid { get; set; }
+
+        /// <summary>
+        /// The entity modality
+        /// </summary>
+        [JsonPropertyName("modality")]
+        public string Modality { get; set; }
+
+        /// <summary>
+        /// The entity description
+        /// </summary>
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// The entity series instance UID
+        /// </summary>
+        [JsonPropertyName("series_uid")]
+        public string SeriesUid { get; set; }
+
+        /// <summary>
+        /// The entity frame of reference UID
+        /// </summary>
+        [JsonPropertyName("frame_of_reference")]
+        public string FrameOfReferenceUid { get; set; }
+
+        /// <summary>
+        /// The entity metadata (custom metrics)
+        /// </summary>
+        [JsonPropertyName("metadata")]
+        public Dictionary<string, object> Metadata { get; set; }
+
+        /// <summary>
+        /// The entity processing status
+        /// </summary>
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
 
         /// <summary>
         /// Entities within this entity
         /// </summary>
         [JsonPropertyName("entities")]
         public IList<EntitySummary> Entities { get; set; }
+
+        /// <summary>
+        /// All entity summary attributes
+        /// </summary>
+        [JsonExtensionData]
+        public Dictionary<string, object> Data { get; set; }
 
         /// <summary>
         /// Determines whether this object satisfies a predicate and/or specified property values
