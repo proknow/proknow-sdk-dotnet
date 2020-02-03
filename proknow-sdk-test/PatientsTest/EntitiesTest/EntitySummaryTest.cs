@@ -15,11 +15,11 @@ namespace ProKnow.Patients.Entities.Test
             var workspace = await proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
             var patientSummary = await proKnow.Patients.FindAsync(workspace.Id, t => t.Name == TestSettings.TestPatientName);
             var patientItem = await patientSummary.GetAsync();
-            var imageSetSummary = patientItem.Studies[0].Entities[0]; //todo--use FindEntities
-            var imageSetItem = await imageSetSummary.GetAsync();
+            var entitySummary = patientItem.FindEntities(e => e.Type == "image_set")[0];
+            var imageSetItem = await entitySummary.GetAsync();
             Assert.AreEqual(imageSetItem.WorkspaceId, workspace.Id);
             Assert.AreEqual(imageSetItem.PatientId, patientItem.Id);
-            Assert.AreEqual(imageSetItem.Id, imageSetSummary.Id);
+            Assert.AreEqual(imageSetItem.Id, entitySummary.Id);
         }
 
         [TestMethod]
@@ -29,11 +29,11 @@ namespace ProKnow.Patients.Entities.Test
             var workspace = await proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
             var patientSummary = await proKnow.Patients.FindAsync(workspace.Id, t => t.Name == TestSettings.TestPatientName);
             var patientItem = await patientSummary.GetAsync();
-            var structureSetSummary = patientItem.Studies[0].Entities[0].Entities[0]; //todo--use FindEntities
-            var structureSetItem = await structureSetSummary.GetAsync();
+            var entitySummary = patientItem.FindEntities(e => e.Type == "structure_set")[0];
+            var structureSetItem = await entitySummary.GetAsync();
             Assert.AreEqual(structureSetItem.WorkspaceId, workspace.Id);
             Assert.AreEqual(structureSetItem.PatientId, patientItem.Id);
-            Assert.AreEqual(structureSetItem.Id, structureSetSummary.Id);
+            Assert.AreEqual(structureSetItem.Id, entitySummary.Id);
         }
 
         [TestMethod]
@@ -43,11 +43,11 @@ namespace ProKnow.Patients.Entities.Test
             var workspace = await proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
             var patientSummary = await proKnow.Patients.FindAsync(workspace.Id, t => t.Name == TestSettings.TestPatientName);
             var patientItem = await patientSummary.GetAsync();
-            var planSummary = patientItem.Studies[0].Entities[0].Entities[0].Entities[0]; //todo--use FindEntities
-            var planItem = await planSummary.GetAsync();
+            var entitySummary = patientItem.FindEntities(e => e.Type == "plan")[0];
+            var planItem = await entitySummary.GetAsync();
             Assert.AreEqual(planItem.WorkspaceId, workspace.Id);
             Assert.AreEqual(planItem.PatientId, patientItem.Id);
-            Assert.AreEqual(planItem.Id, planSummary.Id);
+            Assert.AreEqual(planItem.Id, entitySummary.Id);
         }
 
         [TestMethod]
@@ -57,11 +57,11 @@ namespace ProKnow.Patients.Entities.Test
             var workspace = await proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
             var patientSummary = await proKnow.Patients.FindAsync(workspace.Id, t => t.Name == TestSettings.TestPatientName);
             var patientItem = await patientSummary.GetAsync();
-            var doseSummary = patientItem.Studies[0].Entities[0].Entities[0].Entities[0].Entities[0]; //todo--use FindEntities
-            var doseItem = await doseSummary.GetAsync();
+            var entitySummary = patientItem.FindEntities(e => e.Type == "dose")[0];
+            var doseItem = await entitySummary.GetAsync();
             Assert.AreEqual(doseItem.WorkspaceId, workspace.Id);
             Assert.AreEqual(doseItem.PatientId, patientItem.Id);
-            Assert.AreEqual(doseItem.Id, doseSummary.Id);
+            Assert.AreEqual(doseItem.Id, entitySummary.Id);
         }
     }
 }

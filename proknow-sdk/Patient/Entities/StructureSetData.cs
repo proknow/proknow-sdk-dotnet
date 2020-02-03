@@ -5,21 +5,27 @@ using System.Text.Json.Serialization;
 namespace ProKnow.Patient.Entities
 {
     /// <summary>
-    /// A container for image data
+    /// A container for the structure set entity data
     /// </summary>
-    public class Image
+    public class StructureSetData
     {
         /// <summary>
-        /// The image ProKnow ID
+        /// The version ID
         /// </summary>
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
+        [JsonPropertyName("version")]
+        public string VersionId { get; set; }
 
         /// <summary>
-        /// The SOP instance UID
+        /// The label
         /// </summary>
-        [JsonPropertyName("uid")]
-        public string Uid { get; set; }
+        [JsonPropertyName("label")]
+        public string Label { get; set; }
+
+        /// <summary>
+        /// The name
+        /// </summary>
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
 
         /// <summary>
         /// Properties encountered during deserialization without matching members

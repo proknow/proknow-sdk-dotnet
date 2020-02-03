@@ -8,7 +8,7 @@ using ProKnow.Test;
 namespace ProKnow.Patients.Entities.Test
 {
     [TestClass]
-    public class ImageSetItemTest
+    public class StructureSetItemTest
     {
         [TestMethod]
         public async Task DownloadAsyncTest()
@@ -17,11 +17,11 @@ namespace ProKnow.Patients.Entities.Test
             var workspace = await proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
             var patientSummary = await proKnow.Patients.FindAsync(workspace.Id, t => t.Name == TestSettings.TestPatientName);
             var patientItem = await patientSummary.GetAsync();
-            var entitySummary = patientItem.FindEntities(t => t.Type == "image_set").First();
-            var imageSetItem = await entitySummary.GetAsync();
-            string rootFolder = Path.Combine(Path.GetTempPath(), "ImageSetItemTest_DownloadAsyncTest");
-            string imageSetFolder = await imageSetItem.Download(rootFolder);
-            Directory.Delete(rootFolder, true);
+            var entitySummary = patientItem.FindEntities(t => t.Type == "structure_set").First();
+            var structureSetItem = await entitySummary.GetAsync();
+            string folder = Path.Combine(Path.GetTempPath(), "StructureSetItemTest_DownloadAsyncTest");
+            string file = await structureSetItem.Download(folder);
+            Directory.Delete(folder, true);
         }
     }
 }
