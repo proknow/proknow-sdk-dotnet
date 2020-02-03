@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -87,10 +88,9 @@ namespace ProKnow.Patient.Entities
             var numberOfRetries = 0;
             while (true)
             {
-                var json = await _requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/versions/{Data.VersionId}/status");
-                var response = JsonSerializer.Deserialize<StructureSetVersionStatus>(json);
-                
-                if (response.Status == "ready")
+                var jsonString = await _requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/versions/{Data.VersionId}/status");
+                var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonString);
+                if (keyValuePairs["status"] == "ready")
                 {
                     break;
                 }

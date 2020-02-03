@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace ProKnow.Patient.Entities
@@ -11,11 +12,20 @@ namespace ProKnow.Patient.Entities
         /// <summary>
         /// Downloads this entity as DICOM object(s) to the specified folder
         /// </summary>
-        /// <param name="root">The full path to the destination root folder</param>
+        /// <param name="folder">The full path to the destination root folder</param>
         /// <returns>The full path to the destination folder (root or a sub-folder) to which the file(s) were downloaded</returns>
-        public override Task<string> Download(string root)
+        public override Task<string> Download(string folder)
         {
-            throw new NotImplementedException("PlanItem.Download()");
+            if (File.Exists(folder))
+            {
+                throw new ArgumentException($"The destination folder path '{folder}' is a path to an existing file.");
+            }
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+            var file = Path.Combine(folder, $"RP.{Uid}.dcm");
+            return _requestor.StreamAsync($"/workspaces/{WorkspaceId}/plans/{Id}/dicom", file);
         }
     }
 }
