@@ -31,8 +31,15 @@ namespace ProKnow.Upload.Test
             // Make sure the file was uploaded
             var patientSummary = await proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Mrn == patientIdAndName);
             var patientItem = await patientSummary.GetAsync();
-            var entitySummary = patientItem.FindEntities(e => e.Type == "structure_set").First();
-            Assert.AreEqual(entitySummary.Uid, "1.2.840.10008.5.1.4.1.1.481.3.1535997926");
+            while (true)
+            {
+                var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
+                if (entitySummaries.Count > 0)
+                {
+                    Assert.AreEqual(entitySummaries[0].Uid, "1.2.840.10008.5.1.4.1.1.481.3.1535997926");
+                    break;
+                }
+            }
 
             // Delete the test patient
             await proKnow.Patients.DeleteAsync(workspaceItem.Id, patientItem.Id);

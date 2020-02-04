@@ -15,10 +15,7 @@ namespace ProKnow.Upload
     public class Uploads
     {
         private ProKnow _proKnow;
-        private JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
-            {
-                IgnoreNullValues = true
-            };
+        private JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
 
         /// <summary>
         /// Constructs an Uploads object
@@ -47,6 +44,13 @@ namespace ProKnow.Upload
             return new UploadFileResult { Path = path, Response = initiateFileUploadResponse };
         }
 
+        /// <summary>
+        /// Initiates a file upload asynchronously
+        /// </summary>
+        /// <param name="workspaceId">The ProKnow ID of the destination workspace</param>
+        /// <param name="path">The full path to the file</param>
+        /// <param name="overrides">Optional overrides to be applied to the data</param>
+        /// <returns>The response from the file upload initiation</returns>
         private Task<InitiateFileUploadResponse> InitiateFileUploadAsync(string workspaceId, string path, UploadFileOverrides overrides = null)
         {
             var requestBody = BuildInitiateFileUploadRequestBody(path, overrides);
@@ -54,6 +58,36 @@ namespace ProKnow.Upload
                 .ContinueWith(t => JsonSerializer.Deserialize<InitiateFileUploadResponse>(t.Result));
         }
 
+        /// <summary>
+        /// Builds the body for an initiate file upload request
+        /// </summary>
+        /// <param name="path">The full path to the file</param>
+        /// <param name="overrides">Optional overrides to be applied to the data</param>
+        /// <returns>The content for the body</returns>
+        private HttpContent BuildInitiateFileUploadRequestBody(string path, UploadFileOverrides overrides = null)
+        {
+            using (var md5 = MD5.Create())
+            {
+                using (var stream = File.OpenRead(path))
+                {
+                    var uploadFileRequest = new InitiateFileUploadRequestBody
+                    {
+                        Checksum = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower(),
+                        Path = path,
+                        Filesize = stream.Length,
+                        IsMultipart = false,
+                        Overrides = overrides
+                    };
+                    var json = JsonSerializer.Serialize(uploadFileRequest, _jsonSerializerOptions);
+                    return new StringContent(json, Encoding.UTF8, "application/json");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Uploads file contents as a single chunk
+        /// </summary>
+        /// <param name="initiateFileUploadResponse">The response from the request to initiate the file upload</param>
         private async Task UploadChunkAsync(InitiateFileUploadResponse initiateFileUploadResponse)
         {
             var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
@@ -73,26 +107,6 @@ namespace ProKnow.Upload
                 {
                     content.Add(new StreamContent(fs), "file", initiateFileUploadResponse.Path);
                     await _proKnow.Requestor.PostAsync("/uploads/chunks", headerKeyValuePairs, content);
-                }
-            }
-        }
-
-        private HttpContent BuildInitiateFileUploadRequestBody(string path, UploadFileOverrides overrides = null)
-        {
-            using (var md5 = MD5.Create())
-            {
-                using (var stream = File.OpenRead(path))
-                {
-                    var uploadFileRequest = new InitiateFileUploadRequestBody
-                    {
-                        Checksum = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-","").ToLower(),
-                        Path = path,
-                        Filesize = stream.Length,
-                        IsMultipart = false,
-                        Overrides = overrides
-                    };
-                    var json = JsonSerializer.Serialize(uploadFileRequest, _jsonSerializerOptions);
-                    return new StringContent(json, Encoding.UTF8, "application/json");
                 }
             }
         }
