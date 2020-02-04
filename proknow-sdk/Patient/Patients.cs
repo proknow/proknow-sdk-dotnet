@@ -24,6 +24,34 @@ namespace ProKnow.Patient
         }
 
         /// <summary>
+        /// Creates a patient asynchronously
+        /// </summary>
+        /// <param name="workspace">ID or name of the workspace in which to create the patient</param>
+        /// <param name="mrn">The patient medical record number (DICOM ID)</param>
+        /// <param name="name">The patient name</param>
+        /// <param name="birthDate">The patient birth date</param>
+        /// <param name="sex">The patient sex</param>
+        /// <returns>The created patient item</returns>
+        public async Task<PatientItem> CreateAsync(string workspace, string mrn, string name, string birthDate = null, string sex = null)
+        {
+            var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
+            var patientMetadata = new PatientMetadata { Mrn = mrn, Name = name, BirthDate = birthDate, Sex = sex };
+            var content = new StringContent(JsonSerializer.Serialize(patientMetadata), Encoding.UTF8, "application/json");
+            var patientItemJson = await _proKnow.Requestor.PostAsync($"/workspaces/{workspaceItem.Id}/patients", null, content);
+            return DeserializePatient(workspaceItem.Id, patientItemJson);
+        }
+
+        /// <summary>
+        /// Deletes a patient asynchronously
+        /// </summary>
+        /// <param name="workspaceId">The ProKnow ID of the workspace containing the patient</param>
+        /// <param name="patientId">The ProKnow ID of the patient to delete</param>
+        public Task DeleteAsync(string workspaceId, string patientId)
+        {
+            return _proKnow.Requestor.DeleteAsync($"/workspaces/{workspaceId}/patients/{patientId}");
+        }
+
+        /// <summary>
         /// Finds a patient in a workspace asynchronously based on a predicate
         /// </summary>
         /// <param name="workspace">ID or name of the workspace containing the patients</param>

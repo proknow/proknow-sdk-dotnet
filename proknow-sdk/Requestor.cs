@@ -36,6 +36,20 @@ namespace ProKnow
         }
 
         /// <summary>
+        /// Issues an asynchronous HTTP DELETE request
+        /// </summary>
+        /// <param name="route">The API route to use in the request</param>
+        /// <returns>A task that returns the response as a string</returns>
+        /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
+        public Task<string> DeleteAsync(string route)
+        {
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"{_baseUrl}/{route}");
+            request.Headers.Authorization = _authenticationHeaderValue;
+            var httpResponseMessage = _httpClient.SendAsync(request);
+            return httpResponseMessage.ContinueWith(t => HandleResponseAsync(t.Result)).Unwrap();
+        }
+
+        /// <summary>
         /// Issues an asynchronous HTTP GET request
         /// </summary>
         /// <param name="route">The API route to use in the request</param>
@@ -109,8 +123,9 @@ namespace ProKnow
         /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
         private Task<string> HandleResponseAsync(HttpResponseMessage response)
         {
+            var content = response.Content.ReadAsStringAsync();
             response.EnsureSuccessStatusCode();
-            return response.Content.ReadAsStringAsync();
+            return content;
         }
     }
 }

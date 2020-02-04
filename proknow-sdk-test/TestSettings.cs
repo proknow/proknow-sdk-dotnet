@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using System;
+using System.IO;
 
 namespace ProKnow.Test
 {
@@ -31,6 +32,11 @@ namespace ProKnow.Test
         public static string TestPatientName { get; set; }
 
         /// <summary>
+        /// The full path to the root directory for test data
+        /// </summary>
+        public static string TestDataRootDirectory { get; set; }
+
+        /// <summary>
         /// Initializes the test run
         /// </summary>
         /// <param name="context">Information that is passed to the unit tests</param>
@@ -45,6 +51,7 @@ namespace ProKnow.Test
             CredentialsFile = context.Properties["credentialsFile"].ToString();
             TestWorkspaceName = context.Properties["testWorkspaceName"].ToString();
             TestPatientName = context.Properties["testPatientName"].ToString();
+            TestDataRootDirectory = Path.Combine(context.DeploymentDirectory, "TestData");
         }
     }
 }
