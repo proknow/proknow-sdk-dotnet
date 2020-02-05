@@ -39,7 +39,7 @@ namespace ProKnow.Patients.Entities.Test
             {
                 Patient = new PatientMetadata { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
             };
-            await _uploads.UploadFileAsync(_workspaceItem.Id, _uploadPath, overrides);
+            await _uploads.UploadAsync(_workspaceItem.Id, _uploadPath, overrides);
 
             // Wait until uploaded test file has processed
             while (true)

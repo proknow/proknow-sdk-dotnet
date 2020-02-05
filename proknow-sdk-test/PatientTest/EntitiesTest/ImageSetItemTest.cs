@@ -39,11 +39,8 @@ namespace ProKnow.Patients.Entities.Test
             {
                 Patient = new PatientMetadata { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
             };
+            await _uploads.UploadAsync(_workspaceItem.Id, uploadPath, overrides);
             _uploadedFiles = Directory.GetFiles(uploadPath);
-            foreach (var file in _uploadedFiles)
-            {
-                await _uploads.UploadFileAsync(_workspaceItem.Id, file, overrides);
-            }
 
             // Wait until uploaded test files have processed
             while (true)
@@ -76,21 +73,20 @@ namespace ProKnow.Patients.Entities.Test
             string downloadPath = await _entityItem.Download(downloadFolder);
             var downloadedFiles = Directory.GetFiles(downloadPath);
 
-            //todo--this comparison takes a long time!
-            // Compare the files
-            foreach (var uploadedFile in _uploadedFiles)
+            // Make sure the same number of images were downloaded
+            Assert.AreEqual(_uploadedFiles.Length, downloadedFiles.Length);
+
+            // Find one downloaded file that matches (don't need to check them all!)
+            var doesMatch = false;
+            foreach (var downloadedFile in downloadedFiles)
             {
-                var doesMatch = false;
-                foreach (var downloadedFile in downloadedFiles)
+                if (TestHelper.FileEquals(_uploadedFiles[0], downloadedFile))
                 {
-                    if (TestHelper.FileEquals(uploadedFile, downloadedFile))
-                    {
-                        doesMatch = true;
-                        break;
-                    }
+                    doesMatch = true;
+                    break;
                 }
-                Assert.IsTrue(doesMatch);
             }
+            Assert.IsTrue(doesMatch);
 
             // Cleanup
             Directory.Delete(downloadFolder, true);

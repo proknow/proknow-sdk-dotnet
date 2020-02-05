@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace ProKnow.Upload
 {
@@ -54,5 +55,11 @@ namespace ProKnow.Upload
         /// </summary>
         [JsonPropertyName("identifier")]
         public string Identifier { get; set; }
+
+        /// <summary>
+        /// Properties encountered during deserialization without matching members
+        /// </summary>
+        [JsonExtensionData]
+        public Dictionary<string, object> ExtensionData { get; set; }
     }
 }

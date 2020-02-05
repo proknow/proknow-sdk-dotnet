@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ProKnow.Upload
@@ -16,6 +19,7 @@ namespace ProKnow.Upload
     {
         private ProKnow _proKnow;
         private JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+        private IList<string> _terminalStatuses = new List<string>() { "completed", "pending", "failed" };
 
         /// <summary>
         /// Constructs an Uploads object
@@ -26,22 +30,125 @@ namespace ProKnow.Upload
             _proKnow = proKnow;
         }
 
-        //todo--make UploadFileAsync private!!!
+        /// <summary>
+        /// Upload file(s) asynchronously
+        /// </summary>
+        /// <param name="workspace">The ProKnow ID for the workspace</param>
+        /// <param name="path">The folder or file path</param>
+        /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
+        /// <returns>The upload results</returns>
+        public async Task<UploadBatch> UploadAsync(string workspace, string path, UploadFileOverrides overrides = null)
+        {
+            // Resolve the workspace ID
+            var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
+
+            // Get a list of all the files to be uploaded
+            var batchPaths = new List<string>();
+            AddFiles(batchPaths, path);
+
+            // Upload the files and process the results
+            return await UploadFilesAsync(workspaceItem.Id, batchPaths, overrides);
+        }
+
+        /// <summary>
+        /// Upload files asynchronously
+        /// </summary>
+        /// <param name="workspace">The ProKnow ID for the workspace</param>
+        /// <param name="paths">The folder and/or file paths</param>
+        /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
+        /// <returns>The upload results</returns>
+        public async Task<UploadBatch> UploadAsync(string workspace, IList<string> paths, UploadFileOverrides overrides = null)
+        {
+            // Resolve the workspace ID
+            var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
+
+            // Get a list of all the files to be uploaded
+            var batchPaths = new List<string>();
+            AddFiles(batchPaths, paths);
+
+            // Upload the files and process the results
+            return await UploadFilesAsync(workspaceItem.Id, batchPaths, overrides);
+        }
+
+        /// <summary>
+        /// Adds paths (recursively) to a batch
+        /// </summary>
+        /// <param name="batchPaths">The paths in the batch</param>
+        /// <param name="paths">The paths to add to the batch</param>
+        private void AddFiles(List<string> batchPaths, IList<string> paths)
+        {
+            foreach (var path in paths)
+            {
+                AddFiles(batchPaths, path);
+            }
+        }
+
+        /// <summary>
+        /// Add a path to a batch
+        /// </summary>
+        /// <param name="batchPaths">The paths in the batch</param>
+        /// <param name="path">The path to add to the batch</param>
+        private void AddFiles(List<string> batchPaths, string path)
+        {
+            var fileAttributes = File.GetAttributes(path);
+            if ((fileAttributes & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                batchPaths.AddRange(Directory.GetFiles(path, "*", SearchOption.AllDirectories));
+            }
+            else
+            {
+                batchPaths.Add(path);
+            }
+        }
+
+        /// <summary>
+        /// Uploads files asynchronously
+        /// </summary>
+        /// <param name="workspaceId">The ProKnow ID for the workspace</param>
+        /// <param name="paths">The full paths to the files to be uploaded</param>
+        /// <param name="overrides">Optional overrides to be applied after the file is uploaded</param>
+        /// <returns>The result of the batch upload</returns>
+        private async Task<UploadBatch> UploadFilesAsync(string workspaceId, IList<string> paths, UploadFileOverrides overrides = null)
+        {
+            var maxThreads = 4;
+            var q = new ConcurrentQueue<string>(paths);
+            var tasks = new List<Task>();
+            var initiateFileUploadResponses = new ConcurrentBag<InitiateFileUploadResponse>();
+            for (int n = 0; n < maxThreads; n++)
+            {
+                tasks.Add(Task.Run(async () =>
+                {
+                    while (q.TryDequeue(out string path))
+                    {
+                        var uploadFileResults = await UploadFileAsync(workspaceId, path, overrides);
+                        initiateFileUploadResponses.Add(uploadFileResults);
+                    }
+                }));
+            }
+            await Task.WhenAll(tasks);
+            return await ProcessUploadResults(workspaceId, initiateFileUploadResponses.ToArray());
+        }
+
         /// <summary>
         /// Uploads a file asychronously
         /// </summary>
         /// <param name="workspaceId">The ProKnow ID for the workspace</param>
         /// <param name="path">The full path to the file to be uploaded</param>
         /// <param name="overrides">Optional overrides to be applied after the file is uploaded</param>
-        /// <returns>The result of the file upload</returns>
-        public async Task<UploadFileResult> UploadFileAsync(string workspaceId, string path, UploadFileOverrides overrides = null)
+        /// <returns>The response to the file upload request</returns>
+        private async Task<InitiateFileUploadResponse> UploadFileAsync(string workspaceId, string path, UploadFileOverrides overrides = null)
         {
+            // Initiate the file upload
             var initiateFileUploadResponse = await InitiateFileUploadAsync(workspaceId, path, overrides);
+
+            // If the file has not already been uploaded
             if (initiateFileUploadResponse.Status == "uploading")
             {
+                // Upload the file content
                 await UploadChunkAsync(initiateFileUploadResponse);
             }
-            return new UploadFileResult { Path = path, Response = initiateFileUploadResponse };
+
+            return initiateFileUploadResponse;
         }
 
         /// <summary>
@@ -109,6 +216,59 @@ namespace ProKnow.Upload
                     await _proKnow.Requestor.PostAsync("/uploads/chunks", headerKeyValuePairs, content);
                 }
             }
+        }
+
+        /// <summary>
+        /// Waits for a batch upload to complete and processes the results
+        /// </summary>
+        /// <param name="workspaceId">The ProKnow ID for the workspace</param>
+        /// <param name="initiateUploadFileResponses">The results for each file upload</param>
+        /// <returns>The batch results</returns>
+        private async Task<UploadBatch> ProcessUploadResults(string workspaceId, InitiateFileUploadResponse[] initiateUploadFileResponses)
+        {
+            // Create the collection of unresolved upload IDs
+            List<string> unresolvedUploads = new List<string>(initiateUploadFileResponses.Select(r => r.Id));
+
+            Dictionary<string, object> query = null;
+            long lastUpdatedAt = 0;
+            while (unresolvedUploads.Count > 0)
+            {
+                // Query the current status of the uploads, filtering those whose status has changed since the previous query
+                var uploadsJson = await _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/uploads/", query);
+                var uploads = JsonSerializer.Deserialize<IList<UploadStatusResult>>(uploadsJson);
+
+                // Remove any uploads that reached terminal status from the collection of unresolved uploads, keeping track of last updated
+                foreach (var upload in uploads)
+                {
+                    // If this upload was not previously resolved
+                    if (unresolvedUploads.Contains(upload.Id))
+                    {
+                        // If this upload has reached terminal status
+                        if (_terminalStatuses.Contains(upload.Status))
+                        {
+                            // Indicate this upload is resolved
+                            unresolvedUploads.Remove(upload.Id);
+
+                            // Update the query parameters to the latest upload to reach terminal status
+                            if (upload.UpdatedAt > lastUpdatedAt)
+                            {
+                                if (query == null)
+                                {
+                                    query = new Dictionary<string, object>();
+                                }
+                                lastUpdatedAt = upload.UpdatedAt;
+                                query["updated"] = lastUpdatedAt;
+                                query["after"] = upload.Id;
+                            }
+                        }
+                    }
+                }
+
+                // Give the updates some time to process
+                Thread.Sleep(50);
+            }
+
+            return new UploadBatch();
         }
     }
 }

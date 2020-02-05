@@ -53,11 +53,12 @@ namespace ProKnow
         /// Issues an asynchronous HTTP GET request
         /// </summary>
         /// <param name="route">The API route to use in the request</param>
+        /// <param name="queryParameters">Optional query parameters</param>
         /// <returns>A task that returns the response as a string</returns>
         /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
-        public Task<string> GetAsync(string route)
+        public Task<string> GetAsync(string route, Dictionary<string, object> queryParameters = null)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}/{route}");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, BuildUriString($"{_baseUrl}/{route}", queryParameters));
             request.Headers.Authorization = _authenticationHeaderValue;
             var httpResponseMessage = _httpClient.SendAsync(request);
             return httpResponseMessage.ContinueWith(t => HandleResponseAsync(t.Result)).Unwrap();
@@ -113,6 +114,33 @@ namespace ProKnow
                 }
             }
             return path;
+        }
+
+        /// <summary>
+        /// Builds a URI string
+        /// </summary>
+        /// <param name="route">The route</param>
+        /// <param name="queryParameters">Optional query parameters</param>
+        /// <returns>A URI string</returns>
+        private string BuildUriString(string route, Dictionary<string, object> queryParameters = null)
+        {
+            var uri = new UriBuilder(route);
+            if (queryParameters != null)
+            {
+                foreach (var queryParameter in queryParameters)
+                {
+                    var queryToAppend = $"{queryParameter.Key}={queryParameter.Value}";
+                    if (uri.Query != null && uri.Query.Length > 1)
+                    {
+                        uri.Query = uri.Query.Substring(1) + "&" + queryToAppend;
+                    }
+                    else
+                    {
+                        uri.Query = queryToAppend;
+                    }
+                }
+            }
+            return uri.ToString();
         }
 
         /// <summary>
