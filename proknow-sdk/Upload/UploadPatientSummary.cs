@@ -16,25 +16,26 @@ namespace ProKnow.Upload
         /// <summary>
         /// The workspace ID
         /// </summary>
-        [JsonIgnore]
         public string WorkspaceId { get; internal set; }
 
         /// <summary>
         /// The patient ProKnow ID
         /// </summary>
-        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
-        /// Properties encountered during deserialization without matching members
+        /// The patient medical record number (MRN) or ID
         /// </summary>
-        [JsonExtensionData]
-        public Dictionary<string, object> ExtensionData { get; set; }
+        public string Mrn { get; set; }
+
+        /// <summary>
+        /// The patient name
+        /// </summary>
+        public string Name { get; set; }
 
         /// <summary>
         /// Entities within this patient
         /// </summary>
-        [JsonIgnore]
         public IList<UploadEntitySummary> Entities { get; set; }
 
         /// <summary>
@@ -47,15 +48,19 @@ namespace ProKnow.Upload
         }
 
         /// <summary>
-        /// Finishes initialization of object after deserialization from JSON
+        /// Creates an upload patient summary
         /// </summary>
         /// <param name="patients">Interacts with patients in a ProKnow organization</param>
         /// <param name="workspaceId">The workspace ID</param>
-        internal void PostProcessDeserialization(Patients patients, string workspaceId)
+        /// <param name="uploadStatusResult">The upload status result</param>
+        public UploadPatientSummary(Patients patients, string workspaceId, UploadStatusResultPatient uploadStatusResult)
         {
             _patients = patients;
             WorkspaceId = workspaceId;
             Entities = new List<UploadEntitySummary>();
+            Id = uploadStatusResult.Id;
+            Mrn = uploadStatusResult.Mrn;
+            Name = uploadStatusResult.Name;
         }
     }
 }

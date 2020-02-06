@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace ProKnow.Upload
@@ -38,6 +37,30 @@ namespace ProKnow.Upload
         /// </summary>
         [JsonPropertyName("updated_at")]
         public long UpdatedAt { get; set; }
+
+        /// <summary>
+        /// The patient information
+        /// </summary>
+        [JsonPropertyName("patient")]
+        public UploadStatusResultPatient Patient { get; set; }
+
+        /// <summary>
+        /// The study information
+        /// </summary>
+        [JsonPropertyName("study")]
+        public UploadStatusResultStudy Study { get; set; }
+
+        /// <summary>
+        /// The entity information
+        /// </summary>
+        [JsonPropertyName("entity")]
+        public UploadStatusResultEntity Entity { get; set; }
+
+        /// <summary>
+        /// The SRO information
+        /// </summary>
+        [JsonPropertyName("sro")]
+        public UploadStatusResultSro Sro { get; set; }
 
         /// <summary>
         /// Properties encountered during deserialization without matching members

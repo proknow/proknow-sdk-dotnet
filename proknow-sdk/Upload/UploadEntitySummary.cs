@@ -17,26 +17,37 @@ namespace ProKnow.Upload
         /// <summary>
         /// The workspace ID
         /// </summary>
-        [JsonIgnore]
         public string WorkspaceId { get; internal set; }
 
         /// <summary>
         /// The patient ProKnow ID
         /// </summary>
-        [JsonIgnore]
         public string PatientId { get; internal set; }
 
         /// <summary>
         /// The entity ProKnow ID
         /// </summary>
-        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
-        /// Properties encountered during deserialization without matching members
+        /// The entity UID
         /// </summary>
-        [JsonExtensionData]
-        public Dictionary<string, object> ExtensionData { get; set; }
+        public string Uid { get; set; }
+
+        /// <summary>
+        /// The entity type
+        /// </summary>
+        public string Type { get; set; }
+
+        /// <summary>
+        /// The entity modality
+        /// </summary>
+        public string Modality { get; set; }
+
+        /// <summary>
+        /// The entity description
+        /// </summary>
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets the complete representation of the entity
@@ -50,16 +61,22 @@ namespace ProKnow.Upload
         }
 
         /// <summary>
-        /// Finishes initialization of object after deserialization from JSON
+        /// Creates an entity summary
         /// </summary>
         /// <param name="patients">Interacts with patients in a ProKnow organization</param>
         /// <param name="workspaceId">The workspace ID</param>
         /// <param name="patientId">The patient ID</param>
-        internal void PostProcessDeserialization(Patients patients, string workspaceId, string patientId)
+        /// <param name="uploadStatusResult">The upload status result</param>
+        public UploadEntitySummary(Patients patients, string workspaceId, string patientId, UploadStatusResultEntity uploadStatusResult)
         {
             _patients = patients;
             WorkspaceId = workspaceId;
             PatientId = patientId;
+            Id = uploadStatusResult.Id;
+            Uid = uploadStatusResult.Uid;
+            Type = uploadStatusResult.Type;
+            Modality = uploadStatusResult.Modality;
+            Description = uploadStatusResult.Description;
         }
     }
 }

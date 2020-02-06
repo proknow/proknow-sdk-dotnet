@@ -27,12 +27,6 @@ namespace ProKnow.Patient
         public string Id { get; set; }
 
         /// <summary>
-        /// Properties encountered during deserialization without matching members
-        /// </summary>
-        [JsonExtensionData]
-        public Dictionary<string, object> ExtensionData { get; set; }
-
-        /// <summary>
         /// The patient medical record number (MRN) or ID
         /// </summary>
         [JsonPropertyName("mrn")]
@@ -67,6 +61,12 @@ namespace ProKnow.Patient
         /// </summary>
         [JsonPropertyName("studies")]
         public IList<StudySummary> Studies { get; set; }
+
+        /// <summary>
+        /// Properties encountered during deserialization without matching members
+        /// </summary>
+        [JsonExtensionData]
+        public Dictionary<string, object> ExtensionData { get; set; }
 
         //todo--Tasks
 
