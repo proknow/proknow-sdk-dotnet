@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ProKnow.Upload
 {
@@ -55,17 +56,43 @@ namespace ProKnow.Upload
                 }
             }
         }
-        
-        //todo
-        //public UploadPatientSummary FindPatient(string path)
-        //{
 
-        //}
+        /// <summary>
+        /// Finds the upload patient summary for a file
+        /// </summary>
+        /// <param name="path">The full path to the file</param>
+        /// <returns>The upload patient summary for the specified file</returns>
+        public UploadPatientSummary FindPatient(string path)
+        {
+            if (_fileLookup.ContainsKey(path))
+            {
+                var uploadStatusResult = _fileLookup[path];
+                if (uploadStatusResult.Status == "completed")
+                {
+                    return _patientLookup[uploadStatusResult.Patient.Id];
+                }
+                throw new ApplicationException($"The upload for '{path}' is not complete.");
+            }
+            throw new ApplicationException($"The upload for '{path}' was not found in the batch.");
+        }
 
-        //todo
-        //public UploadEntitySummary FindEntity(string path)
-        //{
-
-        //}
+        /// <summary>
+        /// Finds the upload entity summary for a file
+        /// </summary>
+        /// <param name="path">The full path to the file</param>
+        /// <returns>The upload patient summary for the specified file</returns>
+        public UploadEntitySummary FindEntity(string path)
+        {
+            if (_fileLookup.ContainsKey(path))
+            {
+                var uploadStatusResult = _fileLookup[path];
+                if (uploadStatusResult.Status == "completed")
+                {
+                    return _entityLookup[uploadStatusResult.Entity.Id];
+                }
+                throw new ApplicationException($"The upload for '{path}' is not complete.");
+            }
+            throw new ApplicationException($"The upload for '{path}' was not found in the batch.");
+        }
     }
 }
