@@ -12,7 +12,7 @@ namespace ProKnow.Patients.Entities.Test
     [TestClass]
     public class DoseItemTest
     {
-        private static string _patientMrnAndName = "DoseItemTest";
+        private static string _patientMrnAndName = "SDK-DoseItemTest";
         private static ProKnow _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = new Uploads(_proKnow);
         private WorkspaceItem _workspaceItem;
@@ -23,15 +23,14 @@ namespace ProKnow.Patients.Entities.Test
         [TestInitialize]
         public async Task TestInitialize()
         {
-            // Get the test workspace
-            _workspaceItem = await _proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
+            // Delete test workspace, if necessary
+            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
 
-            // Delete test patient, if necessary
-            await TestHelper.DeletePatientAsync(_workspaceItem.Id, _patientMrnAndName);
+            // Create a test workspace
+            _workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
 
-            // Create test patient
-            await _proKnow.Patients.CreateAsync(TestSettings.TestWorkspaceName, _patientMrnAndName, _patientMrnAndName);
-            var patientSummary = await _proKnow.Patients.FindAsync(_workspaceItem.Id, t => t.Name == _patientMrnAndName);
+            // Create a test patient
+            var patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
 
             // Upload test file
             _uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RD.dcm");
@@ -58,7 +57,7 @@ namespace ProKnow.Patients.Entities.Test
         public async Task TestCleanup()
         {
             // Delete test patient
-            await TestHelper.DeletePatientAsync(_workspaceItem.Id, _patientMrnAndName);
+            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
         }
 
         [TestMethod]

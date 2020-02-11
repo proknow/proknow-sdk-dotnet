@@ -26,7 +26,7 @@ namespace ProKnow.Patient
         /// <summary>
         /// Creates a patient asynchronously
         /// </summary>
-        /// <param name="workspace">ID or name of the workspace in which to create the patient</param>
+        /// <param name="workspace">The ProKnow ID or name of the workspace in which to create the patient</param>
         /// <param name="mrn">The patient medical record number (DICOM ID)</param>
         /// <param name="name">The patient name</param>
         /// <param name="birthDate">The patient birth date</param>

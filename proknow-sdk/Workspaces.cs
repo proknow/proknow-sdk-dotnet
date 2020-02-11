@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -22,7 +24,38 @@ namespace ProKnow
         {
             _proKnow = proKnow;
         }
-        
+
+        /// <summary>
+        /// Creates a workspace asynchronously
+        /// </summary>
+        /// <param name="slug">The workspace slug. A string with a maximum length of 40 that matches the regular
+        /// expression ``^[a-z0-9] [a-z0-9]* (-[a-z0-9]+)*$``</param>
+        /// <param name="name">The workspace name. A string with a maximum length of 80</param>
+        /// <param name="isProtected">Indicates whether the workspace should be protected from accidental
+        /// deletion</param>
+        /// <returns>The new workspace item</returns>
+        public async Task<WorkspaceItem> CreateAsync(string slug, string name, bool isProtected = true)
+        {
+            var workspaceItem = new WorkspaceItem { Slug = slug, Name = name, Protected = isProtected };
+            var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+            var content = new StringContent(JsonSerializer.Serialize(workspaceItem, jsonSerializerOptions),
+                Encoding.UTF8, "application/json");
+            string workspaceJson = await _proKnow.Requestor.PostAsync("/workspaces", null, content);
+            _cache = null;
+            workspaceItem = DeserializeWorkspace(workspaceJson);
+            return workspaceItem;
+        }
+
+        /// <summary>
+        /// Deletes a workspace asynchronously
+        /// </summary>
+        /// <param name="workspaceId">The ProKnow ID for the workspace</param>
+        public async Task DeleteAsync(string workspaceId)
+        {
+            await _proKnow.Requestor.DeleteAsync($"/workspaces/{workspaceId}");
+            _cache = null;
+        }
+
         /// <summary>
         /// Finds a workspace item asynchronously based on a predicate
         /// </summary>
@@ -42,16 +75,17 @@ namespace ProKnow
         /// Queries asynchronously for the collection of workspace items
         /// </summary>
         /// <returns>A collection of workspace items</returns>
-        public Task<IList<WorkspaceItem>> QueryAsync()
+        public async Task<IList<WorkspaceItem>> QueryAsync()
         {
-            Task<string> workspacesJson = _proKnow.Requestor.GetAsync("/workspaces");
-            return workspacesJson.ContinueWith(t => HandleQueryResponse(t.Result));
+            string workspacesJson = await _proKnow.Requestor.GetAsync("/workspaces");
+            _cache = DeserializeWorkspaces(workspacesJson);
+            return _cache;
         }
 
         /// <summary>
         /// Resolves a workspace asynchronously
         /// </summary>
-        /// <param name="workspace">The ID or name of the workspace</param>
+        /// <param name="workspace">The ProKnow ID or name of the workspace</param>
         /// <returns>The workspace item corresponding to the specified ID or name or null if no matching workspace was found</returns>
         public Task<WorkspaceItem> ResolveAsync(string workspace)
         {
@@ -68,9 +102,9 @@ namespace ProKnow
         }
 
         /// <summary>
-        /// Resolves a workspace ID asynchronously
+        /// Resolves a workspace by its ProKnow ID asynchronously
         /// </summary>
-        /// <param name="workspaceId">The ID of the workspace</param>
+        /// <param name="workspaceId">The ProKnow ID of the workspace</param>
         /// <returns>The workspace item corresponding to the specified ID or null if no matching workspace was found</returns>
         public Task<WorkspaceItem> ResolveByIdAsync(string workspaceId)
         {
@@ -82,7 +116,7 @@ namespace ProKnow
         }
 
         /// <summary>
-        /// Resolves a workspace name asynchronously
+        /// Resolves a workspace by its name asynchronously
         /// </summary>
         /// <param name="workspaceName">The name of the workspace</param>
         /// <returns>The workspace item corresponding to the specified name or null if no matching workspace was found</returns>
@@ -99,8 +133,8 @@ namespace ProKnow
         /// Finds a workspace item based on a predicate
         /// </summary>
         /// <param name="predicate">The predicate for the search</param>
-         /// <returns>The first workspace item that satisfies the predicate or null if the predicate was null or no workspace
-         /// item satisfies the predicate were found</returns>
+        /// <returns>The first workspace item that satisfies the predicate or null if the predicate was null or no workspace
+        /// item satisfies the predicate were found</returns>
         private WorkspaceItem Find(Func<WorkspaceItem, bool> predicate)
         {
             if (predicate == null)
@@ -118,17 +152,6 @@ namespace ProKnow
         }
 
         /// <summary>
-        /// Handles the query response
-        /// </summary>
-        /// <param name="workspaceJson">The JSON representation of the workspace items</param>
-        /// <returns>A collection of workspace items</returns>
-        private IList<WorkspaceItem> HandleQueryResponse(string workspaceJson)
-        {
-            _cache = DeserializeWorkspaces(workspaceJson);
-            return _cache;
-        }
-
-        /// <summary>
         /// Creates a collection of workspace items from their JSON representation
         /// </summary>
         /// <param name="json">The JSON representation of the workspace items</param>
@@ -141,6 +164,18 @@ namespace ProKnow
                 workspaceItem.PostProcessDeserialization(this);
             }
             return workspaceItems;
+        }
+
+        /// <summary>
+        /// Creates a workspace item from its JSON representation
+        /// </summary>
+        /// <param name="json">The JSON representation of the workspace item</param>
+        /// <returns>The workspace item</returns>
+        private WorkspaceItem DeserializeWorkspace(string json)
+        {
+            var workspaceItem = JsonSerializer.Deserialize<WorkspaceItem>(json);
+            workspaceItem.PostProcessDeserialization(this);
+            return workspaceItem;
         }
     }
 }

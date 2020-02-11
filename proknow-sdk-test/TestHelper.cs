@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
+using ProKnow.Patient;
 
 namespace ProKnow.Test
 {
@@ -10,14 +14,83 @@ namespace ProKnow.Test
     /// </summary>
     public static class TestHelper
     {
+        private static ProKnow _proKnow = TestSettings.ProKnow;
+
+        /// <summary>
+        /// Creates a test workspace asynchronously
+        /// </summary>
+        /// <param name="testClassName">The test class name</param>
+        /// <returns>The created workspace item</returns>
+        public static async Task<WorkspaceItem> CreateWorkspaceAsync(string testClassName)
+        {
+            // Request the creation
+            var workspaceItem = await _proKnow.Workspaces.CreateAsync(testClassName.ToLower(), testClassName, false);
+
+            // Make sure that it was created
+            var workspaces = await _proKnow.Workspaces.QueryAsync();
+
+            // If it wasn't deleted, keep looping until it is
+            while (workspaces.FirstOrDefault(w => w.Name == testClassName) == null)
+            {
+                Console.WriteLine($"Waiting for workspace {testClassName} to be created.");
+                Thread.Sleep(50);
+                workspaces = await _proKnow.Workspaces.QueryAsync();
+            }
+
+            return workspaceItem;
+        }
+
+        /// <summary>
+        /// Deletes a test workspace asynchronously
+        /// </summary>
+        /// <param name="testClassName">The test class name</param>
+        public static async Task DeleteWorkspaceAsync(string testClassName)
+        {
+            // If the workspace exists
+            IList<WorkspaceItem> workspaces = await _proKnow.Workspaces.QueryAsync();
+            var workspaceItem = workspaces.FirstOrDefault(w => w.Name == testClassName);
+            if (workspaceItem != null)
+            {
+                // Request the deletion
+                await _proKnow.Workspaces.DeleteAsync(workspaceItem.Id);
+
+                // Make sure that it was deleted
+                workspaces = await _proKnow.Workspaces.QueryAsync();
+
+                // If it wasn't deleted, keep looping until it is
+                while (workspaces.FirstOrDefault(w => w.Name == testClassName) != null)
+                {
+                    Console.WriteLine($"Waiting for workspace {testClassName} to be deleted.");
+                    Thread.Sleep(50);
+                    workspaces = await _proKnow.Workspaces.QueryAsync();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates a test patient asynchronously
+        /// </summary>
+        /// <param name="testClassName">The test class name</param>
+        /// <returns>The summary of the created patient</returns>
+        public static async Task<PatientSummary> CreatePatientAsync(string testClassName)
+        {
+            var workspaceItem = await _proKnow.Workspaces.ResolveAsync(testClassName);
+            await _proKnow.Patients.CreateAsync(workspaceItem.Id, testClassName, testClassName);
+            return await _proKnow.Patients.FindAsync(workspaceItem.Id, t => t.Name == testClassName);
+        }
+
+        /// <summary>
+        /// Deletes a patient asynchronously
+        /// </summary>
+        /// <param name="workspaceId">The ProKnow ID for the workspace</param>
+        /// <param name="mrn">The patient medical record number (MRN) or ID</param>
         public static async Task DeletePatientAsync(string workspaceId, string mrn)
         {
-            var proKnow = TestSettings.ProKnow;
-            var patientSummary = await proKnow.Patients.FindAsync(workspaceId, t => t.Mrn == mrn);
+            var patientSummary = await _proKnow.Patients.FindAsync(workspaceId, t => t.Mrn == mrn);
             if (patientSummary != null)
             {
-                await proKnow.Patients.DeleteAsync(workspaceId, patientSummary.Id);
-                while (await proKnow.Patients.FindAsync(workspaceId, p => p.Mrn == mrn) != null)
+                await _proKnow.Patients.DeleteAsync(workspaceId, patientSummary.Id);
+                while (await _proKnow.Patients.FindAsync(workspaceId, p => p.Mrn == mrn) != null)
                 {
                     Thread.Sleep(50);
                 }
