@@ -15,13 +15,13 @@ namespace ProKnow.Patients.Entities.Test
         private static string _patientMrnAndName = "SDK-DoseItemTest";
         private static ProKnow _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = new Uploads(_proKnow);
-        private WorkspaceItem _workspaceItem;
-        private string _uploadPath;
-        private PatientItem _patientItem;
-        private EntityItem _entityItem;
+        private static WorkspaceItem _workspaceItem;
+        private static string _uploadPath;
+        private static PatientItem _patientItem;
+        private static EntityItem _entityItem;
 
-        [TestInitialize]
-        public async Task TestInitialize()
+        [ClassInitialize]
+        public static async Task TestInitialize(TestContext testContext)
         {
             // Delete test workspace, if necessary
             await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
@@ -53,8 +53,8 @@ namespace ProKnow.Patients.Entities.Test
             }
         }
 
-        [TestCleanup]
-        public async Task TestCleanup()
+        [ClassCleanup]
+        public static async Task TestCleanup()
         {
             // Delete test patient
             await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
