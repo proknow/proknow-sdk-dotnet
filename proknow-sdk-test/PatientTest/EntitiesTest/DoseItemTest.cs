@@ -18,7 +18,7 @@ namespace ProKnow.Patients.Entities.Test
         private static WorkspaceItem _workspaceItem;
         private static string _uploadPath;
         private static PatientItem _patientItem;
-        private static EntityItem _entityItem;
+        private static DoseItem _doseItem;
 
         [ClassInitialize]
         public static async Task TestInitialize(TestContext testContext)
@@ -47,7 +47,7 @@ namespace ProKnow.Patients.Entities.Test
                 var entitySummaries = _patientItem.FindEntities(t => t.Type == "dose");
                 if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
                 {
-                    _entityItem = await entitySummaries[0].GetAsync();
+                    _doseItem = await entitySummaries[0].GetAsync() as DoseItem;
                     break;
                 }
             }
@@ -65,7 +65,7 @@ namespace ProKnow.Patients.Entities.Test
         {
             // Download the entity
             string downloadFolder = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
-            string downloadPath = await _entityItem.Download(downloadFolder);
+            string downloadPath = await _doseItem.Download(downloadFolder);
 
             // Compare it to the uploaded one
             Assert.IsTrue(TestHelper.FileEquals(_uploadPath, downloadPath));

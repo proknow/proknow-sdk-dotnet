@@ -15,23 +15,22 @@ namespace ProKnow.Patients.Entities.Test
         private static string _patientMrnAndName = "ImageSetItemTest";
         private static ProKnow _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = new Uploads(_proKnow);
-        private WorkspaceItem _workspaceItem;
-        private string[] _uploadedFiles;
-        private PatientItem _patientItem;
-        private ImageSetItem _entityItem;
+        private static WorkspaceItem _workspaceItem;
+        private static string[] _uploadedFiles;
+        private static PatientItem _patientItem;
+        private static ImageSetItem _imageSetItem;
 
-        [TestInitialize]
-        public async Task TestInitialize()
+        [ClassInitialize]
+        public static async Task TestInitialize(TestContext testContext)
         {
-            // Get the test workspace
-            _workspaceItem = await _proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
+            // Delete test workspace, if necessary
+            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
 
-            // Delete test patient, if necessary
-            await TestHelper.DeletePatientAsync(_workspaceItem.Id, _patientMrnAndName);
+            // Create a test workspace
+            _workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
 
-            // Create test patient
-            await _proKnow.Patients.CreateAsync(TestSettings.TestWorkspaceName, _patientMrnAndName, _patientMrnAndName);
-            var patientSummary = await _proKnow.Patients.FindAsync(_workspaceItem.Id, t => t.Name == _patientMrnAndName);
+            // Create a test patient
+            var patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
 
             // Upload test files
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
@@ -49,8 +48,8 @@ namespace ProKnow.Patients.Entities.Test
                 var entitySummaries = _patientItem.FindEntities(t => t.Type == "image_set");
                 if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
                 {
-                    _entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
-                    if (_entityItem.Data.Images.Count == _uploadedFiles.Length)
+                    _imageSetItem = await entitySummaries[0].GetAsync() as ImageSetItem;
+                    if (_imageSetItem.Data.Images.Count == _uploadedFiles.Length)
                     {
                         break;
                     }
@@ -58,8 +57,8 @@ namespace ProKnow.Patients.Entities.Test
             }
         }
 
-        [TestCleanup]
-        public async Task TestCleanup()
+        [ClassCleanup]
+        public static async Task TestCleanup()
         {
             // Delete test patient
             await TestHelper.DeletePatientAsync(_workspaceItem.Id, _patientMrnAndName);
@@ -70,7 +69,7 @@ namespace ProKnow.Patients.Entities.Test
         {
             // Download the image set
             string downloadFolder = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
-            string downloadPath = await _entityItem.Download(downloadFolder);
+            string downloadPath = await _imageSetItem.Download(downloadFolder);
             var downloadedFiles = Directory.GetFiles(downloadPath);
 
             // Make sure the same number of images were downloaded
