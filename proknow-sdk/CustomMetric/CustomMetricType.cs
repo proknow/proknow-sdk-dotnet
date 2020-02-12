@@ -28,13 +28,6 @@ namespace ProKnow.CustomMetric
         public object String { get; set; }
 
         /// <summary>
-        /// Creates a custom metric type
-        /// </summary>
-        public CustomMetricType()
-        {
-        }
-
-        /// <summary>
         /// Provides a string representation of this object
         /// </summary>
         /// <returns></returns>
