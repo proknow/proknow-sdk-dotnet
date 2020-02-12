@@ -11,32 +11,31 @@ namespace ProKnow.Upload.Test
     [TestClass]
     public class UploadsTest
     {
-        private static string _patientMrnAndName = "UploadsTest";
+        private static string _patientMrnAndName = "SDK-UploadsTest";
         private static ProKnow _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = new Uploads(_proKnow);
-        private WorkspaceItem _workspaceItem;
-        private string _uploadPath;
-        private PatientSummary _patientSummary;
+        private static WorkspaceItem _workspaceItem;
+        private static string _uploadPath;
+        private static PatientSummary _patientSummary;
 
-        [TestInitialize]
-        public async Task TestInitialize()
+        [ClassInitialize]
+        public static async Task ClassInitialize(TestContext testContext)
         {
-            // Get the test workspace
-            _workspaceItem = await _proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
+            // Delete test workspace, if necessary
+            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
 
-            // Delete test patient, if necessary
-            await TestHelper.DeletePatientAsync(_workspaceItem.Id, _patientMrnAndName);
+            // Create a test workspace
+            _workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
 
-            // Create test patient
-            await _proKnow.Patients.CreateAsync(TestSettings.TestWorkspaceName, _patientMrnAndName, _patientMrnAndName);
-            _patientSummary = await _proKnow.Patients.FindAsync(_workspaceItem.Id, t => t.Name == _patientMrnAndName);
+            // Create a test patient
+            _patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
         }
 
-        [TestCleanup]
-        public async Task TestCleanup()
+        [ClassCleanup]
+        public static async Task ClassCleanup()
         {
-            // Delete test patient
-            await TestHelper.DeletePatientAsync(_workspaceItem.Id, _patientMrnAndName);
+            // Delete test workspace
+            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
         }
 
         [TestMethod]

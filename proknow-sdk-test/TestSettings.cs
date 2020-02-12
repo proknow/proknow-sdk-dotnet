@@ -27,16 +27,6 @@ namespace ProKnow.Test
         public static ProKnow ProKnow { get; set; }
 
         /// <summary>
-        /// The workspace name for testing
-        /// </summary>
-        public static string TestWorkspaceName { get; set; }
-
-        /// <summary>
-        /// The patient name for testing
-        /// </summary>
-        public static string TestPatientName { get; set; }
-
-        /// <summary>
         /// The full path to the root directory for test data
         /// </summary>
         public static string TestDataRootDirectory { get; set; }
@@ -55,8 +45,6 @@ namespace ProKnow.Test
             BaseUrl = context.Properties["baseUrl"].ToString();
             CredentialsFile = context.Properties["credentialsFile"].ToString();
             ProKnow = new ProKnow(TestSettings.BaseUrl, TestSettings.CredentialsFile);
-            TestWorkspaceName = context.Properties["testWorkspaceName"].ToString();
-            TestPatientName = context.Properties["testPatientName"].ToString();
             TestDataRootDirectory = Path.Combine(context.DeploymentDirectory, "TestData");
         }
     }
