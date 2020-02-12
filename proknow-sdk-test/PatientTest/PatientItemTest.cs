@@ -16,7 +16,6 @@ namespace ProKnow.Patients.Test
         private static ProKnow _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = new Uploads(_proKnow);
         private static WorkspaceItem _workspaceItem;
-        private static string _uploadPath;
         private static PatientItem _patientItem;
 
         [ClassInitialize]
@@ -63,28 +62,28 @@ namespace ProKnow.Patients.Test
         }
 
         [TestMethod]
-        public async Task FindEntitiesTest_Predicate_1st_Level()
+        public void FindEntitiesTest_Predicate_1st_Level()
         {
            var imageSetEntities = _patientItem.FindEntities(e => e.Type == "image_set");
             Assert.AreEqual(imageSetEntities.Count, 1);
         }
 
         [TestMethod]
-        public async Task FindEntitiesTest_Predicate_2nd_Level()
+        public void FindEntitiesTest_Predicate_2nd_Level()
         {
             var structureSetEntities = _patientItem.FindEntities(e => e.Type == "structure_set");
             Assert.AreEqual(structureSetEntities.Count, 1);
         }
 
         [TestMethod]
-        public async Task FindEntitiesTest_Predicate_3rd_Level()
+        public void FindEntitiesTest_Predicate_3rd_Level()
         {
             var planEntities = _patientItem.FindEntities(e => e.Type == "plan");
             Assert.AreEqual(planEntities.Count, 1);
         }
 
         [TestMethod]
-        public async Task FindEntitiesTest_Predicate_4th_Level()
+        public void FindEntitiesTest_Predicate_4th_Level()
         {
             var doseEntities = _patientItem.FindEntities(e => e.Type == "dose");
             Assert.AreEqual(doseEntities.Count, 1);

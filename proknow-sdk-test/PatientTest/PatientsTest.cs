@@ -15,7 +15,6 @@ namespace ProKnow.Patient.Test
         private static ProKnow _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = new Uploads(_proKnow);
         private static WorkspaceItem _workspaceItem;
-        private static string _uploadPath;
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)

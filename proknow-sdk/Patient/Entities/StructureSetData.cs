@@ -27,6 +27,12 @@ namespace ProKnow.Patient.Entities
         public string Name { get; set; }
 
         /// <summary>
+        /// The ROIs
+        /// </summary>
+        [JsonPropertyName("rois")]
+        public Roi[] Rois { get; set; }
+
+        /// <summary>
         /// Properties encountered during deserialization without matching members
         /// </summary>
         [JsonExtensionData]
