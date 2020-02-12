@@ -12,7 +12,7 @@ namespace ProKnow.Patients.Entities.Test
     [TestClass]
     public class ImageSetItemTest
     {
-        private static string _patientMrnAndName = "ImageSetItemTest";
+        private static string _patientMrnAndName = "SDK-ImageSetItemTest";
         private static ProKnow _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = new Uploads(_proKnow);
         private static WorkspaceItem _workspaceItem;
@@ -21,7 +21,7 @@ namespace ProKnow.Patients.Entities.Test
         private static ImageSetItem _imageSetItem;
 
         [ClassInitialize]
-        public static async Task TestInitialize(TestContext testContext)
+        public static async Task ClassInitialize(TestContext testContext)
         {
             // Delete test workspace, if necessary
             await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
@@ -58,10 +58,10 @@ namespace ProKnow.Patients.Entities.Test
         }
 
         [ClassCleanup]
-        public static async Task TestCleanup()
+        public static async Task ClassCleanup()
         {
-            // Delete test patient
-            await TestHelper.DeletePatientAsync(_workspaceItem.Id, _patientMrnAndName);
+            // Delete test workspace
+            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
         }
 
         [TestMethod]

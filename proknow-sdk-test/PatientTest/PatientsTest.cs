@@ -1,55 +1,95 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-
 using ProKnow.Test;
+using ProKnow.Upload;
 
 namespace ProKnow.Patient.Test
 {
     [TestClass]
     public class PatientsTest
     {
+        private static string _patientMrnAndName = "SDK-PatientsTest";
+        private static ProKnow _proKnow = TestSettings.ProKnow;
+        private static Uploads _uploads = new Uploads(_proKnow);
+        private static WorkspaceItem _workspaceItem;
+        private static string _uploadPath;
+
+        [ClassInitialize]
+        public static async Task ClassInitialize(TestContext testContext)
+        {
+            // Delete test workspace, if necessary
+            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
+
+            // Create a test workspace
+            _workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
+
+            // Create a test patient
+            var patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
+
+            // Upload test files
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew");
+            var overrides = new UploadFileOverrides
+            {
+                Patient = new PatientMetadata { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
+            };
+            await _uploads.UploadAsync(_workspaceItem.Id, uploadPath, overrides);
+
+            // Wait until uploaded test files have processed
+            while (true)
+            {
+                var patientItem = await patientSummary.GetAsync();
+                var entitySummaries = patientItem.FindEntities(e => e.PatientId == patientSummary.Id);
+                if (entitySummaries.Count() >= 4)
+                {
+                    var statuses = entitySummaries.Select(e => e.Status).Distinct();
+                    if (statuses.Count() == 1 && statuses.First() == "completed")
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        [ClassCleanup]
+        public static async Task ClassCleanup()
+        {
+            // Delete test workspace
+            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
+        }
+
         [TestMethod]
         public async Task FindAsyncTest()
         {
-            var proKnow = new ProKnow(TestSettings.BaseUrl, TestSettings.CredentialsFile);
-            var workspace = await proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
-            var patientSummary = await proKnow.Patients.FindAsync(workspace.Id, p => p.Name == TestSettings.TestPatientName);
-            Assert.AreEqual(patientSummary.Name, TestSettings.TestPatientName);
+            var patientSummary = await _proKnow.Patients.FindAsync(_workspaceItem.Id, p => p.Name == _patientMrnAndName);
+            Assert.AreEqual(patientSummary.Name, _patientMrnAndName);
         }
 
         [TestMethod]
         public async Task GetAsyncTest()
         {
-            var proKnow = new ProKnow(TestSettings.BaseUrl, TestSettings.CredentialsFile);
-            var workspace = await proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
-            var patientSummaries = await proKnow.Patients.QueryAsync(workspace.Id);
-            var patientId = patientSummaries.First(p => p.Name == TestSettings.TestPatientName).Id;
-            var patientItem = await proKnow.Patients.GetAsync(workspace.Id, patientId);
+            var patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceItem.Id);
+            var patientId = patientSummaries.First(p => p.Name == _patientMrnAndName).Id;
+            var patientItem = await _proKnow.Patients.GetAsync(_workspaceItem.Id, patientId);
             Assert.AreEqual(patientItem.Id, patientId);
         }
 
         [TestMethod]
         public async Task LookupAsyncTest()
         {
-            var proKnow = new ProKnow(TestSettings.BaseUrl, TestSettings.CredentialsFile);
-            var workspace = await proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
-            var allPatientSummaries = await proKnow.Patients.QueryAsync(workspace.Id);
-            var patientMrn = allPatientSummaries.First(p => p.Name == TestSettings.TestPatientName).Mrn;
-            var myPatientSummaries = await proKnow.Patients.LookupAsync(workspace.Id, new string[] { "invalidMrn", patientMrn });
+            var myPatientSummaries = await _proKnow.Patients.LookupAsync(_workspaceItem.Id, new string[] { "invalidMrn", _patientMrnAndName });
             Assert.IsTrue(myPatientSummaries.Count == 2);
             Assert.IsNull(myPatientSummaries[0]);
-            Assert.AreEqual(myPatientSummaries[1].Name, TestSettings.TestPatientName);
+            Assert.AreEqual(myPatientSummaries[1].Name, _patientMrnAndName);
         }
 
         [TestMethod]
         public async Task QueryAsyncTest()
         {
-            var proKnow = new ProKnow(TestSettings.BaseUrl, TestSettings.CredentialsFile);
-            var workspace = await proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
-            var patientSummaries = await proKnow.Patients.QueryAsync(workspace.Id);
-            Assert.IsTrue(patientSummaries.Count > 0);
+            var patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceItem.Id);
+            Assert.IsTrue(patientSummaries.Count == 1);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace ProKnow.Patients.Entities.Test
         private static PatientItem _patientItem;
 
         [ClassInitialize]
-        public static async Task TestInitialize(TestContext testContext)
+        public static async Task ClassInitialize(TestContext testContext)
         {
             // Delete test workspace, if necessary
             await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
@@ -55,9 +55,9 @@ namespace ProKnow.Patients.Entities.Test
         }
 
         [ClassCleanup]
-        public static async Task TestCleanup()
+        public static async Task ClassCleanup()
         {
-            // Delete test patient
+            // Delete test workspace
             await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
         }
 

@@ -12,26 +12,25 @@ namespace ProKnow.Patients.Entities.Test
     [TestClass]
     public class StructureSetItemTest
     {
-        private static string _patientMrnAndName = "StructureSetItemTest";
+        private static string _patientMrnAndName = "SDK-StructureSetItemTest";
         private static ProKnow _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = new Uploads(_proKnow);
-        private WorkspaceItem _workspaceItem;
-        private string _uploadPath;
-        private PatientItem _patientItem;
-        private EntityItem _entityItem;
+        private static WorkspaceItem _workspaceItem;
+        private static string _uploadPath;
+        private static PatientItem _patientItem;
+        private static StructureSetItem _structureSetItem;
 
-        [TestInitialize]
-        public async Task TestInitialize()
+        [ClassInitialize]
+        public static async Task ClassInitialize(TestContext testContext)
         {
-            // Get the test workspace
-            _workspaceItem = await _proKnow.Workspaces.FindAsync(t => t.Name == TestSettings.TestWorkspaceName);
+            // Delete test workspace, if necessary
+            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
 
-            // Delete test patient, if necessary
-            await TestHelper.DeletePatientAsync(_workspaceItem.Id, _patientMrnAndName);
+            // Create a test workspace
+            _workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
 
-            // Create test patient
-            await _proKnow.Patients.CreateAsync(TestSettings.TestWorkspaceName, _patientMrnAndName, _patientMrnAndName);
-            var patientSummary = await _proKnow.Patients.FindAsync(_workspaceItem.Id, t => t.Name == _patientMrnAndName);
+            // Create a test patient
+            var patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
 
             // Upload test file
             _uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RS.dcm");
@@ -48,17 +47,17 @@ namespace ProKnow.Patients.Entities.Test
                 var entitySummaries = _patientItem.FindEntities(t => t.Type == "structure_set");
                 if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
                 {
-                    _entityItem = await entitySummaries[0].GetAsync();
+                    _structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
                     break;
                 }
             }
         }
 
-        [TestCleanup]
-        public async Task TestCleanup()
+        [ClassCleanup]
+        public static async Task ClassCleanup()
         {
-            // Delete test patient
-            await TestHelper.DeletePatientAsync(_workspaceItem.Id, _patientMrnAndName);
+            // Delete test workspace
+            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
         }
 
         [TestMethod]
@@ -66,7 +65,7 @@ namespace ProKnow.Patients.Entities.Test
         {
             // Download the entity
             string downloadFolder = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
-            string downloadPath = await _entityItem.Download(downloadFolder);
+            string downloadPath = await _structureSetItem.Download(downloadFolder);
 
             // Compare it to the uploaded one
             Assert.IsTrue(TestHelper.FileEquals(_uploadPath, downloadPath));
