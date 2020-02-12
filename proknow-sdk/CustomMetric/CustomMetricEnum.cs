@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace ProKnow.CustomMetric
@@ -13,5 +13,21 @@ namespace ProKnow.CustomMetric
         /// </summary>
         [JsonPropertyName("values")]
         public string[] Values { get; set; }
+
+        /// <summary>
+        /// Used by deserialization to create a custom metric enum
+        /// </summary>
+        public CustomMetricEnum()
+        {
+        }
+
+        /// <summary>
+        /// Creates a custom metric enum
+        /// </summary>
+        /// <param name="values">The enum values</param>
+        public CustomMetricEnum(string[] values)
+        {
+            Values = values.ToArray();
+        }
     }
 }

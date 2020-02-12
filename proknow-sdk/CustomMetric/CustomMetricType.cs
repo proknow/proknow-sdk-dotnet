@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace ProKnow.CustomMetric
 {
@@ -28,9 +29,45 @@ namespace ProKnow.CustomMetric
         public object String { get; set; }
 
         /// <summary>
+        /// Creates a custom metric type
+        /// </summary>
+        /// <param name="type">The type ('enum', 'number', or 'string')</param>
+        /// <param name="enumValues">The enum values or null for types 'number' or 'string'</param>
+        public CustomMetricType(string type, string[] enumValues = null)
+        {
+            if (type == "enum")
+            {
+                if (enumValues == null || enumValues.Length == 0)
+                {
+                    throw new ArgumentException("Enum values must be provided for custom metric type 'enum'.");
+                }
+                Enum = new CustomMetricEnum(enumValues);
+            }
+            else if (type == "number")
+            {
+                Number = new object();
+            }
+            else if (type == "string")
+            {
+                String = new object();
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException("The custom metric type must be 'enum', 'number', or 'string'.");
+            }
+        }
+
+        /// <summary>
+        /// Used by deserialization to create a custom metric type
+        /// </summary>
+        public CustomMetricType()
+        {
+        }
+
+        /// <summary>
         /// Provides a string representation of this object
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A string representation of this object</returns>
         public override string ToString()
         {
             if (Enum != null)

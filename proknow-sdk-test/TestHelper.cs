@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using ProKnow.CustomMetric;
 using ProKnow.Patient;
 
 namespace ProKnow.Test
@@ -17,27 +18,29 @@ namespace ProKnow.Test
         private static ProKnow _proKnow = TestSettings.ProKnow;
 
         /// <summary>
+        /// Deletes the custom metrics for a test
+        /// </summary>
+        /// <param name="testClassName">The test class name</param>
+        public static async Task DeleteCustomMetricsAsync(string testClassName)
+        {
+            var customMetrics = await _proKnow.CustomMetrics.QueryAsync();
+            foreach (var customMetric in customMetrics)
+            {
+                if (customMetric.Name.Contains(testClassName))
+                {
+                    await _proKnow.CustomMetrics.DeleteAsync(customMetric.Id);
+                }
+            }
+        }
+
+        /// <summary>
         /// Creates a test workspace asynchronously
         /// </summary>
         /// <param name="testClassName">The test class name</param>
         /// <returns>The created workspace item</returns>
         public static async Task<WorkspaceItem> CreateWorkspaceAsync(string testClassName)
         {
-            // Request the creation
-            var workspaceItem = await _proKnow.Workspaces.CreateAsync(testClassName.ToLower(), testClassName, false);
-
-            // Make sure that it was created
-            var workspaces = await _proKnow.Workspaces.QueryAsync();
-
-            // If it wasn't deleted, keep looping until it is
-            while (workspaces.FirstOrDefault(w => w.Name == testClassName) == null)
-            {
-                Console.WriteLine($"Waiting for workspace {testClassName} to be created.");
-                Thread.Sleep(50);
-                workspaces = await _proKnow.Workspaces.QueryAsync();
-            }
-
-            return workspaceItem;
+            return await _proKnow.Workspaces.CreateAsync(testClassName.ToLower(), testClassName, false);
         }
 
         /// <summary>
@@ -53,17 +56,6 @@ namespace ProKnow.Test
             {
                 // Request the deletion
                 await _proKnow.Workspaces.DeleteAsync(workspaceItem.Id);
-
-                // Make sure that it was deleted
-                workspaces = await _proKnow.Workspaces.QueryAsync();
-
-                // If it wasn't deleted, keep looping until it is
-                while (workspaces.FirstOrDefault(w => w.Name == testClassName) != null)
-                {
-                    Console.WriteLine($"Waiting for workspace {testClassName} to be deleted.");
-                    Thread.Sleep(50);
-                    workspaces = await _proKnow.Workspaces.QueryAsync();
-                }
             }
         }
 

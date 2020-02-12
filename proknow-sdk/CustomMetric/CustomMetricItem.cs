@@ -43,6 +43,26 @@ namespace ProKnow.CustomMetric
         public Dictionary<string, object> ExtensionData { get; set; }
 
         /// <summary>
+        /// Used by deserialization to create custom metric item
+        /// </summary>
+        public CustomMetricItem()
+        {
+        }
+
+        /// <summary>
+        /// Creates a custom metric type
+        /// </summary>
+        /// <param name="name">The name</param>
+        /// <param name="context">The context</param>
+        /// <param name="type">The type</param>
+        public CustomMetricItem(string name, string context, CustomMetricType type)
+        {
+            Name = name;
+            Context = context;
+            Type = type;
+        }
+
+        /// <summary>
         /// Returns a string that represents the current object
         /// </summary>
         /// <returns>A string that represents the current object</returns>

@@ -10,7 +10,7 @@ namespace ProKnow.Test
         [TestMethod]
         public async Task QueryTest()
         {
-            var proKnow = new ProKnow(TestSettings.BaseUrl, TestSettings.CredentialsFile);
+            var proKnow = TestSettings.ProKnow;
             var workspaces = await proKnow.Workspaces.QueryAsync();
             Assert.IsTrue(workspaces.Count > 0);
         }
