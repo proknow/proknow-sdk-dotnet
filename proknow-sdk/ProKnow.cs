@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text.Json;
+using ProKnow.CustomMetric;
 using ProKnow.Patient;
 
 namespace ProKnow
@@ -13,6 +14,11 @@ namespace ProKnow
         /// Issues requests to the ProKnow API
         /// </summary>
         internal Requestor Requestor { get; private set; }
+
+        /// <summary>
+        /// Interacts with custom metrics in the ProKnow organization
+        /// </summary>
+        public CustomMetrics CustomMetrics { get; private set; }
 
         /// <summary>
         /// Interacts with workspaces in the ProKnow organization
@@ -68,6 +74,7 @@ namespace ProKnow
         {
             LockRenewalBuffer = lockRenewalBuffer;
             Requestor = new Requestor(baseUrl, credentialsId, credentialsSecret);
+            CustomMetrics = new CustomMetrics(this);
             Workspaces = new Workspaces(this);
             Patients = new Patients(this);
         }

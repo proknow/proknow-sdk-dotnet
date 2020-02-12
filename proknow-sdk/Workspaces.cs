@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -79,7 +80,7 @@ namespace ProKnow
         {
             string workspacesJson = await _proKnow.Requestor.GetAsync("/workspaces");
             _cache = DeserializeWorkspaces(workspacesJson);
-            return _cache;
+            return _cache.ToList();
         }
 
         /// <summary>
