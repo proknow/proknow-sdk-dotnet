@@ -198,7 +198,7 @@ namespace ProKnow.Patient.Entities
                 default:
                     throw new ArgumentOutOfRangeException("The entity 'type' must be one of 'image_set', 'structure_set', 'plan', or 'dose'.");
             }
-            entityItem.PostProcessDeserialization(_requestor, WorkspaceId, PatientId);
+            entityItem.PostProcessDeserialization(_requestor, WorkspaceId);
             return entityItem;
         }
     }

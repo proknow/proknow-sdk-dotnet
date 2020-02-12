@@ -68,10 +68,9 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         /// <param name="requestor">Issues requests to the ProKnow API</param>
         /// <param name="workspaceId">The workspace ID</param>
-        /// <param name="patientId">The patient ID</param>
-        internal override void PostProcessDeserialization(Requestor requestor, string workspaceId, string patientId)
+        internal override void PostProcessDeserialization(Requestor requestor, string workspaceId)
         {
-            base.PostProcessDeserialization(requestor, workspaceId, patientId);
+            base.PostProcessDeserialization(requestor, workspaceId);
 
             //todo--_lock = null; _renewer = null
 

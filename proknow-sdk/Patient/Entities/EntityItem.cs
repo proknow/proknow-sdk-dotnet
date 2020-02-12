@@ -24,8 +24,8 @@ namespace ProKnow.Patient.Entities
         /// <summary>
         /// The patient ProKnow ID
         /// </summary>
-        [JsonIgnore]
-        public string PatientId { get; internal set; }
+        [JsonPropertyName("patient")]
+        public string PatientId { get; set; }
 
         /// <summary>
         /// The entity ProKnow ID
@@ -98,12 +98,10 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         /// <param name="requestor">Issues requests to the ProKnow API</param>
         /// <param name="workspaceId">The workspace ID</param>
-        /// <param name="patientId">The patient ID</param>
-        internal virtual void PostProcessDeserialization(Requestor requestor, string workspaceId, string patientId)
+        internal virtual void PostProcessDeserialization(Requestor requestor, string workspaceId)
         {
             _requestor = requestor;
             WorkspaceId = workspaceId;
-            PatientId = patientId;
         }
     }
 }
