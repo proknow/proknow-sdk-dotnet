@@ -117,6 +117,7 @@ namespace ProKnow.Patient
         /// <returns>A collection of patient summaries</returns>
         public Task<IList<PatientSummary>> QueryAsync(string workspace, string searchString = null)
         {
+            //todo--use searchString
             var workspaceItemTask = _proKnow.Workspaces.ResolveAsync(workspace);
             return workspaceItemTask.ContinueWith(t1 =>
                 {

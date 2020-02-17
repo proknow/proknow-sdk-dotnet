@@ -36,7 +36,7 @@ namespace ProKnow.Upload
         /// <summary>
         /// Upload file(s) asynchronously
         /// </summary>
-        /// <param name="workspace">The ProKnow ID for the workspace</param>
+        /// <param name="workspace">ID or name of the workspace</param>
         /// <param name="path">The folder or file path</param>
         /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
         /// <param name="doWait">Indicates whether to wait until all uploads reach a terminal state</param>
