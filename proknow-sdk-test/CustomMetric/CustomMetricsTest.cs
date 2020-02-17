@@ -16,8 +16,8 @@ namespace ProKnow.CustomMetric.Test
         private static CustomMetricItem _numberCustomMetricItem;
         private static CustomMetricItem _stringCustomMetricItem;
 
-        [ClassInitialize]
-        public static async Task ClassInitialize(TestContext testContext)
+        [TestInitialize]
+        public async Task ClassInitialize()
         {
             // Delete existing custom metrics, if necessary
             await TestHelper.DeleteCustomMetricsAsync(_baseName);
@@ -29,8 +29,8 @@ namespace ProKnow.CustomMetric.Test
             _stringCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_baseName}-string", "plan", "string");
         }
 
-        [ClassCleanup]
-        public static async Task ClassCleanup()
+        [TestCleanup]
+        public async Task ClassCleanup()
         {
             // Delete custom metrics created for this test
             await TestHelper.DeleteCustomMetricsAsync(_baseName);
@@ -73,10 +73,45 @@ namespace ProKnow.CustomMetric.Test
         }
 
         [TestMethod]
+        public async Task FindAsyncTest()
+        {
+            var customMetric = await _proKnow.CustomMetrics.FindAsync(m => m.Name == _numberCustomMetricItem.Name);
+            Assert.AreEqual(_numberCustomMetricItem.Id, customMetric.Id);
+        }
+
+        [TestMethod]
         public async Task QueryAsyncTest()
         {
             var customMetrics = await _proKnow.CustomMetrics.QueryAsync();
             Assert.IsTrue(customMetrics.Count > 0);
+        }
+
+        [TestMethod]
+        public async Task ResolveAsyncTest_Id()
+        {
+            var customMetric = await _proKnow.CustomMetrics.ResolveAsync(_enumCustomMetricItem.Id);
+            Assert.AreEqual(_enumCustomMetricItem.Id, customMetric.Id);
+        }
+
+        [TestMethod]
+        public async Task ResolveAsyncTest_Name()
+        {
+            var customMetric = await _proKnow.CustomMetrics.ResolveAsync(_enumCustomMetricItem.Name);
+            Assert.AreEqual(_enumCustomMetricItem.Id, customMetric.Id);
+        }
+
+        [TestMethod]
+        public async Task ResolveByIdAsyncTest()
+        {
+            var customMetric = await _proKnow.CustomMetrics.ResolveByIdAsync(_numberCustomMetricItem.Id);
+            Assert.AreEqual(_numberCustomMetricItem.Id, customMetric.Id);
+        }
+
+        [TestMethod]
+        public async Task ResolveByNameAsyncTest()
+        {
+            var customMetric = await _proKnow.CustomMetrics.ResolveByNameAsync(_stringCustomMetricItem.Name);
+            Assert.AreEqual(_stringCustomMetricItem.Id, customMetric.Id);
         }
     }
 }

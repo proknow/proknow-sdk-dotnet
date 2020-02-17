@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ProKnow.CustomMetric
@@ -55,6 +57,21 @@ namespace ProKnow.CustomMetric
         }
 
         /// <summary>
+        /// Finds a custom metric item asynchronously based on a predicate
+        /// </summary>
+        /// <param name="predicate">The predicate for the search</param>
+        /// <returns>The first custom metric item that satisfies the predicate or null if the predicate was null or no
+        /// custom metric item satisfies the predicate</returns>
+        public Task<CustomMetricItem> FindAsync(Func<CustomMetricItem, bool> predicate)
+        {
+            if (_cache == null)
+            {
+                return QueryAsync().ContinueWith(_ => Find(predicate));
+            }
+            return Task.FromResult(Find(predicate));
+        }
+
+        /// <summary>
         /// Queries for custom metrics asynchronously
         /// </summary>
         /// <returns>The custom metrics</returns>
@@ -62,6 +79,78 @@ namespace ProKnow.CustomMetric
         {
             string customMetricsJson = await _proKnow.Requestor.GetAsync("/metrics/custom");
             return DeserializeCustomMetrics(customMetricsJson);
+        }
+
+        /// <summary>
+        /// Resolves a custom metric asynchronously
+        /// </summary>
+        /// <param name="customMetric">The ProKnow ID or name of the custom metric</param>
+        /// <returns>The custom metric item corresponding to the specified ID or name or null if no matching
+        /// custom metric was found</returns>
+        public Task<CustomMetricItem> ResolveAsync(string customMetric)
+        {
+            Regex regex = new Regex(@"^[0-9a-f]{32}$");
+            Match match = regex.Match(customMetric);
+            if (match.Success)
+            {
+                return ResolveByIdAsync(customMetric);
+            }
+            else
+            {
+                return ResolveByNameAsync(customMetric);
+            }
+        }
+
+        /// <summary>
+        /// Resolves a custom metric by its ProKnow ID asynchronously
+        /// </summary>
+        /// <param name="customMetricId">The ProKnow ID of the custom metric</param>
+        /// <returns>The custom metric item corresponding to the specified ID or null if no matching custom metric
+        /// was found</returns>
+        public Task<CustomMetricItem> ResolveByIdAsync(string customMetricId)
+        {
+            if (String.IsNullOrWhiteSpace(customMetricId))
+            {
+                throw new ArgumentException("The custom metric ID must be specified.");
+            }
+            return FindAsync(t => t.Id == customMetricId);
+        }
+
+        /// <summary>
+        /// Resolves a custom metric by its name asynchronously
+        /// </summary>
+        /// <param name="customMetricName">The name of the custom metric</param>
+        /// <returns>The custom metric item corresponding to the specified name or null if no matching custom metric
+        /// was found</returns>
+        public Task<CustomMetricItem> ResolveByNameAsync(string customMetricName)
+        {
+            if (String.IsNullOrWhiteSpace(customMetricName))
+            {
+                throw new ArgumentException("The custom metric name must be specified.");
+            }
+            return FindAsync(t => t.Name == customMetricName);
+        }
+
+        /// <summary>
+        /// Finds a custom metric item based on a predicate
+        /// </summary>
+        /// <param name="predicate">The predicate for the search</param>
+        /// <returns>The first custom metric item that satisfies the predicate or null if the predicate was null or no
+        /// custom metric item satisfies the predicate were found</returns>
+        private CustomMetricItem Find(Func<CustomMetricItem, bool> predicate)
+        {
+            if (predicate == null)
+            {
+                return null;
+            }
+            foreach (var customMetricItem in _cache)
+            {
+                if (predicate(customMetricItem))
+                {
+                    return customMetricItem;
+                }
+            }
+            return null;
         }
 
         /// <summary>
