@@ -45,7 +45,7 @@ namespace ProKnow.Upload.Test
             _uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RP.dcm");
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientMetadata { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
+                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
             };
             var uploadBatch = await _uploads.UploadAsync(_workspaceItem.Id, _uploadPath, overrides);
 
@@ -75,7 +75,7 @@ namespace ProKnow.Upload.Test
             _uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientMetadata { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
+                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
             };
             var uploadBatch = await _uploads.UploadAsync(_workspaceItem.Id, _uploadPath, overrides);
             var uploadedFiles = Directory.GetFiles(_uploadPath);

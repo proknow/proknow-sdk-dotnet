@@ -36,7 +36,7 @@ namespace ProKnow.Patients.Entities.Test
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientMetadata { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
+                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
             };
             await _uploads.UploadAsync(_workspaceItem.Id, uploadPath, overrides);
             _uploadedFiles = Directory.GetFiles(uploadPath);

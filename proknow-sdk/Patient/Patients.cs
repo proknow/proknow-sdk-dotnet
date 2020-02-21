@@ -35,10 +35,10 @@ namespace ProKnow.Patient
         public async Task<PatientItem> CreateAsync(string workspace, string mrn, string name, string birthDate = null, string sex = null)
         {
             var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
-            var patientMetadata = new PatientMetadata { Mrn = mrn, Name = name, BirthDate = birthDate, Sex = sex };
-            var content = new StringContent(JsonSerializer.Serialize(patientMetadata), Encoding.UTF8, "application/json");
+            var patientSchema = new PatientCreateSchema { Mrn = mrn, Name = name, BirthDate = birthDate, Sex = sex };
+            var content = new StringContent(JsonSerializer.Serialize(patientSchema), Encoding.UTF8, "application/json");
             var patientItemJson = await _proKnow.Requestor.PostAsync($"/workspaces/{workspaceItem.Id}/patients", null, content);
-            return DeserializePatient(workspaceItem.Id, patientItemJson);
+            return new PatientItem(_proKnow, workspaceItem.Id, patientItemJson);
         }
 
         /// <summary>
@@ -84,10 +84,10 @@ namespace ProKnow.Patient
         /// <param name="workspaceId">The ID of the workspace containing the patient</param>
         /// <param name="patientId">The ProKnow ID of the patient</param>
         /// <returns>The specified patient item or null if it was not found</returns>
-        public Task<PatientItem> GetAsync(string workspaceId, string patientId)
+        public async Task<PatientItem> GetAsync(string workspaceId, string patientId)
         {
-            var patientJsonTask = _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/patients/{patientId}");
-            return patientJsonTask.ContinueWith(t => DeserializePatient(workspaceId, t.Result));
+            var json = await _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/patients/{patientId}");
+            return new PatientItem(_proKnow, workspaceId, json);
         }
 
         /// <summary>
@@ -144,19 +144,6 @@ namespace ProKnow.Patient
                 }
             }
             return patientSummaries;
-        }
-
-        /// <summary>
-        /// Creates a patient item from its JSON representation
-        /// </summary>
-        /// <param name="workspaceId">ID of the workspace containing the patients</param>
-        /// <param name="json">JSON representation of the patient item</param>
-        /// <returns>A patient item</returns>
-        private PatientItem DeserializePatient(string workspaceId, string json)
-        {
-            var patientItem = JsonSerializer.Deserialize<PatientItem>(json);
-            patientItem.PostProcessDeserialization(_proKnow.Requestor, workspaceId);
-            return patientItem;
         }
     }
 }

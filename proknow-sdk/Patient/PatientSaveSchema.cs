@@ -1,11 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace ProKnow.Patient
 {
     /// <summary>
-    /// Patient metadata
+    /// Properties used to save a patient
     /// </summary>
-    public class PatientMetadata
+    public class PatientSaveSchema
     {
         /// <summary>
         /// The patient medical record number (MRN) or ID
@@ -30,5 +31,11 @@ namespace ProKnow.Patient
         /// </summary>
         [JsonPropertyName("sex")]
         public string Sex { get; set; }
+
+        /// <summary>
+        /// The patient metadata (custom metrics)
+        /// </summary>
+        [JsonPropertyName("metadata")]
+        public Dictionary<string, object> Metadata { get; set; }
     }
 }

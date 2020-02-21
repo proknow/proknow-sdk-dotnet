@@ -92,6 +92,33 @@ namespace ProKnow
         }
 
         /// <summary>
+        /// Issues an asynchronous HTTP PUT request
+        /// </summary>
+        /// <param name="route">The API route to use in the request</param>
+        /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
+        /// <param name="content">Optional content for the body</param>
+        /// <returns>A task that returns the response as a string</returns>
+        /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
+        public Task<string> PutAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
+        {
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, $"{_baseUrl}/{route}");
+            request.Headers.Authorization = _authenticationHeaderValue;
+            if (headerKeyValuePairs != null)
+            {
+                foreach (var kvp in headerKeyValuePairs)
+                {
+                    request.Headers.Add(kvp.Key, kvp.Value);
+                }
+            }
+            if (content != null)
+            {
+                request.Content = content;
+            }
+            var httpResponseMessage = _httpClient.SendAsync(request);
+            return httpResponseMessage.ContinueWith(t => HandleResponseAsync(t.Result)).Unwrap();
+        }
+
+        /// <summary>
         /// Issues an asynchronous HTTP GET request with a streaming response
         /// </summary>
         /// <param name="route">The API route to use in the request</param>
