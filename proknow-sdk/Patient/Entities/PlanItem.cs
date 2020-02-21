@@ -10,11 +10,11 @@ namespace ProKnow.Patient.Entities
     public class PlanItem : EntityItem
     {
         /// <summary>
-        /// Downloads this entity as DICOM object(s) to the specified folder
+        /// Downloads this entity asynchronously as a DICOM object to the specified folder
         /// </summary>
         /// <param name="folder">The full path to the destination root folder</param>
         /// <returns>The full path to the destination folder (root or a sub-folder) to which the file(s) were downloaded</returns>
-        public override Task<string> Download(string folder)
+        public override Task<string> DownloadAsync(string folder)
         {
             if (File.Exists(folder))
             {

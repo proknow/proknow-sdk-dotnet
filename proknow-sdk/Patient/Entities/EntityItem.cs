@@ -78,11 +78,11 @@ namespace ProKnow.Patient.Entities
         //todo--Scorecards
 
         /// <summary>
-        /// Downloads this entity as DICOM object(s) to the specified folder
+        /// Downloads this entity asynchronously as DICOM object(s) to the specified folder
         /// </summary>
         /// <param name="root">The full path to the destination root folder</param>
         /// <returns>The full path to the destination folder (root or a sub-folder) to which the file(s) were downloaded</returns>
-        public abstract Task<string> Download(string root);
+        public abstract Task<string> DownloadAsync(string root);
 
         /// <summary>
         /// Returns a string that represents the current object

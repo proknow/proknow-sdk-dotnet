@@ -65,7 +65,7 @@ namespace ProKnow.Patients.Entities.Test
         {
             // Download the entity
             string downloadFolder = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
-            string downloadPath = await _doseItem.Download(downloadFolder);
+            string downloadPath = await _doseItem.DownloadAsync(downloadFolder);
 
             // Compare it to the uploaded one
             Assert.IsTrue(TestHelper.FileEquals(_uploadPath, downloadPath));

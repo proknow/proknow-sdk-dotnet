@@ -41,11 +41,11 @@ namespace ProKnow.Patient.Entities
         public StructureSetData Data { get; set; }
 
         /// <summary>
-        /// Downloads this entity as DICOM object(s) to the specified folder
+        /// Downloads this entity asynchonously as a DICOM object to the specified folder
         /// </summary>
         /// <param name="folder">The full path to the destination folder</param>
         /// <returns>The full path to the file downloaded</returns>
-        public override Task<string> Download(string folder)
+        public override Task<string> DownloadAsync(string folder)
         {
             if (IsDraft)
             {

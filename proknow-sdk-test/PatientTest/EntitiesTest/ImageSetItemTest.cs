@@ -69,7 +69,7 @@ namespace ProKnow.Patients.Entities.Test
         {
             // Download the image set
             string downloadFolder = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
-            string downloadPath = await _imageSetItem.Download(downloadFolder);
+            string downloadPath = await _imageSetItem.DownloadAsync(downloadFolder);
             var downloadedFiles = Directory.GetFiles(downloadPath);
 
             // Make sure the same number of images were downloaded
