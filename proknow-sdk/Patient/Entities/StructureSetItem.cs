@@ -41,7 +41,7 @@ namespace ProKnow.Patient.Entities
         public StructureSetData Data { get; set; }
 
         /// <summary>
-        /// Downloads this entity asynchonously as a DICOM object to the specified folder
+        /// Downloads this entity asynchronously as a DICOM object to the specified folder
         /// </summary>
         /// <param name="folder">The full path to the destination folder</param>
         /// <returns>The full path to the file downloaded</returns>

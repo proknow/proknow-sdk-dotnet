@@ -18,7 +18,7 @@ namespace ProKnow.Patient.Entities
         public ImageSetData Data { get; set; }
 
         /// <summary>
-        /// Downloads this image set asynchonously as DICOM objects to the specified folder
+        /// Downloads this image set asynchronously as DICOM objects to the specified folder
         /// </summary>
         /// <param name="root">The full path to the destination root folder</param>
         /// <returns>The full path to the destination sub-folder to which the images were downloaded</returns>
