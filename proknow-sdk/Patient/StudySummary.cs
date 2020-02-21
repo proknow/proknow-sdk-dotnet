@@ -48,7 +48,7 @@ namespace ProKnow.Patient
         /// <returns>A string that represents the current object</returns>
         public override string ToString()
         {
-            return JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
+            return Id;
         }
 
         /// <summary>
