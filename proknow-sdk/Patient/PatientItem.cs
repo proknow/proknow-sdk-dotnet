@@ -7,7 +7,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-using ProKnow.CustomMetric;
 using ProKnow.Patient.Entities;
 
 namespace ProKnow.Patient
@@ -91,22 +90,7 @@ namespace ProKnow.Patient
         /// <returns>A patient item</returns>
         internal PatientItem(ProKnow proKnow, string workspaceId, string json)
         {
-            var patientItem = JsonSerializer.Deserialize<PatientItem>(json);
-            _proKnow = proKnow;
-            WorkspaceId = workspaceId;
-            Id = patientItem.Id;
-            Mrn = patientItem.Mrn;
-            Name = patientItem.Name;
-            BirthDate = patientItem.BirthDate;
-            Sex = patientItem.Sex;
-            Metadata = patientItem.Metadata;
-            foreach (var study in patientItem.Studies)
-            {
-                study.PostProcessDeserialization(_proKnow.Requestor, WorkspaceId, Id);
-            }
-            Studies = patientItem.Studies;
-            ExtensionData = patientItem.ExtensionData;
-            //todo--Tasks
+            Initialize(proKnow, workspaceId, json);
         }
 
         /// <summary>
@@ -178,17 +162,7 @@ namespace ProKnow.Patient
         public async Task RefreshAsync()
         {
             var json = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/patients/{Id}");
-            var patientItem = new PatientItem(_proKnow, WorkspaceId, json);
-            Mrn = patientItem.Mrn;
-            Name = patientItem.Name;
-            BirthDate = patientItem.BirthDate;
-            Sex = patientItem.Sex;
-            Metadata = patientItem.Metadata;
-            foreach (var study in patientItem.Studies)
-            {
-                study.PostProcessDeserialization(_proKnow.Requestor, WorkspaceId, Id);
-            }
-            //todo--Tasks
+            Initialize(_proKnow, WorkspaceId, json);
         }
 
         /// <summary>
@@ -229,6 +203,32 @@ namespace ProKnow.Patient
         public override string ToString()
         {
             return $"{Mrn} | {Name}";
+        }
+
+        /// <summary>
+        /// Initializes this instance using its JSON representation
+        /// </summary>
+        /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
+        /// <param name="workspaceId">ID of the workspace containing the patients</param>
+        /// <param name="json">JSON representation of the patient item</param>
+        private void Initialize(ProKnow proKnow, string workspaceId, string json)
+        {
+            var patientItem = JsonSerializer.Deserialize<PatientItem>(json);
+            _proKnow = proKnow;
+            WorkspaceId = workspaceId;
+            Id = patientItem.Id;
+            Mrn = patientItem.Mrn;
+            Name = patientItem.Name;
+            BirthDate = patientItem.BirthDate;
+            Sex = patientItem.Sex;
+            Metadata = patientItem.Metadata;
+            foreach (var study in patientItem.Studies)
+            {
+                study.PostProcessDeserialization(_proKnow.Requestor, WorkspaceId, Id);
+            }
+            Studies = patientItem.Studies;
+            ExtensionData = patientItem.ExtensionData;
+            //todo--Tasks
         }
     }
 }
