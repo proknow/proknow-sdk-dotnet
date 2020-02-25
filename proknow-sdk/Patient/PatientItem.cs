@@ -93,7 +93,7 @@ namespace ProKnow.Patient
         {
             var patientItem = JsonSerializer.Deserialize<PatientItem>(json);
             _proKnow = proKnow;
-            WorkspaceId = patientItem.WorkspaceId;
+            WorkspaceId = workspaceId;
             Id = patientItem.Id;
             Mrn = patientItem.Mrn;
             Name = patientItem.Name;
@@ -104,6 +104,8 @@ namespace ProKnow.Patient
             {
                 study.PostProcessDeserialization(_proKnow.Requestor, WorkspaceId, Id);
             }
+            Studies = patientItem.Studies;
+            ExtensionData = patientItem.ExtensionData;
             //todo--Tasks
         }
 
