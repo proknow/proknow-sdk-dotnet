@@ -77,7 +77,13 @@ namespace ProKnow.Patient.Entities
 
         //todo--Add Scorecards property
 
-        //todo--Implement DeleteAsync method
+        /// <summary>
+        /// Deletes this entity asynchronously
+        /// </summary>
+        public async Task DeleteAsync()
+        {
+            await _requestor.DeleteAsync($"/workspaces/{WorkspaceId}/entities/{Id}");
+        }
 
         /// <summary>
         /// Downloads this entity asynchronously as DICOM object(s) to the specified folder

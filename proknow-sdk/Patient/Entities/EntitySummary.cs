@@ -102,6 +102,14 @@ namespace ProKnow.Patient.Entities
         public Dictionary<string, object> ExtensionData { get; set; }
 
         /// <summary>
+        /// Deletes the corresponding entity item asynchronously
+        /// </summary>
+        public async Task DeleteAsync()
+        {
+            await _requestor.DeleteAsync($"/workspaces/{WorkspaceId}/entities/{Id}");
+        }
+
+        /// <summary>
         /// Gets the corresponding entity item asynchronously
         /// </summary>
         /// <returns>The corresponding entity item</returns>
@@ -129,8 +137,6 @@ namespace ProKnow.Patient.Entities
                 }
             }
          }
-
-        //todo--Implement DeleteAsync method
 
         /// <summary>
         /// Returns a string that represents the current object

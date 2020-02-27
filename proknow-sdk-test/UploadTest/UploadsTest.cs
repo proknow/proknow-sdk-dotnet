@@ -61,7 +61,7 @@ namespace ProKnow.Upload.Test
                     Assert.AreEqual(entitySummaries[0].Uid, "2.16.840.1.114337.1.1.1535997926.0");
 
                     // Cleanup (in case there are other tests using the same patient)
-                    //todo--delete the uploaded plan
+                    entitySummaries[0].DeleteAsync();
 
                     break;
                 }
@@ -93,7 +93,7 @@ namespace ProKnow.Upload.Test
                     if (entityItem.Data.Images.Count == uploadedFiles.Length)
 
                         // Cleanup (in case there are other tests using the same image set)
-                        //todo--delete the uploaded image set
+                        entityItem.DeleteAsync();
 
                         break;
                 }

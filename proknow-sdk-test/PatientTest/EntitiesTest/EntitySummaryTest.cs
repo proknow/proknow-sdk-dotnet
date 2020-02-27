@@ -62,6 +62,46 @@ namespace ProKnow.Patients.Entities.Test
         }
 
         [TestMethod]
+        public async Task DeleteAsyncTest()
+        {
+            // Get existing entity summary
+            var entitySummary = _patientItem.FindEntities(e => e.Type == "plan")[0];
+
+            // Delete entity
+            await entitySummary.DeleteAsync();
+
+            // Verify it was deleted
+            while (true)
+            {
+                _patientItem.RefreshAsync();
+                var entitySummaries = _patientItem.FindEntities(t => t.Type == "plan");
+                if (entitySummaries.Count == 0)
+                {
+                    break;
+                }
+            }
+
+            // Restore test file in case another test needs it
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RP.dcm");
+            var overrides = new UploadFileOverrides
+            {
+                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
+            };
+            await _uploads.UploadAsync(_workspaceItem.Id, uploadPath, overrides);
+
+            // Wait until uploaded test file has processed
+            while (true)
+            {
+                await _patientItem.RefreshAsync();
+                var entitySummaries = _patientItem.FindEntities(t => t.Type == "plan");
+                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
+                {
+                    break;
+                }
+            }
+        }
+
+        [TestMethod]
         public async Task ImageSet_GetAsyncTest()
         {
             var entitySummary = _patientItem.FindEntities(e => e.Type == "image_set")[0];
