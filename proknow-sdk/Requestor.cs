@@ -41,12 +41,12 @@ namespace ProKnow
         /// <param name="route">The API route to use in the request</param>
         /// <returns>A task that returns the response as a string</returns>
         /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
-        public Task<string> DeleteAsync(string route)
+        public async Task<string> DeleteAsync(string route)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"{_baseUrl}/{route}");
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"{_baseUrl}/{route}");
             request.Headers.Authorization = _authenticationHeaderValue;
-            var httpResponseMessage = _httpClient.SendAsync(request);
-            return httpResponseMessage.ContinueWith(t => HandleResponseAsync(t.Result)).Unwrap();
+            var response = await _httpClient.SendAsync(request);
+            return await HandleResponseAsync(response);
         }
 
         /// <summary>
@@ -56,12 +56,12 @@ namespace ProKnow
         /// <param name="queryParameters">Optional query parameters</param>
         /// <returns>A task that returns the response as a string</returns>
         /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
-        public Task<string> GetAsync(string route, Dictionary<string, object> queryParameters = null)
+        public async Task<string> GetAsync(string route, Dictionary<string, object> queryParameters = null)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, BuildUriString($"{_baseUrl}/{route}", queryParameters));
+            var request = new HttpRequestMessage(HttpMethod.Get, BuildUriString($"{_baseUrl}/{route}", queryParameters));
             request.Headers.Authorization = _authenticationHeaderValue;
-            var httpResponseMessage = _httpClient.SendAsync(request);
-            return httpResponseMessage.ContinueWith(t => HandleResponseAsync(t.Result)).Unwrap();
+            var response = await _httpClient.SendAsync(request);
+            return await HandleResponseAsync(response);
         }
 
         /// <summary>
@@ -72,9 +72,9 @@ namespace ProKnow
         /// <param name="content">Optional content for the body</param>
         /// <returns>A task that returns the response as a string</returns>
         /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
-        public Task<string> PostAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
+        public async Task<string> PostAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/{route}");
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/{route}");
             request.Headers.Authorization = _authenticationHeaderValue;
             if (headerKeyValuePairs != null)
             {
@@ -87,8 +87,8 @@ namespace ProKnow
             {
                 request.Content = content;
             }
-            var httpResponseMessage = _httpClient.SendAsync(request);
-            return httpResponseMessage.ContinueWith(t => HandleResponseAsync(t.Result)).Unwrap();
+            var response = await _httpClient.SendAsync(request);
+            return await HandleResponseAsync(response);
         }
 
         /// <summary>
@@ -99,9 +99,9 @@ namespace ProKnow
         /// <param name="content">Optional content for the body</param>
         /// <returns>A task that returns the response as a string</returns>
         /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
-        public Task<string> PutAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
+        public async Task<string> PutAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, $"{_baseUrl}/{route}");
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{_baseUrl}/{route}");
             request.Headers.Authorization = _authenticationHeaderValue;
             if (headerKeyValuePairs != null)
             {
@@ -114,8 +114,8 @@ namespace ProKnow
             {
                 request.Content = content;
             }
-            var httpResponseMessage = _httpClient.SendAsync(request);
-            return httpResponseMessage.ContinueWith(t => HandleResponseAsync(t.Result)).Unwrap();
+            var response = await _httpClient.SendAsync(request);
+            return await HandleResponseAsync(response);
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace ProKnow
         /// <returns>The full path to the file containing the response</returns>
         public async Task<string> StreamAsync(string route, string path)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}/{route}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}/{route}");
             request.Headers.Authorization = _authenticationHeaderValue;
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));

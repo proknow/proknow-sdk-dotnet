@@ -22,8 +22,9 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         /// <param name="root">The full path to the destination root folder</param>
         /// <returns>The full path to the destination sub-folder to which the images were downloaded</returns>
-        public override Task<string> DownloadAsync(string root)
+        public override async Task<string> DownloadAsync(string root)
         {
+            // Create destination folder, if necessary
             var folder = Path.Combine(root, $"{Modality}.{Uid}");
             if (File.Exists(folder))
             {
@@ -33,13 +34,18 @@ namespace ProKnow.Patient.Entities
             {
                 Directory.CreateDirectory(folder);
             }
+
+            // Download each image to the destination folder asynchronously
             var tasks = new List<Task<string>>();
             foreach (var image in Data.Images)
             {
                 var file = Path.Combine(folder, $"{Modality}.{image.Uid}");
                 tasks.Add(Task.Run(() => _requestor.StreamAsync($"/workspaces/{WorkspaceId}/imagesets/{Id}/images/{image.Id}/dicom", file)));
             }
-            return Task.WhenAll(tasks).ContinueWith(t => folder);
+            await Task.WhenAll(tasks);
+
+            // Return the destination folder
+            return folder;
         }
     }
 }

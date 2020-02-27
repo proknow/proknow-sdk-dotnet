@@ -161,16 +161,15 @@ namespace ProKnow.Patient.Entities
         /// <summary>
         /// Gets the corresponding entity item asynchronously
         /// </summary>
-        /// <returns></returns>
-        private Task<EntityItem> GetEntityItemAsync()
+        /// <returns>The corresponding entity item</returns>
+        private async Task<EntityItem> GetEntityItemAsync()
         {
             if (!typeToRoutePartMap.ContainsKey(Type))
             {
                 throw new ArgumentOutOfRangeException("The entity 'type' must be one of 'image_set', 'structure_set', 'plan', or 'dose'.");
             }
-            var entityRoutePart = typeToRoutePartMap[Type];
-            var entityJsonTask = _requestor.GetAsync($"/workspaces/{WorkspaceId}/{entityRoutePart}/{Id}");
-            return entityJsonTask.ContinueWith(t => DeserializeEntity(t.Result));
+            var json = await _requestor.GetAsync($"/workspaces/{WorkspaceId}/{typeToRoutePartMap[Type]}/{Id}");
+            return DeserializeEntity(json);
         }
 
         /// <summary>

@@ -62,13 +62,13 @@ namespace ProKnow.CustomMetric
         /// <param name="predicate">The predicate for the search</param>
         /// <returns>The first custom metric item that satisfies the predicate or null if the predicate was null or no
         /// custom metric item satisfies the predicate</returns>
-        public Task<CustomMetricItem> FindAsync(Func<CustomMetricItem, bool> predicate)
+        public async Task<CustomMetricItem> FindAsync(Func<CustomMetricItem, bool> predicate)
         {
             if (_cache == null)
             {
-                return QueryAsync().ContinueWith(_ => Find(predicate));
+                await QueryAsync();
             }
-            return Task.FromResult(Find(predicate));
+            return Find(predicate);
         }
 
         /// <summary>

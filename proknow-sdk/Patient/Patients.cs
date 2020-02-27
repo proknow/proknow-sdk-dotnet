@@ -36,9 +36,9 @@ namespace ProKnow.Patient
         {
             var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
             var patientSchema = new PatientCreateSchema { Mrn = mrn, Name = name, BirthDate = birthDate, Sex = sex };
-            var content = new StringContent(JsonSerializer.Serialize(patientSchema), Encoding.UTF8, "application/json");
-            var patientItemJson = await _proKnow.Requestor.PostAsync($"/workspaces/{workspaceItem.Id}/patients", null, content);
-            return new PatientItem(_proKnow, workspaceItem.Id, patientItemJson);
+            var requestContent = new StringContent(JsonSerializer.Serialize(patientSchema), Encoding.UTF8, "application/json");
+            var responseJson = await _proKnow.Requestor.PostAsync($"/workspaces/{workspaceItem.Id}/patients", null, requestContent);
+            return new PatientItem(_proKnow, workspaceItem.Id, responseJson);
         }
 
         /// <summary>
@@ -58,24 +58,21 @@ namespace ProKnow.Patient
         /// <param name="predicate">The predicate for the search</param>
         /// <returns>The first patient that satisfies the predicate or null if the predicate was null or no patient satisfies
         /// the predicate</returns>
-        public Task<PatientSummary> FindAsync(string workspace, Func<PatientSummary, bool> predicate)
+        public async Task<PatientSummary> FindAsync(string workspace, Func<PatientSummary, bool> predicate)
         {
             if (predicate == null)
             {
                 return null;
             }
-            return QueryAsync(workspace).ContinueWith(patientSummariesTask =>
+            var patientSummaries = await QueryAsync(workspace);
+            foreach (var patientSummary in patientSummaries)
             {
-                var patientSummaries = patientSummariesTask.Result;
-                foreach (var patientSummary in patientSummaries)
+                if (predicate(patientSummary))
                 {
-                    if (predicate(patientSummary))
-                    {
-                        return patientSummary;
-                    }
+                    return patientSummary;
                 }
-                return null;
-            });
+            }
+            return null;
         }
 
         /// <summary>
@@ -97,16 +94,13 @@ namespace ProKnow.Patient
         /// <param name="mrns">The list of MRNs to look up</param>
         /// <returns>A collection of patient summaries.  If the MRN at a given index cannot be found, the result will contain will
         /// contain null at that index</returns>
-        public Task<IList<PatientSummary>> LookupAsync(string workspace, IList<string> mrns)
+        public async Task<IList<PatientSummary>> LookupAsync(string workspace, IList<string> mrns)
         {
-            var workspaceItemTask = _proKnow.Workspaces.ResolveAsync(workspace);
-            return workspaceItemTask.ContinueWith(t1 =>
-            {
-                var workspaceId = t1.Result.Id;
-                var content = new StringContent(JsonSerializer.Serialize(mrns), Encoding.UTF8, "application/json");
-                var patientsJsonTask = _proKnow.Requestor.PostAsync($"/workspaces/{workspaceId}/patients/lookup", null, content);
-                return patientsJsonTask.ContinueWith(t2 => DeserializePatients(workspaceId, t2.Result));
-            }).Unwrap();
+            var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
+            var workspaceId = workspaceItem.Id;
+            var requestContent = new StringContent(JsonSerializer.Serialize(mrns), Encoding.UTF8, "application/json");
+            var responseJson = await _proKnow.Requestor.PostAsync($"/workspaces/{workspaceId}/patients/lookup", null, requestContent);
+            return DeserializePatients(workspaceId, responseJson);
         }
 
         /// <summary>
@@ -115,16 +109,13 @@ namespace ProKnow.Patient
         /// <param name="workspace">ID or name of the workspace containing the patients</param>
         /// <param name="searchString"></param>
         /// <returns>A collection of patient summaries</returns>
-        public Task<IList<PatientSummary>> QueryAsync(string workspace, string searchString = null)
+        public async Task<IList<PatientSummary>> QueryAsync(string workspace, string searchString = null)
         {
             //todo--use searchString
-            var workspaceItemTask = _proKnow.Workspaces.ResolveAsync(workspace);
-            return workspaceItemTask.ContinueWith(t1 =>
-                {
-                    var workspaceId = t1.Result.Id;
-                    var patientsJsonTask = _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/patients");
-                    return patientsJsonTask.ContinueWith(t2 => DeserializePatients(workspaceId, t2.Result));
-                }).Unwrap();
+            var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
+            var workspaceId = workspaceItem.Id;
+            var json = await _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/patients");
+            return DeserializePatients(workspaceId, json);
         }
 
         /// <summary>

@@ -51,11 +51,11 @@ namespace ProKnow.Upload
         /// Gets the complete representation of the entity
         /// </summary>
         /// <returns>A complete representation of the entity</returns>
-        public Task<EntityItem> GetAsync()
+        public async Task<EntityItem> GetAsync()
         {
-            var patientTask = _patients.GetAsync(WorkspaceId, PatientId);
-            var entitySummaryTask = patientTask.ContinueWith(t => t.Result.FindEntities(e => e.Id == Id)[0]);
-            return entitySummaryTask.ContinueWith(t => t.Result.GetAsync()).Unwrap();
+            var patientItem = await _patients.GetAsync(WorkspaceId, PatientId);
+            var entitySummary = patientItem.FindEntities(e => e.Id == Id)[0];
+            return await entitySummary.GetAsync();
         }
 
         /// <summary>

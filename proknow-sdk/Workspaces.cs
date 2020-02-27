@@ -63,13 +63,13 @@ namespace ProKnow
         /// <param name="predicate">The predicate for the search</param>
         /// <returns>The first workspace item that satisfies the predicate or null if the predicate was null or no workspace 
         /// item satisfies the predicate</returns>
-        public Task<WorkspaceItem> FindAsync(Func<WorkspaceItem, bool> predicate)
+        public async Task<WorkspaceItem> FindAsync(Func<WorkspaceItem, bool> predicate)
         {
             if (_cache == null)
             {
-                return QueryAsync().ContinueWith(_ => Find(predicate));
+                await QueryAsync();
             }
-            return Task.FromResult(Find(predicate));
+            return Find(predicate);
         }
 
         /// <summary>

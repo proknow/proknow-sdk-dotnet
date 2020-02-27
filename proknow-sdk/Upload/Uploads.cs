@@ -166,11 +166,11 @@ namespace ProKnow.Upload
         /// <param name="path">The full path to the file</param>
         /// <param name="overrides">Optional overrides to be applied to the data</param>
         /// <returns>The response from the file upload initiation</returns>
-        private Task<InitiateFileUploadResponse> InitiateFileUploadAsync(string workspaceId, string path, UploadFileOverrides overrides = null)
+        private async Task<InitiateFileUploadResponse> InitiateFileUploadAsync(string workspaceId, string path, UploadFileOverrides overrides = null)
         {
             var requestBody = BuildInitiateFileUploadRequestBody(path, overrides);
-            return _proKnow.Requestor.PostAsync($"/workspaces/{workspaceId}/uploads/", null, requestBody)
-                .ContinueWith(t => JsonSerializer.Deserialize<InitiateFileUploadResponse>(t.Result));
+            var json = await _proKnow.Requestor.PostAsync($"/workspaces/{workspaceId}/uploads/", null, requestBody);
+            return JsonSerializer.Deserialize<InitiateFileUploadResponse>(json);
         }
 
         /// <summary>
