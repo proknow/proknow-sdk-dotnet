@@ -2,6 +2,7 @@
 using System.Text.Json;
 using ProKnow.CustomMetric;
 using ProKnow.Patient;
+using ProKnow.Upload;
 
 namespace ProKnow
 {
@@ -20,15 +21,28 @@ namespace ProKnow
         /// </summary>
         public CustomMetrics CustomMetrics { get; private set; }
 
+        //todo--Add ScorecardTemplates property
+
         /// <summary>
         /// Interacts with workspaces in the ProKnow organization
         /// </summary>
         public Workspaces Workspaces { get; private set; }
 
+        //todo--Add Roles property
+
+        //todo--Add Users property
+
+        /// <summary>
+        /// Interacts with uploads in the ProKnow organization
+        /// </summary>
+        public Uploads Uploads { get; private set; }
+
         /// <summary>
         /// Interacts with patients in the ProKnow organization
         /// </summary>
         public Patients Patients { get; private set; }
+
+        //todo--Add Collections property
 
         /// <summary>
         /// The number of seconds to use as a buffer when renewing a lock for a draft structure set. As an example, the default value of 30
@@ -75,8 +89,13 @@ namespace ProKnow
             LockRenewalBuffer = lockRenewalBuffer;
             Requestor = new Requestor(baseUrl, credentialsId, credentialsSecret);
             CustomMetrics = new CustomMetrics(this);
+            //todo--Initialize ScorecardTemplates property
             Workspaces = new Workspaces(this);
+            //todo--Initialize Roles property
+            //todo--Initialize Users property
+            Uploads = new Uploads(this);
             Patients = new Patients(this);
+            //todo--Initialize Collections property
         }
     }
 }

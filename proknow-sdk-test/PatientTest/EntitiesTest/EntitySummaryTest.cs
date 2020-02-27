@@ -73,7 +73,7 @@ namespace ProKnow.Patients.Entities.Test
             // Verify it was deleted
             while (true)
             {
-                _patientItem.RefreshAsync();
+                await _patientItem.RefreshAsync();
                 var entitySummaries = _patientItem.FindEntities(t => t.Type == "plan");
                 if (entitySummaries.Count == 0)
                 {

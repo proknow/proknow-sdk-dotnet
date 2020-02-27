@@ -1,19 +1,20 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 using ProKnow.Patient;
 using ProKnow.Patient.Entities;
 using ProKnow.Test;
+using ProKnow.Upload;
 
-namespace ProKnow.Upload.Test
+namespace ProKnow.Patients.Test
 {
     [TestClass]
-    public class UploadsTest
+    public class PatientSummaryTest
     {
-        private static string _patientMrnAndName = "SDK-UploadsTest";
+        private static string _patientMrnAndName = "SDK-PatientSummaryTest";
         private static ProKnow _proKnow = TestSettings.ProKnow;
-        private static Uploads _uploads = new Uploads(_proKnow);
         private static WorkspaceItem _workspaceItem;
         private static PatientSummary _patientSummary;
 
@@ -46,7 +47,7 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
             };
-            var uploadBatch = await _uploads.UploadAsync(_workspaceItem.Id, uploadPath, overrides);
+            var uploadBatch = await _patientSummary.UploadAsync(uploadPath, overrides);
 
             // Wait until uploaded test file has processed
             PatientItem patientItem;
@@ -76,7 +77,7 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
             };
-            var uploadBatch = await _uploads.UploadAsync(_workspaceItem.Id, uploadPath, overrides);
+            var uploadBatch = await _patientSummary.UploadAsync(uploadPath, overrides);
             var uploadedFiles = Directory.GetFiles(uploadPath);
 
             // Wait until uploaded test file has processed
@@ -94,7 +95,7 @@ namespace ProKnow.Upload.Test
                         // Cleanup (in case there are other tests using the same image set)
                         await entityItem.DeleteAsync();
 
-                        break;
+                    break;
                 }
             }
         }

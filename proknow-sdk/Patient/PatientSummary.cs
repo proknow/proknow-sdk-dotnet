@@ -3,6 +3,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
+using ProKnow.Upload;
+
 namespace ProKnow.Patient
 {
     /// <summary>
@@ -10,11 +12,7 @@ namespace ProKnow.Patient
     /// </summary>
     public class PatientSummary
     {
-        /// <summary>
-        /// The parent Patients object
-        /// </summary>
-        [JsonIgnore]
-        internal Patients Patients { get; set; }
+        private ProKnow _proKnow;
 
         /// <summary>
         /// The workspace ID
@@ -64,10 +62,30 @@ namespace ProKnow.Patient
         /// <returns>The corresponding patient item</returns>
         public Task<PatientItem> GetAsync()
         {
-            return Patients.GetAsync(WorkspaceId, Id);
+            return _proKnow.Patients.GetAsync(WorkspaceId, Id);
         }
 
-        //todo--Implement UploadAsync method
+        /// <summary>
+        /// Upload file(s) asynchronously
+        /// </summary>
+        /// <param name="path">The folder or file path</param>
+        /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
+        /// <returns>The upload results</returns>
+        public Task<UploadBatch> UploadAsync(string path, UploadFileOverrides overrides = null)
+        {
+            return _proKnow.Uploads.UploadAsync(WorkspaceId, path, overrides);
+        }
+
+        /// <summary>
+        /// Upload files asynchronously
+        /// </summary>
+        /// <param name="paths">The folder and/or file paths</param>
+        /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
+        /// <returns>The upload results</returns>
+        public Task<UploadBatch> UploadAsync(IList<string> paths, UploadFileOverrides overrides = null)
+        {
+            return _proKnow.Uploads.UploadAsync(WorkspaceId, paths, overrides);
+        }
 
         /// <summary>
         /// Returns a string that represents the current object
@@ -81,11 +99,11 @@ namespace ProKnow.Patient
         /// <summary>
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
-        /// <param name="patients">The parent Patients object</param>
+        /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The workspace ID</param>
-        internal void PostProcessDeserialization(Patients patients, string workspaceId)
+        internal void PostProcessDeserialization(ProKnow proKnow, string workspaceId)
         {
-            Patients = patients;
+            _proKnow = proKnow;
             WorkspaceId = workspaceId;
         }
     }

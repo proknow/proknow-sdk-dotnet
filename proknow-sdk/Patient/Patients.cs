@@ -133,7 +133,7 @@ namespace ProKnow.Patient
             {
                 if (patientSummary != null)
                 {
-                    patientSummary.PostProcessDeserialization(this, workspaceId);
+                    patientSummary.PostProcessDeserialization(_proKnow, workspaceId);
                 }
             }
             return patientSummaries;
