@@ -75,7 +75,9 @@ namespace ProKnow.Patient.Entities
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; }
 
-        //todo--Scorecards
+        //todo--Add Scorecards property
+
+        //todo--Implement DeleteAsync method
 
         /// <summary>
         /// Downloads this entity asynchronously as DICOM object(s) to the specified folder
@@ -83,6 +85,12 @@ namespace ProKnow.Patient.Entities
         /// <param name="root">The full path to the destination root folder</param>
         /// <returns>The full path to the destination folder (root or a sub-folder) to which the file(s) were downloaded</returns>
         public abstract Task<string> DownloadAsync(string root);
+
+        //todo--Implement GetMetadataAsync method
+
+        //todo--Implement SaveAsync method
+
+        //todo--Implement SetMetadataAsync method
 
         /// <summary>
         /// Returns a string that represents the current object

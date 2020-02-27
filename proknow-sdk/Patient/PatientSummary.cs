@@ -67,6 +67,8 @@ namespace ProKnow.Patient
             return Patients.GetAsync(WorkspaceId, Id);
         }
 
+        //todo--Implement UploadAsync method
+
         /// <summary>
         /// Returns a string that represents the current object
         /// </summary>

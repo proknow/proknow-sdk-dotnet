@@ -30,15 +30,21 @@ namespace ProKnow.Patient.Entities
         [JsonIgnore]
         public bool IsDraft { get; protected set; }
 
-        //todo--Rois
+        //todo--Add Rois property
 
-        //todo--Versions
+        //todo--Add Versions property
 
         /// <summary>
         /// Type-specific entity data
         /// </summary>
         [JsonPropertyName("data")]
         public StructureSetData Data { get; set; }
+
+        //todo--Implement ApproveAsync method
+
+        //todo--Implement CreateRoiAsync method
+
+        //todo--Implement DiscardAsync method
 
         /// <summary>
         /// Downloads this entity asynchronously as a DICOM object to the specified folder
@@ -63,6 +69,14 @@ namespace ProKnow.Patient.Entities
             return _requestor.StreamAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/versions/{Data.VersionId}/dicom", file);
         }
 
+        //todo--Implement DraftAsync method
+
+        //todo--Implement ReleaseLockAsync method
+
+        //todo--Implement StartRenewer method
+
+        //todo--Implement StopRenewer method
+
         /// <summary>
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
@@ -77,9 +91,9 @@ namespace ProKnow.Patient.Entities
             IsEditable = false;
             IsDraft = false;
 
-            //todo--rois
+            //todo--post process Rois deserialization
 
-            //todo--versions
+            //todo--post process Versions deserialization
         }
 
         private async void WaitForReadyStatus()

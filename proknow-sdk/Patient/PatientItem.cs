@@ -72,7 +72,7 @@ namespace ProKnow.Patient
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; }
 
-        //todo--Tasks
+        //todo--Add Tasks property
 
         /// <summary>
         /// Used by deserialization to create patient item
@@ -92,6 +92,8 @@ namespace ProKnow.Patient
         {
             Initialize(proKnow, workspaceId, json);
         }
+
+        //todo--Implement DeleteAsync method
 
         /// <summary>
         /// Finds the entities for this patient that satisfy a predicate
@@ -195,6 +197,8 @@ namespace ProKnow.Patient
             await Task.WhenAll(tasks);
             Metadata = resolvedMetadata;
         }
+
+        //todo--Implement UploadAsync method
 
         /// <summary>
         /// Returns a string that represents the current object

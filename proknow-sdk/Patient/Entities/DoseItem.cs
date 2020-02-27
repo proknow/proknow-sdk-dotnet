@@ -27,5 +27,7 @@ namespace ProKnow.Patient.Entities
             var file = Path.Combine(folder, $"RD.{Uid}.dcm");
             return _requestor.StreamAsync($"/workspaces/{WorkspaceId}/doses/{Id}/dicom", file);
         }
+
+        //todo--Implement GetSliceData
     }
 }

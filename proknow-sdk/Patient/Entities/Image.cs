@@ -20,10 +20,14 @@ namespace ProKnow.Patient.Entities
         [JsonPropertyName("uid")]
         public string Uid { get; set; }
 
+        //todo--Add tag property (for getting image data)
+
         /// <summary>
         /// Properties encountered during deserialization without matching members
         /// </summary>
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; }
+
+        //todo--Add GetImageData method
     }
 }

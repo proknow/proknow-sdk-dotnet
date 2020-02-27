@@ -130,6 +130,8 @@ namespace ProKnow.Patient.Entities
             }
          }
 
+        //todo--Implement DeleteAsync method
+
         /// <summary>
         /// Returns a string that represents the current object
         /// </summary>

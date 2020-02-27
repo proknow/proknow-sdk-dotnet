@@ -26,6 +26,8 @@ namespace ProKnow.Patient.Entities
         [JsonPropertyName("color")]
         public int[] Color { get; set; }
 
+        //todo--Add private Key property
+
         /// <summary>
         /// The name
         /// </summary>
@@ -55,6 +57,14 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; }
+
+        //todo--Implement DeleteAsync method
+
+        //todo--Implement GetDataAsync method
+
+        //todo--Implement IsEditable method
+
+        //todo--Implement SaveAsync method
 
         /// <summary>
         /// Provides a string representation of this object

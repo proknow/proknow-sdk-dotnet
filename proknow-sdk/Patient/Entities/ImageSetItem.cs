@@ -47,5 +47,7 @@ namespace ProKnow.Patient.Entities
             // Return the destination folder
             return folder;
         }
+
+        //todo--Implement GetImageData() method
     }
 }
