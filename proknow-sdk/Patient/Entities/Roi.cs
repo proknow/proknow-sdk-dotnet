@@ -69,10 +69,12 @@ namespace ProKnow.Patient.Entities
         /// <summary>
         /// Provides a string representation of this object
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A string representation of this object</returns>
         public override string ToString()
         {
             return Name;
         }
+
+        //todo--Add PostProcessDeserialization to initialize requestor, workspace ID, and structure set ID properties
     }
 }

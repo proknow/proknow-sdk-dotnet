@@ -30,8 +30,6 @@ namespace ProKnow.Patient.Entities
         [JsonIgnore]
         public bool IsDraft { get; protected set; }
 
-        //todo--Add Rois property
-
         //todo--Add Versions property
 
         /// <summary>
@@ -91,11 +89,12 @@ namespace ProKnow.Patient.Entities
             IsEditable = false;
             IsDraft = false;
 
-            //todo--post process Rois deserialization
-
             //todo--post process Versions deserialization
         }
 
+        /// <summary>
+        /// Waits until the structure set version status becomes "ready"
+        /// </summary>
         private async void WaitForReadyStatus()
         {
             var numberOfRetries = 0;
