@@ -103,8 +103,6 @@ namespace ProKnow.Patient
             return DeserializePatients(workspaceId, responseJson);
         }
 
-        //todo--Implement LookupAsync method
-
         /// <summary>
         /// Queries the ProKnow API for the collection of patient summaries
         /// </summary>
