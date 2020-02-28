@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 using ProKnow.Patient.Entities;
+using ProKnow.Upload;
 
 namespace ProKnow.Patient
 {
@@ -204,7 +205,27 @@ namespace ProKnow.Patient
             Metadata = resolvedMetadata;
         }
 
-        //todo--Implement UploadAsync method
+        /// <summary>
+        /// Upload file(s) asynchronously
+        /// </summary>
+        /// <param name="path">The folder or file path</param>
+        /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
+        /// <returns>The upload results</returns>
+        public Task<UploadBatch> UploadAsync(string path, UploadFileOverrides overrides = null)
+        {
+            return _proKnow.Uploads.UploadAsync(WorkspaceId, path, overrides);
+        }
+
+        /// <summary>
+        /// Upload files asynchronously
+        /// </summary>
+        /// <param name="paths">The folder and/or file paths</param>
+        /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
+        /// <returns>The upload results</returns>
+        public Task<UploadBatch> UploadAsync(IList<string> paths, UploadFileOverrides overrides = null)
+        {
+            return _proKnow.Uploads.UploadAsync(WorkspaceId, paths, overrides);
+        }
 
         /// <summary>
         /// Returns a string that represents the current object

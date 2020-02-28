@@ -111,6 +111,7 @@ namespace ProKnow.Patient
         /// <returns>A collection of patient summaries</returns>
         public async Task<IList<PatientSummary>> QueryAsync(string workspace, string searchString = null)
         {
+            //todo--paging (response header includes "proknow-has-more" -> "true")
             //todo--use searchString
             var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
             var workspaceId = workspaceItem.Id;
