@@ -93,7 +93,13 @@ namespace ProKnow.Patient
             Initialize(proKnow, workspaceId, json);
         }
 
-        //todo--Implement DeleteAsync method
+        /// <summary>
+        /// Deletes this patient item asynchronously
+        /// </summary>
+        public Task DeleteAsync()
+        {
+            return _proKnow.Patients.DeleteAsync(WorkspaceId, Id);
+        }
 
         /// <summary>
         /// Finds the entities for this patient that satisfy a predicate

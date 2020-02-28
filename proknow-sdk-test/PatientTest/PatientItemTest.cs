@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace ProKnow.Patients.Test
             while (true)
             {
                 _patientItem = await patientSummary.GetAsync();
-                var entitySummaries = _patientItem.FindEntities(e => e.PatientId == patientSummary.Id);
+                var entitySummaries = _patientItem.FindEntities(e => true);
                 if (entitySummaries.Count() >= 4)
                 {
                     var statuses = entitySummaries.Select(e => e.Status).Distinct();
@@ -59,6 +60,48 @@ namespace ProKnow.Patients.Test
         {
             // Delete test workspace
             await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
+        }
+
+        [TestMethod]
+        public async Task DeleteAsyncTest()
+        {
+            // Delete this patient
+            await _patientItem.DeleteAsync();
+
+            // Verify that the patient was deleted
+            while (true)
+            {
+                var patientSummaries = await _proKnow.Patients.LookupAsync(_workspaceItem.Id, new List<string>() { _patientItem.Mrn });
+                if (patientSummaries[0] == null)
+                {
+                    break;
+                }
+            }
+
+            // Restore the patient for other tests
+
+            // Upload test files
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew");
+            var overrides = new UploadFileOverrides
+            {
+                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
+            };
+            var uploadBatch = await _uploads.UploadAsync(_workspaceItem.Id, uploadPath, overrides);
+
+            // Wait until uploaded test files have processed
+            while (true)
+            {
+                _patientItem = await _proKnow.Patients.GetAsync(_workspaceItem.Id, uploadBatch.Patients.First().Id);
+                var entitySummaries = _patientItem.FindEntities(e => true);
+                if (entitySummaries.Count() >= 4)
+                {
+                    var statuses = entitySummaries.Select(e => e.Status).Distinct();
+                    if (statuses.Count() == 1 && statuses.First() == "completed")
+                    {
+                        break;
+                    }
+                }
+            }
         }
 
         [TestMethod]
