@@ -15,12 +15,18 @@ namespace ProKnow.Patient
         private ProKnow _proKnow;
 
         /// <summary>
+        /// Interacts with documents for patients
+        /// </summary>
+        public Documents Documents { get; private set; }
+
+        /// <summary>
         /// Constructs a patients object
         /// </summary>
         /// <param name="proKnow">Parent ProKnow object</param>
         public Patients(ProKnow proKnow)
         {
             _proKnow = proKnow;
+            Documents = new Documents(_proKnow);
         }
 
         /// <summary>

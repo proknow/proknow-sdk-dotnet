@@ -47,6 +47,9 @@
     <None Update="TestData\Becker^Matthew\RS.dcm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestData\dummy.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

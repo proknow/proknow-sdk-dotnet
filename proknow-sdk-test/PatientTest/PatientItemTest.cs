@@ -175,7 +175,6 @@ namespace ProKnow.Patients.Test
             var uploadedFiles = Directory.GetFiles(uploadPath);
 
             // Wait until uploaded test file has processed
-            PatientItem patientItem;
             while (true)
             {
                 await _patientItem.RefreshAsync();
