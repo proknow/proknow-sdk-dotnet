@@ -14,7 +14,7 @@ namespace ProKnow.Patient.Test
         private static string _patientMrnAndName = "SDK-PatientsTest";
         private static ProKnow _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = _proKnow.Uploads;
-        private static WorkspaceItem _workspaceItem;
+        private static string _workspaceId;
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
@@ -23,7 +23,8 @@ namespace ProKnow.Patient.Test
             await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
 
             // Create a test workspace
-            _workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
+            _workspaceId = workspaceItem.Id;
 
             // Create a test patient
             var patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
@@ -34,7 +35,7 @@ namespace ProKnow.Patient.Test
             {
                 Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
             };
-            await _uploads.UploadAsync(_workspaceItem.Id, uploadPath, overrides);
+            await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
 
             // Wait until uploaded test files have processed
             while (true)
@@ -56,29 +57,30 @@ namespace ProKnow.Patient.Test
         public static async Task ClassCleanup()
         {
             // Delete test workspace
-            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
+            await _proKnow.Workspaces.DeleteAsync(_workspaceId);
         }
 
         [TestMethod]
         public async Task FindAsyncTest()
         {
-            var patientSummary = await _proKnow.Patients.FindAsync(_workspaceItem.Id, p => p.Name == _patientMrnAndName);
+            var patientSummary = await _proKnow.Patients.FindAsync(_workspaceId, p => p.Name == _patientMrnAndName);
             Assert.AreEqual(patientSummary.Name, _patientMrnAndName);
         }
 
         [TestMethod]
         public async Task GetAsyncTest()
         {
-            var patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceItem.Id);
+            var patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceId);
             var patientId = patientSummaries.First(p => p.Name == _patientMrnAndName).Id;
-            var patientItem = await _proKnow.Patients.GetAsync(_workspaceItem.Id, patientId);
+            var patientItem = await _proKnow.Patients.GetAsync(_workspaceId, patientId);
             Assert.AreEqual(patientItem.Id, patientId);
         }
 
         [TestMethod]
         public async Task LookupAsyncTest()
         {
-            var myPatientSummaries = await _proKnow.Patients.LookupAsync(_workspaceItem.Id, new string[] { "invalidMrn", _patientMrnAndName });
+            var myPatientSummaries = await _proKnow.Patients.LookupAsync(_workspaceId, 
+                new string[] { "invalidMrn", _patientMrnAndName });
             Assert.IsTrue(myPatientSummaries.Count == 2);
             Assert.IsNull(myPatientSummaries[0]);
             Assert.AreEqual(myPatientSummaries[1].Name, _patientMrnAndName);
@@ -87,7 +89,7 @@ namespace ProKnow.Patient.Test
         [TestMethod]
         public async Task QueryAsyncTest()
         {
-            var patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceItem.Id);
+            var patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceId);
             Assert.IsTrue(patientSummaries.Count == 1);
         }
     }

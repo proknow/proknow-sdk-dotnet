@@ -15,7 +15,7 @@ namespace ProKnow.Patients.Entities.Test
         private static string _patientMrnAndName = "SDK-EntitySummaryTest";
         private static ProKnow _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = _proKnow.Uploads;
-        private static WorkspaceItem _workspaceItem;
+        private static string _workspaceId;
         private static PatientItem _patientItem;
 
         [ClassInitialize]
@@ -25,7 +25,8 @@ namespace ProKnow.Patients.Entities.Test
             await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
 
             // Create a test workspace
-            _workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
+            _workspaceId = workspaceItem.Id;
 
             // Create a test patient
             var patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
@@ -36,7 +37,7 @@ namespace ProKnow.Patients.Entities.Test
             {
                 Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
             };
-            await _uploads.UploadAsync(_workspaceItem.Id, uploadPath, overrides);
+            await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
 
             // Wait until uploaded test files have processed
             while (true)
@@ -58,7 +59,7 @@ namespace ProKnow.Patients.Entities.Test
         public static async Task ClassCleanup()
         {
             // Delete test workspace
-            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
+            await _proKnow.Workspaces.DeleteAsync(_workspaceId);
         }
 
         [TestMethod]
@@ -87,7 +88,7 @@ namespace ProKnow.Patients.Entities.Test
             {
                 Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
             };
-            await _uploads.UploadAsync(_workspaceItem.Id, uploadPath, overrides);
+            await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
 
             // Wait until uploaded test file has processed
             while (true)
@@ -106,7 +107,7 @@ namespace ProKnow.Patients.Entities.Test
         {
             var entitySummary = _patientItem.FindEntities(e => e.Type == "image_set")[0];
             var imageSetItem = await entitySummary.GetAsync();
-            Assert.AreEqual(imageSetItem.WorkspaceId, _workspaceItem.Id);
+            Assert.AreEqual(imageSetItem.WorkspaceId, _workspaceId);
             Assert.AreEqual(imageSetItem.PatientId, _patientItem.Id);
             Assert.AreEqual(imageSetItem.Id, entitySummary.Id);
         }
@@ -116,7 +117,7 @@ namespace ProKnow.Patients.Entities.Test
         {
             var entitySummary = _patientItem.FindEntities(e => e.Type == "structure_set")[0];
             var structureSetItem = await entitySummary.GetAsync();
-            Assert.AreEqual(structureSetItem.WorkspaceId, _workspaceItem.Id);
+            Assert.AreEqual(structureSetItem.WorkspaceId, _workspaceId);
             Assert.AreEqual(structureSetItem.PatientId, _patientItem.Id);
             Assert.AreEqual(structureSetItem.Id, entitySummary.Id);
         }
@@ -126,7 +127,7 @@ namespace ProKnow.Patients.Entities.Test
         {
             var entitySummary = _patientItem.FindEntities(e => e.Type == "plan")[0];
             var planItem = await entitySummary.GetAsync();
-            Assert.AreEqual(planItem.WorkspaceId, _workspaceItem.Id);
+            Assert.AreEqual(planItem.WorkspaceId, _workspaceId);
             Assert.AreEqual(planItem.PatientId, _patientItem.Id);
             Assert.AreEqual(planItem.Id, entitySummary.Id);
         }
@@ -136,7 +137,7 @@ namespace ProKnow.Patients.Entities.Test
         {
             var entitySummary = _patientItem.FindEntities(e => e.Type == "dose")[0];
             var doseItem = await entitySummary.GetAsync();
-            Assert.AreEqual(doseItem.WorkspaceId, _workspaceItem.Id);
+            Assert.AreEqual(doseItem.WorkspaceId, _workspaceId);
             Assert.AreEqual(doseItem.PatientId, _patientItem.Id);
             Assert.AreEqual(doseItem.Id, entitySummary.Id);
         }

@@ -14,7 +14,7 @@ namespace ProKnow.Upload.Test
         private static string _patientMrnAndName = "SDK-UploadsTest";
         private static ProKnow _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = _proKnow.Uploads;
-        private static WorkspaceItem _workspaceItem;
+        private static string _workspaceId;
         private static PatientSummary _patientSummary;
 
         [ClassInitialize]
@@ -24,7 +24,8 @@ namespace ProKnow.Upload.Test
             await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
 
             // Create a test workspace
-            _workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
+            _workspaceId = workspaceItem.Id;
 
             // Create a test patient
             _patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
@@ -34,7 +35,7 @@ namespace ProKnow.Upload.Test
         public static async Task ClassCleanup()
         {
             // Delete test workspace
-            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
+            await _proKnow.Workspaces.DeleteAsync(_workspaceId);
         }
 
         [TestMethod]
@@ -46,7 +47,7 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
             };
-            var uploadBatch = await _uploads.UploadAsync(_workspaceItem.Id, uploadPath, overrides);
+            var uploadBatch = await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
 
             // Wait until uploaded test file has processed
             PatientItem patientItem;
@@ -76,7 +77,7 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
             };
-            var uploadBatch = await _uploads.UploadAsync(_workspaceItem.Id, uploadPath, overrides);
+            var uploadBatch = await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
             var uploadedFiles = Directory.GetFiles(uploadPath);
 
             // Wait until uploaded test file has processed

@@ -14,7 +14,7 @@ namespace ProKnow.Patients.Test
     {
         private static string _patientMrnAndName = "SDK-PatientSummaryTest";
         private static ProKnow _proKnow = TestSettings.ProKnow;
-        private static WorkspaceItem _workspaceItem;
+        private static string _workspaceId;
         private static PatientSummary _patientSummary;
 
         [ClassInitialize]
@@ -24,7 +24,8 @@ namespace ProKnow.Patients.Test
             await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
 
             // Create a test workspace
-            _workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
+            _workspaceId = workspaceItem.Id;
 
             // Create a test patient
             _patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
@@ -34,7 +35,7 @@ namespace ProKnow.Patients.Test
         public static async Task ClassCleanup()
         {
             // Delete test workspace
-            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
+            await _proKnow.Workspaces.DeleteAsync(_workspaceId);
         }
 
         [TestMethod]

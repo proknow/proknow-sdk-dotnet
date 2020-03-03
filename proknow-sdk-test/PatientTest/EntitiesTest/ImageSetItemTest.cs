@@ -15,7 +15,7 @@ namespace ProKnow.Patients.Entities.Test
         private static string _patientMrnAndName = "SDK-ImageSetItemTest";
         private static ProKnow _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = _proKnow.Uploads;
-        private static WorkspaceItem _workspaceItem;
+        private static string _workspaceId;
         private static string[] _uploadedFiles;
         private static PatientItem _patientItem;
         private static ImageSetItem _imageSetItem;
@@ -27,7 +27,8 @@ namespace ProKnow.Patients.Entities.Test
             await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
 
             // Create a test workspace
-            _workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
+            _workspaceId = workspaceItem.Id;
 
             // Create a test patient
             var patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
@@ -38,7 +39,7 @@ namespace ProKnow.Patients.Entities.Test
             {
                 Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
             };
-            await _uploads.UploadAsync(_workspaceItem.Id, uploadPath, overrides);
+            await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
             _uploadedFiles = Directory.GetFiles(uploadPath);
 
             // Wait until uploaded test files have processed
@@ -61,7 +62,7 @@ namespace ProKnow.Patients.Entities.Test
         public static async Task ClassCleanup()
         {
             // Delete test workspace
-            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
+            await _proKnow.Workspaces.DeleteAsync(_workspaceId);
         }
 
         [TestMethod]
