@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace ProKnow.Patient
+namespace ProKnow.Patient.Document
 {
     /// <summary>
     /// Interacts with documents for patients in a ProKnow organization

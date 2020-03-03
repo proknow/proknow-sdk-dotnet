@@ -5,6 +5,8 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
+using ProKnow.Patient.Document;
+
 namespace ProKnow.Patient
 {
     /// <summary>

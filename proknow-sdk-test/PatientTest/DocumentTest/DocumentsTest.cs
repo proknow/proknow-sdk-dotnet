@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ProKnow.Test;
 using ProKnow.Upload;
 
-namespace ProKnow.Patient.Test
+namespace ProKnow.Patient.Document.Test
 {
     [TestClass]
     public class DocumentsTest

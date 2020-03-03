@@ -2,6 +2,7 @@
 using System.Text.Json;
 using ProKnow.CustomMetric;
 using ProKnow.Patient;
+using ProKnow.Patient.Document;
 using ProKnow.Upload;
 
 namespace ProKnow

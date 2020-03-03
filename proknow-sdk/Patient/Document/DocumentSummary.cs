@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace ProKnow.Patient
+namespace ProKnow.Patient.Document
 {
     /// <summary>
     /// Provides a summary of a document for a patient

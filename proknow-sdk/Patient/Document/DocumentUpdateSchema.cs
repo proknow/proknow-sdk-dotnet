@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ProKnow.Patient
+namespace ProKnow.Patient.Document
 {
     /// <summary>
     /// Properties used to update a document
