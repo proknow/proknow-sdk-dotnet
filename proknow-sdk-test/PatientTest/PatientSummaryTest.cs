@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 using ProKnow.Patient;

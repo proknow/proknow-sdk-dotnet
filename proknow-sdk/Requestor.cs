@@ -126,6 +126,15 @@ namespace ProKnow
         /// <returns>The full path to the file containing the response</returns>
         public async Task<string> StreamAsync(string route, string path)
         {
+            if (Directory.Exists(path))
+            {
+                throw new ArgumentException($"'{path}' is a path to an existing directory.");
+            }
+            var parent = Directory.GetParent(path).FullName;
+            if (!Directory.Exists(parent))
+            {
+                Directory.CreateDirectory(parent);
+            }
             var request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}/{route}");
             request.Headers.Authorization = _authenticationHeaderValue;
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
