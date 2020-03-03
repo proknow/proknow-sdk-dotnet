@@ -13,7 +13,7 @@ namespace ProKnow.Upload.Test
     {
         private static string _patientMrnAndName = "SDK-UploadsTest";
         private static ProKnow _proKnow = TestSettings.ProKnow;
-        private static Uploads _uploads = new Uploads(_proKnow);
+        private static Uploads _uploads = _proKnow.Uploads;
         private static WorkspaceItem _workspaceItem;
         private static PatientSummary _patientSummary;
 

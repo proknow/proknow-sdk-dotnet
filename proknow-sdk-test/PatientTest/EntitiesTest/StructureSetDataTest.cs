@@ -15,7 +15,7 @@ namespace ProKnow.Patients.Entities.Test
     {
         private static string _patientMrnAndName = "SDK-StructureSetDataTest";
         private static ProKnow _proKnow = TestSettings.ProKnow;
-        private static Uploads _uploads = new Uploads(_proKnow);
+        private static Uploads _uploads = _proKnow.Uploads;
         private static WorkspaceItem _workspaceItem;
         private static string _uploadPath;
         private static PatientItem _patientItem;
