@@ -3,7 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace ProKnow
 {
-    // Provides a summary of a user
+    /// <summary>
+    /// Provides a summary of a user
+    /// </summary>
     public class UserSummary
     {
         /// <summary>

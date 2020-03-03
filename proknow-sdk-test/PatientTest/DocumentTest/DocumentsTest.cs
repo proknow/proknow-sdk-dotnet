@@ -80,8 +80,7 @@ namespace ProKnow.Patient.Document.Test
                 {
                     // Stream document to a new file
                     var outputDocumentPath = Path.Combine(Path.GetTempPath(), _patientMrnAndName, "CreateAsyncTest.pdf");
-                    await _documents.StreamAsync(_workspaceId, _patientId, documentSummary.Id, "CreateAsyncTest.pdf",
-                        outputDocumentPath);
+                    await _documents.StreamAsync(_workspaceId, _patientId, documentSummary.Id, outputDocumentPath);
 
                     // Make sure created document and streamed document sizes are the same
                     Assert.AreEqual(documentSummary.Size, new FileInfo(outputDocumentPath).Length);
@@ -162,8 +161,7 @@ namespace ProKnow.Patient.Document.Test
                 {
                     // Stream document to a new file
                     var outputDocumentPath = Path.Combine(Path.GetTempPath(), _patientMrnAndName, "StreamAsyncTest.pdf");
-                    await _documents.StreamAsync(_workspaceId, _patientId, documentSummary.Id, "StreamAsyncTest.pdf",
-                        outputDocumentPath);
+                    await _documents.StreamAsync(_workspaceId, _patientId, documentSummary.Id, outputDocumentPath);
 
                     // Make sure created document and streamed document sizes are the same
                     Assert.AreEqual(documentSummary.Size, new FileInfo(outputDocumentPath).Length);
