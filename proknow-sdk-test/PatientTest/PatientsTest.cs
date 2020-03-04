@@ -87,10 +87,39 @@ namespace ProKnow.Patient.Test
         }
 
         [TestMethod]
-        public async Task QueryAsyncTest()
+        public async Task QueryAsyncTest_NoSearchString()
         {
             var patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceId);
             Assert.IsTrue(patientSummaries.Count == 1);
+        }
+
+        [TestMethod]
+        public async Task QueryAsyncTest_NonMatchingSearchString()
+        {
+            var patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceId, "foobar");
+            Assert.IsTrue(patientSummaries.Count == 0);
+        }
+
+        [TestMethod]
+        public async Task QueryAsyncTest_MatchingSearchString()
+        {
+            // Change patient name so it doesn't match MRN
+            var patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceId);
+            var patientItem = await patientSummaries.First().GetAsync();
+            patientItem.Name = $"{patientItem.Name}-Name";
+            await patientItem.SaveAsync();
+
+            // Verify with matching MRN
+            patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceId, patientItem.Mrn);
+            Assert.IsTrue(patientSummaries.Count == 1);
+
+            // Verify with matching name
+            patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceId, patientItem.Name);
+            Assert.IsTrue(patientSummaries.Count == 1);
+
+            // Restore patient name to original
+            patientItem.Name = _patientMrnAndName;
+            await patientItem.SaveAsync();
         }
     }
 }

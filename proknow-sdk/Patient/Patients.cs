@@ -120,10 +120,14 @@ namespace ProKnow.Patient
         public async Task<IList<PatientSummary>> QueryAsync(string workspace, string searchString = null)
         {
             //todo--paging (response header includes "proknow-has-more" -> "true")
-            //todo--use searchString
             var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
             var workspaceId = workspaceItem.Id;
-            var json = await _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/patients");
+            Dictionary<string, object> queryParameters = null;
+            if (searchString != null)
+            {
+                queryParameters = new Dictionary<string, object>() { { "search", searchString } };
+            }
+            var json = await _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/patients", queryParameters);
             return DeserializePatients(workspaceId, json);
         }
 
