@@ -189,7 +189,7 @@ namespace ProKnow.Patient
         /// Sets the metadata to an encoded version of the provided metadata
         /// </summary>
         /// <param name="metadata">A dictionary of custom metric names and values</param>
-        public async Task SaveMetadataAsync(IDictionary<string, object> metadata)
+        public async Task SetMetadataAsync(IDictionary<string, object> metadata)
         {
             var resolvedMetadata = new Dictionary<string, object>();
             var tasks = new List<Task>();
@@ -255,7 +255,7 @@ namespace ProKnow.Patient
             Metadata = patientItem.Metadata;
             foreach (var study in patientItem.Studies)
             {
-                study.PostProcessDeserialization(_proKnow.Requestor, WorkspaceId, Id);
+                study.PostProcessDeserialization(_proKnow, WorkspaceId, Id);
             }
             Studies = patientItem.Studies;
             ExtensionData = patientItem.ExtensionData;

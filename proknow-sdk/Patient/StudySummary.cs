@@ -9,7 +9,7 @@ namespace ProKnow.Patient
     /// </summary>
     public class StudySummary
     {
-        private Requestor _requestor;
+        private ProKnow _proKnow;
 
         /// <summary>
         /// The workspace ID
@@ -53,19 +53,19 @@ namespace ProKnow.Patient
         /// <summary>
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
-        /// <param name="requestor">Issues requests to the ProKnow API</param>
+        /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The workspace ID</param>
         /// <param name="patientId">The patient ID</param>
-        internal void PostProcessDeserialization(Requestor requestor, string workspaceId, string patientId)
+        internal void PostProcessDeserialization(ProKnow proKnow, string workspaceId, string patientId)
         {
-            _requestor = requestor;
+            _proKnow = proKnow;
             WorkspaceId = workspaceId;
             PatientId = patientId;
 
             // Post-process deserialization of entities
             foreach (var entity in Entities)
             {
-                entity.PostProcessDeserialization(requestor, workspaceId, patientId);
+                entity.PostProcessDeserialization(_proKnow, WorkspaceId, PatientId);
             }
         }
     }

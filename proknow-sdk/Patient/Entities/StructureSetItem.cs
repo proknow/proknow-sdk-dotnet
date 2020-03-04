@@ -64,7 +64,8 @@ namespace ProKnow.Patient.Entities
                 Directory.CreateDirectory(folder);
             }
             var file = Path.Combine(folder, $"RS.{Uid}.dcm");
-            return _requestor.StreamAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/versions/{Data.VersionId}/dicom", file);
+            var route = $"/workspaces/{WorkspaceId}/structuresets/{Id}/versions/{Data.VersionId}/dicom";
+            return _proKnow.Requestor.StreamAsync(route, file);
         }
 
         //todo--Implement DraftAsync method
@@ -78,11 +79,11 @@ namespace ProKnow.Patient.Entities
         /// <summary>
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
-        /// <param name="requestor">Issues requests to the ProKnow API</param>
+        /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The workspace ID</param>
-        internal override void PostProcessDeserialization(Requestor requestor, string workspaceId)
+        internal override void PostProcessDeserialization(ProKnow proKnow, string workspaceId)
         {
-            base.PostProcessDeserialization(requestor, workspaceId);
+            base.PostProcessDeserialization(proKnow, workspaceId);
 
             //todo--_lock = null; _renewer = null
 
@@ -97,10 +98,11 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         private async void WaitForReadyStatus()
         {
+            var route = $"/workspaces/{WorkspaceId}/structuresets/{Id}/versions/{Data.VersionId}/status";
             var numberOfRetries = 0;
             while (true)
             {
-                var jsonString = await _requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/versions/{Data.VersionId}/status");
+                var jsonString = await _proKnow.Requestor.GetAsync(route);
                 var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonString);
                 if (keyValuePairs["status"] == "ready")
                 {

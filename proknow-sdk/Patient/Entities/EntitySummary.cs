@@ -21,7 +21,7 @@ namespace ProKnow.Patient.Entities
         private const int MAX_TOTAL_RETRY_DELAY = 5000;
         private const int MAX_RETRIES = MAX_TOTAL_RETRY_DELAY / RETRY_DELAY;
 
-        private Requestor _requestor;
+        private ProKnow _proKnow;
 
         /// <summary>
         /// The patient workspace ID
@@ -106,7 +106,7 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         public async Task DeleteAsync()
         {
-            await _requestor.DeleteAsync($"/workspaces/{WorkspaceId}/entities/{Id}");
+            await _proKnow.Requestor.DeleteAsync($"/workspaces/{WorkspaceId}/entities/{Id}");
         }
 
         /// <summary>
@@ -150,19 +150,19 @@ namespace ProKnow.Patient.Entities
         /// <summary>
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
-        /// <param name="requestor">Issues requests to the ProKnow API</param>
+        /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The workspace ID</param>
         /// <param name="patientId">The patient ID</param>
-        internal void PostProcessDeserialization(Requestor requestor, string workspaceId, string patientId)
+        internal void PostProcessDeserialization(ProKnow proKnow, string workspaceId, string patientId)
         {
-            _requestor = requestor;
+            _proKnow = proKnow;
             WorkspaceId = workspaceId;
             PatientId = patientId;
 
             // Post-process deserialization of entities
             foreach (var entity in Entities)
             {
-                entity.PostProcessDeserialization(_requestor, WorkspaceId, PatientId);
+                entity.PostProcessDeserialization(_proKnow, WorkspaceId, PatientId);
             }
         }
 
@@ -176,7 +176,7 @@ namespace ProKnow.Patient.Entities
             {
                 throw new ArgumentOutOfRangeException("The entity 'type' must be one of 'image_set', 'structure_set', 'plan', or 'dose'.");
             }
-            var json = await _requestor.GetAsync($"/workspaces/{WorkspaceId}/{typeToRoutePartMap[Type]}/{Id}");
+            var json = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/{typeToRoutePartMap[Type]}/{Id}");
             return DeserializeEntity(json);
         }
 
@@ -205,7 +205,7 @@ namespace ProKnow.Patient.Entities
                 default:
                     throw new ArgumentOutOfRangeException("The entity 'type' must be one of 'image_set', 'structure_set', 'plan', or 'dose'.");
             }
-            entityItem.PostProcessDeserialization(_requestor, WorkspaceId);
+            entityItem.PostProcessDeserialization(_proKnow, WorkspaceId);
             return entityItem;
         }
     }

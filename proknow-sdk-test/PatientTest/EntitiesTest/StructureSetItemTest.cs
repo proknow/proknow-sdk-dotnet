@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
+using ProKnow.CustomMetric;
 using ProKnow.Patient;
 using ProKnow.Patient.Entities;
 using ProKnow.Test;
@@ -17,8 +19,9 @@ namespace ProKnow.Patients.Entities.Test
         private static Uploads _uploads = _proKnow.Uploads;
         private static string _workspaceId;
         private static string _uploadPath;
-        private static PatientItem _patientItem;
+        private static EntitySummary _entitySummary;
         private static StructureSetItem _structureSetItem;
+        private static CustomMetricItem _customMetricItem;
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
@@ -44,14 +47,19 @@ namespace ProKnow.Patients.Entities.Test
             // Wait until uploaded test file has processed
             while (true)
             {
-                _patientItem = await patientSummary.GetAsync();
-                var entitySummaries = _patientItem.FindEntities(t => t.Type == "structure_set");
+                var patientItem = await patientSummary.GetAsync();
+                var entitySummaries = patientItem.FindEntities(t => t.Type == "structure_set");
                 if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
                 {
-                    _structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
+                    _entitySummary = entitySummaries[0];
+                    _structureSetItem = await _entitySummary.GetAsync() as StructureSetItem;
                     break;
                 }
             }
+
+            // Create custom metric for testing
+            _customMetricItem = await _proKnow.CustomMetrics.CreateAsync(
+                _patientMrnAndName, "structure_set", "number");
         }
 
         [ClassCleanup]
@@ -59,6 +67,9 @@ namespace ProKnow.Patients.Entities.Test
         {
             // Delete test workspace
             await _proKnow.Workspaces.DeleteAsync(_workspaceId);
+
+            // Delete custom metrics created for this test
+            await TestHelper.DeleteCustomMetricsAsync(_patientMrnAndName);
         }
 
         [TestMethod]
@@ -73,6 +84,61 @@ namespace ProKnow.Patients.Entities.Test
 
             // Cleanup
             Directory.Delete(downloadFolder, true);
+        }
+
+        [TestMethod]
+        public async Task GetMetadataAsyncTest()
+        {
+            // Set test metadata
+            _structureSetItem.Metadata.Add(_customMetricItem.Id, 3.141);
+
+            // Get metadata
+            var metadata = await _structureSetItem.GetMetadataAsync();
+
+            // Verify metadata
+            Assert.AreEqual(1, metadata.Keys.Count);
+            Assert.AreEqual(3.141, metadata[_customMetricItem.Name]);
+
+            // Cleanup
+            _structureSetItem.Metadata.Clear();
+        }
+
+        [TestMethod]
+        public async Task SaveAsyncTest()
+        {
+            // Set description and metadata
+            _structureSetItem.Description = _patientMrnAndName;
+            _structureSetItem.Metadata.Add(_customMetricItem.Id, 1);
+
+            // Save entity changes
+            await _structureSetItem.SaveAsync();
+
+            // Refresh entity
+            _structureSetItem = await _entitySummary.GetAsync() as StructureSetItem;
+
+            // Verify changes were saved
+            Assert.AreEqual(_patientMrnAndName, _structureSetItem.Description);
+            Assert.AreEqual(1, _structureSetItem.Metadata.Keys.Count);
+            Assert.AreEqual(1, _structureSetItem.Metadata[_customMetricItem.Id]);
+
+            // Cleanup
+            _structureSetItem.Description = _entitySummary.Description;
+            _structureSetItem.Metadata.Clear();
+        }
+
+        [TestMethod]
+        public async Task SetMetadataAsyncTest()
+        {
+            // Set metadata
+            var metadata = new Dictionary<string, object>() { { _customMetricItem.Name, 2 } };
+            await _structureSetItem.SetMetadataAsync(metadata);
+
+            // Verify metadata was set
+            Assert.AreEqual(1, _structureSetItem.Metadata.Keys.Count);
+            Assert.AreEqual(2, _structureSetItem.Metadata[_customMetricItem.Id]);
+
+            // Cleanup
+            _structureSetItem.Metadata.Clear();
         }
     }
 }

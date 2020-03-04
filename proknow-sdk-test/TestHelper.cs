@@ -42,6 +42,21 @@ namespace ProKnow.Test
         }
 
         /// <summary>
+        /// Deletes a test custom metric asynchronously
+        /// </summary>
+        /// <param name="customMetric">The ProKnow ID or name of the custom metric</param>
+        public static async Task DeleteCustomMetricAsync(string customMetric)
+        {
+            // If the custom metric exists
+            var customMetricItem = await _proKnow.CustomMetrics.ResolveAsync(customMetric);
+            if (customMetricItem != null)
+            {
+                // Request the deletion
+                await _proKnow.CustomMetrics.DeleteAsync(customMetricItem.Id);
+            }
+        }
+
+        /// <summary>
         /// Deletes a test workspace asynchronously
         /// </summary>
         /// <param name="testClassName">The test class name</param>

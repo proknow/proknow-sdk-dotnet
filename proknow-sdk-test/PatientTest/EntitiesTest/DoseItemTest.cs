@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
+using ProKnow.CustomMetric;
 using ProKnow.Patient;
 using ProKnow.Patient.Entities;
 using ProKnow.Test;
@@ -17,8 +19,9 @@ namespace ProKnow.Patients.Entities.Test
         private static Uploads _uploads = _proKnow.Uploads;
         private static string _workspaceId;
         private static string _uploadPath;
-        private static PatientItem _patientItem;
+        private static EntitySummary _entitySummary;
         private static DoseItem _doseItem;
+        private static CustomMetricItem _customMetricItem;
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
@@ -44,14 +47,18 @@ namespace ProKnow.Patients.Entities.Test
             // Wait until uploaded test file has processed
             while (true)
             {
-                _patientItem = await patientSummary.GetAsync();
-                var entitySummaries = _patientItem.FindEntities(t => t.Type == "dose");
+                var patientItem = await patientSummary.GetAsync();
+                var entitySummaries = patientItem.FindEntities(t => t.Type == "dose");
                 if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
                 {
-                    _doseItem = await entitySummaries[0].GetAsync() as DoseItem;
+                    _entitySummary = entitySummaries[0];
+                    _doseItem = await _entitySummary.GetAsync() as DoseItem;
                     break;
                 }
             }
+
+            // Create custom metric for testing
+            _customMetricItem = await _proKnow.CustomMetrics.CreateAsync(_patientMrnAndName, "dose", "number");
         }
 
         [ClassCleanup]
@@ -59,6 +66,9 @@ namespace ProKnow.Patients.Entities.Test
         {
             // Delete test workspace
             await _proKnow.Workspaces.DeleteAsync(_workspaceId);
+
+            // Delete custom metrics created for this test
+            await TestHelper.DeleteCustomMetricsAsync(_patientMrnAndName);
         }
 
         [TestMethod]
@@ -73,6 +83,61 @@ namespace ProKnow.Patients.Entities.Test
 
             // Cleanup
             Directory.Delete(downloadFolder, true);
+        }
+
+        [TestMethod]
+        public async Task GetMetadataAsyncTest()
+        {
+            // Set test metadata
+            _doseItem.Metadata.Add(_customMetricItem.Id, 3.141);
+
+            // Get metadata
+            var metadata = await _doseItem.GetMetadataAsync();
+
+            // Verify metadata
+            Assert.AreEqual(1, metadata.Keys.Count);
+            Assert.AreEqual(3.141, metadata[_customMetricItem.Name]);
+
+            // Cleanup
+            _doseItem.Metadata.Clear();
+        }
+
+        [TestMethod]
+        public async Task SaveAsyncTest()
+        {
+            // Set description and metadata
+            _doseItem.Description = _patientMrnAndName;
+            _doseItem.Metadata.Add(_customMetricItem.Id, 1);
+
+            // Save entity changes
+            await _doseItem.SaveAsync();
+
+            // Refresh entity
+            _doseItem = await _entitySummary.GetAsync() as DoseItem;
+
+            // Verify changes were saved
+            Assert.AreEqual(_patientMrnAndName, _doseItem.Description);
+            Assert.AreEqual(1, _doseItem.Metadata.Keys.Count);
+            Assert.AreEqual(1, _doseItem.Metadata[_customMetricItem.Id]);
+
+            // Cleanup
+            _doseItem.Description = _entitySummary.Description;
+            _doseItem.Metadata.Clear();
+        }
+
+        [TestMethod]
+        public async Task SetMetadataAsyncTest()
+        {
+            // Set metadata
+            var metadata = new Dictionary<string, object>() { { _customMetricItem.Name, 2 } };
+            await _doseItem.SetMetadataAsync(metadata);
+
+            // Verify metadata was set
+            Assert.AreEqual(1, _doseItem.Metadata.Keys.Count);
+            Assert.AreEqual(2, _doseItem.Metadata[_customMetricItem.Id]);
+
+            // Cleanup
+            _doseItem.Metadata.Clear();
         }
     }
 }
