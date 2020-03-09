@@ -16,6 +16,22 @@ namespace ProKnow.Test
         private static ProKnow _proKnow = TestSettings.ProKnow;
 
         /// <summary>
+        /// Deletes the scorecard templates for a test
+        /// </summary>
+        /// <param name="testClassName">The test class name</param>
+        public static async Task DeleteScorecardTemplatesAsync(string testClassName)
+        {
+            var scorecardTemplates = await _proKnow.ScorecardTemplates.QueryAsync();
+            foreach (var scorecardTemplate in scorecardTemplates)
+            {
+                if (scorecardTemplate.Name.Contains(testClassName))
+                {
+                    await _proKnow.ScorecardTemplates.DeleteAsync(scorecardTemplate.Id);
+                }
+            }
+        }
+
+        /// <summary>
         /// Deletes the custom metrics for a test
         /// </summary>
         /// <param name="testClassName">The test class name</param>

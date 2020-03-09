@@ -2,6 +2,7 @@
 using System.Text.Json;
 using ProKnow.CustomMetric;
 using ProKnow.Patient;
+using ProKnow.Scorecard;
 using ProKnow.Upload;
 
 namespace ProKnow
@@ -21,7 +22,10 @@ namespace ProKnow
         /// </summary>
         public CustomMetrics CustomMetrics { get; private set; }
 
-        //todo--Add ScorecardTemplates property
+        /// <summary>
+        /// Interacts with scorecard templates in the ProKnow organization
+        /// </summary>
+        public ScorecardTemplates ScorecardTemplates { get; private set; }
 
         /// <summary>
         /// Interacts with workspaces in the ProKnow organization
@@ -89,7 +93,7 @@ namespace ProKnow
             LockRenewalBuffer = lockRenewalBuffer;
             Requestor = new Requestor(baseUrl, credentialsId, credentialsSecret);
             CustomMetrics = new CustomMetrics(this);
-            //todo--Initialize ScorecardTemplates property
+            ScorecardTemplates = new ScorecardTemplates(this);
             Workspaces = new Workspaces(this);
             //todo--Initialize Roles property
             //todo--Initialize Users property

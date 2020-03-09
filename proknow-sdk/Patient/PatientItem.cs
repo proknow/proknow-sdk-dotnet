@@ -88,7 +88,6 @@ namespace ProKnow.Patient
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">ID of the workspace containing the patients</param>
         /// <param name="json">JSON representation of the patient item</param>
-        /// <returns>A patient item</returns>
         internal PatientItem(ProKnow proKnow, string workspaceId, string json)
         {
             Initialize(proKnow, workspaceId, json);
