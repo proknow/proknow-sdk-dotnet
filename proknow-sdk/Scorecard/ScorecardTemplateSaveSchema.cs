@@ -26,6 +26,6 @@ namespace ProKnow.Scorecard
         /// The custom metrics
         /// </summary>
         [JsonPropertyName("custom")]
-        public IList<CustomMetricItem> CustomMetrics { get; set; }
+        public IList<CustomMetricIdSchema> CustomMetricIds { get; set; }
     }
 }

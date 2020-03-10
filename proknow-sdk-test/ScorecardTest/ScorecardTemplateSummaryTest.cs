@@ -13,7 +13,7 @@ namespace ProKnow.Scorecard.Test
     public class ScorecardTemplateSummaryTest
     {
         private static ProKnow _proKnow = TestSettings.ProKnow;
-        private static string _baseName = "SDK-ScorecardTemplatesTest";
+        private static string _baseName = "SDK-ScorecardTemplateSummaryTest";
         private static ComputedMetric _computedMetric;
         private static CustomMetricItem _customMetricItem;
         private static List<ComputedMetric> _computedMetrics;

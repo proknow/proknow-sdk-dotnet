@@ -100,11 +100,16 @@ namespace ProKnow.Scorecard
         /// <returns></returns>
         public async Task SaveAsync()
         {
+            var customMetricIds = new List<CustomMetricIdSchema>();
+            foreach (var customMetric in CustomMetrics)
+            {
+                customMetricIds.Add(new CustomMetricIdSchema() { Id = customMetric.Id });
+            }
             var schema = new ScorecardTemplateSaveSchema
             {
                 Name = Name,
                 ComputedMetrics = ComputedMetrics,
-                CustomMetrics = CustomMetrics
+                CustomMetricIds = customMetricIds
             };
             var content = new StringContent(JsonSerializer.Serialize(schema), Encoding.UTF8, "application/json");
             await _proKnow.Requestor.PutAsync($"/metrics/templates/{Id}", null, content);
