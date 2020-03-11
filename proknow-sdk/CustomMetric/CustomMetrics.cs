@@ -40,9 +40,9 @@ namespace ProKnow.CustomMetric
             var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
             var content = new StringContent(JsonSerializer.Serialize(customMetricItem, jsonSerializerOptions),
                 Encoding.UTF8, "application/json");
-            string customMetricJson = await _proKnow.Requestor.PostAsync("/metrics/custom", null, content);
+            string json = await _proKnow.Requestor.PostAsync("/metrics/custom", null, content);
             _cache = null;
-            customMetricItem = DeserializeCustomMetric(customMetricJson);
+            customMetricItem = JsonSerializer.Deserialize<CustomMetricItem>(json);
             return customMetricItem;
         }
 
@@ -161,24 +161,8 @@ namespace ProKnow.CustomMetric
         private IList<CustomMetricItem> DeserializeCustomMetrics(string json)
         {
             var customMetricItems = JsonSerializer.Deserialize<IList<CustomMetricItem>>(json);
-            foreach (var customMetricItem in customMetricItems)
-            {
-                customMetricItem.PostProcessDeserialization(this, this._proKnow.Requestor);
-            }
             _cache = customMetricItems;
             return _cache.ToList();
-        }
-
-        /// <summary>
-        /// Creates a custom metric item from its JSON representation
-        /// </summary>
-        /// <param name="json">The JSON representation of the custom metric item</param>
-        /// <returns>A custom metric item</returns>
-        private CustomMetricItem DeserializeCustomMetric(string json)
-        {
-            var customMetricItem = JsonSerializer.Deserialize<CustomMetricItem>(json);
-            customMetricItem.PostProcessDeserialization(this, this._proKnow.Requestor);
-            return customMetricItem;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -97,21 +98,11 @@ namespace ProKnow.Scorecard
         /// <summary>
         /// Saves changes to a scorecard template asynchronously
         /// </summary>
-        /// <returns></returns>
         public async Task SaveAsync()
         {
-            var customMetricIds = new List<CustomMetricIdSchema>();
-            foreach (var customMetric in CustomMetrics)
-            {
-                customMetricIds.Add(new CustomMetricIdSchema() { Id = customMetric.Id });
-            }
-            var schema = new ScorecardTemplateSaveSchema
-            {
-                Name = Name,
-                ComputedMetrics = ComputedMetrics,
-                CustomMetricIds = customMetricIds
-            };
-            var content = new StringContent(JsonSerializer.Serialize(schema), Encoding.UTF8, "application/json");
+            var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+            var contentJson = JsonSerializer.Serialize(ConvertToSaveSchema(), jsonSerializerOptions);
+            var content = new StringContent(contentJson, Encoding.UTF8, "application/json");
             await _proKnow.Requestor.PutAsync($"/metrics/templates/{Id}", null, content);
         }
 
@@ -122,6 +113,21 @@ namespace ProKnow.Scorecard
         public override string ToString()
         {
             return Name;
+        }
+
+        /// <summary>
+        /// Provide a copy of this instance containing only the information required to represent it in a save request
+        /// </summary>
+        /// <returns>A copy of this instance containing only the information required to represent it in a save
+        /// request</returns>
+        internal ScorecardTemplateItem ConvertToSaveSchema()
+        {
+            return new ScorecardTemplateItem()
+            {
+                Name = Name,
+                ComputedMetrics = ComputedMetrics,
+                CustomMetrics = CustomMetrics.Select(c => c.ConvertToScorecardTemplateSchema()).ToList()
+            };
         }
 
         /// <summary>

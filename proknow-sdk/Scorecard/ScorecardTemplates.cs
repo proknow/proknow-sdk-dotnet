@@ -12,7 +12,7 @@ using ProKnow.CustomMetric;
 namespace ProKnow.Scorecard
 {
     /// <summary>
-    /// Interacts with scorecards in a ProKnow organization
+    /// Interacts with scorecard templates in a ProKnow organization
     /// </summary>
     public class ScorecardTemplates
     {
@@ -39,27 +39,25 @@ namespace ProKnow.Scorecard
         public async Task<ScorecardTemplateItem> CreateAsync(string name, IList<ComputedMetric> computedMetrics,
             IList<string> customMetricNames)
         {
-            // Convert custom metric names to IDs
-            var customMetrics = await Task.WhenAll(customMetricNames.Select(async (n) =>
+            // Resolve custom metric names
+            var customMetricItems = await Task.WhenAll(customMetricNames.Select(async (n) =>
                 await _proKnow.CustomMetrics.ResolveByNameAsync(n)));
-            var customMetricIds = new List<CustomMetricIdSchema>();
-            foreach (var customMetric in customMetrics)
-            {
-                customMetricIds.Add(new CustomMetricIdSchema() { Id = customMetric.Id });
-            }
+
+            // Convert custom metrics to their scorecard template creation schema
+            var customMetricIds = customMetricItems.Select(c => c.ConvertToScorecardTemplateSchema()).ToList();
 
             // Request the creation
-            var requestSchema = new ScorecardTemplateCreateSchema()
-                { Name = name, ComputedMetrics = computedMetrics, CustomMetricIdSchemas = customMetricIds };
+            var requestSchema = new ScorecardTemplateItem(null, null, name, computedMetrics, customMetricIds);
             var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
             var contentJson = JsonSerializer.Serialize(requestSchema, jsonSerializerOptions);
             var content = new StringContent(contentJson, Encoding.UTF8, "application/json");
-            string json = await _proKnow.Requestor.PostAsync("/metrics/templates", null, content);
+            string responseJson = await _proKnow.Requestor.PostAsync("/metrics/templates", null, content);
             _cache = null;
 
-            // Return the created scorecard template
-            var responseSchema = JsonSerializer.Deserialize<ScorecardTemplateCreateSchema>(json);
-            return new ScorecardTemplateItem(_proKnow, responseSchema.Id, name, computedMetrics, customMetrics);
+            // Return the created scorecard template, with complete custom metric representations
+            var responseSchema = JsonSerializer.Deserialize<ScorecardTemplateItem>(responseJson);
+            return new ScorecardTemplateItem(_proKnow, responseSchema.Id, responseSchema.Name,
+                responseSchema.ComputedMetrics, customMetricItems);
         }
 
         /// <summary>

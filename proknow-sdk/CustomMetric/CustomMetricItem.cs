@@ -8,9 +8,6 @@ namespace ProKnow.CustomMetric
     /// </summary>
     public class CustomMetricItem
     {
-        private CustomMetrics _customMetrics;
-        private Requestor _requestor;
-
         /// <summary>
         /// The ProKnow ID
         /// </summary>
@@ -71,14 +68,17 @@ namespace ProKnow.CustomMetric
         }
 
         /// <summary>
-        /// Finishes initialization of object after deserialization from JSON
+        /// Provide a copy of this instance containing only the information required to represent it in a scorecard
+        /// template create or save request
         /// </summary>
-        /// <param name="customMetrics">The parent CustomMetrics object</param>
-        /// <param name="requestor">Issues requests to the ProKnow API</param>
-        internal void PostProcessDeserialization(CustomMetrics customMetrics, Requestor requestor)
+        /// <returns>A copy of this instance containing only the information required to represent it in a scorecard
+        /// template create or save request</returns>
+        internal CustomMetricItem ConvertToScorecardTemplateSchema()
         {
-            _customMetrics = customMetrics;
-            _requestor = requestor;
+            return new CustomMetricItem()
+            {
+                Id = Id
+            };
         }
     }
 }
