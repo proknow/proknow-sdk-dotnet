@@ -7,8 +7,6 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-using ProKnow.CustomMetric;
-
 namespace ProKnow.Scorecard
 {
     /// <summary>
@@ -44,7 +42,7 @@ namespace ProKnow.Scorecard
                 await _proKnow.CustomMetrics.ResolveByNameAsync(n)));
 
             // Convert custom metrics to their scorecard template creation schema
-            var customMetricIds = customMetricItems.Select(c => c.ConvertToScorecardTemplateSchema()).ToList();
+            var customMetricIds = customMetricItems.Select(c => c.ConvertToScorecardSchema()).ToList();
 
             // Request the creation
             var requestSchema = new ScorecardTemplateItem(null, null, name, computedMetrics, customMetricIds);

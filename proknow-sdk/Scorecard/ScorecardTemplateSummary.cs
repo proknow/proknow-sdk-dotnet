@@ -10,7 +10,10 @@ namespace ProKnow.Scorecard
     /// </summary>
     public class ScorecardTemplateSummary
     {
-        private ProKnow _proKnow;
+        /// <summary>
+        /// Root object for interfacing with the ProKnow API
+        /// </summary>
+        protected ProKnow _proKnow;
 
         /// <summary>
         /// The ProKnow ID
@@ -38,23 +41,10 @@ namespace ProKnow.Scorecard
         }
 
         /// <summary>
-        /// Creates a scorecard template summary from its JSON representation
-        /// </summary>
-        /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
-        /// <param name="json">JSON representation of the scorecard template summary</param>
-        internal ScorecardTemplateSummary(ProKnow proKnow, string json)
-        {
-            var scorecardTemplateSummary = JsonSerializer.Deserialize<ScorecardTemplateSummary>(json);
-            _proKnow = proKnow;
-            Id = scorecardTemplateSummary.Id;
-            Name = scorecardTemplateSummary.Name;
-        }
-
-        /// <summary>
         /// Gets the full representation of the scorecard template asynchronously
         /// </summary>
         /// <returns>The full representation of a scorecard template</returns>
-        public Task<ScorecardTemplateItem> GetAsync()
+        public virtual Task<ScorecardTemplateItem> GetAsync()
         {
             return _proKnow.ScorecardTemplates.GetAsync(Id);
         }

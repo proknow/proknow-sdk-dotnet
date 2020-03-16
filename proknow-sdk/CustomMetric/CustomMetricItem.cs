@@ -69,11 +69,11 @@ namespace ProKnow.CustomMetric
 
         /// <summary>
         /// Provide a copy of this instance containing only the information required to represent it in a scorecard
-        /// template create or save request
+        /// create or save request
         /// </summary>
         /// <returns>A copy of this instance containing only the information required to represent it in a scorecard
-        /// template create or save request</returns>
-        internal CustomMetricItem ConvertToScorecardTemplateSchema()
+        /// create or save request</returns>
+        internal CustomMetricItem ConvertToScorecardSchema()
         {
             return new CustomMetricItem()
             {

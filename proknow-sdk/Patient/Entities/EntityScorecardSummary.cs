@@ -10,55 +10,24 @@ namespace ProKnow.Patient.Entities
     /// <summary>
     /// Provides a summary of an entity scorecard
     /// </summary>
-    public class EntityScorecardSummary
+    public class EntityScorecardSummary : ScorecardTemplateSummary
     {
         private EntityScorecards _entityScorecards;
 
         /// <summary>
-        /// The ProKnow ID
-        /// </summary>
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// The name
-        /// </summary>
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Properties encountered during deserialization without matching members
-        /// </summary>
-        [JsonExtensionData]
-        public Dictionary<string, object> ExtensionData { get; set; }
-
-        /// <summary>
         /// Used by deserialization to create an entity scorecard summary
         /// </summary>
-        protected EntityScorecardSummary()
+        protected EntityScorecardSummary() : base()
         {
         }
 
         /// <summary>
-        /// Creates an entity scorecard summary from its JSON representation
+        /// Gets the full representation of the entity scorecard asynchronously
         /// </summary>
-        /// <param name="entityScorecards">Interacts with scorecards for an entity in a ProKnow organization</param>
-        /// <param name="json">JSON representation of the scorecard template summary</param>
-        internal EntityScorecardSummary(EntityScorecards entityScorecards, string json)
+        /// <returns>The full representation of an entity scorecard</returns>
+        public override Task<ScorecardTemplateItem> GetAsync()
         {
-            var entityScorecardSummary = JsonSerializer.Deserialize<EntityScorecardSummary>(json);
-            _entityScorecards = entityScorecards;
-            Id = entityScorecardSummary.Id;
-            Name = entityScorecardSummary.Name;
-        }
-
-        /// <summary>
-        /// Gets the full representation of the scorecard template asynchronously
-        /// </summary>
-        /// <returns>The full representation of a scorecard template</returns>
-        public Task<EntityScorecardItem> GetAsync()
-        {
-            return _entityScorecards.GetAsync(Id);
+            return ConvertToBaseTask(_entityScorecards.GetAsync(Id));
         }
 
         /// <summary>
@@ -73,10 +42,23 @@ namespace ProKnow.Patient.Entities
         /// <summary>
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
+        /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="entityScorecards">Interacts with scorecards for an entity in a ProKnow organization</param>
-        internal void PostProcessDeserialization(EntityScorecards entityScorecards)
+        internal void PostProcessDeserialization(ProKnow proKnow, EntityScorecards entityScorecards)
         {
+            _proKnow = proKnow;
             _entityScorecards = entityScorecards;
+        }
+
+        /// <summary>
+        /// Helper to cast EntityScorecardItem task to ScorecardTemplateItem task
+        /// </summary>
+        /// <param name="task">The EntityScorecardItem task</param>
+        /// <returns>A ScorecardTemplateItem task</returns>
+        private static async Task<ScorecardTemplateItem> ConvertToBaseTask(Task<EntityScorecardItem> task)
+        {
+            var entityScorecardItem = await task;
+            return entityScorecardItem as ScorecardTemplateItem;
         }
     }
 }

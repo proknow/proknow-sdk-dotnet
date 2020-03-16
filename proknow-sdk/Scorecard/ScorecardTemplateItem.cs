@@ -15,7 +15,10 @@ namespace ProKnow.Scorecard
     /// </summary>
     public class ScorecardTemplateItem
     {
-        private ProKnow _proKnow;
+        /// <summary>
+        /// Root object for interfacing with the ProKnow API
+        /// </summary>
+        protected ProKnow _proKnow;
 
         /// <summary>
         /// The ProKnow ID
@@ -57,7 +60,7 @@ namespace ProKnow.Scorecard
         /// <summary>
         /// Creates a scorecard template
         /// </summary>
-        /// <param name="proKnow">The parent ProKnow object</param>
+        /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="id">The ProKnow ID</param>
         /// <param name="name">The name</param>
         /// <param name="computedMetrics">The computed metrics</param>
@@ -90,7 +93,7 @@ namespace ProKnow.Scorecard
         /// <summary>
         /// Deletes this scorecard template instance asynchronously
         /// </summary>
-        public async Task DeleteAsync()
+        public virtual async Task DeleteAsync()
         {
             await _proKnow.ScorecardTemplates.DeleteAsync(Id);
         }
@@ -98,7 +101,7 @@ namespace ProKnow.Scorecard
         /// <summary>
         /// Saves changes to a scorecard template asynchronously
         /// </summary>
-        public async Task SaveAsync()
+        public virtual async Task SaveAsync()
         {
             var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
             var contentJson = JsonSerializer.Serialize(ConvertToSaveSchema(), jsonSerializerOptions);
@@ -120,13 +123,13 @@ namespace ProKnow.Scorecard
         /// </summary>
         /// <returns>A copy of this instance containing only the information required to represent it in a save
         /// request</returns>
-        internal ScorecardTemplateItem ConvertToSaveSchema()
+        internal virtual ScorecardTemplateItem ConvertToSaveSchema()
         {
             return new ScorecardTemplateItem()
             {
                 Name = Name,
                 ComputedMetrics = ComputedMetrics,
-                CustomMetrics = CustomMetrics.Select(c => c.ConvertToScorecardTemplateSchema()).ToList()
+                CustomMetrics = CustomMetrics.Select(c => c.ConvertToScorecardSchema()).ToList()
             };
         }
 
