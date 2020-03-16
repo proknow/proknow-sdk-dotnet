@@ -52,7 +52,6 @@ namespace ProKnow.Scorecard
         [JsonPropertyName("arg_2")]
         public double? Arg2 { get; set; }
 
-        //todo--add allowable type values to constructor documentation
         /// <summary>
         /// Constructs a computed metric
         /// </summary>
@@ -60,6 +59,30 @@ namespace ProKnow.Scorecard
         /// <param name="roiName">The ROI name or null if not required</param>
         /// <param name="arg1">The first argument or null if not required</param>
         /// <param name="arg2">The second argument or null if not required</param>
+        /// <remarks>
+        /// The allowable values for metric type are:
+        /// <para/>'DOSE_VOLUME_CC_ROI' - Dose (Gy) covering Arg1 (cc) of the RoiName
+        /// <para/>'DOSE_VOLUME_MINUS_CC_ROI' - Dose (Gy) covering the total volume (cc) minus Arg1 (cc) of the RoiName
+        /// <para/>'DOSE_VOLUME_PERCENT_ROI' - Dose (Gy) covering Arg1 (%) of the RoiName
+        /// <para/>'VOLUME_CC_DOSE_ROI' - Volume (cc) of the RoiName covered by Arg1 (Gy)
+        /// <para/>'VOLUME_PERCENT_DOSE_ROI' - Volume (%) of the RoiName covered by Arg1 (Gy)
+        /// <para/>'VOLUME_CC_DOSE_RANGE_ROI' - Volume (cc) of the RoiName in range of Arg1 to Arg2 (Gy)
+        /// <para/>'VOLUME_PERCENT_DOSE_RANGE_ROI' - Volume (%) of the RoiName in range of Arg1 to Arg2 (Gy)
+        /// <para/>'MIN_DOSE_ROI' - Minimum dose (Gy) to the RoiName
+        /// <para/>'MAX_DOSE_ROI' - Maximum dose (Gy) to the RoiName
+        /// <para/>'MEAN_DOSE_ROI' - Mean dose (Gy) to the RoiName
+        /// <para/>'INTEGRAL_DOSE_ROI' - Integral dose (Gy * cc) to the RoiName
+        /// <para/>'MAX_DOSE' - Global maximum dose (Gy) over the enire dose grid
+        /// <para/>'VOLUME_OF_REGRET' - Total volume (cc) covered by Arg1 (Gy) but outside of the RoiName
+        /// <para/>'IRRADIATED_VOLUME' - Total volume (cc) covered by Arg1 (Gy)
+        /// <para/>'CONFORMATION_NUMBER' - Conformation number of the RoiName at Arg1 (Gy)
+        /// <para/>'CONFORMALITY_INDEX' - Conformality index of the RoiName at Arg1 (Gy)
+        /// <para/>'HOMOGENEITY_INDEX' - Homogeneity index of the RoiName at Arg1 (Gy)
+        /// <para/>'INHOMOGENEITY_INDEX' - Inhomogeneity index of the RoiName
+        /// <para/>'CUMULATIVE_METERSET' - Cumulative meterset
+        /// <para/>'ESTIMATED_BEAM_TIME' - Estimated beam time
+        /// <para/>'VOLUME'- Volume (cc) of the RoiName
+        /// </remarks>
         public ComputedMetric(string type, string roiName = null, double? arg1 = null, double? arg2 = null)
         {
             Type = type;
