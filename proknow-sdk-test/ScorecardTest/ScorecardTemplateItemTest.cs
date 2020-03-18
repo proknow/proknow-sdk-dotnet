@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Drawing;
 
 using ProKnow.CustomMetric;
 using ProKnow.Test;
@@ -26,7 +27,14 @@ namespace ProKnow.Scorecard.Test
             await ClassCleanup();
 
             // Create computed metric for testing
-            _computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "BODY", 0, 0.05);
+            _computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
+                new List<MetricBin>() {
+                    new MetricBin("IDEAL", new byte[] { Color.Green.R, Color.Green.G, Color.Green.B }),
+                    new MetricBin("GOOD", new byte[] { Color.LightGreen.R, Color.LightGreen.G, Color.LightGreen.B }, 20),
+                    new MetricBin("ACCEPTABLE", new byte[] { Color.Yellow.R, Color.Yellow.G, Color.Yellow.B }, 40, 60),
+                    new MetricBin("MARGINAL", new byte[] { Color.Orange.R, Color.Orange.G, Color.Orange.B }, null, 80),
+                    new MetricBin("UNACCEPTABLE", new byte[] { Color.Red.R, Color.Red.G, Color.Red.B })
+                });
 
             // Create custom metric for testing
             _customMetricItem = await _proKnow.CustomMetrics.CreateAsync(_baseName, "patient", "number");

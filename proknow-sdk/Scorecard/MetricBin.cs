@@ -5,6 +5,7 @@ namespace ProKnow.Scorecard
     /// <summary>
     /// Defines a bin for metrics
     /// </summary>
+    [JsonConverter(typeof(MetricBinJsonConverter))]
     public class MetricBin
     {
         /// <summary>
@@ -17,6 +18,7 @@ namespace ProKnow.Scorecard
         /// The RGB color values
         /// </summary>
         [JsonPropertyName("color")]
+        [JsonConverter(typeof(ByteArrayJsonConverter))]
         public byte[] Color { get; set; }
 
         /// <summary>
@@ -30,6 +32,13 @@ namespace ProKnow.Scorecard
         /// </summary>
         [JsonPropertyName("max")]
         public double? Max { get; set; }
+
+        /// <summary>
+        /// Used by deserialization to create a metric bin
+        /// </summary>
+        protected MetricBin()
+        {
+        }
 
         /// <summary>
         /// Constructs a metric bin

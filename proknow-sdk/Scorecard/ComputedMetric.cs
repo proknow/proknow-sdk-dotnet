@@ -1,10 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace ProKnow.Scorecard
 {
     /// <summary>
     /// Represents a computed metric
     /// </summary>
+    [JsonConverter(typeof(ComputedMetricJsonConverter))]
     public class ComputedMetric
     {
         /// <summary>
@@ -53,12 +55,19 @@ namespace ProKnow.Scorecard
         public double? Arg2 { get; set; }
 
         /// <summary>
+        /// The objectives or null if not specified
+        /// </summary>
+        [JsonPropertyName("objectives")]
+        public IList<MetricBin> Objectives { get; set; }
+
+        /// <summary>
         /// Constructs a computed metric
         /// </summary>
         /// <param name="type">The metric type</param>
         /// <param name="roiName">The ROI name or null if not required</param>
         /// <param name="arg1">The first argument or null if not required</param>
         /// <param name="arg2">The second argument or null if not required</param>
+        /// <param name="objectives">The objectives or null if not specified</param>
         /// <remarks>
         /// The allowable values for metric type are:
         /// <para/>'DOSE_VOLUME_CC_ROI' - Dose (Gy) covering Arg1 (cc) of the RoiName
@@ -83,12 +92,14 @@ namespace ProKnow.Scorecard
         /// <para/>'ESTIMATED_BEAM_TIME' - Estimated beam time
         /// <para/>'VOLUME'- Volume (cc) of the RoiName
         /// </remarks>
-        public ComputedMetric(string type, string roiName = null, double? arg1 = null, double? arg2 = null)
+        public ComputedMetric(string type, string roiName = null, double? arg1 = null, double? arg2 = null,
+            IList<MetricBin> objectives = null)
         {
             Type = type;
             RoiName = roiName;
             Arg1 = arg1;
             Arg2 = arg2;
+            Objectives = objectives;
         }
 
         /// <summary>

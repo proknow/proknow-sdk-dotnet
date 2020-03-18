@@ -36,13 +36,12 @@ namespace ProKnow.CustomMetric
         /// <returns>The created custom metric</returns>
         public async Task<CustomMetricItem> CreateAsync(string name, string context, string type, string[] enumValues = null)
         {
-            var customMetricItem = new CustomMetricItem(name, context, new CustomMetricType(type, enumValues));
-            var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
-            var content = new StringContent(JsonSerializer.Serialize(customMetricItem, jsonSerializerOptions),
-                Encoding.UTF8, "application/json");
-            string json = await _proKnow.Requestor.PostAsync("/metrics/custom", null, content);
+            var customMetricItem = new CustomMetricItem(null, name, context, new CustomMetricType(type, enumValues));
+            string requestJson = JsonSerializer.Serialize(customMetricItem);
+            var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            string responseJson = await _proKnow.Requestor.PostAsync("/metrics/custom", null, content);
             _cache = null;
-            customMetricItem = JsonSerializer.Deserialize<CustomMetricItem>(json);
+            customMetricItem = JsonSerializer.Deserialize<CustomMetricItem>(responseJson);
             return customMetricItem;
         }
 

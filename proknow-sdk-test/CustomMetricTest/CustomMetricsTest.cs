@@ -83,7 +83,36 @@ namespace ProKnow.CustomMetric.Test
         public async Task QueryAsyncTest()
         {
             var customMetrics = await _proKnow.CustomMetrics.QueryAsync();
-            Assert.IsTrue(customMetrics.Count > 0);
+
+            // enum custom metric
+            var enumCustomMetricItem = customMetrics.First(c => c.Name == $"{_baseName}-enum");
+            Assert.AreEqual(_enumCustomMetricItem.Id, enumCustomMetricItem.Id);
+            Assert.AreEqual(_enumCustomMetricItem.Name, enumCustomMetricItem.Name);
+            Assert.AreEqual(_enumCustomMetricItem.Context, enumCustomMetricItem.Context);
+            Assert.AreEqual(3, enumCustomMetricItem.Type.Enum.Values.Count());
+            Assert.AreEqual(_enumCustomMetricItem.Type.Enum.Values[0], enumCustomMetricItem.Type.Enum.Values[0]);
+            Assert.AreEqual(_enumCustomMetricItem.Type.Enum.Values[1], enumCustomMetricItem.Type.Enum.Values[1]);
+            Assert.AreEqual(_enumCustomMetricItem.Type.Enum.Values[2], enumCustomMetricItem.Type.Enum.Values[2]);
+            Assert.IsNull(enumCustomMetricItem.Type.Number);
+            Assert.IsNull(enumCustomMetricItem.Type.String);
+
+            // number custom metric
+            var numberCustomMetricItem = customMetrics.First(c => c.Name == $"{_baseName}-number");
+            Assert.AreEqual(_numberCustomMetricItem.Id, numberCustomMetricItem.Id);
+            Assert.AreEqual(_numberCustomMetricItem.Name, numberCustomMetricItem.Name);
+            Assert.AreEqual(_numberCustomMetricItem.Context, numberCustomMetricItem.Context);
+            Assert.IsNull(numberCustomMetricItem.Type.Enum);
+            Assert.IsNotNull(numberCustomMetricItem.Type.Number);
+            Assert.IsNull(numberCustomMetricItem.Type.String);
+
+            // string custom metric
+            var stringCustomMetricItem = customMetrics.First(c => c.Name == $"{_baseName}-string");
+            Assert.AreEqual(_stringCustomMetricItem.Id, stringCustomMetricItem.Id);
+            Assert.AreEqual(_stringCustomMetricItem.Name, stringCustomMetricItem.Name);
+            Assert.AreEqual(_stringCustomMetricItem.Context, stringCustomMetricItem.Context);
+            Assert.IsNull(stringCustomMetricItem.Type.Enum);
+            Assert.IsNull(stringCustomMetricItem.Type.Number);
+            Assert.IsNotNull(stringCustomMetricItem.Type.String);
         }
 
         [TestMethod]

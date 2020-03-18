@@ -46,8 +46,8 @@ namespace ProKnow.Scorecard
 
             // Request the creation
             var requestSchema = new ScorecardTemplateItem(null, null, name, computedMetrics, customMetricIds);
-            var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
-            var contentJson = JsonSerializer.Serialize(requestSchema, jsonSerializerOptions);
+            //var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+            var contentJson = JsonSerializer.Serialize(requestSchema); // using jsonSerializerOptions causes access violation
             var content = new StringContent(contentJson, Encoding.UTF8, "application/json");
             string responseJson = await _proKnow.Requestor.PostAsync("/metrics/templates", null, content);
             _cache = null;

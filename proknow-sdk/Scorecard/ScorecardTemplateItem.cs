@@ -13,6 +13,7 @@ namespace ProKnow.Scorecard
     /// <summary>
     /// Represents a scorecard template
     /// </summary>
+    [JsonConverter(typeof(ScorecardTemplateItemJsonConverter))]
     public class ScorecardTemplateItem
     {
         /// <summary>
@@ -55,6 +56,22 @@ namespace ProKnow.Scorecard
         /// </summary>
         protected ScorecardTemplateItem()
         {
+        }
+
+        /// <summary>
+        /// Used by deserialization to create scorecard template item
+        /// </summary>
+        /// <param name="id">The ProKnow ID</param>
+        /// <param name="name">The name</param>
+        /// <param name="computedMetrics">The computed metrics</param>
+        /// <param name="customMetrics">The custom metrics</param>
+        public ScorecardTemplateItem(string id, string name, IList<ComputedMetric> computedMetrics,
+            IList<CustomMetricItem> customMetrics)
+        {
+            Id = id;
+            Name = name;
+            ComputedMetrics = computedMetrics;
+            CustomMetrics = customMetrics;
         }
 
         /// <summary>
@@ -103,8 +120,7 @@ namespace ProKnow.Scorecard
         /// </summary>
         public virtual async Task SaveAsync()
         {
-            var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
-            var contentJson = JsonSerializer.Serialize(ConvertToSaveSchema(), jsonSerializerOptions);
+            var contentJson = JsonSerializer.Serialize(ConvertToSaveSchema());
             var content = new StringContent(contentJson, Encoding.UTF8, "application/json");
             await _proKnow.Requestor.PutAsync($"/metrics/templates/{Id}", null, content);
         }
