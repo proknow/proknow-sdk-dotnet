@@ -1,11 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Drawing;
-
-using ProKnow.CustomMetric;
 using ProKnow.Test;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Threading.Tasks;
 
 namespace ProKnow.Scorecard.Test
 {

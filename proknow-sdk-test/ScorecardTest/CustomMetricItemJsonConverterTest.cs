@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace ProKnow.CustomMetric.Test
+namespace ProKnow.Scorecard.Test
 {
     [TestClass]
     public class CustomMetricItemJsonConverterTest

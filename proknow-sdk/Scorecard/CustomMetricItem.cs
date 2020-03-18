@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace ProKnow.CustomMetric
+namespace ProKnow.Scorecard
 {
     /// <summary>
     /// Represents a custom metric

@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using ProKnow.CustomMetric;
-
 namespace ProKnow.Scorecard
 {
     /// <summary>

@@ -1,13 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ProKnow.Patient;
+using ProKnow.Patient.Entities;
+using ProKnow.Scorecard;
+using ProKnow.Test;
+using ProKnow.Upload;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-
-using ProKnow.CustomMetric;
-using ProKnow.Patient;
-using ProKnow.Patient.Entities;
-using ProKnow.Test;
-using ProKnow.Upload;
 
 namespace ProKnow.Patients.Entities.Test
 {

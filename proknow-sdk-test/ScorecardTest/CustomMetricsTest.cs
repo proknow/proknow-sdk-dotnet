@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using ProKnow.Test;
 
-namespace ProKnow.CustomMetric.Test
+namespace ProKnow.Scorecard.Test
 {
     [TestClass]
     public class CustomMetricsTest

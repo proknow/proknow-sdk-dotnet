@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-using ProKnow.CustomMetric;
+using ProKnow.Scorecard;
 
 namespace ProKnow.Scorecard
 {

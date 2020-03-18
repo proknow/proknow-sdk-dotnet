@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using ProKnow.Scorecard;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-
-using ProKnow.CustomMetric;
-using ProKnow.Scorecard;
 
 namespace ProKnow.Patient.Entities
 {

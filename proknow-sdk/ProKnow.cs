@@ -1,9 +1,8 @@
-﻿using System.IO;
-using System.Text.Json;
-using ProKnow.CustomMetric;
-using ProKnow.Patient;
+﻿using ProKnow.Patient;
 using ProKnow.Scorecard;
 using ProKnow.Upload;
+using System.IO;
+using System.Text.Json;
 
 namespace ProKnow
 {

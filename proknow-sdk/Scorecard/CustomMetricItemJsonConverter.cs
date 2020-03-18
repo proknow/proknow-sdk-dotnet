@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ProKnow.CustomMetric
+namespace ProKnow.Scorecard
 {
     /// <summary>
     /// Converts a custom metric to and from its JSON representation

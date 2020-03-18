@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ProKnow.CustomMetric
+namespace ProKnow.Scorecard
 {
     /// <summary>
     /// Interacts with the custom metrics in a ProKnow organization
