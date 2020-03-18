@@ -26,6 +26,9 @@ namespace ProKnow.Patients.Entities.Test
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
         {
+            // Delete existing custom metrics, if necessary
+            await TestHelper.DeleteCustomMetricsAsync(_patientMrnAndName);
+
             // Delete test workspace, if necessary
             await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
 

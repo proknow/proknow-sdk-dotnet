@@ -20,11 +20,11 @@ namespace ProKnow.Patient.Entities
         private string _entityId;
 
         /// <summary>
-        /// Creates an entity scorecards object
+        /// 
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
-        /// <param name="workspaceId">The workspace ProKnow ID</param>
-        /// <param name="entityId">The entity ProKnow ID</param>
+        /// <param name="workspaceId">The ProKnow ID for the workspace</param>
+        /// <param name="entityId">The ProKnow ID for the entity</param>
         public EntityScorecards(ProKnow proKnow, string workspaceId, string entityId)
         {
             _proKnow = proKnow;

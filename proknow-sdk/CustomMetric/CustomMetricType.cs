@@ -60,7 +60,7 @@ namespace ProKnow.CustomMetric
         /// <summary>
         /// Used by deserialization to create a custom metric type
         /// </summary>
-        public CustomMetricType()
+        protected CustomMetricType()
         {
         }
 

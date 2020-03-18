@@ -53,7 +53,7 @@ namespace ProKnow.CustomMetric
         /// <param name="name">The name</param>
         /// <param name="context">The context</param>
         /// <param name="type">The type</param>
-        public CustomMetricItem(string id, string name, string context, CustomMetricType type)
+        internal CustomMetricItem(string id, string name, string context, CustomMetricType type)
         {
             Id = id;
             Name = name;

@@ -17,7 +17,7 @@ namespace ProKnow.CustomMetric
         /// <summary>
         /// Used by deserialization to create a custom metric enum
         /// </summary>
-        public CustomMetricEnum()
+        protected CustomMetricEnum()
         {
         }
 

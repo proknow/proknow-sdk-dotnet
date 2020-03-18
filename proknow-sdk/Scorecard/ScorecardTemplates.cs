@@ -20,7 +20,7 @@ namespace ProKnow.Scorecard
         /// <summary>
         /// Constructs a scorecard templates object
         /// </summary>
-        /// <param name="proKnow">Parent ProKnow objet</param>
+        /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         public ScorecardTemplates(ProKnow proKnow)
         {
             _proKnow = proKnow;
