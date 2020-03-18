@@ -34,6 +34,12 @@ namespace ProKnow.Scorecard
         public CustomMetricType Type { get; set; }
 
         /// <summary>
+        /// The objectives or null if not specified
+        /// </summary>
+        [JsonPropertyName("objectives")]
+        public IList<MetricBin> Objectives { get; set; }
+
+        /// <summary>
         /// Used by deserialization to create custom metric item
         /// </summary>
         protected CustomMetricItem()
@@ -47,12 +53,15 @@ namespace ProKnow.Scorecard
         /// <param name="name">The name</param>
         /// <param name="context">The context</param>
         /// <param name="type">The type</param>
-        internal CustomMetricItem(string id, string name, string context, CustomMetricType type)
+        /// <param name="objectives">The objectives or null if not specified</param>
+        internal CustomMetricItem(string id, string name, string context, CustomMetricType type,
+            IList<MetricBin> objectives = null)
         {
             Id = id;
             Name = name;
             Context = context;
             Type = type;
+            Objectives = objectives;
         }
 
         /// <summary>

@@ -19,16 +19,30 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Read_IdNameContextType()
+        public void Read_IdNameContextTypeObjectives()
         {
-            string json = "{\"id\":\"5b98016854c00417f86e8d098ffc1e00\",\"name\":\"Planner Name\",\"context\":\"patient\",\"type\":{\"string\":{}},\"created_at\":\"2018-09-11T17:54:48.344Z\"}";
+            string objectivesJson = "[{\"label\":\"PASS\",\"color\":[18,191,0],\"max\":90},{\"label\":\"FAIL\",\"color\":[255,0,0]}]";
+            string json = $"{{\"id\":\"5b980134bc004112c9946f5af5dc753a\",\"name\":\"Normalcy of Diet @ 6 mo. (0-100)\",\"context\":\"patient\",\"type\":{{\"number\":{{}}}},\"objectives\":{objectivesJson},\"created_at\":\"2018-09-11T17:54:48.344Z\"}}";
             var customMetricItem = JsonSerializer.Deserialize<CustomMetricItem>(json);
-            Assert.AreEqual("5b98016854c00417f86e8d098ffc1e00", customMetricItem.Id);
-            Assert.AreEqual("Planner Name", customMetricItem.Name);
+            Assert.AreEqual("5b980134bc004112c9946f5af5dc753a", customMetricItem.Id);
+            Assert.AreEqual("Normalcy of Diet @ 6 mo. (0-100)", customMetricItem.Name);
             Assert.AreEqual("patient", customMetricItem.Context);
             Assert.IsNull(customMetricItem.Type.Enum);
-            Assert.IsNull(customMetricItem.Type.Number);
-            Assert.IsNotNull(customMetricItem.Type.String);
+            Assert.IsNotNull(customMetricItem.Type.Number);
+            Assert.IsNull(customMetricItem.Type.String);
+            Assert.AreEqual(2, customMetricItem.Objectives.Count);
+            Assert.AreEqual("PASS", customMetricItem.Objectives[0].Label);
+            Assert.AreEqual(18, customMetricItem.Objectives[0].Color[0]);
+            Assert.AreEqual(191, customMetricItem.Objectives[0].Color[1]);
+            Assert.AreEqual(0, customMetricItem.Objectives[0].Color[2]);
+            Assert.IsNull(customMetricItem.Objectives[0].Min);
+            Assert.AreEqual(90, customMetricItem.Objectives[0].Max);
+            Assert.AreEqual("FAIL", customMetricItem.Objectives[1].Label);
+            Assert.AreEqual(255, customMetricItem.Objectives[1].Color[0]);
+            Assert.AreEqual(0, customMetricItem.Objectives[1].Color[1]);
+            Assert.AreEqual(0, customMetricItem.Objectives[1].Color[2]);
+            Assert.IsNull(customMetricItem.Objectives[1].Min);
+            Assert.IsNull(customMetricItem.Objectives[1].Max);
         }
 
         [TestMethod]
@@ -81,10 +95,16 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Write_NameContextType()
+        public void Write_NameContextTypeObjectives()
         {
-            var customMetricItem = new CustomMetricItem(null, "Planner Name", "patient", new CustomMetricType("string"));
-            string expected = "{\"name\":\"Planner Name\",\"context\":\"patient\",\"type\":{\"string\":{}}}";
+            var objectives = new List<MetricBin>()
+            {
+                new MetricBin("PASS", new byte[] { 18, 191, 0 }, null, 90),
+                new MetricBin("FAIL", new byte[] { 255, 0, 0 })
+            };
+            var customMetricItem = new CustomMetricItem(null, "Normalcy of Diet @ 6 mo. (0-100)", "patient", new CustomMetricType("number"), objectives);
+            string objectivesJson = "[{\"label\":\"PASS\",\"color\":[18,191,0],\"max\":90},{\"label\":\"FAIL\",\"color\":[255,0,0]}]";
+            string expected = $"{{\"name\":\"Normalcy of Diet @ 6 mo. (0-100)\",\"context\":\"patient\",\"type\":{{\"number\":{{}}}},\"objectives\":{objectivesJson}}}";
             var actual = JsonSerializer.Serialize<CustomMetricItem>(customMetricItem);
             Assert.AreEqual(expected, actual);
         }

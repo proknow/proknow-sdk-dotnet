@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -13,6 +14,7 @@ namespace ProKnow.Scorecard
         private readonly JsonEncodedText _nameKey = JsonEncodedText.Encode("name");
         private readonly JsonEncodedText _contextKey = JsonEncodedText.Encode("context");
         private readonly JsonEncodedText _typeKey = JsonEncodedText.Encode("type");
+        private readonly JsonEncodedText _objectivesKey = JsonEncodedText.Encode("objectives");
 
         /// <summary>
         /// Reads a custom metric item from its JSON representation
@@ -27,6 +29,7 @@ namespace ProKnow.Scorecard
             string name = null;
             string context = null;
             CustomMetricType type = null;
+            IList<MetricBin> objectives = null;
 
             if (reader.TokenType != JsonTokenType.StartObject)
             {
@@ -37,7 +40,7 @@ namespace ProKnow.Scorecard
             {
                 if (reader.TokenType == JsonTokenType.EndObject)
                 {
-                    return new CustomMetricItem(id, name, context, type);
+                    return new CustomMetricItem(id, name, context, type, objectives);
                 }
 
                 // Read property name
@@ -64,6 +67,10 @@ namespace ProKnow.Scorecard
                 else if (propertyName == "type")
                 {
                     type = JsonSerializer.Deserialize<CustomMetricType>(ref reader);
+                }
+                else if (propertyName == "objectives")
+                {
+                    objectives = JsonSerializer.Deserialize<IList<MetricBin>>(ref reader);
                 }
                 // ignore any other properties
             }
@@ -107,6 +114,13 @@ namespace ProKnow.Scorecard
                 writer.WritePropertyName(_typeKey);
                 var overrideOptions = new JsonSerializerOptions { IgnoreNullValues = true };
                 JsonSerializer.Serialize(writer, customMetricItem.Type, overrideOptions);
+            }
+
+            // objectives
+            if (customMetricItem.Objectives != null)
+            {
+                writer.WritePropertyName(_objectivesKey);
+                JsonSerializer.Serialize(writer, customMetricItem.Objectives, typeof(IList<MetricBin>));
             }
 
             writer.WriteEndObject();
