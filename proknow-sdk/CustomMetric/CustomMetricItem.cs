@@ -34,12 +34,6 @@ namespace ProKnow.CustomMetric
         public CustomMetricType Type { get; set; }
 
         /// <summary>
-        /// Properties encountered during deserialization without matching members
-        /// </summary>
-        [JsonExtensionData]
-        public Dictionary<string, object> ExtensionData { get; set; }
-
-        /// <summary>
         /// Used by deserialization to create custom metric item
         /// </summary>
         protected CustomMetricItem()
