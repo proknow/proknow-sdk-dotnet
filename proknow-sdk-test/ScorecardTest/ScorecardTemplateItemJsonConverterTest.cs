@@ -8,7 +8,7 @@ namespace ProKnow.Scorecard.Test
     public class ScorecardTemplateItemJsonConverterTest
     {
         [TestMethod]
-        public void Read_OnlyComputedMetrics()
+        public void ReadTest_OnlyComputedMetrics()
         {
             string computedMetricObjectivesJson = "[{\"label\":\"IDEAL\",\"color\":[18,191,0],\"max\":85},{\"label\":\"UNACCEPTABLE\",\"color\":[255,0,0]}]";
             string computedMetricsJson = $"[{{\"type\":\"CUMULATIVE_METERSET\",\"roi_name\":null,\"arg_1\":null,\"arg_2\":null,\"objectives\":{computedMetricObjectivesJson}}}]";
@@ -38,7 +38,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Read_OnlyCustomMetrics()
+        public void ReadTest_OnlyCustomMetrics()
         {
             string customMetricObjectivesJson = "[{\"label\":\"IDEAL\",\"color\":[18,191,0],\"max\":90},{\"label\":\"UNACCEPTABLE\",\"color\":[255,0,0]}]";
             string customMetricsJson = $"[{{\"id\":\"5b9c00f90e40e073f43aec25ff9f851a\",\"objectives\":{customMetricObjectivesJson}}}]";
@@ -68,7 +68,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Read_ComputedAndCustomMetrics()
+        public void ReadTest_ComputedAndCustomMetrics()
         {
             string computedMetricObjectivesJson = "[{\"label\":\"IDEAL\",\"color\":[18,191,0],\"max\":85},{\"label\":\"UNACCEPTABLE\",\"color\":[255,0,0]}]";
             string computedMetricsJson = $"[{{\"type\":\"CUMULATIVE_METERSET\",\"roi_name\":null,\"arg_1\":null,\"arg_2\":null,\"objectives\":{computedMetricObjectivesJson}}}]";
@@ -117,7 +117,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Write()
+        public void WriteTest()
         {
             var computedMetricObjectives = new List<MetricBin>()
             {

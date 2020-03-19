@@ -8,7 +8,7 @@ namespace ProKnow.Scorecard.Test
     public class CustomMetricItemJsonConverterTest
     {
         [TestMethod]
-        public void Read_Id()
+        public void ReadTest_Id()
         {
             string json = "{\"id\":\"abc123\"}";
             var customMetricItem = JsonSerializer.Deserialize<CustomMetricItem>(json);
@@ -19,7 +19,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Read_IdNameContextTypeObjectives()
+        public void ReadTest_IdNameContextTypeObjectives()
         {
             string objectivesJson = "[{\"label\":\"PASS\",\"color\":[18,191,0],\"max\":90},{\"label\":\"FAIL\",\"color\":[255,0,0]}]";
             string json = $"{{\"id\":\"5b980134bc004112c9946f5af5dc753a\",\"name\":\"Normalcy of Diet @ 6 mo. (0-100)\",\"context\":\"patient\",\"type\":{{\"number\":{{}}}},\"objectives\":{objectivesJson},\"created_at\":\"2018-09-11T17:54:48.344Z\"}}";
@@ -46,7 +46,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Read_AllTypes()
+        public void ReadTest_AllTypes()
         {
             string json1 = "{\"id\":\"5b98011868c06b40b35b88b14ac8894d\",\"name\":\"Genetic-Type\",\"context\":\"patient\",\"type\":{\"enum\":{\"values\":[\"TYPE I\",\"TYPE II\",\"TYPE III\",\"TYPE IV\",\"TYPE V\"]}},\"created_at\":\"2018-09-11T17:53:28.424Z\"}";
             string json2 = "{\"id\":\"5b980134bc004112c9946f5af5dc753a\",\"name\":\"Normalcy of Diet @ 6 mo. (0-100)\",\"context\":\"patient\",\"type\":{\"number\":{}},\"created_at\":\"2018-09-11T17:53:56.757Z\"}";
@@ -86,7 +86,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Write_Id()
+        public void WriteTest_Id()
         {
             var customMetricItem = new CustomMetricItem("5b98016854c00417f86e8d098ffc1e00", null, null, null);
             string expected = "{\"id\":\"5b98016854c00417f86e8d098ffc1e00\"}";
@@ -95,7 +95,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Write_NameContextTypeObjectives()
+        public void WriteTest_NameContextTypeObjectives()
         {
             var objectives = new List<MetricBin>()
             {
@@ -110,7 +110,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Write_AllTypes()
+        public void WriteTest_AllTypes()
         {
             var customMetricItems = new List<CustomMetricItem>() {
                 new CustomMetricItem(null, "Genetic-Type", "patient", new CustomMetricType("enum", new string[] { "TYPE I", "TYPE II", "TYPE III", "TYPE IV", "TYPE V" })),

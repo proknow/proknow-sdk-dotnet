@@ -8,7 +8,7 @@ namespace ProKnow.Scorecard.Test
     public class ComputedMetricJsonConverterTest
     {
         [TestMethod]
-        public void Read_Type()
+        public void ReadTest_Type()
         {
             string json = "{\"type\":\"CUMULATIVE_METERSET\",\"roi_name\":null,\"arg_1\":null,\"arg_2\":null}";
             var computedMetric = JsonSerializer.Deserialize<ComputedMetric>(json);
@@ -20,7 +20,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Read_TypeAndRoiName()
+        public void ReadTest_TypeAndRoiName()
         {
             string json = "{\"type\":\"MEAN_DOSE_ROI\",\"roi_name\":\"PTV\",\"arg_1\":null,\"arg_2\":null}";
             var computedMetric = JsonSerializer.Deserialize<ComputedMetric>(json);
@@ -32,7 +32,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Read_TypeRoiNameAndArg1()
+        public void ReadTest_TypeRoiNameAndArg1()
         {
             string json = "{\"type\":\"DOSE_VOLUME_CC_ROI\",\"roi_name\":\"PTV\",\"arg_1\":3.14,\"arg_2\":null}";
             var computedMetric = JsonSerializer.Deserialize<ComputedMetric>(json);
@@ -44,7 +44,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Read_TypeRoiNameArg1AndArg2()
+        public void ReadTest_TypeRoiNameArg1AndArg2()
         {
             string json = "{\"type\":\"DOSE_VOLUME_CC_ROI\",\"roi_name\":\"PTV\",\"arg_1\":1.23,\"arg_2\":3.14}";
             var computedMetric = JsonSerializer.Deserialize<ComputedMetric>(json);
@@ -56,7 +56,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Read_TypeRoiNameArg1Arg2AndObjectives()
+        public void ReadTest_TypeRoiNameArg1Arg2AndObjectives()
         {
             string objectivesJson = "[{\"label\":\"PASS\",\"color\":[18,191,0],\"max\":1},{\"label\":\"FAIL\",\"color\":[255,0,0]}]";
             string json = $"{{\"type\":\"DOSE_VOLUME_CC_ROI\",\"roi_name\":\"PTV\",\"arg_1\":1.23,\"arg_2\":3.14,\"objectives\":{objectivesJson}}}";
@@ -81,7 +81,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Write_Type()
+        public void WriteTest_Type()
         {
             var computedMetric = new ComputedMetric("CUMULATIVE_METERSET");
             string expected = "{\"type\":\"CUMULATIVE_METERSET\",\"roi_name\":null,\"arg_1\":null,\"arg_2\":null}";
@@ -90,7 +90,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Write_TypeAndRoiName()
+        public void WriteTest_TypeAndRoiName()
         {
             var computedMetric = new ComputedMetric("MEAN_DOSE_ROI", "PTV");
             string expected = "{\"type\":\"MEAN_DOSE_ROI\",\"roi_name\":\"PTV\",\"arg_1\":null,\"arg_2\":null}";
@@ -99,7 +99,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Write_TypeRoiNameAndArg1()
+        public void WriteTest_TypeRoiNameAndArg1()
         {
             var computedMetric = new ComputedMetric("DOSE_VOLUME_CC_ROI", "PTV", 3.14);
             string expected = "{\"type\":\"DOSE_VOLUME_CC_ROI\",\"roi_name\":\"PTV\",\"arg_1\":3.14,\"arg_2\":null}";
@@ -108,7 +108,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Write_TypeRoiNameArg1AndArg2()
+        public void WriteTest_TypeRoiNameArg1AndArg2()
         {
             var computedMetric = new ComputedMetric("DOSE_VOLUME_CC_ROI", "PTV", 1.23, 3.14);
             string expected = "{\"type\":\"DOSE_VOLUME_CC_ROI\",\"roi_name\":\"PTV\",\"arg_1\":1.23,\"arg_2\":3.14}";
@@ -117,7 +117,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Write_TypeRoiNameArg1Arg2AndObjectives()
+        public void WriteTest_TypeRoiNameArg1Arg2AndObjectives()
         {
             var objectives = new List<MetricBin>()
             {

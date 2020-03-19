@@ -7,7 +7,7 @@ namespace ProKnow.Scorecard.Test
     public class MetricBinJsonConverterTest
     {
         [TestMethod]
-        public void Read_WithoutMinOrMax()
+        public void ReadTest_WithoutMinOrMax()
         {
             string json = "{\"label\":\"UNACCEPTABLE\",\"color\":[128,32,96]}";
             var metricBin = JsonSerializer.Deserialize<MetricBin>(json);
@@ -20,7 +20,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Read_WithMin()
+        public void ReadTest_WithMin()
         {
             string json = "{\"label\":\"UNACCEPTABLE\",\"color\":[128,32,96],\"min\":3.14}";
             var metricBin = JsonSerializer.Deserialize<MetricBin>(json);
@@ -33,7 +33,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Read_WithMax()
+        public void ReadTest_WithMax()
         {
             string json = "{\"label\":\"UNACCEPTABLE\",\"color\":[128,32,96],\"min\":1.23,\"max\":3.14}";
             var metricBin = JsonSerializer.Deserialize<MetricBin>(json);
@@ -46,7 +46,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Read_WithMinAndMax()
+        public void ReadTest_WithMinAndMax()
         {
             string json = "{\"label\":\"UNACCEPTABLE\",\"color\":[128,32,96],\"max\":3.14}";
             var metricBin = JsonSerializer.Deserialize<MetricBin>(json);
@@ -59,7 +59,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Write_WithoutMinOrMax()
+        public void WriteTest_WithoutMinOrMax()
         {
             var metricBin = new MetricBin("UNACCEPTABLE", new byte[] { 128, 32, 96 });
             string expected = "{\"label\":\"UNACCEPTABLE\",\"color\":[128,32,96]}";
@@ -68,7 +68,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Write_WithMin()
+        public void WriteTest_WithMin()
         {
             var metricBin = new MetricBin("UNACCEPTABLE", new byte[] { 128, 32, 96 }, 3.14);
             string expected = "{\"label\":\"UNACCEPTABLE\",\"color\":[128,32,96],\"min\":3.14}";
@@ -77,7 +77,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Write_WithMax()
+        public void WriteTest_WithMax()
         {
             var metricBin = new MetricBin("UNACCEPTABLE", new byte[] { 128, 32, 96 }, null, 3.14);
             string expected = "{\"label\":\"UNACCEPTABLE\",\"color\":[128,32,96],\"max\":3.14}";
@@ -86,7 +86,7 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
-        public void Write_WithMinAndMax()
+        public void WriteTest_WithMinAndMax()
         {
             var metricBin = new MetricBin("UNACCEPTABLE", new byte[] { 128, 32, 96 }, 1.23, 3.14);
             string expected = "{\"label\":\"UNACCEPTABLE\",\"color\":[128,32,96],\"min\":1.23,\"max\":3.14}";
