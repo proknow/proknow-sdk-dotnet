@@ -32,22 +32,44 @@ namespace ProKnow.Scorecard
         /// </summary>
         /// <param name="name">The name</param>
         /// <param name="computedMetrics">The computed metrics</param>
-        /// <param name="customMetricNames">The ProKnow IDs for the custom metrics</param>
+        /// <param name="customMetrics">The custom metrics (names and objectives)</param>
         /// <returns>The created scorecard template</returns>
         public async Task<ScorecardTemplateItem> CreateAsync(string name, IList<ComputedMetric> computedMetrics,
-            IList<string> customMetricNames)
+            IList<CustomMetricItem> customMetrics)
         {
-            // Resolve custom metric names
-            var customMetricItems = await Task.WhenAll(customMetricNames.Select(async (n) =>
-                await _proKnow.CustomMetrics.ResolveByNameAsync(n)));
+            // Check arguments
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+            if (computedMetrics == null)
+            {
+                throw new ArgumentNullException("computedMetrics");
+            }
+            if (customMetrics == null)
+            {
+                throw new ArgumentNullException("customMetrics");
+            }
+            // Resolve custom metrics (obtain their IDs) and add objectives
+            var resolvedCustomMetrics = new List<CustomMetricItem>();
+            var tasks = new List<Task>();
+            foreach (var inputCustomMetric in customMetrics)
+            {
+                tasks.Add(Task.Run(async () =>
+                {
+                    var resolvedCustomMetric = await _proKnow.CustomMetrics.ResolveByNameAsync(inputCustomMetric.Name);
+                    resolvedCustomMetric.Objectives = inputCustomMetric.Objectives;
+                    resolvedCustomMetrics.Add(resolvedCustomMetric);
+                }));
+            }
+            await Task.WhenAll(tasks);
 
             // Convert custom metrics to their scorecard template creation schema
-            var customMetricIds = customMetricItems.Select(c => c.ConvertToScorecardSchema()).ToList();
+            var customMetricIdsAndObjectives = resolvedCustomMetrics.Select(c => c.ConvertToScorecardSchema()).ToList();
 
             // Request the creation
-            var requestSchema = new ScorecardTemplateItem(null, null, name, computedMetrics, customMetricIds);
-            //var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
-            var contentJson = JsonSerializer.Serialize(requestSchema); // using jsonSerializerOptions causes access violation
+            var requestSchema = new ScorecardTemplateItem(null, null, name, computedMetrics, customMetricIdsAndObjectives);
+            var contentJson = JsonSerializer.Serialize(requestSchema);
             var content = new StringContent(contentJson, Encoding.UTF8, "application/json");
             string responseJson = await _proKnow.Requestor.PostAsync("/metrics/templates", null, content);
             _cache = null;
@@ -55,7 +77,7 @@ namespace ProKnow.Scorecard
             // Return the created scorecard template, with complete custom metric representations
             var responseSchema = JsonSerializer.Deserialize<ScorecardTemplateItem>(responseJson);
             return new ScorecardTemplateItem(_proKnow, responseSchema.Id, responseSchema.Name,
-                responseSchema.ComputedMetrics, customMetricItems);
+                responseSchema.ComputedMetrics, resolvedCustomMetrics);
         }
 
         /// <summary>

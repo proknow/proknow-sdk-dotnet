@@ -15,7 +15,7 @@ namespace ProKnow.Scorecard.Test
         private static ComputedMetric _computedMetric;
         private static CustomMetricItem _customMetricItem;
         private static List<ComputedMetric> _computedMetrics;
-        private static List<string> _customMetricNames;
+        private static List<CustomMetricItem> _customMetricItems;
         private static ScorecardTemplateItem _scorecardTemplateItem;
 
         [TestInitialize]
@@ -39,8 +39,8 @@ namespace ProKnow.Scorecard.Test
 
             // Create scorecard template for testing
             _computedMetrics = new List<ComputedMetric>() { _computedMetric };
-            _customMetricNames = new List<string>() { _customMetricItem.Name };
-            _scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync(_baseName, _computedMetrics, _customMetricNames);
+            _customMetricItems = new List<CustomMetricItem>() { new CustomMetricItem(_customMetricItem.Name, _customMetricItem.Objectives) };
+            _scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync(_baseName, _computedMetrics, _customMetricItems);
         }
 
         [TestCleanup]
@@ -88,7 +88,7 @@ namespace ProKnow.Scorecard.Test
             Assert.IsNull(scorecardTemplate);
 
             // Restore the deleted scorecard template
-            _scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync(_baseName, _computedMetrics, _customMetricNames);
+            _scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync(_baseName, _computedMetrics, _customMetricItems);
         }
 
         [TestMethod]

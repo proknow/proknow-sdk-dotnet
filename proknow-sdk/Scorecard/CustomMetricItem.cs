@@ -47,6 +47,17 @@ namespace ProKnow.Scorecard
         }
 
         /// <summary>
+        /// Creates a custom metric for a scorecard
+        /// </summary>
+        /// <param name="name">The custom metric name (must be an existing custom metric)</param>
+        /// <param name="objectives">The optional objectives</param>
+        public CustomMetricItem(string name, IList<MetricBin> objectives = null)
+        {
+            Name = name;
+            Objectives = objectives;
+        }
+
+        /// <summary>
         /// Used by deserialization to create custom metric item
         /// </summary>
         /// <param name="id">The ProKnow ID</param>
@@ -83,7 +94,8 @@ namespace ProKnow.Scorecard
         {
             return new CustomMetricItem()
             {
-                Id = Id
+                Id = Id,
+                Objectives = Objectives
             };
         }
     }

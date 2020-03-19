@@ -96,23 +96,16 @@ namespace ProKnow.Scorecard
                 writer.WriteStringValue(scorecardTemplateItem.Name);
             }
 
-            // computed
-            if (scorecardTemplateItem.ComputedMetrics != null)
-            {
-                writer.WritePropertyName(_computedKey);
-                var overrideOptions = new JsonSerializerOptions { IgnoreNullValues = true };
-                JsonSerializer.Serialize(writer, scorecardTemplateItem.ComputedMetrics, overrideOptions);
-            }
+            // computed (must be an array, even if empty)
+            writer.WritePropertyName(_computedKey);
+            var overrideOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+            JsonSerializer.Serialize(writer, scorecardTemplateItem.ComputedMetrics, overrideOptions);
 
-            // custom
-            if (scorecardTemplateItem.CustomMetrics != null)
-            {
-                // only include IDs
-                var customMetricIds = scorecardTemplateItem.CustomMetrics.Select(c => c.ConvertToScorecardSchema()).ToList();
-                writer.WritePropertyName(_customKey);
-                var overrideOptions = new JsonSerializerOptions { IgnoreNullValues = true };
-                JsonSerializer.Serialize(writer, customMetricIds, overrideOptions);
-            }
+            // custom (must be an array, even if empty)
+            writer.WritePropertyName(_customKey);
+            // only include IDs and objectives
+            var customMetricIdsAndObjectives = scorecardTemplateItem.CustomMetrics.Select(c => c.ConvertToScorecardSchema()).ToList();
+            JsonSerializer.Serialize(writer, customMetricIdsAndObjectives, overrideOptions);
 
             writer.WriteEndObject();
         }
