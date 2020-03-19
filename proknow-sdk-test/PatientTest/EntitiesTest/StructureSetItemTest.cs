@@ -1,6 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProKnow.Patient;
-using ProKnow.Patient.Entities;
 using ProKnow.Scorecard;
 using ProKnow.Test;
 using ProKnow.Upload;
@@ -8,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace ProKnow.Patients.Entities.Test
+namespace ProKnow.Patient.Entities.Test
 {
     [TestClass]
     public class StructureSetItemTest
