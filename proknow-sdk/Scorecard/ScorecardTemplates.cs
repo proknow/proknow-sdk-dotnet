@@ -50,6 +50,7 @@ namespace ProKnow.Scorecard
             {
                 throw new ArgumentNullException("customMetrics");
             }
+
             // Resolve custom metrics (obtain their IDs) and add objectives
             var resolvedCustomMetrics = new List<CustomMetricItem>();
             var tasks = new List<Task>();

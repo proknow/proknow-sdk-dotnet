@@ -39,7 +39,7 @@ namespace ProKnow.Scorecard.Test
 
             // Create scorecard template for testing
             _computedMetrics = new List<ComputedMetric>() { _computedMetric };
-            _customMetricItems = new List<CustomMetricItem>() { new CustomMetricItem(_customMetricItem.Name, _customMetricItem.Objectives) };
+            _customMetricItems = new List<CustomMetricItem>() { new CustomMetricItem(_customMetricItem.Name) };
             _scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync(_baseName, _computedMetrics, _customMetricItems);
         }
 
@@ -126,6 +126,14 @@ namespace ProKnow.Scorecard.Test
         }
 
         [TestMethod]
+        public async Task QueryAsyncTest()
+        {
+            var scorecardTemplates = await _proKnow.ScorecardTemplates.QueryAsync();
+            var scorecardTemplate = scorecardTemplates.First(t => t.Id == _scorecardTemplateItem.Id);
+            Assert.AreEqual(_scorecardTemplateItem.Name, scorecardTemplate.Name);
+        }
+
+        [TestMethod]
         public async Task ResolveAsyncTest_Id()
         {
             var scorecardTemplate = await _proKnow.ScorecardTemplates.ResolveAsync(_scorecardTemplateItem.Id);
@@ -154,14 +162,6 @@ namespace ProKnow.Scorecard.Test
         {
             var scorecardTemplate = await _proKnow.ScorecardTemplates.ResolveByNameAsync(_scorecardTemplateItem.Name);
             Assert.AreEqual(_scorecardTemplateItem.Id, scorecardTemplate.Id);
-            Assert.AreEqual(_scorecardTemplateItem.Name, scorecardTemplate.Name);
-        }
-
-        [TestMethod]
-        public async Task QueryAsyncTest()
-        {
-            var scorecardTemplates = await _proKnow.ScorecardTemplates.QueryAsync();
-            var scorecardTemplate = scorecardTemplates.First(t => t.Id == _scorecardTemplateItem.Id);
             Assert.AreEqual(_scorecardTemplateItem.Name, scorecardTemplate.Name);
         }
     }

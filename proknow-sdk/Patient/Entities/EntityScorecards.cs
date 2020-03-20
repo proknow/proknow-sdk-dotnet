@@ -37,30 +37,54 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         /// <param name="name">The name</param>
         /// <param name="computedMetrics">The computed metrics</param>
-        /// <param name="customMetricNames">The ProKnow IDs for the custom metrics</param>
+        /// <param name="customMetrics">The custom metrics (names and objectives)</param>
         /// <returns>The created entity scorecard</returns>
         public async Task<EntityScorecardItem> CreateAsync(string name, IList<ComputedMetric> computedMetrics,
-            IList<string> customMetricNames)
+            IList<CustomMetricItem> customMetrics)
         {
-            // Resolve custom metric names
-            var customMetricItems = await Task.WhenAll(customMetricNames.Select(async (n) =>
-                await _proKnow.CustomMetrics.ResolveByNameAsync(n)));
+            // Check arguments
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+            if (computedMetrics == null)
+            {
+                throw new ArgumentNullException("computedMetrics");
+            }
+            if (customMetrics == null)
+            {
+                throw new ArgumentNullException("customMetrics");
+            }
 
-            // Convert custom metrics to their scorecard creation schema
-            var customMetricIds = customMetricItems.Select(c => c.ConvertToScorecardSchema()).ToList();
+            // Resolve custom metrics (obtain their IDs) and add objectives
+            var resolvedCustomMetrics = new List<CustomMetricItem>();
+            var tasks = new List<Task>();
+            foreach (var inputCustomMetric in customMetrics)
+            {
+                tasks.Add(Task.Run(async () =>
+                {
+                    var resolvedCustomMetric = await _proKnow.CustomMetrics.ResolveByNameAsync(inputCustomMetric.Name);
+                    resolvedCustomMetric.Objectives = inputCustomMetric.Objectives;
+                    resolvedCustomMetrics.Add(resolvedCustomMetric);
+                }));
+            }
+            await Task.WhenAll(tasks);
+
+            // Convert custom metrics to their scorecard template creation schema
+            var customMetricIdsAndObjectives = resolvedCustomMetrics.Select(c => c.ConvertToScorecardSchema()).ToList();
 
             // Request the creation
             var route = $"/workspaces/{_workspaceId}/entities/{_entityId}/metrics/sets";
-            var requestSchema = new EntityScorecardItem(null, null, null, null, null, name, computedMetrics, customMetricIds);
+            var requestSchema = new EntityScorecardItem(null, null, null, null, null, name, computedMetrics, customMetricIdsAndObjectives);
             var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
             var contentJson = JsonSerializer.Serialize(requestSchema, jsonSerializerOptions);
             var content = new StringContent(contentJson, Encoding.UTF8, "application/json");
             string responseJson = await _proKnow.Requestor.PostAsync(route, null, content);
 
             // Return the created entity scorecard, with complete custom metric representations
-            var responseSchema = JsonSerializer.Deserialize<EntityScorecardItem>(responseJson);
-            return new EntityScorecardItem(_proKnow, _workspaceId, _entityId, this, responseSchema.Id,
-                responseSchema.Name, responseSchema.ComputedMetrics, customMetricItems);
+            var responseSchema = JsonSerializer.Deserialize<ScorecardTemplateItem>(responseJson);
+            return new EntityScorecardItem(_proKnow, _workspaceId, _entityId, this, responseSchema.Id, responseSchema.Name,
+                responseSchema.ComputedMetrics, resolvedCustomMetrics);
         }
 
         /// <summary>
