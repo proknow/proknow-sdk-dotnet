@@ -162,7 +162,7 @@ namespace ProKnow.Patient.Entities
             var entityScorecards = JsonSerializer.Deserialize<IList<EntityScorecardSummary>>(json);
             foreach (var entityScorecard in entityScorecards)
             {
-                entityScorecard.PostProcessDeserialization(_proKnow);
+                entityScorecard.PostProcessDeserialization(_proKnow, this);
             }
             return entityScorecards;
         }
