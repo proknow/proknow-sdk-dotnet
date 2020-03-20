@@ -1,6 +1,5 @@
-﻿using System.Threading.Tasks;
-
-using ProKnow.Scorecard;
+﻿using ProKnow.Scorecard;
+using System.Threading.Tasks;
 
 namespace ProKnow.Patient.Entities
 {

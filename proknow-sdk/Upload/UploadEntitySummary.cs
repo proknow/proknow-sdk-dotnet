@@ -1,7 +1,6 @@
-﻿using System.Threading.Tasks;
-
-using ProKnow.Patient;
+﻿using ProKnow.Patient;
 using ProKnow.Patient.Entities;
+using System.Threading.Tasks;
 
 namespace ProKnow.Upload
 {

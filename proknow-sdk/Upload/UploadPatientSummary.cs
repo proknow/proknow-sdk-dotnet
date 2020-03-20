@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ProKnow.Patient;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-
-using ProKnow.Patient;
 
 namespace ProKnow.Upload
 {

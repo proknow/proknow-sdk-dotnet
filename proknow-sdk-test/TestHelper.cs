@@ -1,10 +1,10 @@
-﻿using System;
+﻿using ProKnow.Patient;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ProKnow.Patient;
 
 namespace ProKnow.Test
 {

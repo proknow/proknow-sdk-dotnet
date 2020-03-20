@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ProKnow.Patient.Entities;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using ProKnow.Patient.Entities;
 
 namespace ProKnow.Patient
 {

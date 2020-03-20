@@ -1,6 +1,5 @@
-﻿using System.Text.Json.Serialization;
-
-using ProKnow.Patient;
+﻿using ProKnow.Patient;
+using System.Text.Json.Serialization;
 
 namespace ProKnow.Upload
 {

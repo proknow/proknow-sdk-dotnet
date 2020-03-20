@@ -1,10 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
-using System.Threading.Tasks;
-
 using ProKnow.Patient;
 using ProKnow.Patient.Entities;
 using ProKnow.Test;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace ProKnow.Upload.Test
 {
