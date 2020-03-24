@@ -39,12 +39,25 @@ namespace ProKnow
         /// Issues an asynchronous HTTP DELETE request
         /// </summary>
         /// <param name="route">The API route to use in the request</param>
+        /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
+        /// <param name="content">Optional content for the body</param>
         /// <returns>A task that returns the response as a string</returns>
         /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
-        public async Task<string> DeleteAsync(string route)
+        public async Task<string> DeleteAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Delete, $"{_baseUrl}/{route}");
             request.Headers.Authorization = _authenticationHeaderValue;
+            if (headerKeyValuePairs != null)
+            {
+                foreach (var kvp in headerKeyValuePairs)
+                {
+                    request.Headers.Add(kvp.Key, kvp.Value);
+                }
+            }
+            if (content != null)
+            {
+                request.Content = content;
+            }
             var response = await _httpClient.SendAsync(request);
             return await HandleResponseAsync(response);
         }

@@ -44,7 +44,11 @@ namespace ProKnow.Collection
         [JsonPropertyName("workspaces")]
         public IList<string> WorkspaceIds { get; set; }
 
-        //todo--add CollectionPatients
+        /// <summary>
+        /// Interacts with patients in this collection
+        /// </summary>
+        [JsonIgnore]
+        public CollectionPatients Patients { get; private set; }
 
         //todo--add CollectionScorecards
 
@@ -69,6 +73,7 @@ namespace ProKnow.Collection
             Description = collectionItem.Description;
             Type = collectionItem.Type;
             WorkspaceIds = collectionItem.WorkspaceIds;
+            Patients = new CollectionPatients(_proKnow, this);
         }
 
         /// <summary>
@@ -79,6 +84,10 @@ namespace ProKnow.Collection
             return _proKnow.Collections.DeleteAsync(Id);
         }
 
+        /// <summary>
+        /// Saves name and description changes to this collection asynchronously
+        /// </summary>
+        /// <returns></returns>
         public async Task SaveAsync()
         {
             var properties = new Dictionary<string, object>();
@@ -96,6 +105,16 @@ namespace ProKnow.Collection
         public override string ToString()
         {
             return Name;
+        }
+
+        /// <summary>
+        /// Finishes initialization of object after deserialization from JSON
+        /// </summary>
+        /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
+        internal void PostProcessDeserialization(ProKnow proKnow)
+        {
+            _proKnow = proKnow;
+            Patients = new CollectionPatients(proKnow, this);
         }
     }
 }
