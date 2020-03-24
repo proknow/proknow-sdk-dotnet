@@ -1,4 +1,5 @@
-﻿using ProKnow.Patient;
+﻿using ProKnow.Collection;
+using ProKnow.Patient;
 using ProKnow.Scorecard;
 using ProKnow.Upload;
 using System.IO;
@@ -45,7 +46,10 @@ namespace ProKnow
         /// </summary>
         public Patients Patients { get; private set; }
 
-        //todo--Add Collections property
+        /// <summary>
+        /// Interacts with collections in the ProKnow organization
+        /// </summary>
+        public Collections Collections { get; private set; }
 
         /// <summary>
         /// The number of seconds to use as a buffer when renewing a lock for a draft structure set. As an example, the default value of 30
@@ -98,7 +102,7 @@ namespace ProKnow
             //todo--Initialize Users property
             Uploads = new Uploads(this);
             Patients = new Patients(this);
-            //todo--Initialize Collections property
+            Collections = new Collections(this);
         }
     }
 }

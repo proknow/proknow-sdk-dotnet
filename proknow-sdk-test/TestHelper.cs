@@ -1,4 +1,5 @@
-﻿using ProKnow.Patient;
+﻿using ProKnow.Collection;
+using ProKnow.Patient;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,35 +17,15 @@ namespace ProKnow.Test
         private static ProKnow _proKnow = TestSettings.ProKnow;
 
         /// <summary>
-        /// Deletes the scorecard templates for a test
+        /// Creates a test patient asynchronously
         /// </summary>
         /// <param name="testClassName">The test class name</param>
-        public static async Task DeleteScorecardTemplatesAsync(string testClassName)
+        /// <returns>The summary of the created patient</returns>
+        public static async Task<PatientSummary> CreatePatientAsync(string testClassName)
         {
-            var scorecardTemplates = await _proKnow.ScorecardTemplates.QueryAsync();
-            foreach (var scorecardTemplate in scorecardTemplates)
-            {
-                if (scorecardTemplate.Name.Contains(testClassName))
-                {
-                    await _proKnow.ScorecardTemplates.DeleteAsync(scorecardTemplate.Id);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Deletes the custom metrics for a test
-        /// </summary>
-        /// <param name="testClassName">The test class name</param>
-        public static async Task DeleteCustomMetricsAsync(string testClassName)
-        {
-            var customMetrics = await _proKnow.CustomMetrics.QueryAsync();
-            foreach (var customMetric in customMetrics)
-            {
-                if (customMetric.Name.Contains(testClassName))
-                {
-                    await _proKnow.CustomMetrics.DeleteAsync(customMetric.Id);
-                }
-            }
+            var workspaceItem = await _proKnow.Workspaces.ResolveAsync(testClassName);
+            await _proKnow.Patients.CreateAsync(workspaceItem.Id, testClassName, testClassName);
+            return await _proKnow.Patients.FindAsync(workspaceItem.Id, t => t.Name == testClassName);
         }
 
         /// <summary>
@@ -55,6 +36,22 @@ namespace ProKnow.Test
         public static async Task<WorkspaceItem> CreateWorkspaceAsync(string testClassName)
         {
             return await _proKnow.Workspaces.CreateAsync(testClassName.ToLower(), testClassName, false);
+        }
+
+        /// <summary>
+        /// Deletes a test collection asynchronously
+        /// </summary>
+        /// <param name="testClassName">The test class name</param>
+        public static async Task DeleteCollectionAsync(string testClassName)
+        {
+            // If the collection exists
+            IList<CollectionSummary> collections = await _proKnow.Collections.QueryAsync(testClassName);
+            var collectionSummary = collections.FirstOrDefault(w => w.Name.Contains(testClassName));
+            if (collectionSummary != null)
+            {
+                // Request the deletion
+                await _proKnow.Collections.DeleteAsync(collectionSummary.Id);
+            }
         }
 
         /// <summary>
@@ -73,31 +70,19 @@ namespace ProKnow.Test
         }
 
         /// <summary>
-        /// Deletes a test workspace asynchronously
+        /// Deletes all of the custom metrics for a test
         /// </summary>
         /// <param name="testClassName">The test class name</param>
-        public static async Task DeleteWorkspaceAsync(string testClassName)
+        public static async Task DeleteCustomMetricsAsync(string testClassName)
         {
-            // If the workspace exists
-            IList<WorkspaceItem> workspaces = await _proKnow.Workspaces.QueryAsync();
-            var workspaceItem = workspaces.FirstOrDefault(w => w.Name == testClassName);
-            if (workspaceItem != null)
+            var customMetrics = await _proKnow.CustomMetrics.QueryAsync();
+            foreach (var customMetric in customMetrics)
             {
-                // Request the deletion
-                await _proKnow.Workspaces.DeleteAsync(workspaceItem.Id);
+                if (customMetric.Name.Contains(testClassName))
+                {
+                    await _proKnow.CustomMetrics.DeleteAsync(customMetric.Id);
+                }
             }
-        }
-
-        /// <summary>
-        /// Creates a test patient asynchronously
-        /// </summary>
-        /// <param name="testClassName">The test class name</param>
-        /// <returns>The summary of the created patient</returns>
-        public static async Task<PatientSummary> CreatePatientAsync(string testClassName)
-        {
-            var workspaceItem = await _proKnow.Workspaces.ResolveAsync(testClassName);
-            await _proKnow.Patients.CreateAsync(workspaceItem.Id, testClassName, testClassName);
-            return await _proKnow.Patients.FindAsync(workspaceItem.Id, t => t.Name == testClassName);
         }
 
         /// <summary>
@@ -115,6 +100,38 @@ namespace ProKnow.Test
                 {
                     Thread.Sleep(50);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Deletes the scorecard templates for a test
+        /// </summary>
+        /// <param name="testClassName">The test class name</param>
+        public static async Task DeleteScorecardTemplatesAsync(string testClassName)
+        {
+            var scorecardTemplates = await _proKnow.ScorecardTemplates.QueryAsync();
+            foreach (var scorecardTemplate in scorecardTemplates)
+            {
+                if (scorecardTemplate.Name.Contains(testClassName))
+                {
+                    await _proKnow.ScorecardTemplates.DeleteAsync(scorecardTemplate.Id);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Deletes a test workspace asynchronously
+        /// </summary>
+        /// <param name="testClassName">The test class name</param>
+        public static async Task DeleteWorkspaceAsync(string testClassName)
+        {
+            // If the workspace exists
+            IList<WorkspaceItem> workspaces = await _proKnow.Workspaces.QueryAsync();
+            var workspaceItem = workspaces.FirstOrDefault(w => w.Name == testClassName);
+            if (workspaceItem != null)
+            {
+                // Request the deletion
+                await _proKnow.Workspaces.DeleteAsync(workspaceItem.Id);
             }
         }
 
