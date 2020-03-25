@@ -250,7 +250,31 @@ namespace ProKnow.Patient
             Name = patientItem.Name;
             BirthDate = patientItem.BirthDate;
             Sex = patientItem.Sex;
-            Metadata = patientItem.Metadata;
+            var metadata = new Dictionary<string, object>();
+            foreach (var key in patientItem.Metadata.Keys)
+            {
+                var element = (JsonElement)patientItem.Metadata[key];
+                switch (element.ValueKind)
+                {
+                    case JsonValueKind.String:
+                        metadata[key] = element.GetString();
+                        break;
+                    case JsonValueKind.Number:
+                        var number = element.GetDouble();
+                        if (number % 1 == 0)
+                        {
+                            metadata[key] = (int)number;
+                        }
+                        else
+                        {
+                            metadata[key] = number;
+                        }
+                        break;
+                    default:
+                        throw new JsonException($"{element.ValueKind} is not a supported type for custom metrics.");
+                }
+            }
+            Metadata = metadata;
             foreach (var study in patientItem.Studies)
             {
                 study.PostProcessDeserialization(_proKnow, WorkspaceId, Id);

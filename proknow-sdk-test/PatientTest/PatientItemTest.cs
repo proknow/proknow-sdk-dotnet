@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Patient.Entities;
+using ProKnow.Scorecard;
 using ProKnow.Test;
 using ProKnow.Upload;
 using System.Collections.Generic;
@@ -15,12 +16,25 @@ namespace ProKnow.Patient.Test
         private static string _patientMrnAndName = "SDK-PatientItemTest";
         private static ProKnow _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = _proKnow.Uploads;
+        private static CustomMetricItem _enumCustomMetricItem;
+        private static CustomMetricItem _numberCustomMetricItem;
+        private static CustomMetricItem _stringCustomMetricItem;
         private static string _workspaceId;
         private static PatientItem _patientItem;
+        private static Dictionary<string, object> _metadata;
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
         {
+            // Delete existing custom metrics, if necessary
+            await TestHelper.DeleteCustomMetricsAsync(_patientMrnAndName);
+
+            // Create custom metrics for testing
+            _enumCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_patientMrnAndName}-enum", "patient", "enum",
+                new string[] { "one", "two", "three" });
+            _numberCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_patientMrnAndName}-number", "patient", "number");
+            _stringCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_patientMrnAndName}-string", "patient", "string");
+
             // Delete test workspace, if necessary
             await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
 
@@ -53,6 +67,16 @@ namespace ProKnow.Patient.Test
                     }
                 }
             }
+
+            // Add custom metric values
+            _metadata = new Dictionary<string, object>();
+            _metadata.Add(_enumCustomMetricItem.Name, "one");
+            _metadata.Add(_numberCustomMetricItem.Name, 1);
+            _metadata.Add(_stringCustomMetricItem.Name, "I");
+            await _patientItem.SetMetadataAsync(_metadata);
+            await _patientItem.SaveAsync();
+
+            //todo--There is some timing issue that causes only 2 of the 3 custom metrics to get saved to the test patient (possibly conflict with another test)
         }
 
         [ClassCleanup]
@@ -60,6 +84,9 @@ namespace ProKnow.Patient.Test
         {
             // Delete test workspace
             await _proKnow.Workspaces.DeleteAsync(_workspaceId);
+
+            // Delete custom metrics
+            await TestHelper.DeleteCustomMetricsAsync(_patientMrnAndName);
         }
 
         [TestMethod]
@@ -102,6 +129,10 @@ namespace ProKnow.Patient.Test
                     }
                 }
             }
+
+            // Add custom metric values
+            await _patientItem.SetMetadataAsync(_metadata);
+            await _patientItem.SaveAsync();
         }
 
         [TestMethod]
@@ -130,6 +161,38 @@ namespace ProKnow.Patient.Test
         {
             var doseEntities = _patientItem.FindEntities(e => e.Type == "dose");
             Assert.AreEqual(doseEntities.Count, 1);
+        }
+
+        [TestMethod]
+        public async Task GetMetadataAsyncTest()
+        {
+            var metadata = await _patientItem.GetMetadataAsync();
+            Assert.AreEqual(3, metadata.Keys.Count);
+            Assert.IsTrue(metadata.ContainsKey(_enumCustomMetricItem.Name));
+            Assert.AreEqual("one", metadata[_enumCustomMetricItem.Name]);
+            Assert.IsTrue(metadata.ContainsKey(_numberCustomMetricItem.Name));
+            Assert.AreEqual(1, metadata[_numberCustomMetricItem.Name]);
+            Assert.IsTrue(metadata.ContainsKey(_stringCustomMetricItem.Name));
+            Assert.AreEqual("I", metadata[_stringCustomMetricItem.Name]);
+        }
+
+        //todo--RefreshAsyncTest
+
+        //todo--SaveAsyncTest
+
+        [TestMethod]
+        public async Task SetMetadataAsyncTest()
+        {
+            // Verify the metadata set in the class initializer
+            var patientSummary = await _proKnow.Patients.FindAsync(_workspaceId, p => p.Id == _patientItem.Id);
+            var patientItem = await patientSummary.GetAsync();
+            Assert.AreEqual(3, patientItem.Metadata.Keys.Count);
+            Assert.IsTrue(patientItem.Metadata.ContainsKey(_enumCustomMetricItem.Id));
+            Assert.AreEqual("one", patientItem.Metadata[_enumCustomMetricItem.Id]);
+            Assert.IsTrue(patientItem.Metadata.ContainsKey(_numberCustomMetricItem.Id));
+            Assert.AreEqual(1, patientItem.Metadata[_numberCustomMetricItem.Id]);
+            Assert.IsTrue(patientItem.Metadata.ContainsKey(_stringCustomMetricItem.Id));
+            Assert.AreEqual("I", patientItem.Metadata[_stringCustomMetricItem.Id]);
         }
 
         [TestMethod]
@@ -162,7 +225,7 @@ namespace ProKnow.Patient.Test
         }
 
         [TestMethod]
-        public async Task UploadAsyncTest_Folder()
+        public async Task UploadAsyncTest_SingleFolder()
         {
             // Upload test folder
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
@@ -191,5 +254,7 @@ namespace ProKnow.Patient.Test
                 }
             }
         }
+
+        //todo--UploadAsyncTest_MultipleFilesAndOrFolders
     }
 }
