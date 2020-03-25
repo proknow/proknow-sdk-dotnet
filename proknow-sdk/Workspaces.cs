@@ -21,7 +21,7 @@ namespace ProKnow
         /// Constructs a workspaces object
         /// </summary>
         /// <param name="proKnow">Parent ProKnow object</param>
-        public Workspaces(ProKnow proKnow)
+        internal Workspaces(ProKnow proKnow)
         {
             _proKnow = proKnow;
         }

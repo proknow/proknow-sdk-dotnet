@@ -61,6 +61,13 @@ namespace ProKnow.Scorecard
         public IList<MetricBin> Objectives { get; set; }
 
         /// <summary>
+        /// Used by deserialization to create a computed metric
+        /// </summary>
+        public ComputedMetric()
+        {
+        }
+
+        /// <summary>
         /// Constructs a computed metric
         /// </summary>
         /// <param name="type">The metric type</param>
@@ -100,13 +107,6 @@ namespace ProKnow.Scorecard
             Arg1 = arg1;
             Arg2 = arg2;
             Objectives = objectives;
-        }
-
-        /// <summary>
-        /// Used by deserialization to create computed metric
-        /// </summary>
-        protected ComputedMetric()
-        {
         }
 
         /// <summary>

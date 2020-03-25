@@ -42,7 +42,7 @@ namespace ProKnow.Scorecard
         /// <summary>
         /// Used by deserialization to create custom metric item
         /// </summary>
-        protected CustomMetricItem()
+        public CustomMetricItem()
         {
         }
 

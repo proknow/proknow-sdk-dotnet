@@ -33,9 +33,9 @@ namespace ProKnow.Scorecard
         public Dictionary<string, object> ExtensionData { get; set; }
 
         /// <summary>
-        /// Used by deserialization to create scorecard template summary
+        /// Used by deserialization to create a scorecard template summary
         /// </summary>
-        protected ScorecardTemplateSummary()
+        public ScorecardTemplateSummary()
         {
         }
 

@@ -29,6 +29,13 @@ namespace ProKnow.Scorecard
         public object String { get; set; }
 
         /// <summary>
+        /// Used by deserialization to create a custom metric type
+        /// </summary>
+        public CustomMetricType()
+        {
+        }
+
+        /// <summary>
         /// Creates a custom metric type
         /// </summary>
         /// <param name="type">The type ('enum', 'number', or 'string')</param>
@@ -55,13 +62,6 @@ namespace ProKnow.Scorecard
             {
                 throw new ArgumentOutOfRangeException("The custom metric type must be 'enum', 'number', or 'string'.");
             }
-        }
-
-        /// <summary>
-        /// Used by deserialization to create a custom metric type
-        /// </summary>
-        protected CustomMetricType()
-        {
         }
 
         /// <summary>

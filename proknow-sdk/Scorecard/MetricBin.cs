@@ -36,7 +36,7 @@ namespace ProKnow.Scorecard
         /// <summary>
         /// Used by deserialization to create a metric bin
         /// </summary>
-        protected MetricBin()
+        public MetricBin()
         {
         }
 

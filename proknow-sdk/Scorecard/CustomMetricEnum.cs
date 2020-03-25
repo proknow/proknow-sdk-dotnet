@@ -17,7 +17,7 @@ namespace ProKnow.Scorecard
         /// <summary>
         /// Used by deserialization to create a custom metric enum
         /// </summary>
-        protected CustomMetricEnum()
+        public CustomMetricEnum()
         {
         }
 

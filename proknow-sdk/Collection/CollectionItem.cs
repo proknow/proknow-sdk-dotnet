@@ -55,7 +55,7 @@ namespace ProKnow.Collection
         /// <summary>
         /// Used by deserialization to create a collection
         /// </summary>
-        protected CollectionItem()
+        public CollectionItem()
         {
         }
 

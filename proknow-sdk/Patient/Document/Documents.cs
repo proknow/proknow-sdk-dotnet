@@ -18,7 +18,7 @@ namespace ProKnow.Patient.Document
         /// Constructs a documents object
         /// </summary>
         /// <param name="proKnow">Parent ProKnow object</param>
-        public Documents(ProKnow proKnow)
+        internal Documents(ProKnow proKnow)
         {
             _proKnow = proKnow;
         }

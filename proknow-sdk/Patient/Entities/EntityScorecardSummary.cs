@@ -13,7 +13,7 @@ namespace ProKnow.Patient.Entities
         /// <summary>
         /// Used by deserialization to create an entity scorecard summary
         /// </summary>
-        protected EntityScorecardSummary() : base()
+        public EntityScorecardSummary() : base()
         {
         }
 

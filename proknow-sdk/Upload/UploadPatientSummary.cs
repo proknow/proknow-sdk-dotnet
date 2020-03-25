@@ -37,15 +37,6 @@ namespace ProKnow.Upload
         public IList<UploadEntitySummary> Entities { get; set; }
 
         /// <summary>
-        /// Gets the complete representation of the patient
-        /// </summary>
-        /// <returns></returns>
-        public Task<PatientItem> GetAsync()
-        {
-            return _patients.GetAsync(WorkspaceId, Id);
-        }
-
-        /// <summary>
         /// Creates an upload patient summary
         /// </summary>
         /// <param name="patients">Interacts with patients in a ProKnow organization</param>
@@ -59,6 +50,15 @@ namespace ProKnow.Upload
             Id = uploadStatusResult.Id;
             Mrn = uploadStatusResult.Mrn;
             Name = uploadStatusResult.Name;
+        }
+
+        /// <summary>
+        /// Gets the complete representation of the patient
+        /// </summary>
+        /// <returns></returns>
+        public Task<PatientItem> GetAsync()
+        {
+            return _patients.GetAsync(WorkspaceId, Id);
         }
     }
 }

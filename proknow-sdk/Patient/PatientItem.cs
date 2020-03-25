@@ -77,7 +77,7 @@ namespace ProKnow.Patient
         /// <summary>
         /// Used by deserialization to create patient item
         /// </summary>
-        protected PatientItem()
+        public PatientItem()
         {
         }
 

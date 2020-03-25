@@ -44,9 +44,9 @@ namespace ProKnow.Scorecard
         public IList<CustomMetricItem> CustomMetrics { get; set; }
 
         /// <summary>
-        /// Used by deserialization to create scorecard template item
+        /// Used by deserialization to create a scorecard template item
         /// </summary>
-        protected ScorecardTemplateItem()
+        public ScorecardTemplateItem()
         {
         }
 

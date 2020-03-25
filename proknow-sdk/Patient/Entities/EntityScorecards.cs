@@ -19,7 +19,7 @@ namespace ProKnow.Patient.Entities
         private string _entityId;
 
         /// <summary>
-        /// 
+        /// Constructs an EntityScorecards object
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The ProKnow ID for the workspace</param>

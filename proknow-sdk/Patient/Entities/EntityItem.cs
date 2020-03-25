@@ -78,7 +78,11 @@ namespace ProKnow.Patient.Entities
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; }
 
-        //todo--Add Scorecards property
+        /// <summary>
+        /// Interacts with scorecards for this entity
+        /// </summary>
+        [JsonIgnore]
+        public EntityScorecards Scorecards { get; private set; }
 
         /// <summary>
         /// Deletes this entity asynchronously
@@ -192,6 +196,7 @@ namespace ProKnow.Patient.Entities
                 }
             }
             Metadata = metadata;
+            Scorecards = new EntityScorecards(_proKnow, WorkspaceId, Id);
         }
     }
 }

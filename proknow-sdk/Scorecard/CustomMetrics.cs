@@ -21,7 +21,7 @@ namespace ProKnow.Scorecard
         /// Creates a custom metrics object
         /// </summary>
         /// <param name="proKnow">The parent ProKnow object</param>
-        public CustomMetrics(ProKnow proKnow)
+        internal CustomMetrics(ProKnow proKnow)
         {
             _proKnow = proKnow;
         }

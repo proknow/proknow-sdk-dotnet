@@ -28,7 +28,7 @@ namespace ProKnow.Upload
         /// Constructs an Uploads object
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
-        public Uploads(ProKnow proKnow)
+        internal Uploads(ProKnow proKnow)
         {
             _proKnow = proKnow;
         }
