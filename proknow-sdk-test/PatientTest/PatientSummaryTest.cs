@@ -2,6 +2,7 @@
 using ProKnow.Patient.Entities;
 using ProKnow.Test;
 using ProKnow.Upload;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -37,6 +38,20 @@ namespace ProKnow.Patient.Test
         }
 
         [TestMethod]
+        public async Task GetAsyncTest()
+        {
+            // Get the patient item
+            var patientItem = await _patientSummary.GetAsync();
+
+            // Verify the returned patient item
+            Assert.AreEqual(_patientSummary.Id, patientItem.Id);
+            Assert.AreEqual(_patientSummary.Mrn, patientItem.Mrn);
+            Assert.AreEqual(_patientSummary.Name, patientItem.Name);
+            Assert.AreEqual(_patientSummary.BirthDate, patientItem.BirthDate);
+            Assert.AreEqual(_patientSummary.Sex, patientItem.Sex);
+        }
+
+        [TestMethod]
         public async Task UploadAsyncTest_SingleFile()
         {
             // Upload test file
@@ -67,7 +82,7 @@ namespace ProKnow.Patient.Test
         }
 
         [TestMethod]
-        public async Task UploadAsyncTest_Folder()
+        public async Task UploadAsyncTest_SingleFolder()
         {
             // Upload test folder
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
@@ -76,9 +91,9 @@ namespace ProKnow.Patient.Test
                 Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
             };
             var uploadBatch = await _patientSummary.UploadAsync(uploadPath, overrides);
-            var uploadedFiles = Directory.GetFiles(uploadPath);
 
-            // Wait until uploaded test file has processed
+            // Wait until uploaded test files have processed
+            var uploadedFiles = Directory.GetFiles(uploadPath);
             PatientItem patientItem;
             while (true)
             {
@@ -92,6 +107,58 @@ namespace ProKnow.Patient.Test
 
                         // Cleanup (in case there are other tests using the same image set)
                         await entityItem.DeleteAsync();
+
+                    break;
+                }
+            }
+        }
+
+        [TestMethod]
+        public async Task UploadAsyncTest_MultipleFilesAndOrFolders()
+        {
+            // Upload test folder and file
+            var uploadPath1 = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
+            var uploadPath2 = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RP.dcm");
+            var uploadPaths = new List<string>() { uploadPath1, uploadPath2 };
+            var overrides = new UploadFileOverrides
+            {
+                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
+            };
+            var uploadBatch = await _patientSummary.UploadAsync(uploadPaths, overrides);
+
+
+            // Wait until uploaded CT files have processed
+            var uploadedCtFiles = Directory.GetFiles(uploadPath1);
+            PatientItem patientItem;
+            while (true)
+            {
+                patientItem = await _patientSummary.GetAsync();
+                var entitySummaries = patientItem.FindEntities(t => t.Type == "image_set");
+                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
+                {
+                    // Make sure the uploaded data is the same
+                    var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
+                    if (entityItem.Data.Images.Count == uploadedCtFiles.Length)
+
+                        // Cleanup (in case there are other tests using the same image set)
+                        await entityItem.DeleteAsync();
+
+                    break;
+                }
+            }
+
+            // Wait until upload plan file has processed
+            while (true)
+            {
+                patientItem = await _patientSummary.GetAsync();
+                var entitySummaries = patientItem.FindEntities(t => t.Type == "plan");
+                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
+                {
+                    // Make sure the uploaded data is the same
+                    Assert.AreEqual(entitySummaries[0].Uid, "2.16.840.1.114337.1.1.1535997926.0");
+
+                    // Cleanup (in case there are other tests using the same patient)
+                    await entitySummaries[0].DeleteAsync();
 
                     break;
                 }
