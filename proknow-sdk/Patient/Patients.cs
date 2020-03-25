@@ -43,8 +43,8 @@ namespace ProKnow.Patient
         public async Task<PatientItem> CreateAsync(string workspace, string mrn, string name, string birthDate = null, string sex = null)
         {
             var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
-            var patientSchema = new PatientCreateSchema { Mrn = mrn, Name = name, BirthDate = birthDate, Sex = sex };
-            var requestContent = new StringContent(JsonSerializer.Serialize(patientSchema), Encoding.UTF8, "application/json");
+            var properties = new Dictionary<string, object>() { { "mrn", mrn }, { "name", name }, { "birth_date", birthDate }, { "sex", sex } };
+            var requestContent = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
             var responseJson = await _proKnow.Requestor.PostAsync($"/workspaces/{workspaceItem.Id}/patients", null, requestContent);
             return new PatientItem(_proKnow, workspaceItem.Id, responseJson);
         }

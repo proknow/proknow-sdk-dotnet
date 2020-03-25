@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Test;
 using ProKnow.Upload;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -57,6 +58,44 @@ namespace ProKnow.Patient.Test
         {
             // Delete test workspace
             await _proKnow.Workspaces.DeleteAsync(_workspaceId);
+        }
+
+        [TestMethod]
+        public async Task CreateAsyncTest()
+        {
+            // Create a new patient
+            var patientItem = await _proKnow.Patients.CreateAsync(_workspaceId, $"{_patientMrnAndName}-Mrn-2",
+                $"{_patientMrnAndName}-Name-2", "1976-07-04", "F");
+
+            // Verify the creation
+            Assert.AreEqual(_workspaceId, patientItem.WorkspaceId);
+            Assert.IsFalse(String.IsNullOrEmpty(patientItem.Id));
+            Assert.AreEqual($"{_patientMrnAndName}-Mrn-2", patientItem.Mrn);
+            Assert.AreEqual($"{_patientMrnAndName}-Name-2", patientItem.Name);
+            Assert.AreEqual("1976-07-04", patientItem.BirthDate);
+            Assert.AreEqual("F", patientItem.Sex);
+
+            // Cleanup
+            await _proKnow.Patients.DeleteAsync(_workspaceId, patientItem.Id);
+        }
+
+        [TestMethod]
+        public async Task DeleteAsyncTest()
+        {
+            // Create a new patient
+            var patientItem = await _proKnow.Patients.CreateAsync(_workspaceId, $"{_patientMrnAndName}-Mrn-3",
+                $"{_patientMrnAndName}-Name-3", "1960-01-01", "M");
+
+            // Verify the creation
+            var patientSummary = await _proKnow.Patients.FindAsync(_workspaceId, p => p.Name == $"{_patientMrnAndName}-Name-3");
+            Assert.IsNotNull(patientSummary);
+
+            // Delete it
+            await _proKnow.Patients.DeleteAsync(_workspaceId, patientItem.Id);
+
+            // Verify the deletion
+            patientSummary = await _proKnow.Patients.FindAsync(_workspaceId, p => p.Name == $"{_patientMrnAndName}-Name-3");
+            Assert.IsNull(patientSummary);
         }
 
         [TestMethod]
