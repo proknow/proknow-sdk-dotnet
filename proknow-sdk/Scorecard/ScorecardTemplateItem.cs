@@ -57,7 +57,7 @@ namespace ProKnow.Scorecard
         /// <param name="name">The name</param>
         /// <param name="computedMetrics">The computed metrics</param>
         /// <param name="customMetrics">The custom metrics</param>
-        internal ScorecardTemplateItem(string id, string name, IList<ComputedMetric> computedMetrics,
+        public ScorecardTemplateItem(string id, string name, IList<ComputedMetric> computedMetrics,
             IList<CustomMetricItem> customMetrics)
         {
             Id = id;

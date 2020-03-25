@@ -58,14 +58,14 @@ namespace ProKnow.Scorecard
         }
 
         /// <summary>
-        /// Used by deserialization to create custom metric item
+        /// Used by deserialization to a create custom metric item
         /// </summary>
         /// <param name="id">The ProKnow ID</param>
         /// <param name="name">The name</param>
         /// <param name="context">The context</param>
         /// <param name="type">The type</param>
         /// <param name="objectives">The objectives or null if not specified</param>
-        internal CustomMetricItem(string id, string name, string context, CustomMetricType type,
+        public CustomMetricItem(string id, string name, string context, CustomMetricType type,
             IList<MetricBin> objectives = null)
         {
             Id = id;

@@ -18,10 +18,5 @@
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="4.7.0" />
   </ItemGroup>
-  <ItemGroup>
-	<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-	  <_Parameter1>proknow-sdk-test</_Parameter1>
-	</AssemblyAttribute>
-  </ItemGroup>
 
 </Project>
