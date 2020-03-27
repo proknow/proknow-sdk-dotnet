@@ -47,17 +47,6 @@ namespace ProKnow.Upload
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets the complete representation of the entity
-        /// </summary>
-        /// <returns>A complete representation of the entity</returns>
-        public async Task<EntityItem> GetAsync()
-        {
-            var patientItem = await _patients.GetAsync(WorkspaceId, PatientId);
-            var entitySummary = patientItem.FindEntities(e => e.Id == Id)[0];
-            return await entitySummary.GetAsync();
-        }
-
-        /// <summary>
         /// Creates an entity summary
         /// </summary>
         /// <param name="patients">Interacts with patients in a ProKnow organization</param>
@@ -74,6 +63,17 @@ namespace ProKnow.Upload
             Type = uploadStatusResult.Type;
             Modality = uploadStatusResult.Modality;
             Description = uploadStatusResult.Description;
+        }
+
+        /// <summary>
+        /// Gets the complete representation of the entity
+        /// </summary>
+        /// <returns>A complete representation of the entity</returns>
+        public async Task<EntityItem> GetAsync()
+        {
+            var patientItem = await _patients.GetAsync(WorkspaceId, PatientId);
+            var entitySummary = patientItem.FindEntities(e => e.Id == Id)[0];
+            return await entitySummary.GetAsync();
         }
     }
 }

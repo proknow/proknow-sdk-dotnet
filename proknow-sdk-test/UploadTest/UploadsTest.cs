@@ -68,7 +68,7 @@ namespace ProKnow.Upload.Test
         }
 
         [TestMethod]
-        public async Task UploadAsyncTest_Folder()
+        public async Task UploadAsyncTest_SingleFolder()
         {
             // Upload test folder
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
@@ -98,5 +98,7 @@ namespace ProKnow.Upload.Test
                 }
             }
         }
+
+        //todo--UploadAsyncTest_MultipleFilesAndOrFolders
     }
 }

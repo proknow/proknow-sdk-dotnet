@@ -75,6 +75,10 @@ namespace ProKnow.Scorecard
             Objectives = objectives;
         }
 
+        //todo--DeleteAsync (HIGH PRIORITY)
+
+        //todo--SaveAsync (HIGH PRIORITY)
+
         /// <summary>
         /// Returns a string that represents the current object
         /// </summary>

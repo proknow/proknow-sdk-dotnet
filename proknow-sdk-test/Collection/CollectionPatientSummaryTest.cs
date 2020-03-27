@@ -1,4 +1,4 @@
-﻿namespace ProKnow.Test.Collection
+﻿namespace ProKnow.Collection.Test
 {
     class CollectionPatientSummaryTest
     {

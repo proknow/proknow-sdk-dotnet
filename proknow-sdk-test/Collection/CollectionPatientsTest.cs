@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ProKnow.Test.Collection
+namespace ProKnow.Collection.Test
 {
     [TestClass]
     public class CollectionPatientsTest
