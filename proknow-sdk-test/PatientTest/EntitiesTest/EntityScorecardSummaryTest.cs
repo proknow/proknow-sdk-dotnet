@@ -20,7 +20,7 @@ namespace ProKnow.Patient.Entities.Test
         private static ComputedMetric _computedMetric;
         private static CustomMetricItem _customMetricItem;
         private static List<ComputedMetric> _computedMetrics;
-        private static List<CustomMetricItem> _customMetricItems;
+        private static List<CustomMetric> _customMetrics;
         private static EntityScorecardItem _entityScorecardItem;
 
         [TestInitialize]
@@ -83,12 +83,12 @@ namespace ProKnow.Patient.Entities.Test
             _customMetricItem.Objectives = objectives;
 
             // Convert custom metric to schema expected by CreateAsync (name and objectives only)
-            var customMetricItem = new CustomMetricItem(_patientMrnAndName, objectives);
+            var customMetric = new CustomMetric(_patientMrnAndName, objectives);
 
             // Create entity scorecard for testing
             _computedMetrics = new List<ComputedMetric>() { _computedMetric };
-            _customMetricItems = new List<CustomMetricItem>() { customMetricItem };
-            _entityScorecardItem = await _entityScorecards.CreateAsync(_patientMrnAndName, _computedMetrics, _customMetricItems);
+            _customMetrics = new List<CustomMetric>() { customMetric };
+            _entityScorecardItem = await _entityScorecards.CreateAsync(_patientMrnAndName, _computedMetrics, _customMetrics);
         }
 
         [TestCleanup]

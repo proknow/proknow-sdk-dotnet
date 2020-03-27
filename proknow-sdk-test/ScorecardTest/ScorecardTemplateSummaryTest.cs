@@ -14,7 +14,7 @@ namespace ProKnow.Scorecard.Test
         private static ComputedMetric _computedMetric;
         private static CustomMetricItem _customMetricItem;
         private static List<ComputedMetric> _computedMetrics;
-        private static List<CustomMetricItem> _customMetricItems;
+        private static List<CustomMetric> _customMetrics;
         private static ScorecardTemplateItem _scorecardTemplateItem;
 
         [TestInitialize]
@@ -36,10 +36,17 @@ namespace ProKnow.Scorecard.Test
             // Create custom metric for testing
             _customMetricItem = await _proKnow.CustomMetrics.CreateAsync(_baseName, "patient", "number");
 
+            // Add objectives to custom metric
+            _customMetricItem.Objectives = new List<MetricBin>()
+            {
+                new MetricBin("PASS", new byte[] { 18, 191, 0 }, null, 90),
+                new MetricBin("FAIL", new byte[] { 255, 0, 0 })
+            };
+
             // Create scorecard template for testing
             _computedMetrics = new List<ComputedMetric>() { _computedMetric };
-            _customMetricItems = new List<CustomMetricItem>() { new CustomMetricItem(_customMetricItem.Name, _customMetricItem.Objectives) };
-            _scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync(_baseName, _computedMetrics, _customMetricItems);
+            _customMetrics = new List<CustomMetric>() { new CustomMetric(_customMetricItem.Name, _customMetricItem.Objectives) };
+            _scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync(_baseName, _computedMetrics, _customMetrics);
         }
 
         [TestCleanup]

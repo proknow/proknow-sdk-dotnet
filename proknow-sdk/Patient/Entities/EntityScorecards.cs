@@ -36,10 +36,10 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         /// <param name="name">The name</param>
         /// <param name="computedMetrics">The computed metrics</param>
-        /// <param name="customMetrics">The custom metrics (names and objectives)</param>
+        /// <param name="customMetrics">The custom metrics</param>
         /// <returns>The created entity scorecard</returns>
         public async Task<EntityScorecardItem> CreateAsync(string name, IList<ComputedMetric> computedMetrics,
-            IList<CustomMetricItem> customMetrics)
+            IList<CustomMetric> customMetrics)
         {
             // Check arguments
             if (name == null)

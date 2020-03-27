@@ -36,12 +36,18 @@ namespace ProKnow.Scorecard
         /// <returns>The created custom metric</returns>
         public async Task<CustomMetricItem> CreateAsync(string name, string context, string type, string[] enumValues = null)
         {
-            var customMetricItem = new CustomMetricItem(null, name, context, new CustomMetricType(type, enumValues));
+            var customMetricItem = new CustomMetricItem()
+            {
+                Name = name,
+                Context = context,
+                Type = new CustomMetricType(type, enumValues)
+            };
             string requestJson = JsonSerializer.Serialize(customMetricItem);
             var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
             string responseJson = await _proKnow.Requestor.PostAsync("/metrics/custom", null, content);
             _cache = null;
             customMetricItem = JsonSerializer.Deserialize<CustomMetricItem>(responseJson);
+            customMetricItem.PostProcessSerialization(_proKnow);
             return customMetricItem;
         }
 
@@ -160,6 +166,10 @@ namespace ProKnow.Scorecard
         private IList<CustomMetricItem> DeserializeCustomMetrics(string json)
         {
             var customMetricItems = JsonSerializer.Deserialize<IList<CustomMetricItem>>(json);
+            foreach (var customMetricItem in customMetricItems)
+            {
+                customMetricItem.PostProcessSerialization(_proKnow);
+            }
             _cache = customMetricItems;
             return _cache.ToList();
         }

@@ -40,7 +40,14 @@ namespace ProKnow.Scorecard
             {
                 if (reader.TokenType == JsonTokenType.EndObject)
                 {
-                    return new CustomMetricItem(id, name, context, type, objectives);
+                    return new CustomMetricItem()
+                    {
+                        Id = id,
+                        Name = name,
+                        Context = context,
+                        Type = type,
+                        Objectives = objectives
+                    };
                 }
 
                 // Read property name

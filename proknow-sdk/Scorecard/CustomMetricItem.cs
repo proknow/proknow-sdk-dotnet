@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace ProKnow.Scorecard
 {
@@ -9,6 +13,8 @@ namespace ProKnow.Scorecard
     [JsonConverter(typeof(CustomMetricItemJsonConverter))]
     public class CustomMetricItem
     {
+        private ProKnow _proKnow;
+
         /// <summary>
         /// The ProKnow ID
         /// </summary>
@@ -40,44 +46,27 @@ namespace ProKnow.Scorecard
         public IList<MetricBin> Objectives { get; set; }
 
         /// <summary>
-        /// Used by deserialization to create custom metric item
+        /// Deletes this custom metric asynchronously
         /// </summary>
-        public CustomMetricItem()
+        public Task DeleteAsync()
         {
+            return _proKnow.CustomMetrics.DeleteAsync(Id);
         }
 
         /// <summary>
-        /// Creates a custom metric for a scorecard
+        /// Saves name and context changes to this instance asynchronously
         /// </summary>
-        /// <param name="name">The custom metric name (must be an existing custom metric)</param>
-        /// <param name="objectives">The optional objectives</param>
-        public CustomMetricItem(string name, IList<MetricBin> objectives = null)
+        public Task SaveAsync()
         {
-            Name = name;
-            Objectives = objectives;
+            var customMetricItem = new CustomMetricItem()
+            {
+                Name = Name,
+                Context = Context
+            };
+            string requestJson = JsonSerializer.Serialize(customMetricItem);
+            var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            return _proKnow.Requestor.PutAsync($"/metrics/custom/{Id}", null, content);
         }
-
-        /// <summary>
-        /// Used by deserialization to a create custom metric item
-        /// </summary>
-        /// <param name="id">The ProKnow ID</param>
-        /// <param name="name">The name</param>
-        /// <param name="context">The context</param>
-        /// <param name="type">The type</param>
-        /// <param name="objectives">The objectives or null if not specified</param>
-        public CustomMetricItem(string id, string name, string context, CustomMetricType type,
-            IList<MetricBin> objectives = null)
-        {
-            Id = id;
-            Name = name;
-            Context = context;
-            Type = type;
-            Objectives = objectives;
-        }
-
-        //todo--DeleteAsync (HIGH PRIORITY)
-
-        //todo--SaveAsync (HIGH PRIORITY)
 
         /// <summary>
         /// Returns a string that represents the current object
@@ -101,6 +90,15 @@ namespace ProKnow.Scorecard
                 Id = Id,
                 Objectives = Objectives
             };
+        }
+
+        /// <summary>
+        /// Finishes initialization of object after deserialization from JSON
+        /// </summary>
+        /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
+        internal void PostProcessSerialization(ProKnow proKnow)
+        {
+            _proKnow = proKnow;
         }
     }
 }

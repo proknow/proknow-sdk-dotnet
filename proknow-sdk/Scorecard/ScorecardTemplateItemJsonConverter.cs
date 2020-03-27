@@ -66,7 +66,7 @@ namespace ProKnow.Scorecard
                 else if (propertyName == "custom")
                 {
                     custom = JsonSerializer.Deserialize<IList<CustomMetricItem>>(ref reader);
-                }
+               }
                 // ignore any other properties
             }
             throw new JsonException("End of JSON string reached before object end.");

@@ -88,7 +88,7 @@ namespace ProKnow.Scorecard.Test
         [TestMethod]
         public void WriteTest_Id()
         {
-            var customMetricItem = new CustomMetricItem("5b98016854c00417f86e8d098ffc1e00", null, null, null);
+            var customMetricItem = new CustomMetricItem() { Id = "5b98016854c00417f86e8d098ffc1e00" };
             string expected = "{\"id\":\"5b98016854c00417f86e8d098ffc1e00\"}";
             var actual = JsonSerializer.Serialize<CustomMetricItem>(customMetricItem);
             Assert.AreEqual(expected, actual);
@@ -102,7 +102,13 @@ namespace ProKnow.Scorecard.Test
                 new MetricBin("PASS", new byte[] { 18, 191, 0 }, null, 90),
                 new MetricBin("FAIL", new byte[] { 255, 0, 0 })
             };
-            var customMetricItem = new CustomMetricItem(null, "Normalcy of Diet @ 6 mo. (0-100)", "patient", new CustomMetricType("number"), objectives);
+            var customMetricItem = new CustomMetricItem()
+            {
+                Name = "Normalcy of Diet @ 6 mo. (0-100)",
+                Context = "patient",
+                Type = new CustomMetricType("number"),
+                Objectives = objectives
+            };
             string objectivesJson = "[{\"label\":\"PASS\",\"color\":[18,191,0],\"max\":90},{\"label\":\"FAIL\",\"color\":[255,0,0]}]";
             string expected = $"{{\"name\":\"Normalcy of Diet @ 6 mo. (0-100)\",\"context\":\"patient\",\"type\":{{\"number\":{{}}}},\"objectives\":{objectivesJson}}}";
             var actual = JsonSerializer.Serialize<CustomMetricItem>(customMetricItem);
@@ -113,9 +119,21 @@ namespace ProKnow.Scorecard.Test
         public void WriteTest_AllTypes()
         {
             var customMetricItems = new List<CustomMetricItem>() {
-                new CustomMetricItem(null, "Genetic-Type", "patient", new CustomMetricType("enum", new string[] { "TYPE I", "TYPE II", "TYPE III", "TYPE IV", "TYPE V" })),
-                new CustomMetricItem(null, "Normalcy of Diet @ 6 mo. (0-100)", "patient", new CustomMetricType("number")),
-                new CustomMetricItem(null, "Planner Name", "patient", new CustomMetricType("string"))
+                new CustomMetricItem() {
+                    Name = "Genetic-Type",
+                    Context = "patient",
+                    Type = new CustomMetricType("enum", new string[] { "TYPE I", "TYPE II", "TYPE III", "TYPE IV", "TYPE V" })
+                },
+                new CustomMetricItem() {
+                    Name = "Normalcy of Diet @ 6 mo. (0-100)",
+                    Context = "patient",
+                    Type = new CustomMetricType("number")
+                },
+                new CustomMetricItem() {
+                    Name = "Planner Name",
+                    Context = "patient",
+                    Type = new CustomMetricType("string")
+                }
             };
             string json1 = "{\"name\":\"Genetic-Type\",\"context\":\"patient\",\"type\":{\"enum\":{\"values\":[\"TYPE I\",\"TYPE II\",\"TYPE III\",\"TYPE IV\",\"TYPE V\"]}}}";
             string json2 = "{\"name\":\"Normalcy of Diet @ 6 mo. (0-100)\",\"context\":\"patient\",\"type\":{\"number\":{}}}";

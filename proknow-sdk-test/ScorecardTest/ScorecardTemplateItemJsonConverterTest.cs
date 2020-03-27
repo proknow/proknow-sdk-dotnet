@@ -131,7 +131,10 @@ namespace ProKnow.Scorecard.Test
                 new MetricBin("IDEAL", new byte[] { 18, 191, 0 }, null, 90),
                 new MetricBin("UNACCEPTABLE", new byte[] { 255, 0, 0 })
             };
-            var customMetricItem = new CustomMetricItem("5b9c00f90e40e073f43aec25ff9f851a", null, null, null, customMetricObjectives);
+            var customMetricItem = new CustomMetricItem() {
+                Id = "5b9c00f90e40e073f43aec25ff9f851a",
+                Objectives = customMetricObjectives
+            };
             var customMetricItems = new List<CustomMetricItem>() { customMetricItem };
             var scorecardTemplateItem = new ScorecardTemplateItem(null, "SDK Testing", computedMetrics, customMetricItems);
             string computedMetricObjectivesJson = "[{\"label\":\"IDEAL\",\"color\":[18,191,0],\"max\":85},{\"label\":\"UNACCEPTABLE\",\"color\":[255,0,0]}]";

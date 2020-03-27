@@ -32,10 +32,10 @@ namespace ProKnow.Scorecard
         /// </summary>
         /// <param name="name">The name</param>
         /// <param name="computedMetrics">The computed metrics</param>
-        /// <param name="customMetrics">The custom metrics (names and objectives)</param>
+        /// <param name="customMetrics">The custom metrics</param>
         /// <returns>The created scorecard template</returns>
         public async Task<ScorecardTemplateItem> CreateAsync(string name, IList<ComputedMetric> computedMetrics,
-            IList<CustomMetricItem> customMetrics)
+            IList<CustomMetric> customMetrics)
         {
             // Check arguments
             if (name == null)
