@@ -92,47 +92,17 @@ namespace ProKnow.Patient.Test
         [TestMethod]
         public async Task DeleteAsyncTest()
         {
-            // Delete this patient
-            await _patientItem.DeleteAsync();
+            // Create a patient
+            var patientItem = await _proKnow.Patients.CreateAsync(_workspaceId, $"{_patientMrnAndName}-Mrn-1", $"{_patientMrnAndName}-Name-1");
+
+            // Verify patient is found
+            Assert.IsNotNull(await _proKnow.Patients.FindAsync(_workspaceId, p => p.Mrn == $"{_patientMrnAndName}-Mrn-1"));
+
+            // Delete the patient
+            await patientItem.DeleteAsync();
 
             // Verify that the patient was deleted
-            while (true)
-            {
-                var patientSummaries = await _proKnow.Patients.LookupAsync(_workspaceId, new List<string>() { _patientItem.Mrn });
-                if (patientSummaries[0] == null)
-                {
-                    break;
-                }
-            }
-
-            // Restore the patient for other tests
-
-            // Upload test files
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew");
-            var overrides = new UploadFileOverrides
-            {
-                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
-            };
-            var uploadBatch = await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
-
-            // Wait until uploaded test files have processed
-            while (true)
-            {
-                _patientItem = await _proKnow.Patients.GetAsync(_workspaceId, uploadBatch.Patients.First().Id);
-                var entitySummaries = _patientItem.FindEntities(e => true);
-                if (entitySummaries.Count() >= 4)
-                {
-                    var statuses = entitySummaries.Select(e => e.Status).Distinct();
-                    if (statuses.Count() == 1 && statuses.First() == "completed")
-                    {
-                        break;
-                    }
-                }
-            }
-
-            // Add custom metric values
-            await _patientItem.SetMetadataAsync(_metadata);
-            await _patientItem.SaveAsync();
+            Assert.IsNull(await _proKnow.Patients.FindAsync(_workspaceId, p => p.Mrn == $"{_patientMrnAndName}-Mrn-1"));
         }
 
         [TestMethod]

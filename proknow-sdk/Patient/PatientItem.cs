@@ -55,7 +55,7 @@ namespace ProKnow.Patient
         public string Sex { get; set; }
 
         /// <summary>
-        /// The patient metadata (custom metrics)
+        /// The patient metadata (custom metrics) referenced by ProKnow ID
         /// </summary>
         [JsonPropertyName("metadata")]
         public Dictionary<string, object> Metadata { get; set; }
@@ -154,7 +154,7 @@ namespace ProKnow.Patient
         public async Task<IDictionary<string, object>> GetMetadataAsync()
         {
             var customMetricItems = await Task.WhenAll(Metadata.Keys.Select(async (k) =>
-                await _proKnow.CustomMetrics.ResolveAsync(k)));
+                await _proKnow.CustomMetrics.ResolveByIdAsync(k)));
             var metadata = new Dictionary<string, object>();
             foreach (var customMetricItem in customMetricItems)
             {
@@ -189,18 +189,21 @@ namespace ProKnow.Patient
         /// <param name="metadata">A dictionary of custom metric names and values</param>
         public async Task SetMetadataAsync(IDictionary<string, object> metadata)
         {
-            var resolvedMetadata = new Dictionary<string, object>();
-            var tasks = new List<Task>();
-            foreach (var key in metadata.Keys)
+            if (metadata == null)
             {
-                tasks.Add(Task.Run(async () =>
-                {
-                    var customMetric = await _proKnow.CustomMetrics.ResolveByNameAsync(key);
-                    resolvedMetadata.Add(customMetric.Id, metadata[key]);
-                }));
+                Metadata = null;
             }
-            await Task.WhenAll(tasks);
-            Metadata = resolvedMetadata;
+            else
+            {
+                var customMetricItems = await Task.WhenAll(metadata.Keys.Select(async (k) =>
+                    await _proKnow.CustomMetrics.ResolveByNameAsync(k)));
+                var resolvedMetadata = new Dictionary<string, object>();
+                foreach (var customMetricItem in customMetricItems)
+                {
+                    resolvedMetadata.Add(customMetricItem.Id, metadata[customMetricItem.Name]);
+                }
+                Metadata = resolvedMetadata;
+            }
         }
 
         /// <summary>
