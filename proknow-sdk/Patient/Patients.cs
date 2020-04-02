@@ -37,8 +37,8 @@ namespace ProKnow.Patient
         /// <param name="workspace">The ProKnow ID or name of the workspace in which to create the patient</param>
         /// <param name="mrn">The patient medical record number (DICOM ID)</param>
         /// <param name="name">The patient name</param>
-        /// <param name="birthDate">The patient birth date</param>
-        /// <param name="sex">The patient sex</param>
+        /// <param name="birthDate">The patient birth date in the format "YYYY-MM-DD" or null</param>
+        /// <param name="sex">The patient sex, one of "M", "F", "O" or null</param>
         /// <returns>The created patient item</returns>
         public async Task<PatientItem> CreateAsync(string workspace, string mrn, string name, string birthDate = null, string sex = null)
         {
