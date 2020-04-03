@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ProKnow.Test
@@ -199,9 +198,15 @@ namespace ProKnow.Test
             var workspaces = await _proKnow.Workspaces.QueryAsync();
             foreach (var workspace in workspaces)
             {
-                // Include "SDK" to further protect from accidental deletion of workspaces
+                // Include "SDK" to protect from accidental deletion of workspaces
                 if (workspace.Name.Contains("SDK") && workspace.Name.Contains(testClassName))
                 {
+                    // Turn off protection, if necessary
+                    if (workspace.Protected)
+                    {
+                        workspace.Protected = false;
+                        await workspace.SaveAsync();
+                    }
                     await _proKnow.Workspaces.DeleteAsync(workspace.Id);
                 }
             }

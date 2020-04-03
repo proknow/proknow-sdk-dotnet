@@ -162,7 +162,7 @@ namespace ProKnow
             var workspaceItems = JsonSerializer.Deserialize<IList<WorkspaceItem>>(json);
             foreach (var workspaceItem in workspaceItems)
             {
-                workspaceItem.PostProcessDeserialization(this);
+                workspaceItem.PostProcessDeserialization(_proKnow);
             }
             return workspaceItems;
         }
@@ -175,7 +175,7 @@ namespace ProKnow
         private WorkspaceItem DeserializeWorkspace(string json)
         {
             var workspaceItem = JsonSerializer.Deserialize<WorkspaceItem>(json);
-            workspaceItem.PostProcessDeserialization(this);
+            workspaceItem.PostProcessDeserialization(_proKnow);
             return workspaceItem;
         }
     }

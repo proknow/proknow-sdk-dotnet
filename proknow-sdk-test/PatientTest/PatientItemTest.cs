@@ -19,6 +19,7 @@ namespace ProKnow.Patient.Test
         private static CustomMetricItem _enumCustomMetricItem;
         private static CustomMetricItem _numberCustomMetricItem;
         private static CustomMetricItem _stringCustomMetricItem;
+
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
         {

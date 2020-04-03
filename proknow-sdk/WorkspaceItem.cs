@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace ProKnow
 {
@@ -8,6 +12,8 @@ namespace ProKnow
     /// </summary>
     public class WorkspaceItem
     {
+        private ProKnow _proKnow;
+
         /// <summary>
         /// The parent Workspaces object
         /// </summary>
@@ -45,6 +51,27 @@ namespace ProKnow
         public Dictionary<string, object> ExtensionData { get; set; }
 
         /// <summary>
+        /// Deletes this workspace asynchronously
+        /// </summary>
+        public Task DeleteAsync()
+        {
+            return _proKnow.Workspaces.DeleteAsync(Id);
+        }
+
+        /// <summary>
+        /// Saves slug, name, and protected flag changes asynchronously
+        /// </summary>
+        public async Task SaveAsync()
+        {
+            var properties = new Dictionary<string, object>();
+            properties.Add("slug", Slug);
+            properties.Add("name", Name);
+            properties.Add("protected", Protected);
+            var content = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
+            await _proKnow.Requestor.PutAsync($"/workspaces/{Id}", null, content);
+        }
+
+        /// <summary>
         /// Returns a string that represents the current object
         /// </summary>
         /// <returns>A string that represents the current object</returns>
@@ -56,10 +83,10 @@ namespace ProKnow
         /// <summary>
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
-        /// <param name="workspaces">The parent Workspaces object</param>
-        internal void PostProcessDeserialization(Workspaces workspaces)
+        /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
+        internal void PostProcessDeserialization(ProKnow proKnow)
         {
-            Workspaces = workspaces;
+            _proKnow = proKnow;
         }
     }
 }
