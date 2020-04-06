@@ -22,8 +22,8 @@ namespace ProKnow.Collection.Test
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
         {
-            // Delete test collection, if necessary
-            await TestHelper.DeleteCollectionAsync(_baseName);
+            // Delete test collections, if necessary
+            await TestHelper.DeleteCollectionsAsync(_baseName);
 
             // Delete test workspace, if necessary
             await TestHelper.DeleteWorkspaceAsync(_baseName);

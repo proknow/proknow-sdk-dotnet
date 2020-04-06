@@ -69,8 +69,8 @@ namespace ProKnow.Test
                     var entitySummaries = patientItem.FindEntities(e => true);
                     if (entitySummaries.Count() == numberOfEntities)
                     {
-                        var statuses = entitySummaries.Select(e => e.Status).Distinct();
-                        if (statuses.Count() == 1 && statuses.First() == "completed")
+                        var statuses = entitySummaries.Select(e => e.Status).Distinct().ToList();
+                        if (statuses.Count == 1 && statuses[0] == "completed")
                         {
                             break;
                         }
@@ -111,18 +111,18 @@ namespace ProKnow.Test
         }
 
         /// <summary>
-        /// Deletes a test collection asynchronously
+        /// Deletes test collections asynchronously
         /// </summary>
         /// <param name="testClassName">The test class name</param>
-        public static async Task DeleteCollectionAsync(string testClassName)
+        public static async Task DeleteCollectionsAsync(string testClassName)
         {
-            // If the collection exists
-            IList<CollectionSummary> collections = await _proKnow.Collections.QueryAsync(testClassName);
-            var collectionSummary = collections.FirstOrDefault(w => w.Name.Contains(testClassName));
-            if (collectionSummary != null)
+            var collectionSummaries = await _proKnow.Collections.QueryAsync(testClassName);
+            foreach (var collectionSummary in collectionSummaries)
             {
-                // Request the deletion
-                await _proKnow.Collections.DeleteAsync(collectionSummary.Id);
+                if (collectionSummary.Name.Contains(testClassName))
+                {
+                    await _proKnow.Collections.DeleteAsync(collectionSummary.Id);
+                }
             }
         }
 

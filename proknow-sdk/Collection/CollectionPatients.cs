@@ -46,15 +46,13 @@ namespace ProKnow.Collection
         public async Task<IList<CollectionPatientSummary>> QueryAsync()
         {
             var route = $"/collections/{_collectionItem.Id}/patients";
-            StringContent requestContent = null;
+            Dictionary<string, object> queryParameters = null;
             if (_collectionItem.Type == "workspace")
             {
-                var properties = new Dictionary<string, object>();
-                properties.Add("workspace", _collectionItem.WorkspaceIds[0]);
-                var requestJson = JsonSerializer.Serialize(properties);
-                requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+                queryParameters = new Dictionary<string, object>();
+                queryParameters.Add("workspace", _collectionItem.WorkspaceIds[0]);
             }
-            var responseJson = await _proKnow.Requestor.PutAsync(route, null, requestContent);
+            var responseJson = await _proKnow.Requestor.GetAsync(route, queryParameters);
             return DeserializeCollectionPatientSummaries(responseJson);
         }
 

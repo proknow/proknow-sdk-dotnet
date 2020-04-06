@@ -10,23 +10,23 @@ namespace ProKnow.Collection
         /// <summary>
         /// The ProKnow ID for the patient
         /// </summary>
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
+        [JsonPropertyName("patient")]
+        public string PatientId { get; set; }
 
         /// <summary>
         /// The optional ProKnow ID for the entity
         /// </summary>
-        [JsonPropertyName("entity_id")]
+        [JsonPropertyName("entity")]
         public string EntityId { get; set; }
 
         /// <summary>
-        /// Creates a CollectionPatientProperties object
+        /// Creates a CollectionPatientAddSchema object
         /// </summary>
-        /// <param name="id">The ProKnow ID for the patient</param>
+        /// <param name="patientId">The ProKnow ID for the patient</param>
         /// <param name="entityId">The optional ProKnow ID for the entity</param>
-        public CollectionPatientsAddSchema(string id, string entityId = null)
+        public CollectionPatientsAddSchema(string patientId, string entityId = null)
         {
-            Id = id;
+            PatientId = patientId;
             EntityId = entityId;
         }
     }
