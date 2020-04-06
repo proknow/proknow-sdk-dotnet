@@ -5,7 +5,7 @@ namespace ProKnow
     /// <summary>
     /// Represents the contents of a credentials JSON file from ProKnow
     /// </summary>
-    internal class ProKnowCredentials
+    public class ProKnowCredentials
     {
         /// <summary>
         /// The ID
