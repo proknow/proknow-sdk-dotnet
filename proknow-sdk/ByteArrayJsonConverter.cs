@@ -61,7 +61,7 @@ namespace ProKnow
             }
 
             writer.WriteStartArray();
-             for (var i = 0; i < value.Length; i++)
+            for (var i = 0; i < value.Length; i++)
             {
                 writer.WriteNumberValue((int)value[i]);
             }
