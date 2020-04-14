@@ -10,12 +10,12 @@ namespace ProKnow
     /// <summary>
     /// Root object for interfacing with the ProKnow API
     /// </summary>
-    public class ProKnow
+    public class ProKnowApi
     {
         /// <summary>
         /// Issues requests to the ProKnow API
         /// </summary>
-        internal Requestor Requestor { get; private set; }
+        public Requestor Requestor { get; private set; }
 
         /// <summary>
         /// Interacts with custom metrics in the ProKnow organization
@@ -63,7 +63,7 @@ namespace ProKnow
         /// <param name="baseUrl">The base URL to ProKnow, e.g. 'https://example.proknow.com'</param>
         /// <param name="credentialsFile">The path to the ProKnow credentials JSON file</param>
         /// <param name="lockRenewalBuffer">The number of seconds to use as a buffer when renewing a lock for a draft structure set</param>
-        public ProKnow(string baseUrl, string credentialsFile, int lockRenewalBuffer = 30)
+        public ProKnowApi(string baseUrl, string credentialsFile, int lockRenewalBuffer = 30)
         {
             using (StreamReader sr = new StreamReader(credentialsFile))
             {
@@ -79,7 +79,7 @@ namespace ProKnow
         /// <param name="credentialsId">The ID from the ProKnow credentials JSON file</param>
         /// <param name="credentialsSecret">The secret from the ProKnow credentials JSON file</param>
         /// <param name="lockRenewalBuffer">The number of seconds to use as a buffer when renewing a lock for a draft structure set</param>
-        public ProKnow(string baseUrl, string credentialsId, string credentialsSecret, int lockRenewalBuffer = 30)
+        public ProKnowApi(string baseUrl, string credentialsId, string credentialsSecret, int lockRenewalBuffer = 30)
         {
             ConstructorHelper(baseUrl, credentialsId, credentialsSecret, lockRenewalBuffer);
         }

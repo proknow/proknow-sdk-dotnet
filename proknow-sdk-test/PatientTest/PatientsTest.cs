@@ -12,7 +12,7 @@ namespace ProKnow.Patient.Test
     public class PatientsTest
     {
         private static string _patientMrnAndName = "SDK-PatientsTest";
-        private static ProKnow _proKnow = TestSettings.ProKnow;
+        private static ProKnowApi _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = _proKnow.Uploads;
         private static string _workspaceId;
 

@@ -11,7 +11,7 @@ namespace ProKnow.Patient.Document.Test
     public class DocumentsTest
     {
         private static string _patientMrnAndName = "SDK-DocumentsTest";
-        private static ProKnow _proKnow = TestSettings.ProKnow;
+        private static ProKnowApi _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = _proKnow.Uploads;
         private static Documents _documents = _proKnow.Patients.Documents;
         private static string _workspaceId;

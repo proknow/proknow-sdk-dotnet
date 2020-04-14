@@ -14,14 +14,14 @@ namespace ProKnow.Scorecard
     /// </summary>
     public class ScorecardTemplates
     {
-        private ProKnow _proKnow;
+        private ProKnowApi _proKnow;
         private IList<ScorecardTemplateSummary> _cache;
 
         /// <summary>
         /// Constructs a scorecard templates object
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
-        internal ScorecardTemplates(ProKnow proKnow)
+        internal ScorecardTemplates(ProKnowApi proKnow)
         {
             _proKnow = proKnow;
             _cache = null;

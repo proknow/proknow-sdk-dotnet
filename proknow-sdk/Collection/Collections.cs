@@ -12,13 +12,13 @@ namespace ProKnow.Collection
     /// </summary>
     public class Collections
     {
-        private ProKnow _proKnow;
+        private ProKnowApi _proKnow;
 
         /// <summary>
         /// Constructs a collections object
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
-        internal Collections(ProKnow proKnow)
+        internal Collections(ProKnowApi proKnow)
         {
             _proKnow = proKnow;
         }

@@ -13,7 +13,7 @@ namespace ProKnow.Scorecard
     [JsonConverter(typeof(CustomMetricItemJsonConverter))]
     public class CustomMetricItem
     {
-        private ProKnow _proKnow;
+        private ProKnowApi _proKnow;
 
         /// <summary>
         /// The ProKnow ID
@@ -96,7 +96,7 @@ namespace ProKnow.Scorecard
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
-        internal void PostProcessSerialization(ProKnow proKnow)
+        internal void PostProcessSerialization(ProKnowApi proKnow)
         {
             _proKnow = proKnow;
         }

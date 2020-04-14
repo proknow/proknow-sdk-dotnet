@@ -11,7 +11,7 @@ namespace ProKnow.Collection
     /// </summary>
     public class CollectionPatients
     {
-        private ProKnow _proKnow;
+        private ProKnowApi _proKnow;
         private CollectionItem _collectionItem;
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace ProKnow.Collection
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="collectionItem">The collection</param>
-        public CollectionPatients(ProKnow proKnow, CollectionItem collectionItem)
+        public CollectionPatients(ProKnowApi proKnow, CollectionItem collectionItem)
         {
             _proKnow = proKnow;
             _collectionItem = collectionItem;

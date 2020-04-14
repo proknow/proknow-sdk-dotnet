@@ -12,13 +12,13 @@ namespace ProKnow.Patient.Document
     /// </summary>
     public class Documents
     {
-        private ProKnow _proKnow;
+        private ProKnowApi _proKnow;
 
         /// <summary>
         /// Constructs a documents object
         /// </summary>
         /// <param name="proKnow">Parent ProKnow object</param>
-        internal Documents(ProKnow proKnow)
+        internal Documents(ProKnowApi proKnow)
         {
             _proKnow = proKnow;
         }

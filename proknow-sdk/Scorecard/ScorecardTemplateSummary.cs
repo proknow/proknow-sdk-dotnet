@@ -12,7 +12,7 @@ namespace ProKnow.Scorecard
         /// <summary>
         /// Root object for interfacing with the ProKnow API
         /// </summary>
-        protected ProKnow _proKnow;
+        protected ProKnowApi _proKnow;
 
         /// <summary>
         /// The ProKnow ID
@@ -61,7 +61,7 @@ namespace ProKnow.Scorecard
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
-        internal void PostProcessDeserialization(ProKnow proKnow)
+        internal void PostProcessDeserialization(ProKnowApi proKnow)
         {
             _proKnow = proKnow;
         }

@@ -13,7 +13,7 @@ namespace ProKnow.Test
     public class RequestorTest
     {
         private static string _testClassName = nameof(RequestorTest);
-        private static ProKnow _proKnow = TestSettings.ProKnow;
+        private static ProKnowApi _proKnow = TestSettings.ProKnow;
         private static Requestor _requestor;
 
         [ClassInitialize]

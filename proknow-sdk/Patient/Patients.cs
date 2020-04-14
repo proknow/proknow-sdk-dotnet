@@ -14,7 +14,7 @@ namespace ProKnow.Patient
     /// </summary>
     public class Patients
     {
-        private ProKnow _proKnow;
+        private ProKnowApi _proKnow;
 
         /// <summary>
         /// Interacts with documents for patients
@@ -25,7 +25,7 @@ namespace ProKnow.Patient
         /// Constructs a patients object
         /// </summary>
         /// <param name="proKnow">Parent ProKnow object</param>
-        internal Patients(ProKnow proKnow)
+        internal Patients(ProKnowApi proKnow)
         {
             _proKnow = proKnow;
             Documents = new Documents(_proKnow);

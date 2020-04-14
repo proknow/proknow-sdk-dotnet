@@ -23,7 +23,7 @@ namespace ProKnow.Test
         /// <summary>
         /// Root object for interfacing with the ProKnow API
         /// </summary>
-        public static ProKnow ProKnow { get; set; }
+        public static ProKnowApi ProKnow { get; set; }
 
         /// <summary>
         /// The full path to the root directory for test data
@@ -43,7 +43,7 @@ namespace ProKnow.Test
             }
             BaseUrl = context.Properties["baseUrl"].ToString();
             CredentialsFile = context.Properties["credentialsFile"].ToString();
-            ProKnow = new ProKnow(TestSettings.BaseUrl, TestSettings.CredentialsFile);
+            ProKnow = new ProKnowApi(TestSettings.BaseUrl, TestSettings.CredentialsFile);
             TestDataRootDirectory = Path.Combine(context.DeploymentDirectory, "TestData");
         }
     }

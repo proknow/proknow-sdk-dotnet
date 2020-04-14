@@ -40,7 +40,7 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="entityScorecards">Interacts with scorecards for an entity in a ProKnow organization</param>
-        internal void PostProcessDeserialization(ProKnow proKnow, EntityScorecards entityScorecards)
+        internal void PostProcessDeserialization(ProKnowApi proKnow, EntityScorecards entityScorecards)
         {
             _proKnow = proKnow;
             _entityScorecards = entityScorecards;

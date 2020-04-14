@@ -35,7 +35,7 @@ namespace ProKnow.Patient.Entities
         /// <param name="name">The name</param>
         /// <param name="computedMetrics">The computed metrics</param>
         /// <param name="customMetrics">The custom metrics</param>
-        internal EntityScorecardItem(ProKnow proKnow, string workspaceId, string entityId,
+        internal EntityScorecardItem(ProKnowApi proKnow, string workspaceId, string entityId,
             EntityScorecards entityScorecards, string id, string name, IList<ComputedMetric> computedMetrics,
             IList<CustomMetricItem> customMetrics) : base(proKnow, id, name, computedMetrics, customMetrics)
         {
@@ -52,7 +52,7 @@ namespace ProKnow.Patient.Entities
         /// <param name="entityId">The entity ProKnow ID</param>
         /// <param name="entityScorecards">Interacts with scorecards for an entity in a ProKnow organization</param>
         /// <param name="json">JSON representation of the entity scorecard item</param>
-        internal EntityScorecardItem(ProKnow proKnow, string workspaceId, string entityId,
+        internal EntityScorecardItem(ProKnowApi proKnow, string workspaceId, string entityId,
             EntityScorecards entityScorecards, string json) : base(proKnow, json)
         {
             _workspaceId = workspaceId;
@@ -111,7 +111,7 @@ namespace ProKnow.Patient.Entities
         /// <param name="workspaceId">The workspace ProKnow ID</param>
         /// <param name="entityId">The entity ProKnow ID</param>
         /// <param name="entityScorecards">Interacts with scorecards for an entity in a ProKnow organization</param>
-        internal void PostProcessDeserialization(ProKnow proKnow, string workspaceId, string entityId,
+        internal void PostProcessDeserialization(ProKnowApi proKnow, string workspaceId, string entityId,
             EntityScorecards entityScorecards)
         {
             _proKnow = proKnow;

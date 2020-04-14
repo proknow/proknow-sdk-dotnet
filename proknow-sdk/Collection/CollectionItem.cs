@@ -12,7 +12,7 @@ namespace ProKnow.Collection
     /// </summary>
     public class CollectionItem
     {
-        private ProKnow _proKnow;
+        private ProKnowApi _proKnow;
 
         /// <summary>
         /// The ProKnow ID of the collection
@@ -64,7 +64,7 @@ namespace ProKnow.Collection
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="json">JSON representation of the patient item</param>
-        internal CollectionItem(ProKnow proKnow, string json)
+        internal CollectionItem(ProKnowApi proKnow, string json)
         {
             var collectionItem = JsonSerializer.Deserialize<CollectionItem>(json);
             _proKnow = proKnow;
@@ -111,7 +111,7 @@ namespace ProKnow.Collection
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
-        internal void PostProcessDeserialization(ProKnow proKnow)
+        internal void PostProcessDeserialization(ProKnowApi proKnow)
         {
             _proKnow = proKnow;
             Patients = new CollectionPatients(proKnow, this);

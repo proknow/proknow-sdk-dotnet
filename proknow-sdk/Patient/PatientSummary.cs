@@ -10,7 +10,7 @@ namespace ProKnow.Patient
     /// </summary>
     public class PatientSummary
     {
-        private ProKnow _proKnow;
+        private ProKnowApi _proKnow;
 
         /// <summary>
         /// The workspace ID
@@ -99,7 +99,7 @@ namespace ProKnow.Patient
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The workspace ID</param>
-        internal void PostProcessDeserialization(ProKnow proKnow, string workspaceId)
+        internal void PostProcessDeserialization(ProKnowApi proKnow, string workspaceId)
         {
             _proKnow = proKnow;
             WorkspaceId = workspaceId;

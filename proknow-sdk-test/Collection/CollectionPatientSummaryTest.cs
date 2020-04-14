@@ -2,7 +2,6 @@
 using ProKnow.Test;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProKnow.Collection.Test
@@ -11,7 +10,7 @@ namespace ProKnow.Collection.Test
     public class CollectionPatientSummaryTest
     {
         private static string _testClassName = nameof(CollectionPatientSummaryTest);
-        private static ProKnow _proKnow = TestSettings.ProKnow;
+        private static ProKnowApi _proKnow = TestSettings.ProKnow;
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)

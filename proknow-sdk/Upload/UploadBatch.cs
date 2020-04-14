@@ -8,7 +8,7 @@ namespace ProKnow.Upload
     /// </summary>
     public class UploadBatch
     {
-        private ProKnow _proKnow;
+        private ProKnowApi _proKnow;
         private string _workspaceId;
         private Dictionary<string, UploadStatusResult> _fileLookup;
         private Dictionary<string, UploadPatientSummary> _patientLookup;
@@ -25,7 +25,7 @@ namespace ProKnow.Upload
         /// <param name="proKnow"></param>
         /// <param name="workspaceId"></param>
         /// <param name="uploadStatusResults"></param>
-        public UploadBatch(ProKnow proKnow, string workspaceId, IList<UploadStatusResult> uploadStatusResults)
+        public UploadBatch(ProKnowApi proKnow, string workspaceId, IList<UploadStatusResult> uploadStatusResults)
         {
             _proKnow = proKnow;
             _workspaceId = workspaceId;

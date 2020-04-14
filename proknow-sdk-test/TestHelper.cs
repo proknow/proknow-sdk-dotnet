@@ -1,5 +1,4 @@
-﻿using ProKnow.Collection;
-using ProKnow.Patient;
+﻿using ProKnow.Patient;
 using ProKnow.Upload;
 using System;
 using System.Collections.Generic;
@@ -14,7 +13,7 @@ namespace ProKnow.Test
     /// </summary>
     public static class TestHelper
     {
-        private static ProKnow _proKnow = TestSettings.ProKnow;
+        private static ProKnowApi _proKnow = TestSettings.ProKnow;
 
         /// <summary>
         /// Creates a test patient asynchronously

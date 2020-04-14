@@ -10,7 +10,7 @@ namespace ProKnow.Patient.Entities.Test
     public class ImageSetItemTest
     {
         private static string _patientMrnAndName = "SDK-ImageSetItemTest";
-        private static ProKnow _proKnow = TestSettings.ProKnow;
+        private static ProKnowApi _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = _proKnow.Uploads;
         private static string _workspaceId;
         private static string[] _uploadedFiles;

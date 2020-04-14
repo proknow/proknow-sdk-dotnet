@@ -14,7 +14,7 @@ namespace ProKnow.Patient.Test
     public class PatientItemTest
     {
         private static string _testClassName = nameof(PatientItemTest);
-        private static ProKnow _proKnow = TestSettings.ProKnow;
+        private static ProKnowApi _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = _proKnow.Uploads;
         private static CustomMetricItem _enumCustomMetricItem;
         private static CustomMetricItem _numberCustomMetricItem;

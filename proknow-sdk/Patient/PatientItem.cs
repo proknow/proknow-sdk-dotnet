@@ -16,7 +16,7 @@ namespace ProKnow.Patient
     /// </summary>
     public class PatientItem
     {
-        private ProKnow _proKnow;
+        private ProKnowApi _proKnow;
 
         /// <summary>
         /// The patient workspace ID
@@ -87,7 +87,7 @@ namespace ProKnow.Patient
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">ID of the workspace containing the patients</param>
         /// <param name="json">JSON representation of the patient item</param>
-        internal PatientItem(ProKnow proKnow, string workspaceId, string json)
+        internal PatientItem(ProKnowApi proKnow, string workspaceId, string json)
         {
             Initialize(proKnow, workspaceId, json);
         }
@@ -243,7 +243,7 @@ namespace ProKnow.Patient
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">ID of the workspace containing the patients</param>
         /// <param name="json">JSON representation of the patient item</param>
-        private void Initialize(ProKnow proKnow, string workspaceId, string json)
+        private void Initialize(ProKnowApi proKnow, string workspaceId, string json)
         {
             var patientItem = JsonSerializer.Deserialize<PatientItem>(json);
             _proKnow = proKnow;

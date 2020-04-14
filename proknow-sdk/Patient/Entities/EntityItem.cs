@@ -16,7 +16,7 @@ namespace ProKnow.Patient.Entities
         /// <summary>
         /// Root object for interfacing with the ProKnow API
         /// </summary>
-        protected ProKnow _proKnow;
+        protected ProKnowApi _proKnow;
 
         /// <summary>
         /// The patient workspace ID
@@ -163,7 +163,7 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The workspace ID</param>
-        internal virtual void PostProcessDeserialization(ProKnow proKnow, string workspaceId)
+        internal virtual void PostProcessDeserialization(ProKnowApi proKnow, string workspaceId)
         {
             _proKnow = proKnow;
             WorkspaceId = workspaceId;

@@ -12,7 +12,7 @@ namespace ProKnow.Upload.Test
     public class UploadsTest
     {
         private static string _testClassName = "SDK-UploadsTest";
-        private static ProKnow _proKnow = TestSettings.ProKnow;
+        private static ProKnowApi _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = _proKnow.Uploads;
 
         [ClassInitialize]

@@ -17,7 +17,7 @@ namespace ProKnow.Scorecard
         /// <summary>
         /// Root object for interfacing with the ProKnow API
         /// </summary>
-        protected ProKnow _proKnow;
+        protected ProKnowApi _proKnow;
 
         /// <summary>
         /// The ProKnow ID
@@ -74,7 +74,7 @@ namespace ProKnow.Scorecard
         /// <param name="name">The name</param>
         /// <param name="computedMetrics">The computed metrics</param>
         /// <param name="customMetrics">The custom metrics</param>
-        internal ScorecardTemplateItem(ProKnow proKnow, string id, string name, IList<ComputedMetric> computedMetrics,
+        internal ScorecardTemplateItem(ProKnowApi proKnow, string id, string name, IList<ComputedMetric> computedMetrics,
             IList<CustomMetricItem> customMetrics)
         {
             _proKnow = proKnow;
@@ -89,7 +89,7 @@ namespace ProKnow.Scorecard
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="json">JSON representation of the scorecard template item</param>
-        internal ScorecardTemplateItem(ProKnow proKnow, string json)
+        internal ScorecardTemplateItem(ProKnowApi proKnow, string json)
         {
             var scorecardTemplateItem = JsonSerializer.Deserialize<ScorecardTemplateItem>(json);
             _proKnow = proKnow;
@@ -145,7 +145,7 @@ namespace ProKnow.Scorecard
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
-        internal void PostProcessDeserialization(ProKnow proKnow)
+        internal void PostProcessDeserialization(ProKnowApi proKnow)
         {
             _proKnow = proKnow;
         }

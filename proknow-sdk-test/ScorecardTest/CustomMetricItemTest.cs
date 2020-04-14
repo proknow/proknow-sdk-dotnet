@@ -7,7 +7,7 @@ namespace ProKnow.Scorecard.Test
     [TestClass]
     public class CustomMetricItemTest
     {
-        private static ProKnow _proKnow = TestSettings.ProKnow;
+        private static ProKnowApi _proKnow = TestSettings.ProKnow;
         private static string _baseName = "SDK-CustomMetricItemTest";
 
         [TestInitialize]

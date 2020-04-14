@@ -14,14 +14,14 @@ namespace ProKnow.Scorecard
     /// </summary>
     public class CustomMetrics
     {
-        private ProKnow _proKnow;
+        private ProKnowApi _proKnow;
         private IList<CustomMetricItem> _cache;
 
         /// <summary>
         /// Creates a custom metrics object
         /// </summary>
         /// <param name="proKnow">The parent ProKnow object</param>
-        internal CustomMetrics(ProKnow proKnow)
+        internal CustomMetrics(ProKnowApi proKnow)
         {
             _proKnow = proKnow;
         }

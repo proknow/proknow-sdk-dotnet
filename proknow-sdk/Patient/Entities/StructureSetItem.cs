@@ -81,7 +81,7 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The workspace ID</param>
-        internal override void PostProcessDeserialization(ProKnow proKnow, string workspaceId)
+        internal override void PostProcessDeserialization(ProKnowApi proKnow, string workspaceId)
         {
             base.PostProcessDeserialization(proKnow, workspaceId);
 

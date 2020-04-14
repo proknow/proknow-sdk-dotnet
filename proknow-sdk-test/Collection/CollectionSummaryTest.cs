@@ -13,7 +13,7 @@ namespace ProKnow.Collection.Test
     public class CollectionSummaryTest
     {
         private static string _baseName = "SDK-CollectionSummaryTest";
-        private static ProKnow _proKnow = TestSettings.ProKnow;
+        private static ProKnowApi _proKnow = TestSettings.ProKnow;
         private static Uploads _uploads = _proKnow.Uploads;
         private static string _workspaceId;
         private static CollectionItem _collectionItem;

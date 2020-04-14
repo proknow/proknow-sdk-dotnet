@@ -14,14 +14,14 @@ namespace ProKnow
     /// </summary>
     public class Workspaces
     {
-        private ProKnow _proKnow;
+        private ProKnowApi _proKnow;
         private IList<WorkspaceItem> _cache = null;
 
         /// <summary>
         /// Constructs a workspaces object
         /// </summary>
         /// <param name="proKnow">Parent ProKnow object</param>
-        internal Workspaces(ProKnow proKnow)
+        internal Workspaces(ProKnowApi proKnow)
         {
             _proKnow = proKnow;
         }

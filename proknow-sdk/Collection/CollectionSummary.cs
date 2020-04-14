@@ -8,7 +8,7 @@ namespace ProKnow.Collection
     /// </summary>
     public class CollectionSummary
     {
-        private ProKnow _proKnow;
+        private ProKnowApi _proKnow;
 
         /// <summary>
         /// The ProKnow ID of the collection
@@ -50,7 +50,7 @@ namespace ProKnow.Collection
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
-        internal void PostProcessDeserialization(ProKnow proKnow)
+        internal void PostProcessDeserialization(ProKnowApi proKnow)
         {
             _proKnow = proKnow;
         }

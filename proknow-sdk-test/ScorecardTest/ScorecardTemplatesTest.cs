@@ -10,7 +10,7 @@ namespace ProKnow.Scorecard.Test
     [TestClass]
     public class ScorecardTemplatesTest
     {
-        private static ProKnow _proKnow = TestSettings.ProKnow;
+        private static ProKnowApi _proKnow = TestSettings.ProKnow;
         private static string _baseName = "SDK-ScorecardTemplatesTest";
         private static ComputedMetric _computedMetric;
         private static CustomMetricItem _customMetricItem;

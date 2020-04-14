@@ -21,7 +21,7 @@ namespace ProKnow.Patient.Entities
         private const int MAX_TOTAL_RETRY_DELAY = 5000;
         private const int MAX_RETRIES = MAX_TOTAL_RETRY_DELAY / RETRY_DELAY;
 
-        private ProKnow _proKnow;
+        private ProKnowApi _proKnow;
 
         /// <summary>
         /// The patient workspace ID
@@ -153,7 +153,7 @@ namespace ProKnow.Patient.Entities
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The workspace ID</param>
         /// <param name="patientId">The patient ID</param>
-        internal void PostProcessDeserialization(ProKnow proKnow, string workspaceId, string patientId)
+        internal void PostProcessDeserialization(ProKnowApi proKnow, string workspaceId, string patientId)
         {
             _proKnow = proKnow;
             WorkspaceId = workspaceId;
