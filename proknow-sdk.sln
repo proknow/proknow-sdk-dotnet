@@ -31,8 +31,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "articles", "articles", "{9688A682-B4F6-439F-BB94-072AAD9F28A6}"
 	ProjectSection(SolutionItems) = preProject
 		docs\articles\computedMetrics.md = docs\articles\computedMetrics.md
-		docs\articles\index.md = docs\articles\index.md
 		docs\articles\toc.yml = docs\articles\toc.yml
+		docs\articles\troubleshooting.md = docs\articles\troubleshooting.md
+		docs\articles\usingFindMethods.md = docs\articles\usingFindMethods.md
 	EndProjectSection
 EndProject
 Global
