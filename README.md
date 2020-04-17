@@ -6,6 +6,22 @@ Complete documentation is available at [Github Pages](http://proknow.github.io/p
 
 # Development
 
+## Generating Documentation
+Documentation is generated using the tool [DocFx](https://dotnet.github.io/docfx) and served on [Github Pages](http://proknow.github.io/proknow-sdk-dotnet).
+
+### Prerequisites
+- Windows PowerShell v2+ - This is automatically included in Windows 10 starting with update 1607.  If you are running
+an earlier version of Windows, PowerShell can be installed following these
+[instructions](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows).
+- .NET Framework 4+ - The installer for this can be downloaded [here](https://dotnet.microsoft.com/download).
+- Chocolatey - This is a package manager for Windows.  The instructions for installing this can be found [here](https://chocolatey.org/install).
+- DocFx - This can be installed using Chocolatey from an administrative command prompt with the command `choco install docfx`.
+
+### Previewing Documentation
+In a command prompt, from the project root directory, run `docfx "./docs/docfx.json" --serve`.  This will serve a
+documentation website on *http://localhost:8080* to verify proper content, links, formatting, etc.  If there are errors
+generating the documentation, they will be highlighted in yellow.
+
 ## Running Tests
 The tests require access to ProKnow in order to create temporary custom metrics, scorecard templates, and workspaces.
 
