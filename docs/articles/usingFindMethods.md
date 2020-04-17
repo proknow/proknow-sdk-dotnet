@@ -22,7 +22,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
-var workspace = await pk.Workspaces.ResolveAsync("Clinical")
+var workspace = await pk.Workspaces.ResolveAsync("Clinical");
 var patientSummary = await pk.Patients.FindAsync(workspace.Id, p => p.Name == "Terence Arnold");
 ```
 

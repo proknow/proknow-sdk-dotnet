@@ -8,7 +8,8 @@ using System.Text.Json;
 namespace ProKnow
 {
     /// <summary>
-    /// Root object for interfacing with the ProKnow API
+    /// This is the main class that should be instantiated during application startup with your base URL (which should
+    /// include your account subdomain) and your API token credentials.
     /// </summary>
     public class ProKnowApi
     {
@@ -52,17 +53,19 @@ namespace ProKnow
         public Collections Collections { get; private set; }
 
         /// <summary>
-        /// The number of seconds to use as a buffer when renewing a lock for a draft structure set. As an example, the default value of 30
-        /// means that the renewer will attempt to renew the lock 30 seconds before it actually expires
+        /// The number of seconds to use as a buffer when renewing a lock for a draft structure set. As an example, the
+        /// default value of 30 means that the renewer will attempt to renew the lock 30 seconds before it actually
+        /// expires
         /// </summary>
         public int LockRenewalBuffer { get; set; }
 
         /// <summary>
-        /// Constructs a ProKnow object
+        /// Constructs a ProKnowApi object
         /// </summary>
         /// <param name="baseUrl">The base URL to ProKnow, e.g. 'https://example.proknow.com'</param>
         /// <param name="credentialsFile">The path to the ProKnow credentials JSON file</param>
-        /// <param name="lockRenewalBuffer">The number of seconds to use as a buffer when renewing a lock for a draft structure set</param>
+        /// <param name="lockRenewalBuffer">The number of seconds to use as a buffer when renewing a lock for a draft
+        /// structure set</param>
         public ProKnowApi(string baseUrl, string credentialsFile, int lockRenewalBuffer = 30)
         {
             using (StreamReader sr = new StreamReader(credentialsFile))
@@ -73,24 +76,26 @@ namespace ProKnow
         }
 
         /// <summary>
-        /// Constructs a ProKnow object
+        /// Constructs a ProKnowApi object
         /// </summary>
         /// <param name="baseUrl">The base URL to ProKnow, e.g. 'https://example.proknow.com'</param>
         /// <param name="credentialsId">The ID from the ProKnow credentials JSON file</param>
         /// <param name="credentialsSecret">The secret from the ProKnow credentials JSON file</param>
-        /// <param name="lockRenewalBuffer">The number of seconds to use as a buffer when renewing a lock for a draft structure set</param>
+        /// <param name="lockRenewalBuffer">The number of seconds to use as a buffer when renewing a lock for a draft
+        /// structure set</param>
         public ProKnowApi(string baseUrl, string credentialsId, string credentialsSecret, int lockRenewalBuffer = 30)
         {
             ConstructorHelper(baseUrl, credentialsId, credentialsSecret, lockRenewalBuffer);
         }
 
         /// <summary>
-        /// Helper to construct a ProKnow object
+        /// Helper to construct a ProKnowApi object
         /// </summary>
         /// <param name="baseUrl">The base URL to ProKnow, e.g. 'https://example.proknow.com'</param>
         /// <param name="credentialsId">The ID from the ProKnow credentials JSON file</param>
         /// <param name="credentialsSecret">The secret from the ProKnow credentials JSON file</param>
-        /// <param name="lockRenewalBuffer">The number of seconds to use as a buffer when renewing a lock for a draft structure set</param>
+        /// <param name="lockRenewalBuffer">The number of seconds to use as a buffer when renewing a lock for a draft
+        /// structure set</param>
         private void ConstructorHelper(string baseUrl, string credentialsId, string credentialsSecret, int lockRenewalBuffer)
         {
             LockRenewalBuffer = lockRenewalBuffer;
