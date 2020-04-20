@@ -1,9 +1,12 @@
 ﻿using ProKnow.Collection;
+using ProKnow.Exceptions;
 using ProKnow.Patient;
 using ProKnow.Scorecard;
 using ProKnow.Upload;
+using System;
 using System.IO;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace ProKnow
 {
@@ -66,13 +69,30 @@ namespace ProKnow
         /// <param name="credentialsFile">The path to the ProKnow credentials JSON file</param>
         /// <param name="lockRenewalBuffer">The number of seconds to use as a buffer when renewing a lock for a draft
         /// structure set</param>
+        /// <exception cref="ProKnow.Exceptions.ProKnowException">If the credentials file could not be read</exception>
         public ProKnowApi(string baseUrl, string credentialsFile, int lockRenewalBuffer = 30)
         {
-            using (StreamReader sr = new StreamReader(credentialsFile))
+            ProKnowCredentials proKnowCredentials = null;
+            try
             {
-                var proKnowCredentials = JsonSerializer.Deserialize<ProKnowCredentials>(sr.ReadToEnd());
-                ConstructorHelper(baseUrl, proKnowCredentials.Id, proKnowCredentials.Secret, lockRenewalBuffer);
+                using (StreamReader sr = new StreamReader(credentialsFile))
+                {
+                    proKnowCredentials = JsonSerializer.Deserialize<ProKnowCredentials>(sr.ReadToEnd());
+                }
             }
+            catch (FileNotFoundException)
+            {
+                throw new ProKnowException($"The credentials file '{credentialsFile}' was not found.");
+            }
+            catch (Exception)
+            {
+                throw new ProKnowException($"The credentials file '{credentialsFile}' is not valid JSON.");
+            }
+            if (proKnowCredentials.Id == null || proKnowCredentials.Secret == null)
+            {
+                throw new ProKnowException($"The 'id' and/or 'secret' in the credentials file '{credentialsFile}' are missing.");
+            }
+            ConstructorHelper(baseUrl, proKnowCredentials.Id, proKnowCredentials.Secret, lockRenewalBuffer);
         }
 
         /// <summary>
@@ -86,6 +106,24 @@ namespace ProKnow
         public ProKnowApi(string baseUrl, string credentialsId, string credentialsSecret, int lockRenewalBuffer = 30)
         {
             ConstructorHelper(baseUrl, credentialsId, credentialsSecret, lockRenewalBuffer);
+        }
+
+        /// <summary>
+        /// Gets the status of the API connection asynchronously
+        /// </summary>
+        /// <returns>"OK" for a valid API connection; otherwise an error message indicating the issue</returns>
+        public async Task<string> GetStatusAsync()
+        {
+            string status = null;
+            try
+            {
+                status = await Requestor.GetAsync("/status");
+            }
+            catch (Exception ex)
+            {
+                status = ex.Message;
+            }
+            return status;
         }
 
         /// <summary>

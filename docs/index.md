@@ -16,20 +16,18 @@ you see when you are signed into your ProKnow account.  The form of this URL is 
 in the ProKnow user interface. Always keep your API token secret.  Once you have your `credentials.json`, make note of
 the file path.
 
-The code snippet below can be used to test your installation of the `proknow-sdk` package.  Please be sure to replace
-`https://example.proknow.com` with your organization's base URL described above, and replace `./credentials.json` with
-the path to your credentials file:
+The code snippet below can be used to test your installation and configuration of the `proknow-sdk` package.  Please be
+sure to replace `https://example.proknow.com` with your organization's base URL described above, and replace
+`./credentials.json` with the path to your credentials file:
 
 ```
 using ProKnow;
 using System.Threading.Tasks;
 
 var pk = new ProKnowApi('https://example.proknow.com', './credentials.json');
-var workspaces = await pk.Workspaces.QueryAsync();
-Console.WriteLine("The workspaces are as follows:");
-foreach (var workspace in workspaces)
-{
-    Console.WriteLine(workspace.Name);
+var status = await pk.GetStatusAsync();
+if (status != "OK") {
+    throw new Exception($"Error connecting to ProKnow API: {status}.");
 }
 ```
 

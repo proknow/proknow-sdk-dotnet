@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using ProKnow.Exceptions;
 
 namespace ProKnow
 {
@@ -197,11 +198,14 @@ namespace ProKnow
         /// </summary>
         /// <param name="response">The response</param>
         /// <returns>A task that returns the response as a string</returns>
-        /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
-        private Task<string> HandleResponseAsync(HttpResponseMessage response)
+        /// <exception cref="ProKnow.Exceptions.ProKnowHttpException">Thrown when the HTTP request is not successful</exception>
+        private async Task<string> HandleResponseAsync(HttpResponseMessage response)
         {
-            var content = response.Content.ReadAsStringAsync();
-            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ProKnowHttpException(response.StatusCode.ToString(), content);
+            }
             return content;
         }
     }
