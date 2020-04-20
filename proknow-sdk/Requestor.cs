@@ -43,7 +43,7 @@ namespace ProKnow
         /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
         /// <param name="content">Optional content for the body</param>
         /// <returns>A task that returns the response as a string</returns>
-        /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
+        /// <exception cref="ProKnow.Exceptions.ProKnowHttpException">If the HTTP request is not successful</exception>
         public async Task<string> DeleteAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Delete, $"{_baseUrl}/{route}");
@@ -69,7 +69,7 @@ namespace ProKnow
         /// <param name="route">The API route to use in the request</param>
         /// <param name="queryParameters">Optional query parameters</param>
         /// <returns>A task that returns the response as a string</returns>
-        /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
+        /// <exception cref="ProKnow.Exceptions.ProKnowHttpException">If the HTTP request is not successful</exception>
         public async Task<string> GetAsync(string route, Dictionary<string, object> queryParameters = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, BuildUriString($"{_baseUrl}/{route}", queryParameters));
@@ -85,7 +85,7 @@ namespace ProKnow
         /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
         /// <param name="content">Optional content for the body</param>
         /// <returns>A task that returns the response as a string</returns>
-        /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
+        /// <exception cref="ProKnow.Exceptions.ProKnowHttpException">If the HTTP request is not successful</exception>
         public async Task<string> PostAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/{route}");
@@ -112,7 +112,7 @@ namespace ProKnow
         /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
         /// <param name="content">Optional content for the body</param>
         /// <returns>A task that returns the response as a string</returns>
-        /// <exception cref="System.Net.Http.HttpRequestException">Thrown when the HTTP request is not successful</exception>
+        /// <exception cref="ProKnow.Exceptions.ProKnowHttpException">If the HTTP request is not successful</exception>
         public async Task<string> PutAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Put, $"{_baseUrl}/{route}");
@@ -138,11 +138,13 @@ namespace ProKnow
         /// <param name="route">The API route to use in the request</param>
         /// <param name="path">The full path to the file to which to write the response</param>
         /// <returns>The full path to the file containing the response</returns>
+        /// <exception cref="ProKnow.Exceptions.ProKnowException">If path is to an existing directory rather than to a new or existing file</exception>
+        /// <exception cref="ProKnow.Exceptions.ProKnowHttpException">If the HTTP request is not successful</exception>
         public async Task<string> StreamAsync(string route, string path)
         {
             if (Directory.Exists(path))
             {
-                throw new ArgumentException($"'{path}' is a path to an existing directory.");
+                throw new ProKnowException($"Cannot stream '{route}' to '{path}'.  It is a path to an existing directory.");
             }
             var parent = Directory.GetParent(path).FullName;
             if (!Directory.Exists(parent))
@@ -153,14 +155,16 @@ namespace ProKnow
             request.Headers.Authorization = _authenticationHeaderValue;
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
-            using (var httpResponseMessage = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead))
+            var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+            if (!response.IsSuccessStatusCode)
             {
-                using (var streamToReadFrom = await httpResponseMessage.Content.ReadAsStreamAsync())
+                throw new ProKnowHttpException(response.StatusCode.ToString());
+            }
+            using (var streamToReadFrom = await response.Content.ReadAsStreamAsync())
+            {
+                using (var streamToWriteTo = File.Open(path, FileMode.Create))
                 {
-                    using (var streamToWriteTo = File.Open(path, FileMode.Create))
-                    {
-                        await streamToReadFrom.CopyToAsync(streamToWriteTo);
-                    }
+                    await streamToReadFrom.CopyToAsync(streamToWriteTo);
                 }
             }
             return path;
@@ -198,7 +202,7 @@ namespace ProKnow
         /// </summary>
         /// <param name="response">The response</param>
         /// <returns>A task that returns the response as a string</returns>
-        /// <exception cref="ProKnow.Exceptions.ProKnowHttpException">Thrown when the HTTP request is not successful</exception>
+        /// <exception cref="ProKnow.Exceptions.ProKnowHttpException">If the HTTP request is not successful</exception>
         private async Task<string> HandleResponseAsync(HttpResponseMessage response)
         {
             var content = await response.Content.ReadAsStringAsync();

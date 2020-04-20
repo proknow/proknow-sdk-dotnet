@@ -9,9 +9,9 @@
         /// Creates a ProKnowHttpException
         /// </summary>
         /// <param name="statusCode">The status code</param>
-        /// <param name="body">The body</param>
-        public ProKnowHttpException(string statusCode, string body)
-            : base($"HttpError({statusCode}, {body})")
+        /// <param name="body">The optional body</param>
+        public ProKnowHttpException(string statusCode, string body = null)
+            : base($"HttpError({statusCode}{(body != null ? $", {body}" : "")})")
         {
         }
     }

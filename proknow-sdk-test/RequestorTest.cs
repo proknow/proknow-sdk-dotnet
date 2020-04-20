@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ProKnow.Exceptions;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -35,6 +36,10 @@ namespace ProKnow.Test
         {
             // Delete test workspaces
             await TestHelper.DeleteWorkspacesAsync(_testClassName);
+
+            // Delete temporary folder
+            var outputDocumentPath = Path.Combine(Path.GetTempPath(), _testClassName);
+            Directory.Delete(outputDocumentPath, true);
         }
 
         [TestMethod]
@@ -58,6 +63,20 @@ namespace ProKnow.Test
         }
 
         [TestMethod]
+        public async Task DeleteAsyncTest_HttpError()
+        {
+            try
+            {
+                await _requestor.DeleteAsync($"/invalid/route");
+                Assert.Fail();
+            }
+            catch (ProKnowHttpException ex)
+            {
+                Assert.IsTrue(ex.Message.Contains("HttpError"));
+            }
+        }
+
+        [TestMethod]
         public async Task GetAsyncTest()
         {
             int testNumber = 2;
@@ -72,6 +91,20 @@ namespace ProKnow.Test
 
             // Verify that the created workspace was one of the workspaces returned
             Assert.IsNotNull(await _proKnow.Workspaces.FindAsync(w => w.Name == workspaceName));
+        }
+
+        [TestMethod]
+        public async Task GetAsyncTest_HttpError()
+        {
+            try
+            {
+                await _requestor.GetAsync($"/invalid/route");
+                Assert.Fail();
+            }
+            catch (ProKnowHttpException ex)
+            {
+                Assert.IsTrue(ex.Message.Contains("HttpError"));
+            }
         }
 
         [TestMethod]
@@ -90,6 +123,20 @@ namespace ProKnow.Test
             // Verify that the workspace exists
             var workspaceItems = await _proKnow.Workspaces.QueryAsync();
             Assert.IsTrue(workspaceItems.Any(w => w.Name == workspaceName));
+        }
+
+        [TestMethod]
+        public async Task PostAsyncTest_HttpError()
+        {
+            try
+            {
+                await _requestor.PostAsync($"/invalid/route");
+                Assert.Fail();
+            }
+            catch (ProKnowHttpException ex)
+            {
+                Assert.IsTrue(ex.Message.Contains("HttpError"));
+            }
         }
 
         [TestMethod]
@@ -120,6 +167,20 @@ namespace ProKnow.Test
         }
 
         [TestMethod]
+        public async Task PutAsyncTest_HttpError()
+        {
+            try
+            {
+                await _requestor.PutAsync($"/invalid/route");
+                Assert.Fail();
+            }
+            catch (ProKnowHttpException ex)
+            {
+                Assert.IsTrue(ex.Message.Contains("HttpError"));
+            }
+        }
+
+        [TestMethod]
         public async Task StreamAsyncTest()
         {
             int testNumber = 5;
@@ -132,26 +193,81 @@ namespace ProKnow.Test
 
             // Create a document using the Documents object
             var inputDocumentPath = Path.Combine(TestSettings.TestDataRootDirectory, "dummy.pdf");
-            await _proKnow.Patients.Documents.CreateAsync(workspaceItem.Id, patientItem.Id, inputDocumentPath, "StreamAsyncTest.pdf");
+            await _proKnow.Patients.Documents.CreateAsync(workspaceItem.Id, patientItem.Id, inputDocumentPath, "test.pdf");
 
             // Wait until the document processing has completed
             while (true)
             {
                 // Query patient documents so we can get the document ID
                 var documentSummaries = await _proKnow.Patients.Documents.QueryAsync(workspaceItem.Id, patientItem.Id);
-                var documentSummary = documentSummaries.FirstOrDefault(d => d.Name == "StreamAsyncTest.pdf");
+                var documentSummary = documentSummaries.FirstOrDefault(d => d.Name == "test.pdf");
                 if (documentSummary != null)
                 {
                     // Stream the document to a new file using the Requestor object
-                    var outputDocumentPath = Path.Combine(Path.GetTempPath(), _testClassName, "StreamAsyncTest.pdf");
+                    var outputDocumentPath = Path.Combine(Path.GetTempPath(), _testClassName, testNumber.ToString(), "test.pdf");
                     var documentName = Path.GetFileName(outputDocumentPath);
-                    var route = $"/workspaces/{workspaceItem.Id}/patients/{patientItem.Id}/documents/{documentSummary.Id}/{documentName}";
+                    var route = $"/workspaces/{workspaceItem.Id}/patients/{patientItem.Id}/documents/{documentSummary.Id}/{documentSummary.Name}";
                     await _requestor.StreamAsync(route, outputDocumentPath);
 
                     // Make sure created document and streamed document sizes are the same
                     Assert.AreEqual(documentSummary.Size, new FileInfo(outputDocumentPath).Length);
                     break;
                 }
+            }
+        }
+
+        [TestMethod]
+        public async Task StreamAsyncTest_ExistingDirectory()
+        {
+            int testNumber = 6;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
+
+            // Create a document using the Documents object
+            var inputDocumentPath = Path.Combine(TestSettings.TestDataRootDirectory, "dummy.pdf");
+            await _proKnow.Patients.Documents.CreateAsync(workspaceItem.Id, patientItem.Id, inputDocumentPath, "test.pdf");
+
+            // Wait until the document processing has completed
+            while (true)
+            {
+                // Query patient documents so we can get the document ID
+                var documentSummaries = await _proKnow.Patients.Documents.QueryAsync(workspaceItem.Id, patientItem.Id);
+                var documentSummary = documentSummaries.FirstOrDefault(d => d.Name == "test.pdf");
+                if (documentSummary != null)
+                {
+                    var route = $"/workspaces/{workspaceItem.Id}/patients/{patientItem.Id}/documents/{documentSummary.Id}/{documentSummary.Name}";
+                    var outputDocumentPath = Path.Combine(Path.GetTempPath(), _testClassName, testNumber.ToString());
+                    try
+                    {
+                        // Attempt to stream the document to an existing folder using the Requestor object
+                        Directory.CreateDirectory(outputDocumentPath);
+                        await _requestor.StreamAsync(route, outputDocumentPath);
+                        Assert.Fail();
+                    }
+                    catch (ProKnowException ex)
+                    {
+                        Assert.AreEqual($"Cannot stream '{route}' to '{outputDocumentPath}'.  It is a path to an existing directory.", ex.Message);
+                        break;
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        public async Task StreamAsyncTest_HttpError()
+        {
+            try
+            {
+                await _requestor.StreamAsync("/invalid/route", "./path.dcm");
+                Assert.Fail();
+            }
+            catch (ProKnowHttpException ex)
+            {
+                Assert.IsTrue(ex.Message.Contains("HttpError"));
             }
         }
     }
