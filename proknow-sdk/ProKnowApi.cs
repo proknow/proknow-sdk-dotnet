@@ -69,7 +69,7 @@ namespace ProKnow
         /// <param name="credentialsFile">The path to the ProKnow credentials JSON file</param>
         /// <param name="lockRenewalBuffer">The number of seconds to use as a buffer when renewing a lock for a draft
         /// structure set</param>
-        /// <exception cref="ProKnow.Exceptions.ProKnowException">If the credentials file could not be read</exception>
+        /// <exception cref="ProKnow.Exceptions.ProKnowException">If the credentials file could not be read or is invalid</exception>
         public ProKnowApi(string baseUrl, string credentialsFile, int lockRenewalBuffer = 30)
         {
             ProKnowCredentials proKnowCredentials = null;
@@ -112,6 +112,19 @@ namespace ProKnow
         /// Gets the status of the API connection asynchronously
         /// </summary>
         /// <returns>"OK" for a valid API connection; otherwise an error message indicating the issue</returns>
+        /// <example>
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        /// 
+        /// var pk = new ProKnowApi('https://example.proknow.com', './credentials.json');
+        /// var status = await pk.GetStatusAsync();
+        /// if (status != "OK")
+        /// {
+        ///     throw new Exception($"Error connecting to ProKnow API: {status}.");
+        /// }
+        /// </code>
+        /// </example>
         public async Task<string> GetStatusAsync()
         {
             string status = null;
