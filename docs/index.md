@@ -26,7 +26,8 @@ using System.Threading.Tasks;
 
 var pk = new ProKnowApi('https://example.proknow.com', './credentials.json');
 var status = await pk.GetStatusAsync();
-if (status != "OK") {
+if (status != "OK")
+{
     throw new Exception($"Error connecting to ProKnow API: {status}.");
 }
 ```
@@ -35,6 +36,5 @@ Note that the majority of the methods in the SDK are asynchronous.  Asynchronous
 suffix per convention.  For more information about asynchronous programming, please refer to the Microsoft
 [Asynchronous programming with async and await](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/async/)
 article.
-
 
 If an adaptation of the above code snippet does not work for you, please see the troubleshooting guide.
