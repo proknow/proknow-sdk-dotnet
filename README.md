@@ -22,6 +22,10 @@ In a command prompt, from the project root directory, run `docfx "./docs/docfx.j
 documentation website on *http://localhost:8080* to verify proper content, links, formatting, etc.  If there are errors
 generating the documentation, they will be highlighted in yellow.
 
+### Verifying Documentation
+Once branch changes have been merged into the master branch, the build pipeline will regenerate the documentation which
+can then be viewed on [Github Pages](http://proknow.github.io/proknow-sdk-dotnet).
+
 ## Running Tests
 The tests require access to ProKnow in order to create temporary custom metrics, scorecard templates, and workspaces.
 
