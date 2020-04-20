@@ -25,10 +25,10 @@ using ProKnow;
 using System.Threading.Tasks;
 
 var pk = new ProKnowApi('https://example.proknow.com', './credentials.json');
-var status = await pk.GetStatusAsync();
-if (status != "OK")
+var connectionStatus = await pk.GetConnectionStatusAsync();
+if (!connectionStatus.IsValid)
 {
-    throw new Exception($"Error connecting to ProKnow API: {status}.");
+    throw new Exception($"Error connecting to ProKnow API: {connectionStatus.ErrorMessage}.");
 }
 ```
 

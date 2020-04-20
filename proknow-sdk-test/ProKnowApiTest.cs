@@ -54,28 +54,30 @@ namespace ProKnow.Test
         }
 
         [TestMethod]
-        public async Task GetStatusAsync_GoodCredentials()
+        public async Task GetConnectionStatusAsync_GoodCredentials()
         {
             var proKnowApi = new ProKnowApi(TestSettings.BaseUrl, TestSettings.CredentialsFile);
-            var status = await proKnowApi.GetStatusAsync();
-            Assert.AreEqual("OK", status);
+            var connectionStatus = await proKnowApi.GetConnectionStatusAsync();
+            Assert.IsTrue(connectionStatus.IsValid);
         }
 
         [TestMethod]
-        public async Task GetStatusAsync_BadBaseUrl()
+        public async Task GetConnectionStatusAsync_BadBaseUrl()
         {
             var proKnowApi = new ProKnowApi("https://example.proknow.com", TestSettings.CredentialsFile);
-            var status = await proKnowApi.GetStatusAsync();
-            Assert.AreEqual("HttpError(Unauthorized, Invalid or missing credentials)", status);
+            var connectionStatus = await proKnowApi.GetConnectionStatusAsync();
+            Assert.IsFalse(connectionStatus.IsValid);
+            Assert.AreEqual("HttpError(Unauthorized, Invalid or missing credentials)", connectionStatus.ErrorMessage);
         }
 
         [TestMethod]
-        public async Task GetStatusAsync_BogusCredentials()
+        public async Task GetConnectionStatusAsync_BogusCredentials()
         {
             var credentialsFile = Path.Combine(TestSettings.TestDataRootDirectory, "./bogus_credentials.json");
             var proKnowApi = new ProKnowApi(TestSettings.BaseUrl, credentialsFile);
-            var status = await proKnowApi.GetStatusAsync();
-            Assert.AreEqual("HttpError(Unauthorized, Invalid or missing credentials)", status);
+            var connectionStatus = await proKnowApi.GetConnectionStatusAsync();
+            Assert.IsFalse(connectionStatus.IsValid);
+            Assert.AreEqual("HttpError(Unauthorized, Invalid or missing credentials)", connectionStatus.ErrorMessage);
         }
     }
 }

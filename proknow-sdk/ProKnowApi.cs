@@ -111,32 +111,31 @@ namespace ProKnow
         /// <summary>
         /// Gets the status of the API connection asynchronously
         /// </summary>
-        /// <returns>"OK" for a valid API connection; otherwise an error message indicating the issue</returns>
+        /// <returns>The connection status</returns>
         /// <example>
         /// <code>
         /// using ProKnow;
         /// using System.Threading.Tasks;
         /// 
         /// var pk = new ProKnowApi('https://example.proknow.com', './credentials.json');
-        /// var status = await pk.GetStatusAsync();
-        /// if (status != "OK")
+        /// var status = await pk.GetConnectionStatusAsync();
+        /// if (!connectionStatus.IsValid)
         /// {
-        ///     throw new Exception($"Error connecting to ProKnow API: {status}.");
+        ///     throw new Exception($"Error connecting to ProKnow API: {connectionStatus.ErrorMessage}.");
         /// }
         /// </code>
         /// </example>
-        public async Task<string> GetStatusAsync()
+        public async Task<ProKnowConnectionStatus> GetConnectionStatusAsync()
         {
-            string status = null;
             try
             {
-                status = await Requestor.GetAsync("/status");
+                var status = await Requestor.GetAsync("/status");
+                return new ProKnowConnectionStatus(true);
             }
             catch (Exception ex)
             {
-                status = ex.Message;
+                return new ProKnowConnectionStatus(false, ex.Message);
             }
-            return status;
         }
 
         /// <summary>
