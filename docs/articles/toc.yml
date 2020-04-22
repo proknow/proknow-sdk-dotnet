@@ -1,0 +1,6 @@
+- name: Troubleshooting
+  href: troubleshooting.md
+- name: Computed Metrics
+  href: computedMetrics.md
+- name: Using Find Methods
+  href: usingFindMethods.md
