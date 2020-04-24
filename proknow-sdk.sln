@@ -10,7 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		.runsettings = .runsettings
 		README.md = README.md
-		test.yml = test.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "proknow-sdk-test", "proknow-sdk-test\proknow-sdk-test.csproj", "{1D45A3A9-3938-407B-AB93-29900245D351}"
