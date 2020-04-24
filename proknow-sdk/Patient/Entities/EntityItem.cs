@@ -93,11 +93,35 @@ namespace ProKnow.Patient.Entities
         }
 
         /// <summary>
-        /// Downloads this entity asynchronously as DICOM object(s) to the specified folder
+        /// Downloads this entity asynchronously as DICOM object(s) to the specified folder or file
         /// </summary>
-        /// <param name="root">The full path to the destination root folder</param>
-        /// <returns>The full path to the destination folder (root or a sub-folder) to which the file(s) were downloaded</returns>
-        public abstract Task<string> DownloadAsync(string root);
+        /// <param name="path">The full path to the destination folder or file</param>
+        /// <returns>The full path to the folder or file to which the file(s) were downloaded</returns>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>
+        /// If the entity is an image set, the provided path must be an existing folder.  A subfolder named
+        /// {modality}.{series instance UID} will be created in this folder and the individual images will be
+        /// saved to files named {modality}.{SOP instance UID}.dcm where {modality} is an abbreviation of the
+        /// modality.
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// If the entity is not an image set and the provided path is an existing folder, the entity will be saved to
+        /// a file named {modality}.{SOP instance UID}.dcm.
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// If the entity is not an image set and the provided path is not an existing folder, the entity will be saved to
+        /// the provided path.
+        /// </description>
+        /// </item>
+        /// </list>
+        /// </remarks>
+        public abstract Task<string> DownloadAsync(string path);
 
         /// <summary>
         /// Asynchronously resolves the metadata to a dictionary of custom metric names and values

@@ -45,10 +45,25 @@ namespace ProKnow.Patient.Entities
         //todo--Implement DiscardAsync method
 
         /// <summary>
-        /// Downloads this entity asynchronously as a DICOM object to a specified folder or file
+        /// Downloads this structure set asynchronously as a DICOM object to the specified folder or file
         /// </summary>
         /// <param name="path">The full path to the destination folder or file</param>
-        /// <returns>The full path to the file downloaded</returns>
+        /// <returns>The full path to the file to which the structure set was downloaded</returns>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>
+        /// If the provided path is an existing folder, the structure set will be saved to a file named
+        /// RS.{SOP instance UID}.dcm.
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// If the provided path is not an existing folder, the structure set will be saved to the provided path.
+        /// </description>
+        /// </item>
+        /// </list>
+        /// </remarks>
         public override Task<string> DownloadAsync(string path)
         {
             if (IsDraft)
