@@ -8,7 +8,7 @@
     <Company>Elekta</Company>
     <Product>ProKnow</Product>
     <PackageId>ProKnow</PackageId>
-    <Version>0.0.11</Version>
+    <Version>0.0.13</Version>
     <Authors>ProKnow</Authors>
     <Description>ProKnow.NET SDK is a .NET Standard client and a portable class library for ProKnow</Description>
     <RepositoryUrl>https://github.com/proknow/proknow-sdk-dotnet</RepositoryUrl>

@@ -20,15 +20,20 @@ namespace ProKnow.Patient.Entities
         /// <summary>
         /// Downloads this image set asynchronously as DICOM objects to the specified folder
         /// </summary>
-        /// <param name="root">The full path to the destination root folder</param>
-        /// <returns>The full path to the destination sub-folder to which the images were downloaded</returns>
-        public override async Task<string> DownloadAsync(string root)
+        /// <param name="path">The full path to the destination folder</param>
+        /// <returns>The full path to the folder to which the images were downloaded</returns>
+        /// <remarks>
+        /// The provided path must be an existing folder.  A subfolder named {modality}.{series instance UID} will be
+        /// created in this folder and the individual images will be saved to files named
+        /// {modality}.{SOP instance UID}.dcm where {modality} is an abbreviation of the modality.
+        /// </remarks>
+        public override async Task<string> DownloadAsync(string path)
         {
             // Create destination folder, if necessary
-            var folder = Path.Combine(root, $"{Modality}.{Uid}");
+            var folder = Path.Combine(path, $"{Modality}.{Uid}");
             if (File.Exists(folder))
             {
-                throw new ArgumentException($"The image set download folder path '{root}' is a path to an existing file.");
+                throw new ArgumentException($"The image set download folder path '{path}' is a path to an existing file.");
             }
             if (!Directory.Exists(folder))
             {
