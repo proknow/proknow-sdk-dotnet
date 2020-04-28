@@ -155,7 +155,7 @@ namespace ProKnow.Patient
         /// Queries the ProKnow API for the collection of patient summaries
         /// </summary>
         /// <param name="workspace">ID or name of the workspace containing the patients</param>
-        /// <param name="searchString"></param>
+        /// <param name="searchString">If provided, returns only the patients whose MRN or name match the parameter</param>
         /// <returns>A collection of patient summaries</returns>
         /// <example>This example queries the patients belonging to the Clinical workspace and prints the name of each patient:
         /// <code>
