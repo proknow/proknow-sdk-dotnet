@@ -54,7 +54,8 @@ namespace ProKnow.Upload
         /// <param name="patientId">The patient ProKnow ID</param>
         /// <param name="studyId">The study ProKnow ID</param>
         /// <param name="uploadStatusResult">The upload status result</param>
-        internal UploadSroSummary(ProKnowApi proKnow, string workspaceId, string patientId, string studyId, UploadStatusResultSro uploadStatusResult)
+        internal UploadSroSummary(ProKnowApi proKnow, string workspaceId, string patientId, string studyId,
+            UploadStatusResultSro uploadStatusResult)
         {
             _proKnow = proKnow;
             WorkspaceId = workspaceId;
@@ -71,7 +72,8 @@ namespace ProKnow.Upload
         public async Task<SroItem> GetAsync()
         {
             var patientItem = await _proKnow.Patients.GetAsync(WorkspaceId, PatientId);
-            var sroSummary = patientItem.Studies.SelectMany(study => study.Sros.Where(sro => sro.Id == Id)).First();
+            var studySummary = patientItem.Studies.Where(s => s.Id == StudyId).First();
+            var sroSummary = studySummary.Sros.Where(sro => sro.Id == Id).First();
             return await sroSummary.GetAsync();
         }
     }
