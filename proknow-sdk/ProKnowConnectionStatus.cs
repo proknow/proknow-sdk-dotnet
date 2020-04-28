@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ProKnow
+﻿namespace ProKnow
 {
     /// <summary>
     /// Provides the status of the ProKnow API connection
