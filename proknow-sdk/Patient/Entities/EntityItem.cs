@@ -31,6 +31,12 @@ namespace ProKnow.Patient.Entities
         public string PatientId { get; set; }
 
         /// <summary>
+        /// The entity frame of reference UID
+        /// </summary>
+        [JsonPropertyName("frame_of_reference")]
+        public string FrameOfReferenceUid { get; set; }
+
+        /// <summary>
         /// The entity ProKnow ID
         /// </summary>
         [JsonPropertyName("id")]
