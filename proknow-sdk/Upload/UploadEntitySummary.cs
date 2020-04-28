@@ -47,13 +47,20 @@ namespace ProKnow.Upload
         public string Description { get; set; }
 
         /// <summary>
+        /// Used by de-serialization to construct an UploadEntitySummary
+        /// </summary>
+        public UploadEntitySummary()
+        {
+        }
+
+        /// <summary>
         /// Creates an entity summary
         /// </summary>
         /// <param name="patients">Interacts with patients in a ProKnow organization</param>
         /// <param name="workspaceId">The workspace ID</param>
         /// <param name="patientId">The patient ID</param>
         /// <param name="uploadStatusResult">The upload status result</param>
-        public UploadEntitySummary(Patients patients, string workspaceId, string patientId, UploadStatusResultEntity uploadStatusResult)
+        internal UploadEntitySummary(Patients patients, string workspaceId, string patientId, UploadStatusResultEntity uploadStatusResult)
         {
             _patients = patients;
             WorkspaceId = workspaceId;

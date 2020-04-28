@@ -37,16 +37,29 @@ namespace ProKnow.Upload
         public IList<UploadEntitySummary> Entities { get; set; }
 
         /// <summary>
+        /// Spatial registration objects within this patient
+        /// </summary>
+        public IList<UploadSroSummary> Sros { get; set; }
+
+        /// <summary>
+        /// Used by de-serialization to construct an UploadPatientSummary
+        /// </summary>
+        public UploadPatientSummary()
+        {
+        }
+
+        /// <summary>
         /// Creates an upload patient summary
         /// </summary>
         /// <param name="patients">Interacts with patients in a ProKnow organization</param>
         /// <param name="workspaceId">The workspace ID</param>
         /// <param name="uploadStatusResult">The upload status result</param>
-        public UploadPatientSummary(Patients patients, string workspaceId, UploadStatusResultPatient uploadStatusResult)
+        internal UploadPatientSummary(Patients patients, string workspaceId, UploadStatusResultPatient uploadStatusResult)
         {
             _patients = patients;
             WorkspaceId = workspaceId;
             Entities = new List<UploadEntitySummary>();
+            Sros = new List<UploadSroSummary>();
             Id = uploadStatusResult.Id;
             Mrn = uploadStatusResult.Mrn;
             Name = uploadStatusResult.Name;

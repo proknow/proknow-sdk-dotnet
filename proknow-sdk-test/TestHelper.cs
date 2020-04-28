@@ -33,13 +33,13 @@ namespace ProKnow.Test
         /// <param name="testClassName">The test class name</param>
         /// <param name="testNumber">The test number</param>
         /// <param name="testData">The optional test data subdirectory or file to upload</param>
-        /// <param name="numberOfEntities">The expected number of entities uploaded if test data was specified</param>
+        /// <param name="numberOfEntitiesAndSros">The expected number of entities and SROs uploaded if test data was specified</param>
         /// <param name="birthDate">The optional birthdate in the format "YYYY-MM-DD"</param>
         /// <param name="sex">The optional sex, one of "M", "F", or "O"</param>
         /// <param name="metadata">The optional metadata (custom metrics) names and values</param>
         /// <returns></returns>
         public static async Task<PatientItem> CreatePatientAsync(string testClassName, int testNumber, 
-            string testData = null, int numberOfEntities = 0, string birthDate = null, string sex = null,
+            string testData = null, int numberOfEntitiesAndSros = 0, string birthDate = null, string sex = null,
             IDictionary<string, object> metadata = null)
         {
             // Find the workspace for this test
@@ -59,16 +59,19 @@ namespace ProKnow.Test
                 {
                     Patient = new PatientCreateSchema { Mrn = mrn, Name = name }
                 };
-                await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
+                var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
+                var uploadedEntityIds = uploadBatch.Patients.SelectMany(p => p.Entities.Select(e => e.Id));
+                var uploadedSroIds = uploadBatch.Patients.SelectMany(p => p.Sros.Select(s => s.Id));
 
                 // Wait until uploaded test files have processed
                 while (true)
                 {
                     await patientItem.RefreshAsync();
-                    var entitySummaries = patientItem.FindEntities(e => true);
-                    if (entitySummaries.Count() == numberOfEntities)
+                    var entitySummaries = patientItem.FindEntities(e => uploadedEntityIds.Contains(e.Id));
+                    var sroSummaries = patientItem.Studies.SelectMany(s => s.Sros.Where(r => uploadedSroIds.Contains(r.Id))).ToList();
+                    if (entitySummaries.Count() + sroSummaries.Count() == numberOfEntitiesAndSros)
                     {
-                        var statuses = entitySummaries.Select(e => e.Status).Distinct().ToList();
+                        var statuses = entitySummaries.Select(e => e.Status).Union(sroSummaries.Select(s => s.Status)).Distinct().ToList();
                         if (statuses.Count == 1 && statuses[0] == "completed")
                         {
                             break;
