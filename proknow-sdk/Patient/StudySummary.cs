@@ -42,6 +42,12 @@ namespace ProKnow.Patient
         public IList<EntitySummary> Entities { get; set; }
 
         /// <summary>
+        /// The spatial registration objects
+        /// </summary>
+        [JsonPropertyName("sros")]
+        public IList<SroSummary> Sros { get; set; }
+
+        /// <summary>
         /// Returns a string that represents the current object
         /// </summary>
         /// <returns>A string that represents the current object</returns>
@@ -66,6 +72,12 @@ namespace ProKnow.Patient
             foreach (var entity in Entities)
             {
                 entity.PostProcessDeserialization(_proKnow, WorkspaceId, PatientId);
+            }
+
+            // Post-process deserialization of SROs
+            foreach (var sro in Sros)
+            {
+                sro.PostProcessDeserialization(_proKnow, WorkspaceId, PatientId);
             }
         }
     }
