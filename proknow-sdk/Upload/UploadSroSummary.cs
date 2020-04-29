@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using ProKnow.Patient;
+using ProKnow.Patient.Registrations;
 
 namespace ProKnow.Upload
 {

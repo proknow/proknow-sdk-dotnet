@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ProKnow.Patient
+namespace ProKnow.Patient.Registrations
 {
     /// <summary>
     /// Represents a spatial registration object (SRO) for a patient

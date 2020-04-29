@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ProKnow.Patient
+namespace ProKnow.Patient.Registrations
 {
     /// <summary>
     /// The source or target of a registration object

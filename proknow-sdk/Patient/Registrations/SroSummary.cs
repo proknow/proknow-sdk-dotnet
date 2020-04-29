@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace ProKnow.Patient
+namespace ProKnow.Patient.Registrations
 {
     /// <summary>
     /// Provides a summary of a spatial registration object (SRO) for a patient

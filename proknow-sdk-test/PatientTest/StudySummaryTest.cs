@@ -2,8 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ProKnow.Test;
 
-namespace ProKnow.Test.PatientTest
+namespace ProKnow.Patient.Test
 {
     [TestClass]
     public class StudySummaryTest

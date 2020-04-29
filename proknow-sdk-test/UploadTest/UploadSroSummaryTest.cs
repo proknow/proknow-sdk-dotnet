@@ -3,6 +3,7 @@ using ProKnow.Patient;
 using ProKnow.Test;
 using System.IO;
 using System.Threading.Tasks;
+using ProKnow.Patient.Registrations;
 
 namespace ProKnow.Upload.Test
 {
