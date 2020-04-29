@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace ProKnow.Patient.Registrations
 {
@@ -91,6 +93,45 @@ namespace ProKnow.Patient.Registrations
         /// </summary>
         public SroItem()
         {
+        }
+
+        /// <summary>
+        /// Downloads this spatial registration object asynchronously as a DICOM object to the specified folder or file
+        /// </summary>
+        /// <param name="path">The full path to the destination folder or file</param>
+        /// <returns>The full path to the file to which the spatial registration object was downloaded</returns>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>
+        /// If the provided path is an existing folder, the spatial registration object will be saved to a file named
+        /// REG.{SOP instance UID}.dcm.
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// If the provided path is not an existing folder, the spatial registration object will be saved to the provided path.
+        /// </description>
+        /// </item>
+        /// </list>
+        /// </remarks>
+        public Task<string> DownloadAsync(string path)
+        {
+            string file = null;
+            if (Directory.Exists(path))
+            {
+                file = Path.Combine(path, $"REG.{Uid}.dcm");
+            }
+            else
+            {
+                var parentDirectoryInfo = Directory.GetParent(path);
+                if (!parentDirectoryInfo.Exists)
+                {
+                    parentDirectoryInfo.Create();
+                }
+                file = path;
+            }
+            return _proKnow.Requestor.StreamAsync($"/workspaces/{WorkspaceId}/sros/{Id}/dicom", file);
         }
 
         /// <summary>
