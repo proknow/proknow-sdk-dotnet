@@ -115,6 +115,18 @@ namespace ProKnow.Patient.Registrations
         /// </item>
         /// </list>
         /// </remarks>
+        /// <example>This example shows how to download a spatial registration object for a patient:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
+        /// var patientItem = await pk.Patients.CreateAsync("Clinical");
+        /// var sroSummaries = patientItem.FindSros(s => true);
+        /// var sroItem = await sroSummaries[0].GetAsync();
+        /// await sroItem.DownloadAsync("DICOM");
+        /// </code>
+        /// </example>
         public Task<string> DownloadAsync(string path)
         {
             string file = null;
