@@ -15,7 +15,7 @@ namespace ProKnow.Upload.Test
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
         {
-            // Delete test workspace, if necessary
+            // Delete test workspaces, if necessary
             await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
         }
 
