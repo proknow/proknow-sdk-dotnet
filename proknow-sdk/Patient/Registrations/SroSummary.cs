@@ -94,6 +94,8 @@ namespace ProKnow.Patient.Registrations
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; }
 
+        //todo--Add DeleteAsync method
+
         /// <summary>
         /// Asynchronously gets the corresponding SRO item
         /// </summary>

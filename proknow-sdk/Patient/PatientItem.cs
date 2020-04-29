@@ -92,6 +92,10 @@ namespace ProKnow.Patient
         {
             Initialize(proKnow, workspaceId, json);
         }
+        
+        //todo--Add CreateSpatialRegistrationObject method
+
+        //todo--Add CreateStructureSet method
 
         /// <summary>
         /// Deletes this patient item asynchronously

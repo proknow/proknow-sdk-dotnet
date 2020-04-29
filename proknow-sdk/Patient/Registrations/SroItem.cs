@@ -95,6 +95,8 @@ namespace ProKnow.Patient.Registrations
         {
         }
 
+        //todo--Add DeleteAsync method
+
         /// <summary>
         /// Downloads this spatial registration object asynchronously as a DICOM object to the specified folder or file
         /// </summary>
@@ -145,6 +147,8 @@ namespace ProKnow.Patient.Registrations
             }
             return _proKnow.Requestor.StreamAsync($"/workspaces/{WorkspaceId}/sros/{Id}/dicom", file);
         }
+
+        //todo--Add SaveAsync method
 
         /// <summary>
         /// Creates an SRO item from its JSON representation
