@@ -1,4 +1,5 @@
 ﻿using ProKnow.Patient.Entities;
+using ProKnow.Patient.Registrations;
 using ProKnow.Upload;
 using System;
 using System.Collections.Generic;
@@ -145,6 +146,44 @@ namespace ProKnow.Patient
                 }
             }
             return matchingEntities;
+        }
+
+        /// <summary>
+        /// Finds the spatial registration objects for this patient that satisfy a predicate
+        /// </summary>
+        /// <param name="predicate">A predicate for the search</param>
+        /// <returns>All of the patient spatial registration objects that satisfy the predicate or null if the
+        /// predicate was null or no patient spatial registration object satisfies the predicate</returns>
+        /// <example>This example shows how to find spatial registration objects for a patient that transform to or
+        /// from a specific frame of reference:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
+        /// var patientItem = await pk.Patients.CreateAsync("Clinical");
+        /// var frameOfReferenceUid = "1.2.246.352.221.5093062159960566210763150553104377477";
+        /// var sroSummaries = patientItem.FindSros(s => s.TargetFrameOfReferenceUid == frameOfReferenceUid ||
+        ///     s.SourceTargetFrameOfReferenceUid == frameOfReferenceUid);
+        /// </code>
+        /// </example>
+        /// <example>This example shows how to find all spatial registration objects for a patient:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
+        /// var patientItem = await pk.Patients.CreateAsync("Clinical");
+        /// var sroSummaries = patientItem.FindSros(s => true);
+        /// </code>
+        /// </example>
+        public IList<SroSummary> FindSros(Func<SroSummary, bool> predicate)
+        {
+            if (predicate == null)
+            {
+                return new List<SroSummary>();
+            }
+            return Studies.SelectMany(study => study.Sros.Where(sro => predicate(sro))).ToList();
         }
 
         /// <summary>
