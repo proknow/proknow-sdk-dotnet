@@ -69,6 +69,22 @@ namespace ProKnow.Upload
         /// Gets the complete representation of the spatial registration object
         /// </summary>
         /// <returns>A complete representation of the spatial registration object</returns>
+        /// <example>This example shows how to get a list of spatial registration objects associated with a given upload:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Collections.Generic;
+        /// using System.Linq;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
+        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "DICOM");
+        /// var sroItems = new List&lt;SroItem&gt;();
+        /// foreach (var patient in uploadBatch.Patients)
+        /// {
+        ///     sroItems.AddRange(await Task.WhenAll(patient.Sros.Select(async s => await s.GetAsync())));
+        /// }
+        /// </code>
+        /// </example>
         public async Task<SroItem> GetAsync()
         {
             var patientItem = await _proKnow.Patients.GetAsync(WorkspaceId, PatientId);

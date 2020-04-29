@@ -68,7 +68,18 @@ namespace ProKnow.Upload
         /// <summary>
         /// Gets the complete representation of the patient
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The complete representation of the patient</returns>
+        /// <example>This example shows how to get a list of patients associated with a given upload:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Linq;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
+        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "DICOM");
+        /// var patientItems = await Task.WhenAll(uploadBatch.Patients.Select(async p => await p.GetAsync()));
+        /// </code>
+        /// </example>
         public Task<PatientItem> GetAsync()
         {
             return _patients.GetAsync(WorkspaceId, Id);

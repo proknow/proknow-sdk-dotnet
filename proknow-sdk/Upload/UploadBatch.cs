@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ProKnow.Upload
 {
     /// <summary>
-    /// Looks up patients and entities within a batch of resolved uploads
+    /// Looks up patients, entities, and spatial registration objects within a batch of resolved uploads
     /// </summary>
     public class UploadBatch
     {
@@ -79,6 +79,18 @@ namespace ProKnow.Upload
         /// </summary>
         /// <param name="path">The full path to the file</param>
         /// <returns>The summary view of the patient for an uploaded file</returns>
+        /// <example>This example shows how to find a patient associated with a given file upload:
+        /// <code>
+        /// using ProKnow;
+        /// using System.IO;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
+        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "DICOM");
+        /// var path = Path.GetFullPath(Path.Join("DICOM", "plan.dcm"));
+        /// var uploadPatientSummary = uploadBatch.FindPatient(path);
+        /// </code>
+        /// </example>
         public UploadPatientSummary FindPatient(string path)
         {
             if (_fileLookup.ContainsKey(path))
@@ -98,6 +110,18 @@ namespace ProKnow.Upload
         /// </summary>
         /// <param name="path">The full path to the file</param>
         /// <returns>The summary view of the entity for an uploaded file</returns>
+        /// <example>This example shows how to find an entity associated with a given file upload:
+        /// <code>
+        /// using ProKnow;
+        /// using System.IO;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
+        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "DICOM");
+        /// var path = Path.GetFullPath(Path.Join("DICOM", "plan.dcm"));
+        /// var uploadEntitySummary = uploadBatch.FindEntity(path);
+        /// </code>
+        /// </example>
         public UploadEntitySummary FindEntity(string path)
         {
             if (_fileLookup.ContainsKey(path))
@@ -121,6 +145,18 @@ namespace ProKnow.Upload
         /// </summary>
         /// <param name="path">The full path to the file</param>
         /// <returns>The summary view of the spatial registration object for an uploaded file</returns>
+        /// <example>This example shows how to find a spatial registration object associated with a given file upload:
+        /// <code>
+        /// using ProKnow;
+        /// using System.IO;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
+        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
+        /// var path = Path.GetFullPath(Path.Join("DICOM", "reg.dcm"));
+        /// var uploadSroSummary = uploadBatch.Find(path);
+        /// </code>
+        /// </example>
         public UploadSroSummary FindSro(string path)
         {
             if (_fileLookup.ContainsKey(path))
