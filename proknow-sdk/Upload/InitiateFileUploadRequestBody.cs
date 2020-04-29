@@ -5,7 +5,7 @@ namespace ProKnow.Upload
     /// <summary>
     /// The body for a file upload request
     /// </summary>
-    public class InitiateFileUploadRequestBody
+    internal class InitiateFileUploadRequestBody
     {
         /// <summary>
         /// The file checksum (MD5 hash)

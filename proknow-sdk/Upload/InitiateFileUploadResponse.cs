@@ -6,7 +6,7 @@ namespace ProKnow.Upload
     /// <summary>
     /// Represents the response from a request to initiate a file upload
     /// </summary>
-    public class InitiateFileUploadResponse
+    internal class InitiateFileUploadResponse
     {
         /// <summary>
         /// The ProKnow ID for the upload
