@@ -8,9 +8,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
 
     # Set up .NET Core
@@ -28,15 +26,29 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
 
-    # Build documentation (see https://github.com/nikeee/docfx-action)
+    # Build documentation (see https://github.com/niksteeee/docfx-action)
     - uses: nikeee/docfx-action@v0.1.0
-      name: Build documentation
+    - name: Build documentation
       with:
         args: docs/docfx.json
 
     # Publish generated documentation site to GitHub Pages (see https://github.com/maxheld83/ghpages)
     - uses: maxheld83/ghpages@v0.3.0
-      name: Publish documentation site to GitHub Pages
+    - name: Publish documentation site to GitHub Pages
       env:
         BUILD_DIR: docs/_site
         GH_PAT: ${{ secrets.GH_PAT }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+
+    # Publish NuGet package
+    - uses: actions/checkout@v2
+    - name: Pack NuGet package
+      run: dotnet pack --configuration Release
+    - name: Push package to NuGet
+      run: dotnet nuget push **/*.nupkg
+            --api-key ${{ secrets.NUGET_DEPLOY_KEY }}
+            --source https://api.nuget.org/v3/index.json
