@@ -37,16 +37,29 @@ namespace ProKnow.Upload
         public IList<UploadEntitySummary> Entities { get; set; }
 
         /// <summary>
+        /// Spatial registration objects within this patient
+        /// </summary>
+        public IList<UploadSroSummary> Sros { get; set; }
+
+        /// <summary>
+        /// Used by de-serialization to construct an UploadPatientSummary
+        /// </summary>
+        public UploadPatientSummary()
+        {
+        }
+
+        /// <summary>
         /// Creates an upload patient summary
         /// </summary>
         /// <param name="patients">Interacts with patients in a ProKnow organization</param>
         /// <param name="workspaceId">The workspace ID</param>
         /// <param name="uploadStatusResult">The upload status result</param>
-        public UploadPatientSummary(Patients patients, string workspaceId, UploadStatusResultPatient uploadStatusResult)
+        internal UploadPatientSummary(Patients patients, string workspaceId, UploadStatusResultPatient uploadStatusResult)
         {
             _patients = patients;
             WorkspaceId = workspaceId;
             Entities = new List<UploadEntitySummary>();
+            Sros = new List<UploadSroSummary>();
             Id = uploadStatusResult.Id;
             Mrn = uploadStatusResult.Mrn;
             Name = uploadStatusResult.Name;
@@ -55,7 +68,18 @@ namespace ProKnow.Upload
         /// <summary>
         /// Gets the complete representation of the patient
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The complete representation of the patient</returns>
+        /// <example>This example shows how to get a list of patients associated with a given upload:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Linq;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
+        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "DICOM");
+        /// var patientItems = await Task.WhenAll(uploadBatch.Patients.Select(async p => await p.GetAsync()));
+        /// </code>
+        /// </example>
         public Task<PatientItem> GetAsync()
         {
             return _patients.GetAsync(WorkspaceId, Id);

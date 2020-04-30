@@ -41,6 +41,15 @@ namespace ProKnow.Upload
         /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
         /// <param name="doWait">Indicates whether to wait until all uploads reach a terminal state</param>
         /// <returns>The upload results</returns>
+        /// <example>This example shows how to upload a directory of files:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
+        /// await pk.Uploads.UploadAsync("Upload Test", "DICOM");
+        /// </code>
+        /// </example>
         public async Task<UploadBatch> UploadAsync(string workspace, string path, UploadFileOverrides overrides = null,
             bool doWait = true)
         {
@@ -63,6 +72,41 @@ namespace ProKnow.Upload
         /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
         /// <param name="doWait">Indicates whether to wait until all uploads reach a terminal state</param>
         /// <returns>The upload results</returns>
+        /// <example>This example shows how to upload a directory of files:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Collections.Generic;
+        /// using System.IO;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
+        /// var paths = new List&lt;string&gt;() {
+        ///     Path.Join("DICOM", "img000001.dcm"),
+        ///     Path.Join("DICOM", "img000002.dcm"),
+        ///     Path.Join("DICOM", "img000003.dcm"),
+        ///     Path.Join("DICOM", "img000004.dcm"),
+        ///     Path.Join("DICOM", "img000005.dcm")
+        /// }
+        /// await pk.Uploads.UploadAsync("Upload Test", paths);
+        /// </code>
+        /// </example>
+        /// <example>Lists containing both directories and file paths are also permitted:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Collections.Generic;
+        /// using System.IO;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
+        /// var paths = new List&lt;string&gt;() {
+        ///     Path.Join("DICOM", "CT"),
+        ///     Path.Join("DICOM", "structures.dcm"),
+        ///     Path.Join("DICOM", "plan.dcm"),
+        ///     Path.Join("DICOM", "dose.dcm")
+        /// }
+        /// await pk.Uploads.UploadAsync("Upload Test", paths);
+        /// </code>
+        /// </example>
         public async Task<UploadBatch> UploadAsync(string workspace, IList<string> paths,
             UploadFileOverrides overrides = null, bool doWait = true)
         {

@@ -47,13 +47,20 @@ namespace ProKnow.Upload
         public string Description { get; set; }
 
         /// <summary>
+        /// Used by de-serialization to construct an UploadEntitySummary
+        /// </summary>
+        public UploadEntitySummary()
+        {
+        }
+
+        /// <summary>
         /// Creates an entity summary
         /// </summary>
         /// <param name="patients">Interacts with patients in a ProKnow organization</param>
         /// <param name="workspaceId">The workspace ID</param>
         /// <param name="patientId">The patient ID</param>
         /// <param name="uploadStatusResult">The upload status result</param>
-        public UploadEntitySummary(Patients patients, string workspaceId, string patientId, UploadStatusResultEntity uploadStatusResult)
+        internal UploadEntitySummary(Patients patients, string workspaceId, string patientId, UploadStatusResultEntity uploadStatusResult)
         {
             _patients = patients;
             WorkspaceId = workspaceId;
@@ -69,6 +76,22 @@ namespace ProKnow.Upload
         /// Gets the complete representation of the entity
         /// </summary>
         /// <returns>A complete representation of the entity</returns>
+        /// <example>This example shows how to get a list of entities associated with a given upload:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Collections.Generic;
+        /// using System.Linq;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
+        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "DICOM");
+        /// var entityItems = new List&lt;EntityItem&gt;();
+        /// foreach (var patient in uploadBatch.Patients)
+        /// {
+        ///     entityItems.AddRange(await Task.WhenAll(patient.Entities.Select(async s => await s.GetAsync())));
+        /// }
+        /// </code>
+        /// </example>
         public async Task<EntityItem> GetAsync()
         {
             var patientItem = await _patients.GetAsync(WorkspaceId, PatientId);

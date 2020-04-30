@@ -3,12 +3,12 @@ using ProKnow.Test;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace ProKnow.Patient.Entities.Test
+namespace ProKnow.Patient.Registrations.Test
 {
     [TestClass]
-    public class DoseItemTest
+    public class SroItemTest
     {
-        private static string _patientMrnAndName = "SDK-DoseItemTest";
+        private static string _patientMrnAndName = "SDK-SroItemTest";
         private static ProKnowApi _proKnow = TestSettings.ProKnow;
         private static string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
 
@@ -48,21 +48,21 @@ namespace ProKnow.Patient.Entities.Test
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
-            var entitySummaries = patientItem.FindEntities(e => e.Type == "dose");
-            var doseItem = await entitySummaries[0].GetAsync() as DoseItem;
+            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
+            var sroSummary = patientItem.Studies[0].Sros[0];
+            var sroItem = await sroSummary.GetAsync();
 
-            // Download the entity to an existing directory using the default filename
+            // Download the SRO to an existing directory using the default filename
             string downloadFolder = Path.Combine(_downloadFolderRoot, testNumber.ToString());
             Directory.CreateDirectory(downloadFolder);
-            string expectedDownloadPath = Path.Combine(downloadFolder, $"RD.{doseItem.Uid}.dcm");
-            string actualDownloadPath = await doseItem.DownloadAsync(downloadFolder);
+            string expectedDownloadPath = Path.Combine(downloadFolder, $"REG.{sroItem.Uid}.dcm");
+            string actualDownloadPath = await sroItem.DownloadAsync(downloadFolder);
 
             // Make sure it was downloaded to the expected path
             Assert.AreEqual(expectedDownloadPath, actualDownloadPath);
 
             // Compare it to the uploaded one
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RD.dcm");
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm");
             Assert.IsTrue(TestHelper.FileEquals(uploadPath, actualDownloadPath));
         }
 
@@ -75,22 +75,22 @@ namespace ProKnow.Patient.Entities.Test
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
-            var entitySummaries = patientItem.FindEntities(e => e.Type == "dose");
-            var doseItem = await entitySummaries[0].GetAsync() as DoseItem;
+            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
+            var sroSummary = patientItem.Studies[0].Sros[0];
+            var sroItem = await sroSummary.GetAsync();
 
-            // Download the entity to an existing filename
+            // Download the SRO to an existing filename
             string downloadFolder = Path.Combine(_downloadFolderRoot, testNumber.ToString());
             Directory.CreateDirectory(downloadFolder);
-            string expectedDownloadPath = Path.Combine(downloadFolder, "RD.dcm");
+            string expectedDownloadPath = Path.Combine(downloadFolder, "REG.dcm");
             File.WriteAllText(expectedDownloadPath, "This is an existing file!");
-            string actualDownloadPath = await doseItem.DownloadAsync(expectedDownloadPath);
+            string actualDownloadPath = await sroItem.DownloadAsync(expectedDownloadPath);
 
             // Make sure it was downloaded to the expected path
             Assert.AreEqual(expectedDownloadPath, actualDownloadPath);
 
             // Compare it to the uploaded one
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RD.dcm");
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm");
             Assert.IsTrue(TestHelper.FileEquals(uploadPath, actualDownloadPath));
         }
 
@@ -103,20 +103,20 @@ namespace ProKnow.Patient.Entities.Test
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
-            var entitySummaries = patientItem.FindEntities(e => e.Type == "dose");
-            var doseItem = await entitySummaries[0].GetAsync() as DoseItem;
+            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
+            var sroSummary = patientItem.Studies[0].Sros[0];
+            var sroItem = await sroSummary.GetAsync();
 
-            // Download the entity to an existing directory using a specified filename
+            // Download the SRO to an existing directory using a specified filename
             string downloadFolder = Path.Combine(_downloadFolderRoot, testNumber.ToString());
-            string expectedDownloadPath = Path.Combine(downloadFolder, "RD.dcm");
-            string actualDownloadPath = await doseItem.DownloadAsync(expectedDownloadPath);
+            string expectedDownloadPath = Path.Combine(downloadFolder, "REG.dcm");
+            string actualDownloadPath = await sroItem.DownloadAsync(expectedDownloadPath);
 
             // Make sure it was downloaded to the expected path
             Assert.AreEqual(expectedDownloadPath, actualDownloadPath);
 
             // Compare it to the uploaded one
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RD.dcm");
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm");
             Assert.IsTrue(TestHelper.FileEquals(uploadPath, actualDownloadPath));
         }
 
@@ -129,20 +129,20 @@ namespace ProKnow.Patient.Entities.Test
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
-            var entitySummaries = patientItem.FindEntities(e => e.Type == "dose");
-            var doseItem = await entitySummaries[0].GetAsync() as DoseItem;
+            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
+            var sroSummary = patientItem.Studies[0].Sros[0];
+            var sroItem = await sroSummary.GetAsync();
 
-            // Download the entity to an nonexisting directory using a specified filename
+            // Download the SRO to an nonexisting directory using a specified filename
             string downloadFolder = Path.Combine(_downloadFolderRoot, testNumber.ToString());
-            string expectedDownloadPath = Path.Combine(downloadFolder, "grandparent", "parent", "RD.dcm");
-            string actualDownloadPath = await doseItem.DownloadAsync(expectedDownloadPath);
+            string expectedDownloadPath = Path.Combine(downloadFolder, "grandparent", "parent", "REG.dcm");
+            string actualDownloadPath = await sroItem.DownloadAsync(expectedDownloadPath);
 
             // Make sure it was downloaded to the expected path
             Assert.AreEqual(expectedDownloadPath, actualDownloadPath);
 
             // Compare it to the uploaded one
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RD.dcm");
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "REG.dcm");
             Assert.IsTrue(TestHelper.FileEquals(uploadPath, actualDownloadPath));
         }
     }
