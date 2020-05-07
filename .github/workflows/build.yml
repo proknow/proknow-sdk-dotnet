@@ -26,7 +26,7 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
 
-    # Build documentation (see https://github.com/niksteeee/docfx-action)
+    # Build documentation (see https://github.com/nikeee/docfx-action)
     - uses: nikeee/docfx-action@v0.1.0
     - name: Build documentation
       with:
