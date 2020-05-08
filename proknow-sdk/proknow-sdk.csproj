@@ -13,8 +13,6 @@
     <Description>ProKnow.NET SDK is a .NET Standard client and a portable class library for ProKnow</Description>
     <RepositoryUrl>https://github.com/proknow/proknow-sdk-dotnet</RepositoryUrl>
     <PackageProjectUrl>https://github.com/proknow/proknow-sdk-dotnet</PackageProjectUrl>
-    <IncludesSymbols>true</IncludesSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
