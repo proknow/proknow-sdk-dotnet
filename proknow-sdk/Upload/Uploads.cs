@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ProKnow.Exceptions;
 
 namespace ProKnow.Upload
 {
@@ -36,11 +37,12 @@ namespace ProKnow.Upload
         /// <summary>
         /// Upload file(s) asynchronously
         /// </summary>
-        /// <param name="workspace">ID or name of the workspace</param>
+        /// <param name="workspace">The ProKnow ID or name of the workspace</param>
         /// <param name="path">The folder or file path</param>
         /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
         /// <param name="doWait">Indicates whether to wait until all uploads reach a terminal state</param>
         /// <returns>The upload results</returns>
+        /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
         /// <example>This example shows how to upload a directory of files:
         /// <code>
         /// using ProKnow;
@@ -67,11 +69,12 @@ namespace ProKnow.Upload
         /// <summary>
         /// Upload files asynchronously
         /// </summary>
-        /// <param name="workspace">The ProKnow ID for the workspace</param>
+        /// <param name="workspace">The ProKnow ID or name of the workspace</param>
         /// <param name="paths">The folder and/or file paths</param>
         /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
         /// <param name="doWait">Indicates whether to wait until all uploads reach a terminal state</param>
         /// <returns>The upload results</returns>
+        /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
         /// <example>This example shows how to upload a directory of files:
         /// <code>
         /// using ProKnow;

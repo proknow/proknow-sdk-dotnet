@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ProKnow.Exceptions;
 
 namespace ProKnow.Collection
 {
@@ -96,16 +97,14 @@ namespace ProKnow.Collection
         /// <param name="workspace">The ProKnow ID or name of the workspace or null to query for only organization
         /// collections</param>
         /// <returns>Summaries of the collections found</returns>
+        /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
         public async Task<IList<CollectionSummary>> QueryAsync(string workspace = null)
         {
             var queryParameters = new Dictionary<string, object>();
             if (workspace != null)
             {
                 var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
-                if (workspaceItem != null)
-                {
-                    queryParameters.Add("workspace", workspaceItem.Id);
-                }
+                queryParameters.Add("workspace", workspaceItem.Id);
             }
             var json = await _proKnow.Requestor.GetAsync($"/collections", queryParameters);
             return DeserializeCollections(json);

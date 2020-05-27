@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ProKnow.Exceptions;
 
 namespace ProKnow.Collection
 {
@@ -30,6 +31,7 @@ namespace ProKnow.Collection
         /// </summary>
         /// <param name="workspace">The ProKnow ID or name of the workspace in which to the find the patients</param>
         /// <param name="items">The ProKnow IDs of the patients and optional entities to add</param>
+        /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
         public async Task AddAsync(string workspace, IList<CollectionPatientsAddSchema> items)
         {
             var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
@@ -61,6 +63,7 @@ namespace ProKnow.Collection
         /// </summary>
         /// <param name="workspace">The ProKnow ID or name of the workspace in which to the find the patients</param>
         /// <param name="patientIds">The ProKnow IDs of the patients to remove</param>
+        /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
         public async Task RemoveAsync(string workspace, IList<string> patientIds)
         {
             var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);

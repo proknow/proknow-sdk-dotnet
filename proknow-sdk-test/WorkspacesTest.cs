@@ -1,6 +1,7 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Threading.Tasks;
+using ProKnow.Exceptions;
 
 namespace ProKnow.Test
 {
@@ -156,9 +157,33 @@ namespace ProKnow.Test
         }
 
         [TestMethod]
-        public async Task ResolveByNameAsyncTest()
+        public async Task ResolveByIdAsyncTest_InvalidId()
         {
             int testNumber = 8;
+
+            // Create two workspaces
+            var workspaceName1 = $"SDK-{_testClassName}-{testNumber}-A";
+            var workspaceItem1 = await _proKnow.Workspaces.CreateAsync(workspaceName1.ToLower(), workspaceName1);
+            var workspaceName2 = $"SDK-{_testClassName}-{testNumber}-B";
+            var workspaceItem2 = await _proKnow.Workspaces.CreateAsync(workspaceName2.ToLower(), workspaceName2, false);
+
+            // Try to resolve a workspace with an invalid ID
+            var invalidId = "12345678901234567890123456789012";
+            try
+            {
+                await _proKnow.Workspaces.ResolveByIdAsync(invalidId);
+                Assert.Fail();
+            }
+            catch (ProKnowWorkspaceLookupException ex)
+            {
+                Assert.AreEqual(ex.Message, $"There is no workspace with a ProKnow ID of '{invalidId}'.");
+            }
+        }
+
+        [TestMethod]
+        public async Task ResolveByNameAsyncTest()
+        {
+            int testNumber = 9;
 
             // Create two workspaces
             var workspaceName1 = $"SDK-{_testClassName}-{testNumber}-A";
@@ -171,6 +196,29 @@ namespace ProKnow.Test
 
             // Verify that the second workspace was returned
             Assert.AreEqual(workspaceItem2.Id, workspaceItem.Id);
+        }
+
+        [TestMethod]
+        public async Task ResolveByNameAsyncTest_InvalidName()
+        {
+            int testNumber = 10;
+
+            // Create two workspaces
+            var workspaceName1 = $"SDK-{_testClassName}-{testNumber}-A";
+            var workspaceItem1 = await _proKnow.Workspaces.CreateAsync(workspaceName1.ToLower(), workspaceName1);
+            var workspaceName2 = $"SDK-{_testClassName}-{testNumber}-B";
+            var workspaceItem2 = await _proKnow.Workspaces.CreateAsync(workspaceName2.ToLower(), workspaceName2, false);
+
+            // Try to resolve a workspace with an invalid name
+            try
+            {
+                await _proKnow.Workspaces.ResolveByNameAsync("Invalid Name");
+                Assert.Fail();
+            }
+            catch (ProKnowWorkspaceLookupException ex)
+            {
+                Assert.AreEqual(ex.Message, $"There is no workspace with a Name of 'Invalid Name'.");
+            }
         }
     }
 }
