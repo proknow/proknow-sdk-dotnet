@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-
+using ProKnow.Exceptions;
 using ProKnow.Patient.Document;
 
 namespace ProKnow.Patient
@@ -40,6 +40,7 @@ namespace ProKnow.Patient
         /// <param name="birthDate">The patient birth date in the format "YYYY-MM-DD" or null</param>
         /// <param name="sex">The patient sex, one of "M", "F", "O" or null</param>
         /// <returns>The created patient item</returns>
+        /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
         /// <example>This example shows how to create a patient in the workspace called "Clinical":
         /// <code>
         /// using ProKnow;
@@ -49,7 +50,7 @@ namespace ProKnow.Patient
         /// var patient = await pk.Patients.CreateAsync("Clinical");
         /// </code>
         /// </example>
-    public async Task<PatientItem> CreateAsync(string workspace, string mrn, string name, string birthDate = null, string sex = null)
+        public async Task<PatientItem> CreateAsync(string workspace, string mrn, string name, string birthDate = null, string sex = null)
         {
             var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
             var properties = new Dictionary<string, object>() { { "mrn", mrn }, { "name", name }, { "birth_date", birthDate }, { "sex", sex } };
@@ -128,10 +129,11 @@ namespace ProKnow.Patient
         /// <summary>
         /// Looks up a collection of patients matching a given list of MRNs
         /// </summary>
-        /// <param name="workspace">The workspace ProKnow ID</param>
+        /// <param name="workspace">The ProKnow ID or name of the workspace in which to lookup patients</param>
         /// <param name="mrns">The list of MRNs to look up</param>
         /// <returns>A collection of patient summaries.  If the MRN at a given index cannot be found, the result will contain will
         /// contain null at that index</returns>
+        /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
         /// <example>Use this method to resolve a list of patient MRNs.  Just provide the MRNs as a list for the second argument:
         /// <code>
         /// using ProKnow;
@@ -154,9 +156,10 @@ namespace ProKnow.Patient
         /// <summary>
         /// Queries the ProKnow API for the collection of patient summaries
         /// </summary>
-        /// <param name="workspace">ID or name of the workspace containing the patients</param>
+        /// <param name="workspace">The ProKnow ID or name of the workspace containing the patients</param>
         /// <param name="searchString">If provided, returns only the patients whose MRN or name match the parameter</param>
         /// <returns>A collection of patient summaries</returns>
+        /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
         /// <example>This example queries the patients belonging to the Clinical workspace and prints the name of each patient:
         /// <code>
         /// using ProKnow;
