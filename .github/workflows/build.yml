@@ -44,7 +44,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: nuget-artifact
-        path: **/*.nupkg
+        path: "**/*.nupkg"
 
   deploy:
     if: github.ref == 'refs/heads/master'
@@ -68,7 +68,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: nuget-artifact
-        path: **/*.nupkg
+        path: "**/*.nupkg"
 
     - name: Push package to NuGet
       run: dotnet nuget push **/*.nupkg
