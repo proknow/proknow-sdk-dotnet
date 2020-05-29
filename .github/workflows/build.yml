@@ -30,9 +30,21 @@ jobs:
       uses: nikeee/docfx-action@v0.1.0
       with:
         args: docs/docfx.json
+        
+    - name: Upload documentation site artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: docfx-artifact
+        path: docs/_site
 
     - name: Pack NuGet package
       run: dotnet pack --configuration Release
+      
+    - name: Upload NuGet package artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: nuget-artifact
+        path: **/*.nupkg
 
   deploy:
     if: github.ref == 'refs/heads/master'
@@ -40,11 +52,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     
+    - name: Download documentation site artifact
+      uses: actions/download-artifact@master
+      with:
+        name: docfx-artifact
+        path: docs/_site
+
     - name: Publish documentation site to GitHub Pages (see https://github.com/maxheld83/ghpages)
       uses: maxheld83/ghpages@v0.3.0
       env:
         BUILD_DIR: docs/_site
         GH_PAT: ${{ secrets.GH_PAT }}
+      
+    - name: Download NuGet package artifact
+      uses: actions/download-artifact@master
+      with:
+        name: nuget-artifact
+        path: **/*.nupkg
 
     - name: Push package to NuGet
       run: dotnet nuget push **/*.nupkg
