@@ -47,6 +47,27 @@ namespace ProKnow.Patient.Test
         }
 
         [TestMethod]
+        public async Task CreateStructureSetAsyncTest()
+        {
+            int testNumber = 1;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
+
+            // Verify patient is found
+            Assert.IsNotNull(await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Mrn == patientItem.Mrn));
+
+            // Create a structure set
+            var entitySummary = await patientItem.CreateStructureSetAsync("Peaches", "na");
+
+            // Verify that the structure set was created
+            Assert.AreEqual("Peaches", (await entitySummary.GetAsync() as StructureSetItem).Data.Name);
+        }
+
+        [TestMethod]
         public async Task DeleteAsyncTest()
         {
             int testNumber = 1;
