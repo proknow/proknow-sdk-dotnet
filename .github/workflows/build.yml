@@ -2,53 +2,76 @@ name: build
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
     steps:
 
-    # Set up .NET Core
-    - uses: actions/checkout@v2
+    - name: Check out repository
+      uses: actions/checkout@v2
+
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
 
-    # Install dependencies (NuGet packages)
-    - name: Install dependencies
+    - name: Install dependencies (NuGet packages)
       run: dotnet restore
 
-    # Build release version
-    - name: Build
+    - name: Build release version
       run: dotnet build --configuration Release --no-restore
 
-    # Build documentation (see https://github.com/nikeee/docfx-action)
-    - uses: nikeee/docfx-action@v0.1.0
-    - name: Build documentation
+    - name: Build documentation site (see https://github.com/nikeee/docfx-action)
+      uses: nikeee/docfx-action@v0.1.0
       with:
         args: docs/docfx.json
+        
+    - name: Upload documentation site artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: docfx-artifact
+        path: docs/_site
 
-    # Publish generated documentation site to GitHub Pages (see https://github.com/maxheld83/ghpages)
-    - uses: maxheld83/ghpages@v0.3.0
-    - name: Publish documentation site to GitHub Pages
-      env:
-        BUILD_DIR: docs/_site
-        GH_PAT: ${{ secrets.GH_PAT }}
+    - name: Pack NuGet package
+      run: dotnet pack --configuration Release
+      
+    - name: Upload NuGet package artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: nuget-artifact
+        path: "**/*.nupkg"
 
   deploy:
+    if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
     steps:
+    
+    - name: Download documentation site artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: docfx-artifact
+        path: docs/_site
 
-    # Publish NuGet package
-    - uses: actions/checkout@v2
-    - name: Pack NuGet package
-      run: dotnet pack --configuration Release
+    - name: Publish documentation site to GitHub Pages (see https://github.com/maxheld83/ghpages)
+      uses: maxheld83/ghpages@v0.3.0
+      env:
+        BUILD_DIR: docs/_site
+        GH_PAT: ${{ secrets.GH_PAT }}
+      
+    - name: Download NuGet package artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: nuget-artifact
+        path: "**/*.nupkg"
+
     - name: Push package to NuGet
       run: dotnet nuget push **/*.nupkg
             --api-key ${{ secrets.NUGET_DEPLOY_KEY }}
             --source https://api.nuget.org/v3/index.json
+            --no-symbols true

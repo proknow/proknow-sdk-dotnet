@@ -118,12 +118,23 @@ namespace ProKnow.Test
         /// <param name="testClassName">The test class name</param>
         public static async Task DeleteCollectionsAsync(string testClassName)
         {
-            var collectionSummaries = await _proKnow.Collections.QueryAsync(testClassName);
-            foreach (var collectionSummary in collectionSummaries)
+            // Look for both workspace and organization collections
+            foreach (var workspaceNameOrNull in new string[] { testClassName, null })
             {
-                if (collectionSummary.Name.Contains(testClassName))
+                try
                 {
-                    await _proKnow.Collections.DeleteAsync(collectionSummary.Id);
+                    var collectionSummaries = await _proKnow.Collections.QueryAsync(workspaceNameOrNull);
+                    foreach (var collectionSummary in collectionSummaries)
+                    {
+                        if (collectionSummary.Name.Contains(testClassName))
+                        {
+                            await _proKnow.Collections.DeleteAsync(collectionSummary.Id);
+                        }
+                    }
+                }
+                catch
+                {
+                    // Ignore exception that occurs when workspace does not exist
                 }
             }
         }

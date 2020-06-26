@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ProKnow.Exceptions;
 
 namespace ProKnow
 {
@@ -87,7 +88,8 @@ namespace ProKnow
         /// Resolves a workspace asynchronously
         /// </summary>
         /// <param name="workspace">The ProKnow ID or name of the workspace</param>
-        /// <returns>The workspace item corresponding to the specified ID or name or null if no matching workspace was found</returns>
+        /// <returns>The workspace item corresponding to the specified ID or name</returns>
+        /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
         public Task<WorkspaceItem> ResolveAsync(string workspace)
         {
             Regex regex = new Regex(@"^[0-9a-f]{32}$");
@@ -106,28 +108,40 @@ namespace ProKnow
         /// Resolves a workspace by its ProKnow ID asynchronously
         /// </summary>
         /// <param name="workspaceId">The ProKnow ID of the workspace</param>
-        /// <returns>The workspace item corresponding to the specified ID or null if no matching workspace was found</returns>
-        public Task<WorkspaceItem> ResolveByIdAsync(string workspaceId)
+        /// <returns>The workspace item corresponding to the specified ID</returns>
+        /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
+        public async Task<WorkspaceItem> ResolveByIdAsync(string workspaceId)
         {
             if (String.IsNullOrWhiteSpace(workspaceId))
             {
-                throw new ArgumentException("The workspace ID must be specified.");
+                throw new ArgumentException("The workspace ProKnow ID must be specified.");
             }
-            return FindAsync(t => t.Id == workspaceId);
+            var workspaceItem = await FindAsync(t => t.Id == workspaceId);
+            if (workspaceItem == null)
+            {
+                throw new ProKnowWorkspaceLookupException($"There is no workspace with a ProKnow ID of '{workspaceId}'.");
+            }
+            return workspaceItem;
         }
 
         /// <summary>
         /// Resolves a workspace by its name asynchronously
         /// </summary>
         /// <param name="workspaceName">The name of the workspace</param>
-        /// <returns>The workspace item corresponding to the specified name or null if no matching workspace was found</returns>
-        public Task<WorkspaceItem> ResolveByNameAsync(string workspaceName)
+        /// <returns>The workspace item corresponding to the specified name</returns>
+        /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
+        public async Task<WorkspaceItem> ResolveByNameAsync(string workspaceName)
         {
             if (String.IsNullOrWhiteSpace(workspaceName))
             {
                 throw new ArgumentException("The workspace name must be specified.");
             }
-            return FindAsync(t => t.Name == workspaceName);
+            var workspaceItem = await FindAsync(t => t.Name == workspaceName);
+            if (workspaceItem == null)
+            {
+                throw new ProKnowWorkspaceLookupException($"There is no workspace with a Name of '{workspaceName}'.");
+            }
+            return workspaceItem;
         }
 
         /// <summary>
