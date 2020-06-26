@@ -27,6 +27,24 @@ Once branch changes have been merged into the master branch, the build pipeline 
 can then be viewed on [Github Pages](http://proknow.github.io/proknow-sdk-dotnet).
 
 ## Running Tests
+
+### Test Data
+The project test data is managed using [Git Large File Storage](https://github.com/git-lfs/git-lfs).  This tool must be
+installed on a developers workstation in order for the data files to contain the actual contents rather than pointers.
+Follow the instructions in the provided link for your platform.
+
+Once git-lfs has been installed on your workstation, initialize the use of it by running:
+```
+git lfs install
+```
+
+If the repository had already been cloned before git-lfs was installed, replace the pointers in the data files with the
+actual content by running this command from the project directory:
+```
+git lfs fetch
+```
+
+### Access to ProKnow
 The tests require access to ProKnow in order to create temporary custom metrics, scorecard templates, and workspaces.
 
 Create a .runsettings file in the solution folder with the following content, edited appropriately:
