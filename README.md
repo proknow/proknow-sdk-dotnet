@@ -41,7 +41,7 @@ git lfs install
 If the repository had already been cloned before git-lfs was installed, replace the pointers in the data files with the
 actual content by running this command from the project directory:
 ```
-git lfs fetch
+git lfs checkout
 ```
 
 ### Access to ProKnow
