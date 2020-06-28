@@ -6,6 +6,11 @@
     public class ProKnowHttpException : ProKnowException
     {
         /// <summary>
+        /// The HTTP status code
+        /// </summary>
+        public string StatusCode { get; private set; }
+
+        /// <summary>
         /// Creates a ProKnowHttpException
         /// </summary>
         /// <param name="statusCode">The status code</param>
@@ -13,6 +18,7 @@
         public ProKnowHttpException(string statusCode, string body = null)
             : base($"HttpError({statusCode}{(body != null ? $", {body}" : "")})")
         {
+            StatusCode = statusCode;
         }
     }
 }
