@@ -4,19 +4,21 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using ProKnow.Exceptions;
 
 namespace ProKnow.Patient.Entities
 {
     /// <summary>
     /// Represents a structure set for a patient
     /// </summary>
-    public class StructureSetItem : EntityItem
+    public class StructureSetItem : EntityItem, IAsyncDisposable
     {
         private const int RETRY_DELAY = 100;
         private const int MAX_TOTAL_RETRY_DELAY = 30000;
         private const int MAX_RETRIES = MAX_TOTAL_RETRY_DELAY / RETRY_DELAY;
 
-        //todo--_lock, _renewer
+        private StructureSetDraftLockRenewer _draftLockRenewer;
+        private bool _isDisposed;
 
         /// <summary>
         /// Indicates whether this version is editable
@@ -29,6 +31,12 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         [JsonIgnore]
         public bool IsDraft { get; protected set; }
+
+        /// <summary>
+        /// The draft lock
+        /// </summary>
+        [JsonIgnore]
+        public StructureSetDraftLock DraftLock { get; set; }
 
         //todo--Add Versions property
 
@@ -88,13 +96,160 @@ namespace ProKnow.Patient.Entities
             return _proKnow.Requestor.StreamAsync(route, file);
         }
 
-        //todo--Implement DraftAsync method
+        /// <summary>
+        /// Creates a draft if one does not already exist for the structure set or obtains the lock
+        /// </summary>
+        /// <returns>A draft structure set item</returns>
+        public async Task<StructureSetItem> DraftAsync()
+        {
+            StructureSetDraftLock draftLock = null;
+            try
+            {
+                var lockJson = await _proKnow.Requestor.PostAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft");
+                draftLock = JsonSerializer.Deserialize<StructureSetDraftLock>(lockJson);
+            }
+            catch (ProKnowHttpException ex)
+            {
+                if (ex.StatusCode != "Conflict")
+                {
+                    throw ex;
+                }
+                var lockJson = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft/lock");
+                draftLock = JsonSerializer.Deserialize<StructureSetDraftLock>(lockJson);
+            }
+            var queryParameters = new Dictionary<string, object>();
+            queryParameters.Add("version", "draft");
+            var responseJson = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}", queryParameters);
+            var structureSetItem = JsonSerializer.Deserialize<StructureSetItem>(responseJson);
+            structureSetItem.PostProcessDeserialization(_proKnow, WorkspaceId);
+            structureSetItem.IsEditable = true;
+            structureSetItem.IsDraft = true;
+            structureSetItem.DraftLock = draftLock;
+            structureSetItem._draftLockRenewer = new StructureSetDraftLockRenewer(_proKnow, structureSetItem);
+            structureSetItem._draftLockRenewer.Start();
+            structureSetItem._isDisposed = false;
+            return structureSetItem;
+        }
 
-        //todo--Implement ReleaseLockAsync method
+        /// <summary>
+        /// Releases the draft lock asynchronously
+        /// </summary>
+        public async Task ReleaseLockAsync()
+        {
+            if (IsEditable)
+            {
+                await _proKnow.Requestor.DeleteAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft/lock/{DraftLock.Id}");
+                DraftLock = null;
+                IsEditable = false;
+            }
+        }
 
-        //todo--Implement StartRenewer method
+        /// <summary>
+        /// Starts the draft lock renewer
+        /// </summary>
+        public void StartRenewer()
+        {
+            if (IsEditable)
+            {
+                _draftLockRenewer = new StructureSetDraftLockRenewer(_proKnow, this);
+                _draftLockRenewer.Start();
+            }
+        }
 
-        //todo--Implement StopRenewer method
+        /// <summary>
+        /// Stops the draft lock renewer
+        /// </summary>
+        public void StopRenewer()
+        {
+            if (IsEditable && _draftLockRenewer != null)
+            {
+                _draftLockRenewer.Stop();
+                _draftLockRenewer = null;
+            }
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            // Perform async cleanup.
+            await DisposeAsyncCore();
+
+            // Dispose of managed resources.
+            Dispose(false);
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual async ValueTask DisposeAsyncCore()
+        {
+            StopRenewer();
+            await ReleaseLockAsync();
+        }
+
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_isDisposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                // TODO: dispose managed state (managed objects).
+            }
+
+            // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+            // TODO: set large fields to null.
+
+            _isDisposed = true;
+        }
+
+
+
+        ///// <summary>
+        ///// Disposes of managed resources
+        ///// </summary>
+        //public async ValueTask Dispose()
+        //{
+        //    await Dispose(true);
+        //    GC.SuppressFinalize(this);
+        //}
+
+        ///// <summary>
+        ///// Disposes of managed resources
+        ///// </summary>
+        ///// <param name="disposing">True if disposing</param>
+        //protected virtual async ValueTask Dispose(bool disposing)
+        //{
+        //    if (!_isDisposed)
+        //        return;
+
+        //    if (disposing)
+        //    {
+        //        StopRenewer();
+        //        await ReleaseLockAsync();
+        //    }
+
+        //    _isDisposed = true;
+        //}
+
+        ///// <summary>
+        ///// Disposes of managed resources asynchronously
+        ///// </summary>
+        //public virtual ValueTask DisposeAsync()
+        //{
+        //    try
+        //    {
+        //        //todo--fix this!!!
+        //        Dispose(true);
+        //        GC.SuppressFinalize(this);
+        //        return default;
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        return new ValueTask(Task.FromException(exception));
+        //    }
+        //}
 
         /// <summary>
         /// Finishes initialization of object after deserialization from JSON
@@ -105,10 +260,11 @@ namespace ProKnow.Patient.Entities
         {
             base.PostProcessDeserialization(proKnow, workspaceId);
 
-            //todo--_lock = null; _renewer = null
-
+            _draftLockRenewer = null;
+            _isDisposed = false;
             IsEditable = false;
             IsDraft = false;
+            DraftLock = null;
 
             //todo--post process Versions deserialization
         }
