@@ -30,7 +30,7 @@ namespace ProKnow.Patient.Entities
         /// The ROIs
         /// </summary>
         [JsonPropertyName("rois")]
-        public Roi[] Rois { get; set; }
+        public StructureSetRoiItem[] Rois { get; set; }
 
         /// <summary>
         /// Properties encountered during deserialization without matching members

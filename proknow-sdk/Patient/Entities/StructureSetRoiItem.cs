@@ -6,7 +6,7 @@ namespace ProKnow.Patient.Entities
     /// <summary>
     /// Represents a region of interest (ROI) in a structure set
     /// </summary>
-    public class Roi
+    public class StructureSetRoiItem
     {
         /// <summary>
         /// The ProKnow ID
@@ -25,8 +25,6 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         [JsonPropertyName("color")]
         public int[] Color { get; set; }
-
-        //todo--Add private Key property
 
         /// <summary>
         /// The name
