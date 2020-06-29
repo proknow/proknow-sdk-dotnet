@@ -38,6 +38,12 @@ namespace ProKnow.Patient.Entities
         [JsonIgnore]
         public StructureSetDraftLock DraftLock { get; set; }
 
+        /// <summary>
+        /// The regions of interest (ROIs)
+        /// </summary>
+        [JsonIgnore]
+        public StructureSetRoiItem[] Rois { get; private set; }
+
         //todo--Add Versions property
 
         /// <summary>
@@ -161,31 +167,37 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         public void StopRenewer()
         {
-            if (IsEditable && _draftLockRenewer != null)
+            if (_draftLockRenewer != null)
             {
                 _draftLockRenewer.Stop();
                 _draftLockRenewer = null;
             }
         }
 
+        /// <summary>
+        /// Dispose of resources
+        /// </summary>
         public async ValueTask DisposeAsync()
         {
-            // Perform async cleanup.
             await DisposeAsyncCore();
-
-            // Dispose of managed resources.
             Dispose(false);
-            // Suppress finalization.
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Dispose of resources
+        /// </summary>
+        /// <returns></returns>
         protected virtual async ValueTask DisposeAsyncCore()
         {
             StopRenewer();
             await ReleaseLockAsync();
         }
 
-
+        /// <summary>
+        /// Dispose of resources
+        /// </summary>
+        /// <param name="disposing">True if disposing</param>
         protected virtual void Dispose(bool disposing)
         {
             if (_isDisposed)
@@ -195,61 +207,11 @@ namespace ProKnow.Patient.Entities
 
             if (disposing)
             {
-                // TODO: dispose managed state (managed objects).
+                // nothing to do; already done by DisposeAsyncCore
             }
-
-            // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-            // TODO: set large fields to null.
 
             _isDisposed = true;
         }
-
-
-
-        ///// <summary>
-        ///// Disposes of managed resources
-        ///// </summary>
-        //public async ValueTask Dispose()
-        //{
-        //    await Dispose(true);
-        //    GC.SuppressFinalize(this);
-        //}
-
-        ///// <summary>
-        ///// Disposes of managed resources
-        ///// </summary>
-        ///// <param name="disposing">True if disposing</param>
-        //protected virtual async ValueTask Dispose(bool disposing)
-        //{
-        //    if (!_isDisposed)
-        //        return;
-
-        //    if (disposing)
-        //    {
-        //        StopRenewer();
-        //        await ReleaseLockAsync();
-        //    }
-
-        //    _isDisposed = true;
-        //}
-
-        ///// <summary>
-        ///// Disposes of managed resources asynchronously
-        ///// </summary>
-        //public virtual ValueTask DisposeAsync()
-        //{
-        //    try
-        //    {
-        //        //todo--fix this!!!
-        //        Dispose(true);
-        //        GC.SuppressFinalize(this);
-        //        return default;
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        return new ValueTask(Task.FromException(exception));
-        //    }
-        //}
 
         /// <summary>
         /// Finishes initialization of object after deserialization from JSON
@@ -265,7 +227,11 @@ namespace ProKnow.Patient.Entities
             IsEditable = false;
             IsDraft = false;
             DraftLock = null;
-
+            Rois = Data.Rois;
+            foreach (var roi in Rois)
+            {
+                roi.PostProcessDeserialization(proKnow, workspaceId, this);
+            }
             //todo--post process Versions deserialization
         }
 
