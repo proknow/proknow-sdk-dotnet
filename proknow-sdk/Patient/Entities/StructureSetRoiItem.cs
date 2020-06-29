@@ -8,6 +8,15 @@ namespace ProKnow.Patient.Entities
     /// </summary>
     public class StructureSetRoiItem
     {
+        private ProKnowApi _proKnow;
+        private StructureSetItem _structureSetItem;
+
+        /// <summary>
+        /// The ProKnow ID for the workspace
+        /// </summary>
+        [JsonIgnore]
+        public string WorkspaceId { get; internal set; }
+
         /// <summary>
         /// The ProKnow ID
         /// </summary>
@@ -73,6 +82,17 @@ namespace ProKnow.Patient.Entities
             return Name;
         }
 
-        //todo--Add PostProcessDeserialization to initialize requestor, workspace ID, and structure set ID properties
+        /// <summary>
+        /// Constructs a StructureSetRoiItem
+        /// </summary>
+        /// <param name="proKnow">The root object for interfacing with the ProKnow API</param>
+        /// <param name="workspaceId">The ProKnow ID for the workspace</param>
+        /// <param name="structureSetItem">The parent structure set</param>
+        internal void PostProcessDeserialization(ProKnowApi proKnow, string workspaceId, StructureSetItem structureSetItem)
+        {
+            _proKnow = proKnow;
+            _structureSetItem = structureSetItem;
+            WorkspaceId = workspaceId;
+        }
     }
 }
