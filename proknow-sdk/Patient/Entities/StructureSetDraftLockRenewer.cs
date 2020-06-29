@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Globalization;
 using System.Text.Json;
 using System.Threading;
+using ProKnow.Exceptions;
 
 namespace ProKnow.Patient.Entities
 {
@@ -50,7 +50,7 @@ namespace ProKnow.Patient.Entities
                 {
                     period = new TimeSpan(0);
                 }
-                _timer = new Timer(RunAsync, null, new TimeSpan(0), period);
+                _timer = new Timer(Run, null, new TimeSpan(0), period);
                 _hasStarted = true;
             }
         }
@@ -67,10 +67,26 @@ namespace ProKnow.Patient.Entities
         /// <summary>
         /// The TimerCallback delegate that renews the draft lock
         /// </summary>
-        private async void RunAsync(Object notUsed)
+        private void Run(Object notUsed)
         {
-            var json = await _proKnow.Requestor.PutAsync($"/workspaces/{_structureSet.WorkspaceId}/structuresets/{_structureSet.Id}/draft/lock/{_structureSet.DraftLock.Id}");
-            _structureSet.DraftLock = JsonSerializer.Deserialize<StructureSetDraftLock>(json);
+            try
+            {
+                var json = _proKnow.Requestor.PutAsync($"/workspaces/{_structureSet.WorkspaceId}/structuresets/{_structureSet.Id}/draft/lock/{_structureSet.DraftLock.Id}").Result;
+                _structureSet.DraftLock = JsonSerializer.Deserialize<StructureSetDraftLock>(json);
+            }
+            catch (AggregateException ae)
+            {
+                foreach (var ex in ae.InnerExceptions)
+                {
+                    // Handle the situation where the lock was deleted while the timer was firing (e.g., during unit testing)
+                    if (!(ex is ProKnowHttpException) ||
+                        (ex.Message != "HttpError(Forbidden, Incorrect lock)" &&
+                         ex.Message != "HttpError(Forbidden, Structure set is not currently locked for editing)"))
+                    {
+                        throw ex;
+                    }
+                }
+            }
         }
     }
 }

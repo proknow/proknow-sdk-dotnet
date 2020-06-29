@@ -34,10 +34,7 @@ namespace ProKnow.Patient.Entities.Test
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
-            // Restore lock renewal buffer number in case it was changed
-            _proKnow.LockRenewalBuffer = _lockRenewalBuffer;
-
-            // Delete test workspace
+            // Delete test workspaces
             await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
 
             // Delete download folder
@@ -45,6 +42,9 @@ namespace ProKnow.Patient.Entities.Test
             {
                 Directory.Delete(_downloadFolderRoot, true);
             }
+
+            // Restore lock renewal buffer number in case it was changed
+            _proKnow.LockRenewalBuffer = _lockRenewalBuffer;
         }
 
         [TestMethod]
@@ -176,7 +176,7 @@ namespace ProKnow.Patient.Entities.Test
             _proKnow.LockRenewalBuffer = 360;
 
             // Get a draft of the structure set
-            await using (var draft = await structureSetItem.DraftAsync())
+            using (var draft = await structureSetItem.DraftAsync())
             {
                 // Verify that the same structure set was returned
                 Assert.AreEqual(structureSetItem.Id, draft.Id);
@@ -224,29 +224,32 @@ namespace ProKnow.Patient.Entities.Test
             _proKnow.LockRenewalBuffer = 360;
 
             // Get a draft of the structure set
-            DateTime originalExpiresAt;
-            await using (var draft = await structureSetItem.DraftAsync())
+            string originalLockId, newLockId;
+            DateTime originalExpiresAt, newExpiresAt;
+            using (var draft = await structureSetItem.DraftAsync())
             {
-                // Save the original expiration date
+                // Save the original lock ID and expiration date
+                originalLockId = draft.DraftLock.Id;
                 originalExpiresAt = DateTime.ParseExact(draft.DraftLock.ExpiresAt, "yyyy-MM-dd'T'HH:mm:ss.fff'Z'",
                     CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+
+                // Try to get another draft of the structure set
+                using (var draft2 = await structureSetItem.DraftAsync())
+                {
+                    // Save the new lock ID and expiration date
+                    newLockId = draft2.DraftLock.Id;
+                    newExpiresAt = DateTime.ParseExact(draft2.DraftLock.ExpiresAt, "yyyy-MM-dd'T'HH:mm:ss.fff'Z'",
+                        CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+                }
             }
 
-            // Try to get another draft of the structure set
-            DateTime newExpiresAt;
-            await using (var draft = await structureSetItem.DraftAsync())
-            {
-                // Save the new expiration date
-                newExpiresAt = DateTime.ParseExact(draft.DraftLock.ExpiresAt, "yyyy-MM-dd'T'HH:mm:ss.fff'Z'",
-                    CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
-            }
-
-            // Verify that the expiration dates are different
-            Assert.AreNotEqual(newExpiresAt, originalExpiresAt);
+            // Verify that a new lock was obtained
+            Assert.AreNotEqual(originalLockId, newLockId);
+            Assert.AreNotEqual(originalExpiresAt, newExpiresAt);
         }
 
         [TestMethod]
-        public async Task IDisposableAsyncTest()
+        public async Task IDisposableTest()
         {
             var testNumber = 7;
 
@@ -266,7 +269,7 @@ namespace ProKnow.Patient.Entities.Test
             Assert.IsNotNull(draft.DraftLock);
 
             // Dispose of the structure set
-            await draft.DisposeAsync();
+            draft.Dispose();
 
             // Verify that the draft lock was removed when the structure set was disposed
             Assert.IsNull(draft.DraftLock);

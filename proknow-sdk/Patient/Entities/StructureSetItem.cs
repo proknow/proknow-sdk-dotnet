@@ -11,7 +11,7 @@ namespace ProKnow.Patient.Entities
     /// <summary>
     /// Represents a structure set for a patient
     /// </summary>
-    public class StructureSetItem : EntityItem, IAsyncDisposable
+    public class StructureSetItem : EntityItem, IDisposable
     {
         private const int RETRY_DELAY = 100;
         private const int MAX_TOTAL_RETRY_DELAY = 30000;
@@ -19,6 +19,7 @@ namespace ProKnow.Patient.Entities
 
         private StructureSetDraftLockRenewer _draftLockRenewer;
         private bool _isDisposed;
+        private bool disposedValue;
 
         /// <summary>
         /// Indicates whether this version is editable
@@ -111,6 +112,7 @@ namespace ProKnow.Patient.Entities
             StructureSetDraftLock draftLock = null;
             try
             {
+                // Create a structure set draft
                 var lockJson = await _proKnow.Requestor.PostAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft");
                 draftLock = JsonSerializer.Deserialize<StructureSetDraftLock>(lockJson);
             }
@@ -120,6 +122,8 @@ namespace ProKnow.Patient.Entities
                 {
                     throw ex;
                 }
+
+                // Get the structure set draft lock
                 var lockJson = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft/lock");
                 draftLock = JsonSerializer.Deserialize<StructureSetDraftLock>(lockJson);
             }
@@ -138,13 +142,28 @@ namespace ProKnow.Patient.Entities
         }
 
         /// <summary>
-        /// Releases the draft lock asynchronously
+        /// Releases the draft lock
         /// </summary>
-        public async Task ReleaseLockAsync()
+        public void ReleaseLock()
         {
             if (IsEditable)
             {
-                await _proKnow.Requestor.DeleteAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft/lock/{DraftLock.Id}");
+                try
+                {
+                    _proKnow.Requestor.DeleteAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft/lock/{DraftLock.Id}").Wait();
+                }
+                catch (AggregateException ae)
+                {
+                    foreach (var ex in ae.InnerExceptions)
+                    {
+                        // Handle the situation where the lock expired before we could delete it (e.g., when unit testing)
+                        if (!(ex is ProKnowHttpException) ||
+                            ex.Message != "HttpError(Forbidden, Structure set is not currently locked for editing)")
+                        {
+                            throw ex;
+                        }
+                    }
+                }
                 DraftLock = null;
                 IsEditable = false;
             }
@@ -172,45 +191,6 @@ namespace ProKnow.Patient.Entities
                 _draftLockRenewer.Stop();
                 _draftLockRenewer = null;
             }
-        }
-
-        /// <summary>
-        /// Dispose of resources
-        /// </summary>
-        public async ValueTask DisposeAsync()
-        {
-            await DisposeAsyncCore();
-            Dispose(false);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Dispose of resources
-        /// </summary>
-        /// <returns></returns>
-        protected virtual async ValueTask DisposeAsyncCore()
-        {
-            StopRenewer();
-            await ReleaseLockAsync();
-        }
-
-        /// <summary>
-        /// Dispose of resources
-        /// </summary>
-        /// <param name="disposing">True if disposing</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_isDisposed)
-            {
-                return;
-            }
-
-            if (disposing)
-            {
-                // nothing to do; already done by DisposeAsyncCore
-            }
-
-            _isDisposed = true;
         }
 
         /// <summary>
@@ -264,5 +244,43 @@ namespace ProKnow.Patient.Entities
                 }
             }
         }
+
+        #region IDisposable Implementation
+
+        /// <summary>
+        /// Dispose of resources
+        /// </summary>
+        /// <param name="disposing">If true, this method has been called directly or indirectly by a user's code and
+        /// managed and unmanaged resources can be disposed. If false, the method has been called by the runtime from
+        /// inside the finalizer and you should not reference other objects. Only unmanaged resources can be disposed.
+        /// </param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // Dispose managed state (managed objects)
+                    StopRenewer();
+                    ReleaseLock();
+                }
+
+                // Free unmanaged resources (unmanaged objects) and override finalizer (nothing to do)
+                // Set large fields to null (nothing to do)
+                disposedValue = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose of resources
+        /// </summary>
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }
