@@ -16,10 +16,6 @@ namespace ProKnow.Patient.Entities
     /// </summary>
     public class StructureSetItem : EntityItem, IDisposable
     {
-        private const int RETRY_DELAY = 100;
-        private const int MAX_TOTAL_RETRY_DELAY = 30000;
-        private const int MAX_RETRIES = MAX_TOTAL_RETRY_DELAY / RETRY_DELAY;
-
         private StructureSetDraftLockRenewer _draftLockRenewer;
         private bool _isDisposed;
 
@@ -33,7 +29,7 @@ namespace ProKnow.Patient.Entities
         /// Indicates whether this version is a draft
         /// </summary>
         [JsonIgnore]
-        public bool IsDraft { get; protected set; }
+        public bool IsDraft { get; internal set; }
 
         /// <summary>
         /// The draft lock
@@ -45,9 +41,13 @@ namespace ProKnow.Patient.Entities
         /// The regions of interest (ROIs)
         /// </summary>
         [JsonIgnore]
-        public StructureSetRoiItem[] Rois { get; private set; }
+        public StructureSetRoiItem[] Rois { get; internal set; }
 
-        //todo--Add Versions property
+        /// <summary>
+        /// The object for interacting with versions of the structure set
+        /// </summary>
+        [JsonIgnore]
+        public StructureSetVersions Versions { get; protected set; }
 
         /// <summary>
         /// Type-specific entity data
@@ -55,7 +55,34 @@ namespace ProKnow.Patient.Entities
         [JsonPropertyName("data")]
         public StructureSetData Data { get; set; }
 
-        //todo--Implement ApproveAsync method
+        /// <summary>
+        /// Approves a structure set draft asynchronously
+        /// </summary>
+        /// <param name="label">The label</param>
+        /// <param name="message">The message</param>
+        /// <returns>The newly approved structure set</returns>
+        public async Task<StructureSetItem> ApproveAsync(string label = null, string message = null)
+        {
+            if (!IsEditable)
+            {
+                throw new InvalidOperationError("Item is not editable");
+            }
+            var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
+                new KeyValuePair<string, string>("ProKnow-Lock", DraftLock.Id) };
+            var rois = new List<Dictionary<string, object>>();
+            foreach (var roi in Rois)
+            {
+                rois.Add(new Dictionary<string, object>() { { "id", roi.Id }, { "tag", roi.Tag } });
+            }
+            var properties = new Dictionary<string, object>() { { "version", Data.VersionId }, { "rois", rois }, { "label", label }, { "message", message } };
+            var requestContent = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
+            await _proKnow.Requestor.PostAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft/approve", headerKeyValuePairs, requestContent);
+            StopRenewer();
+            IsEditable = false;
+            IsDraft = false;
+            DraftLock = null;
+            return await Versions.GetAsync("approved");
+        }
 
         /// <summary>
         /// Creates a new ROI as part of the draft structure set
@@ -63,12 +90,12 @@ namespace ProKnow.Patient.Entities
         /// <param name="name">The name</param>
         /// <param name="color">The RGB colors</param>
         /// <param name="type">The type</param>
-           /// <remarks>
+        /// <remarks>
         /// The valid types are'EXTERNAL', 'PTV', 'CTV', 'GTV', 'TREATED_VOLUME', 'IRRAD_VOLUME', 'BOLUS', 'AVOIDANCE',
         /// 'ORGAN', 'MARKER', 'REGISTRATION', 'ISOCENTER', 'CONTRAST_AGENT', 'CAVITY', 'BRACHY_CHANNEL',
         /// 'BRACHY_ACCESSORY', 'BRACHY_SRC_APP', 'BRACHY_CHNL_SHLD', 'SUPPORT', 'FIXATION', 'DOSE_REGION', 'CONTROL'
         /// </remarks>
-     /// <returns>The created ROI</returns>
+        /// <returns>The created ROI</returns>
         public async Task<StructureSetRoiItem> CreateRoiAsync(string name, int[] color, string type)
         {
             if (!IsEditable)
@@ -86,7 +113,29 @@ namespace ProKnow.Patient.Entities
             return structureSetRoiItem;
         }
 
-        //todo--Implement DiscardAsync method
+        /// <summary>
+        /// Discards a structure set draft
+        /// </summary>
+        public async Task DiscardAsync()
+        {
+            if (!IsEditable)
+            {
+                throw new InvalidOperationError("Item is not editable");
+            }
+            var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
+                new KeyValuePair<string, string>("ProKnow-Lock", DraftLock.Id) };
+            var rois = new List<Dictionary<string, object>>();
+            foreach (var roi in Rois)
+            {
+                rois.Add(new Dictionary<string, object>() { { "id", roi.Id }, { "tag", roi.Tag } });
+            }
+            var properties = new Dictionary<string, object>() { { "version", Data.VersionId }, { "rois", rois } };
+            var requestContent = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
+            await _proKnow.Requestor.PostAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft/discard", headerKeyValuePairs, requestContent);
+            StopRenewer();
+            IsEditable = false;
+            DraftLock = null;
+        }
 
         /// <summary>
         /// Downloads this structure set asynchronously as a DICOM object to the specified folder or file
@@ -170,7 +219,24 @@ namespace ProKnow.Patient.Entities
             return structureSetItem;
         }
 
-        //todo--Implement RefreshAsync method
+        /// <summary>
+        /// Refreshes this structure set item asynchronously
+        /// </summary>
+        public async Task RefreshAsync()
+        {
+            if (IsDraft)
+            {
+                throw new InvalidOperationError("Cannot refresh a draft structure set");
+            }
+            var json = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}");
+            var structureSetItem = JsonSerializer.Deserialize<StructureSetItem>(json);
+            Data = structureSetItem.Data;
+            Rois = Data.Rois;
+            foreach (var roi in Rois)
+            {
+                roi.PostProcessDeserialization(_proKnow, WorkspaceId, this);
+            }
+        }
 
         /// <summary>
         /// Releases the draft lock
@@ -243,37 +309,7 @@ namespace ProKnow.Patient.Entities
             {
                 roi.PostProcessDeserialization(proKnow, workspaceId, this);
             }
-            //todo--post process Versions deserialization
-        }
-
-        /// <summary>
-        /// Waits until the structure set version status becomes "ready"
-        /// </summary>
-        private async void WaitForReadyStatus()
-        {
-            var route = $"/workspaces/{WorkspaceId}/structuresets/{Id}/versions/{Data.VersionId}/status";
-            var numberOfRetries = 0;
-            while (true)
-            {
-                var jsonString = await _proKnow.Requestor.GetAsync(route);
-                var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonString);
-                if (keyValuePairs["status"] == "ready")
-                {
-                    break;
-                }
-                else
-                {
-                    if (numberOfRetries < MAX_RETRIES)
-                    {
-                        await Task.Delay(RETRY_DELAY);
-                        numberOfRetries++;
-                    }
-                    else
-                    {
-                        throw new TimeoutException($"Timeout while waiting for structure set version to reach ready status.");
-                    }
-                }
-            }
+            Versions = new StructureSetVersions(_proKnow, WorkspaceId, Id);
         }
 
         #region IDisposable Implementation

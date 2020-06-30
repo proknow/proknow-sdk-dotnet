@@ -1,5 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+using ProKnow.Exceptions;
 
 namespace ProKnow.Patient.Entities
 {
@@ -70,13 +76,49 @@ namespace ProKnow.Patient.Entities
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; }
 
-        //todo--Implement DeleteAsync method
+        /// <summary>
+        /// Deletes this ROI asynchronously
+        /// </summary>
+        /// <returns></returns>
+        public async Task DeleteAsync()
+        {
+            if (!IsEditable())
+            {
+                throw new InvalidOperationError("Item is not editable");
+            }
+            var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
+                new KeyValuePair<string, string>("ProKnow-Lock", _structureSetItem.DraftLock.Id) };
+            await _proKnow.Requestor.DeleteAsync($"/workspaces/{WorkspaceId}/structuresets/{_structureSetItem.Id}/draft/rois/{Id}", headerKeyValuePairs);
+            _structureSetItem.Rois = _structureSetItem.Rois.Where(r => r.Id != Id).ToArray();
+        }
 
         //todo--Implement GetDataAsync method
 
-        //todo--Implement IsEditable method
+        /// <summary>
+        /// Indicates whether this ROI is editable
+        /// </summary>
+        /// <returns>True if this ROI is editable; otherwise false</returns>
+        public bool IsEditable()
+        {
+            return _structureSetItem.IsEditable;
+        }
 
-        //todo--Implement SaveAsync method
+        /// <summary>
+        /// Saves changes to the name, color, and type asynchronously
+        /// </summary>
+        /// <returns></returns>
+        public Task SaveAsync()
+        {
+            if (!IsEditable())
+            {
+                throw new InvalidOperationError("Item is not editable");
+            }
+            var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
+                new KeyValuePair<string, string>("ProKnow-Lock", _structureSetItem.DraftLock.Id) };
+            var properties = new Dictionary<string, object>() { { "name", Name }, { "color", Color }, { "type", Type } };
+            var requestContent = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
+            return _proKnow.Requestor.PostAsync($"/workspaces/{WorkspaceId}/structuresets/{_structureSetItem.Id}/draft/rois/{Id}", headerKeyValuePairs, requestContent);
+        }
 
         /// <summary>
         /// Provides a string representation of this object
@@ -88,7 +130,7 @@ namespace ProKnow.Patient.Entities
         }
 
         /// <summary>
-        /// Constructs a StructureSetRoiItem
+        /// Finishes initialization of object after deserialization from JSON
         /// </summary>
         /// <param name="proKnow">The root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The ProKnow ID for the workspace</param>
