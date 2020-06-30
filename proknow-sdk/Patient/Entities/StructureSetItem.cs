@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -19,7 +22,6 @@ namespace ProKnow.Patient.Entities
 
         private StructureSetDraftLockRenewer _draftLockRenewer;
         private bool _isDisposed;
-        private bool disposedValue;
 
         /// <summary>
         /// Indicates whether this version is editable
@@ -55,7 +57,34 @@ namespace ProKnow.Patient.Entities
 
         //todo--Implement ApproveAsync method
 
-        //todo--Implement CreateRoiAsync method
+        /// <summary>
+        /// Creates a new ROI as part of the draft structure set
+        /// </summary>
+        /// <param name="name">The name</param>
+        /// <param name="color">The RGB colors</param>
+        /// <param name="type">The type</param>
+           /// <remarks>
+        /// The valid types are'EXTERNAL', 'PTV', 'CTV', 'GTV', 'TREATED_VOLUME', 'IRRAD_VOLUME', 'BOLUS', 'AVOIDANCE',
+        /// 'ORGAN', 'MARKER', 'REGISTRATION', 'ISOCENTER', 'CONTRAST_AGENT', 'CAVITY', 'BRACHY_CHANNEL',
+        /// 'BRACHY_ACCESSORY', 'BRACHY_SRC_APP', 'BRACHY_CHNL_SHLD', 'SUPPORT', 'FIXATION', 'DOSE_REGION', 'CONTROL'
+        /// </remarks>
+     /// <returns>The created ROI</returns>
+        public async Task<StructureSetRoiItem> CreateRoiAsync(string name, int[] color, string type)
+        {
+            if (!IsEditable)
+            {
+                throw new InvalidOperationError("Item is not editable");
+            }
+            var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
+                new KeyValuePair<string, string>("ProKnow-Lock", DraftLock.Id) };
+            var properties = new Dictionary<string, object>() { { "name", name }, { "color", color }, { "type", type } };
+            var requestContent = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
+            var responseJson = await _proKnow.Requestor.PostAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft/rois", headerKeyValuePairs, requestContent);
+            var structureSetRoiItem = JsonSerializer.Deserialize<StructureSetRoiItem>(responseJson);
+            Rois = Rois.Concat(new StructureSetRoiItem[1] { structureSetRoiItem }).ToArray();
+            structureSetRoiItem.PostProcessDeserialization(_proKnow, WorkspaceId, this);
+            return structureSetRoiItem;
+        }
 
         //todo--Implement DiscardAsync method
 
@@ -140,6 +169,8 @@ namespace ProKnow.Patient.Entities
             structureSetItem._isDisposed = false;
             return structureSetItem;
         }
+
+        //todo--Implement RefreshAsync method
 
         /// <summary>
         /// Releases the draft lock
@@ -256,7 +287,7 @@ namespace ProKnow.Patient.Entities
         /// </param>
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_isDisposed)
             {
                 if (disposing)
                 {
@@ -267,7 +298,7 @@ namespace ProKnow.Patient.Entities
 
                 // Free unmanaged resources (unmanaged objects) and override finalizer (nothing to do)
                 // Set large fields to null (nothing to do)
-                disposedValue = true;
+                _isDisposed = true;
             }
         }
 

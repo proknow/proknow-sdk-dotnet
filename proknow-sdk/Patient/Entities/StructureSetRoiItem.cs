@@ -56,6 +56,11 @@ namespace ProKnow.Patient.Entities
         /// <summary>
         /// The type
         /// </summary>
+        /// <remarks>
+        /// The valid types are'EXTERNAL', 'PTV', 'CTV', 'GTV', 'TREATED_VOLUME', 'IRRAD_VOLUME', 'BOLUS', 'AVOIDANCE',
+        /// 'ORGAN', 'MARKER', 'REGISTRATION', 'ISOCENTER', 'CONTRAST_AGENT', 'CAVITY', 'BRACHY_CHANNEL',
+        /// 'BRACHY_ACCESSORY', 'BRACHY_SRC_APP', 'BRACHY_CHNL_SHLD', 'SUPPORT', 'FIXATION', 'DOSE_REGION', 'CONTROL'
+        /// </remarks>
         [JsonPropertyName("type")]
         public string Type { get; set; }
 
