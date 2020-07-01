@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ProKnow.Exceptions;
 
-namespace ProKnow.Patient.Entities
+namespace ProKnow.Patient.Entities.StructureSet
 {
     /// <summary>
     /// Represents a region of interest (ROI) in a structure set

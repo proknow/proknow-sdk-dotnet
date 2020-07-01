@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Threading;
 using ProKnow.Exceptions;
 
-namespace ProKnow.Patient.Entities
+namespace ProKnow.Patient.Entities.StructureSet
 {
     /// <summary>
     /// Keeps a structure set lock from expiring

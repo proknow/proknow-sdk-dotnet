@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ProKnow.Patient.Entities
+namespace ProKnow.Patient.Entities.StructureSet
 {
     /// <summary>
     /// Represents a structure set draft lock

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace ProKnow.Patient.Entities
+namespace ProKnow.Patient.Entities.StructureSet
 {
     /// <summary>
     /// A container for the structure set entity data

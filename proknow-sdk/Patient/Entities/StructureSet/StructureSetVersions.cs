@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace ProKnow.Patient.Entities
+namespace ProKnow.Patient.Entities.StructureSet
 {
     /// <summary>
     /// Interacts with the versions of a structure set
