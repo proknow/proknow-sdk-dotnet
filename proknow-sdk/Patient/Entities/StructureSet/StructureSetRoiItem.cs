@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Net.Http;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace ProKnow.Patient.Entities.StructureSet
     {
         private ProKnowApi _proKnow;
         private StructureSetItem _structureSetItem;
+        private JsonSerializerOptions _jsonSerializerOptions;
 
         /// <summary>
         /// The ProKnow ID for the workspace
@@ -39,7 +41,8 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// The RGB components of the color
         /// </summary>
         [JsonPropertyName("color")]
-        public int[] Color { get; set; }
+        [JsonConverter(typeof(ColorJsonConverter))]
+        public Color Color { get; set; }
 
         /// <summary>
         /// The name
@@ -79,7 +82,25 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// <summary>
         /// Deletes this ROI asynchronously
         /// </summary>
-        /// <returns></returns>
+        /// <example>This example shows how to delete an ROI, commit the change, and refresh the structure set:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
+        /// var workspaceItem = await _proKnow.Workspaces.FindAsync(w => w.Name == "Clinical");
+        /// var patientSummary = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Name == "Example");
+        /// var patientItem = await patientSummary.GetAsync();
+        /// var structureSetItem = patientItem.FindEntities(e => e.Type == "structure_set")[0];
+        /// using (var draft = await structureSetItem.DraftAsync())
+        /// {
+        ///     var roiItem = draft.Rois.First(r => r.Name == "PTV");
+        ///     await roiItem.DeleteAsync();
+        ///     await draft.ApproveAsync();
+        /// }
+        /// await structureSetItem.RefreshAsync();
+        /// </code>
+        /// </example>
         public async Task DeleteAsync()
         {
             if (!IsEditable())
@@ -106,7 +127,26 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// <summary>
         /// Saves changes to the name, color, and type asynchronously
         /// </summary>
-        /// <returns></returns>
+        /// <example>This example shows how to modify the name, color, and type of an ROI, commit the change, and
+        /// refresh the structure set:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
+        /// var workspaceItem = await _proKnow.Workspaces.FindAsync(w => w.Name == "Clinical");
+        /// var patientSummary = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Name == "Example");
+        /// var patientItem = await patientSummary.GetAsync();
+        /// var structureSetItem = patientItem.FindEntities(e => e.Type == "structure_set")[0];
+        /// using (var draft = await structureSetItem.DraftAsync())
+        /// {
+        ///     var roiItem = draft.Rois.First(r => r.Name == "PTV");
+        ///     await roiItem.DeleteAsync();
+        ///     await draft.ApproveAsync();
+        /// }
+        /// await structureSetItem.RefreshAsync();
+        /// </code>
+        /// </example>
         public Task SaveAsync()
         {
             if (!IsEditable())
@@ -116,8 +156,8 @@ namespace ProKnow.Patient.Entities.StructureSet
             var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
                 new KeyValuePair<string, string>("ProKnow-Lock", _structureSetItem.DraftLock.Id) };
             var properties = new Dictionary<string, object>() { { "name", Name }, { "color", Color }, { "type", Type } };
-            var requestContent = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
-            return _proKnow.Requestor.PostAsync($"/workspaces/{WorkspaceId}/structuresets/{_structureSetItem.Id}/draft/rois/{Id}", headerKeyValuePairs, requestContent);
+            var requestContent = new StringContent(JsonSerializer.Serialize(properties, _jsonSerializerOptions), Encoding.UTF8, "application/json");
+            return _proKnow.Requestor.PutAsync($"/workspaces/{WorkspaceId}/structuresets/{_structureSetItem.Id}/draft/rois/{Id}", headerKeyValuePairs, requestContent);
         }
 
         /// <summary>
@@ -139,6 +179,8 @@ namespace ProKnow.Patient.Entities.StructureSet
         {
             _proKnow = proKnow;
             _structureSetItem = structureSetItem;
+            _jsonSerializerOptions = new JsonSerializerOptions();
+            _jsonSerializerOptions.Converters.Add(new ColorJsonConverter());
             WorkspaceId = workspaceId;
         }
     }

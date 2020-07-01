@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Test;
 using System;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,6 @@ namespace ProKnow.Patient.Entities.Test
         private static string _patientMrnAndName = "SDK-StructureSetItemTest";
         private static ProKnowApi _proKnow = TestSettings.ProKnow;
         private static int _lockRenewalBuffer = _proKnow.LockRenewalBuffer;
-        private static string _workspaceId;
         private static string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
 
         [ClassInitialize]
@@ -55,7 +55,6 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            _workspaceId = workspaceItem.Id;
 
             // Create a test patient with only an image set
             var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
@@ -69,23 +68,23 @@ namespace ProKnow.Patient.Entities.Test
             using (var draft = await structureSetItem.DraftAsync())
             {
                 // Create a new ROI
-                var returnedRoi = await draft.CreateRoiAsync("new", new int[3] { 12, 34, 56 }, "ORGAN");
+                var returnedRoi = await draft.CreateRoiAsync("new", Color.Magenta, "ORGAN");
 
                 // Verify that the returned ROI has the correct properties
                 Assert.AreEqual("new", returnedRoi.Name);
-                Assert.AreEqual(12, returnedRoi.Color[0]);
-                Assert.AreEqual(34, returnedRoi.Color[1]);
-                Assert.AreEqual(56, returnedRoi.Color[2]);
+                Assert.AreEqual(Color.Magenta.ToArgb(), returnedRoi.Color.ToArgb());
                 Assert.AreEqual("ORGAN", returnedRoi.Type);
 
                 // Verify that the new ROI was added to the structure set with the correct properties
                 var structureSetRoi = draft.Rois.First(r => r.Id == returnedRoi.Id);
                 Assert.AreEqual(returnedRoi.Name, structureSetRoi.Name);
-                Assert.AreEqual(returnedRoi.Color[0], structureSetRoi.Color[0]);
-                Assert.AreEqual(returnedRoi.Color[1], structureSetRoi.Color[1]);
-                Assert.AreEqual(returnedRoi.Color[2], structureSetRoi.Color[2]);
+                Assert.AreEqual(returnedRoi.Color, structureSetRoi.Color);
                 Assert.AreEqual(returnedRoi.Type, structureSetRoi.Type);
+
+                //todo--save the draft
             }
+
+            //todo--verify that the new ROI was added
         }
 
         [TestMethod]
@@ -95,7 +94,6 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            _workspaceId = workspaceItem.Id;
 
             // Create a test patient
             var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
@@ -123,7 +121,6 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            _workspaceId = workspaceItem.Id;
 
             // Create a test patient
             var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
@@ -152,7 +149,6 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            _workspaceId = workspaceItem.Id;
 
             // Create a test patient
             var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
@@ -179,7 +175,6 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            _workspaceId = workspaceItem.Id;
 
             // Create a test patient
             var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
@@ -206,7 +201,6 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            _workspaceId = workspaceItem.Id;
 
             // Create a test patient with a structure set
             var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
@@ -254,7 +248,6 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            _workspaceId = workspaceItem.Id;
 
             // Create a test patient with a structure set
             var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
@@ -296,7 +289,6 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            _workspaceId = workspaceItem.Id;
 
             // Create a test patient with a structure set
             var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);

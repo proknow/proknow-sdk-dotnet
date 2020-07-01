@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -18,6 +19,7 @@ namespace ProKnow.Patient.Entities
     public class StructureSetItem : EntityItem, IDisposable
     {
         private StructureSetDraftLockRenewer _draftLockRenewer;
+        private JsonSerializerOptions _jsonSerializerOptions;
         private bool _isDisposed;
 
         /// <summary>
@@ -97,7 +99,7 @@ namespace ProKnow.Patient.Entities
         /// 'BRACHY_ACCESSORY', 'BRACHY_SRC_APP', 'BRACHY_CHNL_SHLD', 'SUPPORT', 'FIXATION', 'DOSE_REGION', 'CONTROL'
         /// </remarks>
         /// <returns>The created ROI</returns>
-        public async Task<StructureSetRoiItem> CreateRoiAsync(string name, int[] color, string type)
+        public async Task<StructureSetRoiItem> CreateRoiAsync(string name, Color color, string type)
         {
             if (!IsEditable)
             {
@@ -106,8 +108,10 @@ namespace ProKnow.Patient.Entities
             var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
                 new KeyValuePair<string, string>("ProKnow-Lock", DraftLock.Id) };
             var properties = new Dictionary<string, object>() { { "name", name }, { "color", color }, { "type", type } };
-            var requestContent = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
-            var responseJson = await _proKnow.Requestor.PostAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft/rois", headerKeyValuePairs, requestContent);
+            var requestContent = new StringContent(JsonSerializer.Serialize(properties, _jsonSerializerOptions),
+                Encoding.UTF8, "application/json");
+            var responseJson = await _proKnow.Requestor.PostAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft/rois",
+                headerKeyValuePairs, requestContent);
             var structureSetRoiItem = JsonSerializer.Deserialize<StructureSetRoiItem>(responseJson);
             Rois = Rois.Concat(new StructureSetRoiItem[1] { structureSetRoiItem }).ToArray();
             structureSetRoiItem.PostProcessDeserialization(_proKnow, WorkspaceId, this);
@@ -301,6 +305,8 @@ namespace ProKnow.Patient.Entities
             base.PostProcessDeserialization(proKnow, workspaceId);
 
             _draftLockRenewer = null;
+            _jsonSerializerOptions = new JsonSerializerOptions();
+            _jsonSerializerOptions.Converters.Add(new ColorJsonConverter());
             _isDisposed = false;
             IsEditable = false;
             IsDraft = false;
