@@ -179,6 +179,15 @@ namespace ProKnow.Patient.Entities.StructureSet
         }
 
         /// <summary>
+        /// Returns a string that represents the current object
+        /// </summary>
+        /// <returns>A string that represents the current object</returns>
+        public override string ToString()
+        {
+            return Label;
+        }
+
+        /// <summary>
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
         /// <param name="proKnow">The root object for interfacing with the ProKnow API</param>
