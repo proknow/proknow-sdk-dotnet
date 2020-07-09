@@ -72,7 +72,12 @@ namespace ProKnow.Patient.Entities.StructureSet
         public async Task<IList<StructureSetVersionItem>> QueryAsync()
         {
             var json = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{StructureSetId}/versions");
-            return JsonSerializer.Deserialize<IList<StructureSetVersionItem>>(json);
+            var structureSetVersionItems = JsonSerializer.Deserialize<IList<StructureSetVersionItem>>(json);
+            foreach (var structureSetVersionItem in structureSetVersionItems)
+            {
+                structureSetVersionItem.PostProcessDeserialization(_proKnow, this);
+            }
+            return structureSetVersionItems;
         }
     }
 }
