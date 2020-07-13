@@ -30,5 +30,14 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// </summary>
         [JsonPropertyName("expires_in")]
         public int ExpiresIn { get; set; }
+
+        /// <summary>
+        /// Provides a string representation of this object
+        /// </summary>
+        /// <returns>A string representation of this object</returns>
+        public override string ToString()
+        {
+            return $"CreatedAt: {CreatedAt}; ExpiresAt: {ExpiresAt}; ExpiresIn: {ExpiresIn}";
+        }
     }
 }
