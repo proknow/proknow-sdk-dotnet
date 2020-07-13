@@ -106,11 +106,11 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// </item>
         /// </list>
         /// </remarks>
-        public Task<string> DownloadAsync(string path)
+        public async Task<string> DownloadAsync(string path)
         {
             if (IsDraft)
             {
-                throw new ApplicationException("Draft versions of structure sets cannot be downloaded.");
+                throw new InvalidOperationError("Draft versions of structure sets cannot be downloaded.");
             }
             string file;
             if (Directory.Exists(path))
@@ -126,9 +126,9 @@ namespace ProKnow.Patient.Entities.StructureSet
                 }
                 file = path;
             }
-            WaitForReadyStatus();
+            await WaitForReadyStatusAsync();
             var route = $"/workspaces/{WorkspaceId}/structuresets/{StructureSetId}/versions/{VersionId}/dicom";
-            return _proKnow.Requestor.StreamAsync(route, file);
+            return await _proKnow.Requestor.StreamAsync(route, file);
         }
 
         /// <summary>
@@ -155,14 +155,14 @@ namespace ProKnow.Patient.Entities.StructureSet
         {
             if (IsDraft)
             {
-                throw new ApplicationException("Draft versions of structure sets cannot be reverted.");
+                throw new InvalidOperationError("Structure sets cannot be reverted to draft versions.");
             }
-            await _proKnow.Requestor.DeleteAsync($"/workspaces/{WorkspaceId}/structuresets/{StructureSetId}/approve/{VersionId}");
+            await _proKnow.Requestor.PostAsync($"/workspaces/{WorkspaceId}/structuresets/{StructureSetId}/approve/{VersionId}");
             return await _structureSetVersions.GetAsync("approved");
         }
 
         /// <summary>
-        /// Saves this structure set version asynchronously
+        /// Saves the label and message for this structure set version asynchronously
         /// </summary>
         public async Task SaveAsync()
         {
@@ -204,7 +204,7 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// <summary>
         /// Waits until the structure set version status becomes "ready"
         /// </summary>
-        private async void WaitForReadyStatus()
+        private async Task WaitForReadyStatusAsync()
         {
             var route = $"/workspaces/{WorkspaceId}/structuresets/{StructureSetId}/versions/{VersionId}/status";
             var numberOfRetries = 0;
