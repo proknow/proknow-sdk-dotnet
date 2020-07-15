@@ -68,7 +68,7 @@ namespace ProKnow.Patient.Entities
         {
             if (!IsEditable)
             {
-                throw new InvalidOperationError("Item is not editable");
+                throw new InvalidOperationError("Item is not editable.");
             }
             var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
                 new KeyValuePair<string, string>("ProKnow-Lock", DraftLock.Id) };
@@ -103,7 +103,7 @@ namespace ProKnow.Patient.Entities
         {
             if (!IsEditable)
             {
-                throw new InvalidOperationError("Item is not editable");
+                throw new InvalidOperationError("Item is not editable.");
             }
             var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
                 new KeyValuePair<string, string>("ProKnow-Lock", DraftLock.Id) };
@@ -125,7 +125,7 @@ namespace ProKnow.Patient.Entities
         {
             if (!IsEditable)
             {
-                throw new InvalidOperationError("Item is not editable");
+                throw new InvalidOperationError("Item is not editable.");
             }
             var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
                 new KeyValuePair<string, string>("ProKnow-Lock", DraftLock.Id) };
@@ -166,7 +166,7 @@ namespace ProKnow.Patient.Entities
         {
             if (IsDraft)
             {
-                throw new ApplicationException("Draft versions of structure sets cannot be downloaded.");
+                throw new InvalidOperationError("Structure set drafts cannot be downloaded.");
             }
             string file = null;
             if (Directory.Exists(path))
@@ -231,7 +231,7 @@ namespace ProKnow.Patient.Entities
         {
             if (IsDraft)
             {
-                throw new InvalidOperationError("Cannot refresh a draft structure set");
+                throw new InvalidOperationError("Structure set drafts cannot be refreshed.");
             }
             var json = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}");
             var structureSetItem = JsonSerializer.Deserialize<StructureSetItem>(json);
