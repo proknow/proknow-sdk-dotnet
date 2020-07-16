@@ -20,7 +20,9 @@ namespace ProKnow.Collection.Test
         private static CollectionItem _collectionItem;
 
         [ClassInitialize]
+#pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             // Delete test collections, if necessary
             await TestHelper.DeleteCollectionsAsync(_baseName);

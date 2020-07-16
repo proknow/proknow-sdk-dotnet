@@ -15,7 +15,9 @@ namespace ProKnow.Upload.Test
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
 
         [ClassInitialize]
+#pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             // Delete test workspaces, if necessary
             await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
