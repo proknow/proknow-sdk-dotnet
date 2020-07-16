@@ -1,10 +1,15 @@
 # Release History
 
-## v0.0.19
-
 *Disclaimer*
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
+
+## v0.0.20
+
+*Bug fixes*
+- Fix issue limiting threads for uploading to ProKnow
+
+## v0.0.19
 
 *New Features and Enhancements*
 - Renamed Roi to StructureSetRoiItem
