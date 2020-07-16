@@ -170,9 +170,11 @@ namespace ProKnow.Patient.Entities.StructureSet
             {
                 throw new ApplicationException("Draft versions of structure sets cannot be saved.");
             }
-            var properties = new Dictionary<string, object>();
-            properties.Add("label", Label);
-            properties.Add("message", Message);
+            var properties = new Dictionary<string, object>
+            {
+                { "label", Label },
+                { "message", Message }
+            };
             var requestJson = JsonSerializer.Serialize(properties);
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
             await _proKnow.Requestor.PutAsync($"/workspaces/{WorkspaceId}/structuresets/{StructureSetId}/versions/{VersionId}", null, requestContent);

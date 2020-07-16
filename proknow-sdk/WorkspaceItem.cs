@@ -63,10 +63,12 @@ namespace ProKnow
         /// </summary>
         public async Task SaveAsync()
         {
-            var properties = new Dictionary<string, object>();
-            properties.Add("slug", Slug);
-            properties.Add("name", Name);
-            properties.Add("protected", Protected);
+            var properties = new Dictionary<string, object>
+            {
+                { "slug", Slug },
+                { "name", Name },
+                { "protected", Protected }
+            };
             var content = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
             await _proKnow.Requestor.PutAsync($"/workspaces/{Id}", null, content);
         }

@@ -9,9 +9,8 @@ namespace ProKnow.Patient.Test
     [TestClass]
     public class StudySummaryTest
     {
-        private static string _patientMrnAndName = "SDK-StudySummaryTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
+        private static readonly string _patientMrnAndName = "SDK-StudySummaryTest";
+        private static readonly string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)

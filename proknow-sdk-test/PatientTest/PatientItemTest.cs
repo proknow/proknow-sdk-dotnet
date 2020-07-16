@@ -13,9 +13,9 @@ namespace ProKnow.Patient.Test
     [TestClass]
     public class PatientItemTest
     {
-        private static string _testClassName = nameof(PatientItemTest);
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static Uploads _uploads = _proKnow.Uploads;
+        private static readonly string _testClassName = nameof(PatientItemTest);
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly Uploads _uploads = _proKnow.Uploads;
         private static CustomMetricItem _enumCustomMetricItem;
         private static CustomMetricItem _numberCustomMetricItem;
         private static CustomMetricItem _stringCustomMetricItem;
@@ -127,13 +127,15 @@ namespace ProKnow.Patient.Test
             int testNumber = 5;
 
             // Create a workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient with metadata
-            var metadata = new Dictionary<string, object>();
-            metadata.Add(_enumCustomMetricItem.Name, "one");
-            metadata.Add(_numberCustomMetricItem.Name, 1);
-            metadata.Add(_stringCustomMetricItem.Name, "I");
+            var metadata = new Dictionary<string, object>
+            {
+                { _enumCustomMetricItem.Name, "one" },
+                { _numberCustomMetricItem.Name, 1 },
+                { _stringCustomMetricItem.Name, "I" }
+            };
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, null, 0, null, null, metadata);
 
             // Get the resolved metadata
@@ -192,10 +194,12 @@ namespace ProKnow.Patient.Test
             patientItem.Name = $"{testNumber}-Name-A";
             patientItem.BirthDate = "1776-07-04";
             patientItem.Sex = "M";
-            var metadata = new Dictionary<string, object>();
-            metadata.Add(_enumCustomMetricItem.Name, "one");
-            metadata.Add(_numberCustomMetricItem.Name, 1);
-            metadata.Add(_stringCustomMetricItem.Name, "I");
+            var metadata = new Dictionary<string, object>
+            {
+                { _enumCustomMetricItem.Name, "one" },
+                { _numberCustomMetricItem.Name, 1 },
+                { _stringCustomMetricItem.Name, "I" }
+            };
             await patientItem.SetMetadataAsync(metadata);
 
             // Save the changes
@@ -223,17 +227,19 @@ namespace ProKnow.Patient.Test
             int testNumber = 8;
 
             // Create a workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient without metadata
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
             Assert.AreEqual(0, patientItem.Metadata.Keys.Count);
 
             // Set the metadata
-            var metadata = new Dictionary<string, object>();
-            metadata.Add(_enumCustomMetricItem.Name, "one");
-            metadata.Add(_numberCustomMetricItem.Name, 1);
-            metadata.Add(_stringCustomMetricItem.Name, "I");
+            var metadata = new Dictionary<string, object>
+            {
+                { _enumCustomMetricItem.Name, "one" },
+                { _numberCustomMetricItem.Name, 1 },
+                { _stringCustomMetricItem.Name, "I" }
+            };
             await patientItem.SetMetadataAsync(metadata);
 
             // Verify the metadata property was set using resolved ProKnow IDs

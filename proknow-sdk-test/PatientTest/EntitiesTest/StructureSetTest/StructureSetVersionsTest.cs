@@ -10,8 +10,7 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
     [TestClass]
     public class StructureSetVersionsTest
     {
-        private static string _patientMrnAndName = "SDK-StructureSetVersionsTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly string _patientMrnAndName = "SDK-StructureSetVersionsTest";
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)

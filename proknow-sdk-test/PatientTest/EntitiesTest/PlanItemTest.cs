@@ -8,10 +8,8 @@ namespace ProKnow.Patient.Entities.Test
     [TestClass]
     public class PlanItemTest
     {
-        private static string _patientMrnAndName = "SDK-PlanItemTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static string _workspaceId;
-        private static string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
+        private static readonly string _patientMrnAndName = "SDK-PlanItemTest";
+        private static readonly string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
@@ -47,7 +45,7 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            _workspaceId = workspaceItem.Id;
+            var workspaceId = workspaceItem.Id;
 
             // Create a test patient
             var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);
@@ -75,7 +73,7 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            _workspaceId = workspaceItem.Id;
+            var workspaceId = workspaceItem.Id;
 
             // Create a test patient
             var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);
@@ -104,7 +102,7 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            _workspaceId = workspaceItem.Id;
+            var workspaceId = workspaceItem.Id;
 
             // Create a test patient
             var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);
@@ -131,7 +129,7 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            _workspaceId = workspaceItem.Id;
+            var workspaceId = workspaceItem.Id;
 
             // Create a test patient
             var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);

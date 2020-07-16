@@ -10,8 +10,8 @@ namespace ProKnow.Upload.Test
     [TestClass]
     public class UploadSroSummaryTest
     {
-        private static string _patientMrnAndName = "SDK-UploadSroSummaryTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly string _patientMrnAndName = "SDK-UploadSroSummaryTest";
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
@@ -50,7 +50,6 @@ namespace ProKnow.Upload.Test
             var uploadSroSummary = uploadBatch.FindSro(Path.Combine(uploadPath, "reg.dcm"));
 
             // Get the full representation of the patient, entities, and SRO
-            var patientItem = await uploadPatientSummary.GetAsync();
             var ctImageSetItem = await uploadCtEntitySummary.GetAsync();
             var mrImageSetItem = await uploadMrEntitySummary.GetAsync();
             var sroItem = await uploadSroSummary.GetAsync() as SroItem;

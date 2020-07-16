@@ -11,8 +11,8 @@ namespace ProKnow.Patient.Test
     [TestClass]
     public class PatientSummaryTest
     {
-        private static string _patientMrnAndName = "SDK-PatientSummaryTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly string _patientMrnAndName = "SDK-PatientSummaryTest";
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
         private static string _workspaceId;
         private static PatientSummary _patientSummary;
 

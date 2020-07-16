@@ -12,8 +12,8 @@ namespace ProKnow.Collection
     /// </summary>
     public class CollectionPatients
     {
-        private ProKnowApi _proKnow;
-        private CollectionItem _collectionItem;
+        private readonly ProKnowApi _proKnow;
+        private readonly CollectionItem _collectionItem;
 
         /// <summary>
         /// Constructs a CollectionPatients object
@@ -51,8 +51,10 @@ namespace ProKnow.Collection
             Dictionary<string, object> queryParameters = null;
             if (_collectionItem.Type == "workspace")
             {
-                queryParameters = new Dictionary<string, object>();
-                queryParameters.Add("workspace", _collectionItem.WorkspaceIds[0]);
+                queryParameters = new Dictionary<string, object>
+                {
+                    { "workspace", _collectionItem.WorkspaceIds[0] }
+                };
             }
             var responseJson = await _proKnow.Requestor.GetAsync(route, queryParameters);
             return DeserializeCollectionPatientSummaries(responseJson);

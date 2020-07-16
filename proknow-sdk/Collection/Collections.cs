@@ -13,7 +13,7 @@ namespace ProKnow.Collection
     /// </summary>
     public class Collections
     {
-        private ProKnowApi _proKnow;
+        private readonly ProKnowApi _proKnow;
 
         /// <summary>
         /// Constructs a collections object
@@ -35,11 +35,13 @@ namespace ProKnow.Collection
         /// <returns>The created collection</returns>
         public async Task<CollectionItem> CreateAsync(string name, string description, string type, IList<string> workspaceIds)
         {
-            var properties = new Dictionary<string, object>();
-            properties.Add("name", name);
-            properties.Add("description", description);
-            properties.Add("type", type);
-            properties.Add("workspaces", workspaceIds);
+            var properties = new Dictionary<string, object>
+            {
+                { "name", name },
+                { "description", description },
+                { "type", type },
+                { "workspaces", workspaceIds }
+            };
             var requestJson = JsonSerializer.Serialize(properties);
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
             var responseJson = await _proKnow.Requestor.PostAsync($"/collections", null, requestContent);

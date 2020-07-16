@@ -21,9 +21,9 @@ namespace ProKnow.Upload
         private const int MAX_TOTAL_RETRY_DELAY = 30000;
         private const int MAX_RETRIES = MAX_TOTAL_RETRY_DELAY / RETRY_DELAY;
 
-        private ProKnowApi _proKnow;
-        private JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
-        private IList<string> _terminalStatuses = new List<string>() { "completed", "pending", "failed" };
+        private readonly ProKnowApi _proKnow;
+        private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+        private readonly IList<string> _terminalStatuses = new List<string>() { "completed", "pending", "failed" };
 
         /// <summary>
         /// Constructs an Uploads object

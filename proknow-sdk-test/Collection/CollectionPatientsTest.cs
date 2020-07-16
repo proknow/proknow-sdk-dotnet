@@ -10,8 +10,8 @@ namespace ProKnow.Collection.Test
     [TestClass]
     public class CollectionPatientsTest
     {
-        private static string _testClassName = nameof(CollectionPatientsTest);
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly string _testClassName = nameof(CollectionPatientsTest);
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)

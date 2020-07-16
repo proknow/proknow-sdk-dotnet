@@ -9,7 +9,7 @@ namespace ProKnow.Upload
     /// </summary>
     public class UploadPatientSummary
     {
-        private Patients _patients;
+        private readonly Patients _patients;
 
         /// <summary>
         /// The workspace ID

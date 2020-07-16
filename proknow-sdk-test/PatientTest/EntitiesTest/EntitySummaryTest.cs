@@ -10,9 +10,9 @@ namespace ProKnow.Patient.Entities.Test
     [TestClass]
     public class EntitySummaryTest
     {
-        private static string _patientMrnAndName = "SDK-EntitySummaryTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static Uploads _uploads = _proKnow.Uploads;
+        private static readonly string _patientMrnAndName = "SDK-EntitySummaryTest";
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly Uploads _uploads = _proKnow.Uploads;
         private static string _workspaceId;
         private static PatientItem _patientItem;
 

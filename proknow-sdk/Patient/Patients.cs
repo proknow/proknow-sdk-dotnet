@@ -14,7 +14,7 @@ namespace ProKnow.Patient
     /// </summary>
     public class Patients
     {
-        private ProKnowApi _proKnow;
+        private readonly ProKnowApi _proKnow;
 
         /// <summary>
         /// Interacts with documents for patients

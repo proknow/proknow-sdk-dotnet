@@ -10,8 +10,7 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
     [TestClass]
     public class StructureSetRoiItemTest
     {
-        private static string _patientMrnAndName = "SDK-StructureSetRoiItemTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly string _patientMrnAndName = "SDK-StructureSetRoiItemTest";
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
@@ -80,14 +79,12 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             Assert.IsFalse(roiItem.IsEditable());
 
             // Get a draft of the structure set
-            using (var draft = await structureSetItem.DraftAsync())
-            {
-                // Get the PTV
-                roiItem = draft.Rois.First(r => r.Name == "PTV");
+            using var draft = await structureSetItem.DraftAsync();
+            // Get the PTV
+            roiItem = draft.Rois.First(r => r.Name == "PTV");
 
-                // Verify that the PTV is editable
-                Assert.IsTrue(roiItem.IsEditable());
-            }
+            // Verify that the PTV is editable
+            Assert.IsTrue(roiItem.IsEditable());
         }
 
         [TestMethod]

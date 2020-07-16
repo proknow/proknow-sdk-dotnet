@@ -8,12 +8,12 @@ namespace ProKnow.Upload
     /// </summary>
     public class UploadBatch
     {
-        private ProKnowApi _proKnow;
-        private string _workspaceId;
-        private Dictionary<string, UploadStatusResult> _fileLookup;
-        private Dictionary<string, UploadPatientSummary> _patientLookup;
-        private Dictionary<string, UploadEntitySummary> _entityLookup;
-        private Dictionary<string, UploadSroSummary> _sroLookup;
+        private readonly ProKnowApi _proKnow;
+        private readonly string _workspaceId;
+        private readonly Dictionary<string, UploadStatusResult> _fileLookup;
+        private readonly Dictionary<string, UploadPatientSummary> _patientLookup;
+        private readonly Dictionary<string, UploadEntitySummary> _entityLookup;
+        private readonly Dictionary<string, UploadSroSummary> _sroLookup;
 
         /// <summary>
         /// The collection of patient summaries

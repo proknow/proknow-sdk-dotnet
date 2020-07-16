@@ -8,8 +8,8 @@ namespace ProKnow.Test
     [TestClass]
     public class WorkspacesTest
     {
-        private static string _testClassName = nameof(WorkspacesTest);
-        private ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly string _testClassName = nameof(WorkspacesTest);
+        private readonly ProKnowApi _proKnow = TestSettings.ProKnow;
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
@@ -111,7 +111,7 @@ namespace ProKnow.Test
             var workspaceName1 = $"SDK-{_testClassName}-{testNumber}-A";
             var workspaceItem1 = await _proKnow.Workspaces.CreateAsync(workspaceName1.ToLower(), workspaceName1);
             var workspaceName2 = $"SDK-{_testClassName}-{testNumber}-B";
-            var workspaceItem2 = await _proKnow.Workspaces.CreateAsync(workspaceName2.ToLower(), workspaceName2, false);
+            await _proKnow.Workspaces.CreateAsync(workspaceName2.ToLower(), workspaceName2, false);
 
             // Resolve the first workspace by ID
             var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspaceItem1.Id);
@@ -127,7 +127,7 @@ namespace ProKnow.Test
 
             // Create two workspaces
             var workspaceName1 = $"SDK-{_testClassName}-{testNumber}-A";
-            var workspaceItem1 = await _proKnow.Workspaces.CreateAsync(workspaceName1.ToLower(), workspaceName1);
+            await _proKnow.Workspaces.CreateAsync(workspaceName1.ToLower(), workspaceName1);
             var workspaceName2 = $"SDK-{_testClassName}-{testNumber}-B";
             var workspaceItem2 = await _proKnow.Workspaces.CreateAsync(workspaceName2.ToLower(), workspaceName2, false);
 
@@ -147,7 +147,7 @@ namespace ProKnow.Test
             var workspaceName1 = $"SDK-{_testClassName}-{testNumber}-A";
             var workspaceItem1 = await _proKnow.Workspaces.CreateAsync(workspaceName1.ToLower(), workspaceName1);
             var workspaceName2 = $"SDK-{_testClassName}-{testNumber}-B";
-            var workspaceItem2 = await _proKnow.Workspaces.CreateAsync(workspaceName2.ToLower(), workspaceName2, false);
+            await _proKnow.Workspaces.CreateAsync(workspaceName2.ToLower(), workspaceName2, false);
 
             // Resolve the first workspace by ID
             var workspaceItem = await _proKnow.Workspaces.ResolveByIdAsync(workspaceItem1.Id);
@@ -163,9 +163,9 @@ namespace ProKnow.Test
 
             // Create two workspaces
             var workspaceName1 = $"SDK-{_testClassName}-{testNumber}-A";
-            var workspaceItem1 = await _proKnow.Workspaces.CreateAsync(workspaceName1.ToLower(), workspaceName1);
+            await _proKnow.Workspaces.CreateAsync(workspaceName1.ToLower(), workspaceName1);
             var workspaceName2 = $"SDK-{_testClassName}-{testNumber}-B";
-            var workspaceItem2 = await _proKnow.Workspaces.CreateAsync(workspaceName2.ToLower(), workspaceName2, false);
+            await _proKnow.Workspaces.CreateAsync(workspaceName2.ToLower(), workspaceName2, false);
 
             // Try to resolve a workspace with an invalid ID
             var invalidId = "12345678901234567890123456789012";
@@ -187,7 +187,7 @@ namespace ProKnow.Test
 
             // Create two workspaces
             var workspaceName1 = $"SDK-{_testClassName}-{testNumber}-A";
-            var workspaceItem1 = await _proKnow.Workspaces.CreateAsync(workspaceName1.ToLower(), workspaceName1);
+            await _proKnow.Workspaces.CreateAsync(workspaceName1.ToLower(), workspaceName1);
             var workspaceName2 = $"SDK-{_testClassName}-{testNumber}-B";
             var workspaceItem2 = await _proKnow.Workspaces.CreateAsync(workspaceName2.ToLower(), workspaceName2, false);
 
@@ -205,9 +205,9 @@ namespace ProKnow.Test
 
             // Create two workspaces
             var workspaceName1 = $"SDK-{_testClassName}-{testNumber}-A";
-            var workspaceItem1 = await _proKnow.Workspaces.CreateAsync(workspaceName1.ToLower(), workspaceName1);
+            await _proKnow.Workspaces.CreateAsync(workspaceName1.ToLower(), workspaceName1);
             var workspaceName2 = $"SDK-{_testClassName}-{testNumber}-B";
-            var workspaceItem2 = await _proKnow.Workspaces.CreateAsync(workspaceName2.ToLower(), workspaceName2, false);
+            await _proKnow.Workspaces.CreateAsync(workspaceName2.ToLower(), workspaceName2, false);
 
             // Try to resolve a workspace with an invalid name
             try

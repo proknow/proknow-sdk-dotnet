@@ -11,9 +11,9 @@ namespace ProKnow.Upload.Test
     [TestClass]
     public class UploadsTest
     {
-        private static string _testClassName = "SDK-UploadsTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static Uploads _uploads = _proKnow.Uploads;
+        private static readonly string _testClassName = "SDK-UploadsTest";
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly Uploads _uploads = _proKnow.Uploads;
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)

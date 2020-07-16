@@ -6,8 +6,8 @@ namespace ProKnow.Test
     [TestClass]
     public class WorkspaceItemTest
     {
-        private static string _testClassName = nameof(WorkspaceItemTest);
-        private ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly string _testClassName = nameof(WorkspaceItemTest);
+        private readonly ProKnowApi _proKnow = TestSettings.ProKnow;
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)

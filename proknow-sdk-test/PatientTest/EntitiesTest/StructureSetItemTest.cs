@@ -14,10 +14,10 @@ namespace ProKnow.Patient.Entities.Test
     [TestClass]
     public class StructureSetItemTest
     {
-        private static string _patientMrnAndName = "SDK-StructureSetItemTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static int _lockRenewalBuffer = _proKnow.LockRenewalBuffer;
-        private static string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
+        private static readonly string _patientMrnAndName = "SDK-StructureSetItemTest";
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly int _lockRenewalBuffer = _proKnow.LockRenewalBuffer;
+        private static readonly string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
@@ -92,30 +92,28 @@ namespace ProKnow.Patient.Entities.Test
             _proKnow.LockRenewalBuffer = 360;
 
             // Create a draft of that structure set
-            using (var draft = await structureSetItem.DraftAsync())
-            {
-                // Add an ROI and commit (approve) the change
-                await draft.CreateRoiAsync("thing1", Color.Magenta, "ORGAN");
-                var approvedStructureSetItem = await draft.ApproveAsync("original + thing1");
+            using var draft = await structureSetItem.DraftAsync();
+            // Add an ROI and commit (approve) the change
+            await draft.CreateRoiAsync("thing1", Color.Magenta, "ORGAN");
+            var approvedStructureSetItem = await draft.ApproveAsync("original + thing1");
 
-                // Verify that the draft is no longer editable
-                Assert.IsFalse(draft.IsEditable);
+            // Verify that the draft is no longer editable
+            Assert.IsFalse(draft.IsEditable);
 
-                // Verify that the structure set item is no longer a draft
-                Assert.IsFalse(draft.IsDraft);
+            // Verify that the structure set item is no longer a draft
+            Assert.IsFalse(draft.IsDraft);
 
-                // Verify that the draft lock has been removed
-                Assert.IsNull(draft.DraftLock);
+            // Verify that the draft lock has been removed
+            Assert.IsNull(draft.DraftLock);
 
-                // Verify that the renewer was stopped
-                await Task.Delay(10);
-                Assert.IsNull(draft.DraftLock);
+            // Verify that the renewer was stopped
+            await Task.Delay(10);
+            Assert.IsNull(draft.DraftLock);
 
-                // Verify the returned structure set item
-                Assert.AreEqual(workspaceItem.Id, approvedStructureSetItem.WorkspaceId);
-                Assert.AreEqual(originalRoiCount + 1, approvedStructureSetItem.Rois.Length);
-                Assert.IsTrue(approvedStructureSetItem.Rois.Where(r => r.Name == "thing1").Any());
-            }
+            // Verify the returned structure set item
+            Assert.AreEqual(workspaceItem.Id, approvedStructureSetItem.WorkspaceId);
+            Assert.AreEqual(originalRoiCount + 1, approvedStructureSetItem.Rois.Length);
+            Assert.IsTrue(approvedStructureSetItem.Rois.Where(r => r.Name == "thing1").Any());
         }
 
         [TestMethod]
@@ -233,21 +231,19 @@ namespace ProKnow.Patient.Entities.Test
             _proKnow.LockRenewalBuffer = 360;
 
             // Get a draft of the structure set
-            using (var draft = await structureSetItem.DraftAsync())
-            {
-                // Discard the draft
-                await draft.DiscardAsync();
+            using var draft = await structureSetItem.DraftAsync();
+            // Discard the draft
+            await draft.DiscardAsync();
 
-                // Verify that the draft is no longer editable
-                Assert.IsFalse(draft.IsEditable);
+            // Verify that the draft is no longer editable
+            Assert.IsFalse(draft.IsEditable);
 
-                // Verify that the draft lock has been removed
-                Assert.IsNull(draft.DraftLock);
+            // Verify that the draft lock has been removed
+            Assert.IsNull(draft.DraftLock);
 
-                // Verify that the renewer was stopped
-                await Task.Delay(10);
-                Assert.IsNull(draft.DraftLock);
-            }
+            // Verify that the renewer was stopped
+            await Task.Delay(10);
+            Assert.IsNull(draft.DraftLock);
         }
 
         [TestMethod]
@@ -264,18 +260,16 @@ namespace ProKnow.Patient.Entities.Test
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
             // Get a draft of the structure set
-            using (var draft = await structureSetItem.DraftAsync())
+            using var draft = await structureSetItem.DraftAsync();
+            // Try to download the draft and verify the exception
+            try
             {
-                // Try to download the draft and verify the exception
-                try
-                {
-                    await draft.DownloadAsync("doesn't matter");
-                    Assert.Fail();
-                }
-                catch (InvalidOperationError ex)
-                {
-                    Assert.AreEqual("Structure set drafts cannot be downloaded.", ex.Message);
-                }
+                await draft.DownloadAsync("doesn't matter");
+                Assert.Fail();
+            }
+            catch (InvalidOperationError ex)
+            {
+                Assert.AreEqual("Structure set drafts cannot be downloaded.", ex.Message);
             }
         }
 
@@ -403,33 +397,31 @@ namespace ProKnow.Patient.Entities.Test
             _proKnow.LockRenewalBuffer = 360;
 
             // Get a draft of the structure set
-            using (var draft = await structureSetItem.DraftAsync())
+            using var draft = await structureSetItem.DraftAsync();
+            // Verify that the same structure set was returned
+            Assert.AreEqual(structureSetItem.Id, draft.Id);
+
+            // Verify that the structure set is now editable
+            Assert.IsTrue(draft.IsEditable);
+
+            // Verify that the structure set is a draft
+            Assert.IsTrue(draft.IsDraft);
+
+            // Verify that the structure set has a draft lock
+            Assert.IsNotNull(draft.DraftLock);
+
+            // Verify that the structure set has a draft lock renewer
+            DateTime originalExpiresAt = DateTime.ParseExact(draft.DraftLock.ExpiresAt, "yyyy-MM-dd'T'HH:mm:ss.fff'Z'",
+                CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+            while (true)
             {
-                // Verify that the same structure set was returned
-                Assert.AreEqual(structureSetItem.Id, draft.Id);
-
-                // Verify that the structure set is now editable
-                Assert.IsTrue(draft.IsEditable);
-
-                // Verify that the structure set is a draft
-                Assert.IsTrue(draft.IsDraft);
-
-                // Verify that the structure set has a draft lock
-                Assert.IsNotNull(draft.DraftLock);
-
-                // Verify that the structure set has a draft lock renewer
-                DateTime originalExpiresAt = DateTime.ParseExact(draft.DraftLock.ExpiresAt, "yyyy-MM-dd'T'HH:mm:ss.fff'Z'",
+                DateTime newExpiresAt = DateTime.ParseExact(draft.DraftLock.ExpiresAt, "yyyy-MM-dd'T'HH:mm:ss.fff'Z'",
                     CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
-                while (true)
+                if (newExpiresAt != originalExpiresAt)
                 {
-                    DateTime newExpiresAt = DateTime.ParseExact(draft.DraftLock.ExpiresAt, "yyyy-MM-dd'T'HH:mm:ss.fff'Z'",
-                        CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
-                    if (newExpiresAt != originalExpiresAt)
-                    {
-                        break;
-                    }
-                    await Task.Delay(10);
+                    break;
                 }
+                await Task.Delay(10);
             }
         }
 
@@ -460,13 +452,11 @@ namespace ProKnow.Patient.Entities.Test
                     CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
 
                 // Try to get another draft of the structure set
-                using (var draft2 = await structureSetItem.DraftAsync())
-                {
-                    // Save the new lock ID and expiration date
-                    newLockId = draft2.DraftLock.Id;
-                    newExpiresAt = DateTime.ParseExact(draft2.DraftLock.ExpiresAt, "yyyy-MM-dd'T'HH:mm:ss.fff'Z'",
-                        CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
-                }
+                using var draft2 = await structureSetItem.DraftAsync();
+                // Save the new lock ID and expiration date
+                newLockId = draft2.DraftLock.Id;
+                newExpiresAt = DateTime.ParseExact(draft2.DraftLock.ExpiresAt, "yyyy-MM-dd'T'HH:mm:ss.fff'Z'",
+                    CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
             }
 
             // Verify that a new lock was obtained
@@ -488,18 +478,16 @@ namespace ProKnow.Patient.Entities.Test
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
             // Create a draft of the structure set
-            using (var draft = await structureSetItem.DraftAsync())
+            using var draft = await structureSetItem.DraftAsync();
+            // Try to download the draft and verify the exception
+            try
             {
-                // Try to download the draft and verify the exception
-                try
-                {
-                    await draft.RefreshAsync();
-                    Assert.Fail();
-                }
-                catch (InvalidOperationError ex)
-                {
-                    Assert.AreEqual("Structure set drafts cannot be refreshed.", ex.Message);
-                }
+                await draft.RefreshAsync();
+                Assert.Fail();
+            }
+            catch (InvalidOperationError ex)
+            {
+                Assert.AreEqual("Structure set drafts cannot be refreshed.", ex.Message);
             }
         }
 
@@ -518,19 +506,17 @@ namespace ProKnow.Patient.Entities.Test
             var originalRoiCount = structureSetItem.Rois.Length;
 
             // Create a draft of that structure set
-            using (var draft = await structureSetItem.DraftAsync())
-            {
-                // Add an ROI and commit (approve) the change
-                await draft.CreateRoiAsync("thing1", Color.Magenta, "ORGAN");
-                var approvedStructureSetItem = await draft.ApproveAsync("original + thing1");
+            using var draft = await structureSetItem.DraftAsync();
+            // Add an ROI and commit (approve) the change
+            await draft.CreateRoiAsync("thing1", Color.Magenta, "ORGAN");
+            var approvedStructureSetItem = await draft.ApproveAsync("original + thing1");
 
-                // Refresh the original structure set item
-                await structureSetItem.RefreshAsync();
+            // Refresh the original structure set item
+            await structureSetItem.RefreshAsync();
 
-                // Verify the refreshed structure set item
-                Assert.AreEqual(originalRoiCount + 1, structureSetItem.Rois.Length);
-                Assert.IsTrue(structureSetItem.Rois.Where(r => r.Name == "thing1").Any());
-            }
+            // Verify the refreshed structure set item
+            Assert.AreEqual(originalRoiCount + 1, structureSetItem.Rois.Length);
+            Assert.IsTrue(structureSetItem.Rois.Where(r => r.Name == "thing1").Any());
         }
 
         [TestMethod]
@@ -567,21 +553,19 @@ namespace ProKnow.Patient.Entities.Test
             _proKnow.LockRenewalBuffer = 360;
 
             // Create a draft of that structure set
-            using (var draft = await structureSetItem.DraftAsync())
-            {
-                // Release the lock
-                draft.ReleaseLock();
+            using var draft = await structureSetItem.DraftAsync();
+            // Release the lock
+            draft.ReleaseLock();
 
-                // Verify that the draft is no longer editable
-                Assert.IsFalse(draft.IsEditable);
+            // Verify that the draft is no longer editable
+            Assert.IsFalse(draft.IsEditable);
 
-                // Verify that the draft lock has been removed
-                Assert.IsNull(draft.DraftLock);
+            // Verify that the draft lock has been removed
+            Assert.IsNull(draft.DraftLock);
 
-                // Verify that the renewer was stopped
-                await Task.Delay(10);
-                Assert.IsNull(draft.DraftLock);
-            }
+            // Verify that the renewer was stopped
+            await Task.Delay(10);
+            Assert.IsNull(draft.DraftLock);
         }
 
         [TestMethod]

@@ -9,8 +9,8 @@ namespace ProKnow.Upload.Test
     [TestClass]
     public class UploadPatientSummaryTest
     {
-        private static string _patientMrnAndName = "SDK-UploadPatientSummaryTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly string _patientMrnAndName = "SDK-UploadPatientSummaryTest";
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)

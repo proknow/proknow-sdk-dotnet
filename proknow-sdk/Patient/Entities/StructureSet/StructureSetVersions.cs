@@ -13,7 +13,7 @@ namespace ProKnow.Patient.Entities.StructureSet
     /// </remarks>
     public class StructureSetVersions
     {
-        private ProKnowApi _proKnow;
+        private readonly ProKnowApi _proKnow;
 
         /// <summary>
         /// The ProKnow ID of the workspace
@@ -56,8 +56,10 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// <returns>A structure set item for the given version</returns>
         public async Task<StructureSetItem> GetAsync(string versionId)
         {
-            var queryParameters = new Dictionary<string, object>();
-            queryParameters.Add("version", versionId);
+            var queryParameters = new Dictionary<string, object>
+            {
+                { "version", versionId }
+            };
             var responseJson = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{StructureSetId}", queryParameters);
             var structureSetItem = JsonSerializer.Deserialize<StructureSetItem>(responseJson);
             structureSetItem.PostProcessDeserialization(_proKnow, WorkspaceId);

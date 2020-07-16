@@ -14,9 +14,9 @@ namespace ProKnow.Patient.Entities
     /// </summary>
     public class EntityScorecards
     {
-        private ProKnowApi _proKnow;
-        private string _workspaceId;
-        private string _entityId;
+        private readonly ProKnowApi _proKnow;
+        private readonly string _workspaceId;
+        private readonly string _entityId;
 
         /// <summary>
         /// Constructs an EntityScorecards object

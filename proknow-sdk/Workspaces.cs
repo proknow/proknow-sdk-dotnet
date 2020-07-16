@@ -15,7 +15,7 @@ namespace ProKnow
     /// </summary>
     public class Workspaces
     {
-        private ProKnowApi _proKnow;
+        private readonly ProKnowApi _proKnow;
         private IList<WorkspaceItem> _cache = null;
 
         /// <summary>

@@ -131,7 +131,7 @@ namespace ProKnow.Patient.Registrations
         /// </example>
         public Task<string> DownloadAsync(string path)
         {
-            string file = null;
+            string file;
             if (Directory.Exists(path))
             {
                 file = Path.Combine(path, $"REG.{Uid}.dcm");

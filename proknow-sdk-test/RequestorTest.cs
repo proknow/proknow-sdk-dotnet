@@ -13,8 +13,8 @@ namespace ProKnow.Test
     [TestClass]
     public class RequestorTest
     {
-        private static string _testClassName = nameof(RequestorTest);
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly string _testClassName = nameof(RequestorTest);
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
         private static Requestor _requestor;
 
         [ClassInitialize]
@@ -24,11 +24,9 @@ namespace ProKnow.Test
             await TestHelper.DeleteWorkspacesAsync(_testClassName);
 
             // Create requestor
-            using (StreamReader sr = new StreamReader(TestSettings.CredentialsFile))
-            {
-                var proKnowCredentials = JsonSerializer.Deserialize<ProKnowCredentials>(sr.ReadToEnd());
-                _requestor = new Requestor(TestSettings.BaseUrl, proKnowCredentials.Id, proKnowCredentials.Secret);
-            }
+            using StreamReader sr = new StreamReader(TestSettings.CredentialsFile);
+            var proKnowCredentials = JsonSerializer.Deserialize<ProKnowCredentials>(sr.ReadToEnd());
+            _requestor = new Requestor(TestSettings.BaseUrl, proKnowCredentials.Id, proKnowCredentials.Secret);
         }
 
         [ClassCleanup]
@@ -150,10 +148,12 @@ namespace ProKnow.Test
 
             // Make and save workspace changes using the Requestor
             var workspaceName2 = $"SDK-{_testClassName}-{testNumber}-A";
-            var properties = new Dictionary<string, object>();
-            properties.Add("slug", workspaceName2.ToLower());
-            properties.Add("name", workspaceName2);
-            properties.Add("protected", true);
+            var properties = new Dictionary<string, object>
+            {
+                { "slug", workspaceName2.ToLower() },
+                { "name", workspaceName2 },
+                { "protected", true }
+            };
             var content = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
             await _requestor.PutAsync($"/workspaces/{workspaceItem.Id}", null, content);
 

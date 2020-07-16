@@ -10,9 +10,9 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
     [TestClass]
     public class StructureSetDataTest
     {
-        private static string _patientMrnAndName = "SDK-StructureSetDataTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static Uploads _uploads = _proKnow.Uploads;
+        private static readonly string _patientMrnAndName = "SDK-StructureSetDataTest";
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly Uploads _uploads = _proKnow.Uploads;
         private static string _workspaceId;
         private static string _uploadPath;
         private static PatientItem _patientItem;

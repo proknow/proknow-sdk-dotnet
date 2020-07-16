@@ -14,9 +14,9 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
     [TestClass]
     public class StructureSetVersionItemTest
     {
-        private static string _patientMrnAndName = "SDK-StructureSetVersionItemTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
+        private static readonly string _patientMrnAndName = "SDK-StructureSetVersionItemTest";
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
@@ -59,22 +59,20 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
             // Create a draft of the structure set
-            using (var draft = await structureSetItem.DraftAsync())
-            {
-                // Get the version of the draft
-                var versions = await draft.Versions.QueryAsync();
-                var draftVersion = versions[0];
+            using var draft = await structureSetItem.DraftAsync();
+            // Get the version of the draft
+            var versions = await draft.Versions.QueryAsync();
+            var draftVersion = versions[0];
 
-                // Try to delete the draft version and verify the exception
-                try
-                {
-                    await draftVersion.DeleteAsync();
-                    Assert.Fail();
-                }
-                catch (InvalidOperationError ex)
-                {
-                    Assert.AreEqual("Draft versions of structure sets cannot be deleted.", ex.Message);
-                }
+            // Try to delete the draft version and verify the exception
+            try
+            {
+                await draftVersion.DeleteAsync();
+                Assert.Fail();
+            }
+            catch (InvalidOperationError ex)
+            {
+                Assert.AreEqual("Draft versions of structure sets cannot be deleted.", ex.Message);
             }
         }
 
@@ -142,22 +140,20 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
             // Create a draft of the structure set
-            using (var draft = await structureSetItem.DraftAsync())
-            {
-                // Get the version of the draft
-                var versions = await draft.Versions.QueryAsync();
-                var draftVersion = versions[0];
+            using var draft = await structureSetItem.DraftAsync();
+            // Get the version of the draft
+            var versions = await draft.Versions.QueryAsync();
+            var draftVersion = versions[0];
 
-                // Try to download the draft version and verify the exception
-                try
-                {
-                    await draftVersion.DownloadAsync("doesn't matter");
-                    Assert.Fail();
-                }
-                catch (InvalidOperationError ex)
-                {
-                    Assert.AreEqual("Draft versions of structure sets cannot be downloaded.", ex.Message);
-                }
+            // Try to download the draft version and verify the exception
+            try
+            {
+                await draftVersion.DownloadAsync("doesn't matter");
+                Assert.Fail();
+            }
+            catch (InvalidOperationError ex)
+            {
+                Assert.AreEqual("Draft versions of structure sets cannot be downloaded.", ex.Message);
             }
         }
 
@@ -414,20 +410,18 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
             // Create a draft of that structure set
-            using (var draft = await structureSetItem.DraftAsync())
-            {
-                // Get the version of that draft
-                var versions = await draft.Versions.QueryAsync();
-                var version = versions[0];
+            using var draft = await structureSetItem.DraftAsync();
+            // Get the version of that draft
+            var versions = await draft.Versions.QueryAsync();
+            var version = versions[0];
 
-                // Get the corresponding structure set item
-                var draftStructureSetItem = await version.GetAsync();
+            // Get the corresponding structure set item
+            var draftStructureSetItem = await version.GetAsync();
 
-                // Verify that the expected structure set item was returned
-                Assert.AreEqual(structureSetItem.Id, draftStructureSetItem.Id);
-                Assert.AreNotEqual(structureSetItem.Uid, draftStructureSetItem.Uid);
-                Assert.IsTrue(draftStructureSetItem.IsDraft);
-            }
+            // Verify that the expected structure set item was returned
+            Assert.AreEqual(structureSetItem.Id, draftStructureSetItem.Id);
+            Assert.AreNotEqual(structureSetItem.Uid, draftStructureSetItem.Uid);
+            Assert.IsTrue(draftStructureSetItem.IsDraft);
         }
 
         [TestMethod]
@@ -509,22 +503,20 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
             // Create a draft of that structure set
-            using (var draft = await structureSetItem.DraftAsync())
-            {
-                // Get the version of the draft
-                var versions = await draft.Versions.QueryAsync();
-                var draftVersion = versions[0];
+            using var draft = await structureSetItem.DraftAsync();
+            // Get the version of the draft
+            var versions = await draft.Versions.QueryAsync();
+            var draftVersion = versions[0];
 
-                // Try to revert the structure set to the draft version and verify the exception
-                try
-                {
-                    await draftVersion.RevertAsync();
-                    Assert.Fail();
-                }
-                catch (InvalidOperationError ex)
-                {
-                    Assert.AreEqual("Structure sets cannot be reverted to draft versions.", ex.Message);
-                }
+            // Try to revert the structure set to the draft version and verify the exception
+            try
+            {
+                await draftVersion.RevertAsync();
+                Assert.Fail();
+            }
+            catch (InvalidOperationError ex)
+            {
+                Assert.AreEqual("Structure sets cannot be reverted to draft versions.", ex.Message);
             }
         }
 

@@ -10,8 +10,8 @@ namespace ProKnow.Patient.Entities.StructureSet
     /// </summary>
     public class StructureSetDraftLockRenewer
     {
-        private ProKnowApi _proKnow;
-        private StructureSetItem _structureSet;
+        private readonly ProKnowApi _proKnow;
+        private readonly StructureSetItem _structureSet;
         private Timer _timer;
         private bool _hasStarted;
         private TimeSpan _lockRenewalBuffer;
