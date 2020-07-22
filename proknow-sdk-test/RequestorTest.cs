@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ProKnow.Patient.Entities;
 using ProKnow.Exceptions;
 using System.Collections.Generic;
 using System.IO;
@@ -13,9 +14,15 @@ namespace ProKnow.Test
     [TestClass]
     public class RequestorTest
     {
+<<<<<<< HEAD
         private static readonly string _testClassName = nameof(RequestorTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
         private static Requestor _requestor;
+=======
+        private static string _testClassName = nameof(RequestorTest);
+        private static ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _testClassName);
+>>>>>>> Add ability to get image pixel data and convert some extension data into specific properties
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
@@ -25,10 +32,19 @@ namespace ProKnow.Test
             // Delete test workspaces, if necessary
             await TestHelper.DeleteWorkspacesAsync(_testClassName);
 
+<<<<<<< HEAD
             // Create requestor
             using StreamReader sr = new StreamReader(TestSettings.CredentialsFile);
             var proKnowCredentials = JsonSerializer.Deserialize<ProKnowCredentials>(sr.ReadToEnd());
             _requestor = new Requestor(TestSettings.BaseUrl, proKnowCredentials.Id, proKnowCredentials.Secret);
+=======
+            // Create download folder root
+            if (Directory.Exists(_downloadFolderRoot))
+            {
+                Directory.Delete(_downloadFolderRoot, true);
+            }
+            Directory.CreateDirectory(_downloadFolderRoot);
+>>>>>>> Add ability to get image pixel data and convert some extension data into specific properties
         }
 
         [ClassCleanup]
@@ -37,9 +53,11 @@ namespace ProKnow.Test
             // Delete test workspaces
             await TestHelper.DeleteWorkspacesAsync(_testClassName);
 
-            // Delete temporary folder
-            var outputDocumentPath = Path.Combine(Path.GetTempPath(), _testClassName);
-            Directory.Delete(outputDocumentPath, true);
+            // Delete download folder
+            if (Directory.Exists(_downloadFolderRoot))
+            {
+                Directory.Delete(_downloadFolderRoot, true);
+            }
         }
 
         [TestMethod]
@@ -47,19 +65,18 @@ namespace ProKnow.Test
         {
             int testNumber = 1;
 
-            // Create a workspace using the Workspaces object
-            var workspaceName = $"SDK-{_testClassName}-{testNumber}";
-            var workspaceItem = await _proKnow.Workspaces.CreateAsync(workspaceName.ToLower(), workspaceName, false);
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Verify that the workspace exists
-            Assert.IsNotNull(await _proKnow.Workspaces.FindAsync(w => w.Name == workspaceName));
+            Assert.IsNotNull(await _proKnow.Workspaces.FindAsync(w => w.Name == workspaceItem.Name));
 
             // Delete the workspace using the Requestor
-            await _requestor.DeleteAsync($"/workspaces/{workspaceItem.Id}");
+            await _proKnow.Requestor.DeleteAsync($"/workspaces/{workspaceItem.Id}");
 
             // Verify that the workspace no longer exists
             var workspaceItems = await _proKnow.Workspaces.QueryAsync();
-            Assert.IsFalse(workspaceItems.Any(w => w.Name == workspaceName));
+            Assert.IsFalse(workspaceItems.Any(w => w.Name == workspaceItem.Name));
         }
 
         [TestMethod]
@@ -67,7 +84,7 @@ namespace ProKnow.Test
         {
             try
             {
-                await _requestor.DeleteAsync($"/invalid/route");
+                await _proKnow.Requestor.DeleteAsync($"/invalid/route");
                 Assert.Fail();
             }
             catch (ProKnowHttpException ex)
@@ -79,18 +96,17 @@ namespace ProKnow.Test
         [TestMethod]
         public async Task GetAsyncTest()
         {
-            int testNumber = 2;
+            int testNumber = 3;
 
-            // Create a workspace using the Workspaces object
-            var workspaceName = $"SDK-{_testClassName}-{testNumber}";
-            var workspaceItem = await _proKnow.Workspaces.CreateAsync(workspaceName.ToLower(), workspaceName, false);
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Get the workspaces using the Requestor
-            string json = await _requestor.GetAsync($"/workspaces");
+            string json = await _proKnow.Requestor.GetAsync($"/workspaces");
             var workspaceItems = JsonSerializer.Deserialize<IList<WorkspaceItem>>(json);
 
             // Verify that the created workspace was one of the workspaces returned
-            Assert.IsNotNull(await _proKnow.Workspaces.FindAsync(w => w.Name == workspaceName));
+            Assert.IsNotNull(await _proKnow.Workspaces.FindAsync(w => w.Name == workspaceItem.Name));
         }
 
         [TestMethod]
@@ -98,7 +114,54 @@ namespace ProKnow.Test
         {
             try
             {
-                await _requestor.GetAsync($"/invalid/route");
+                await _proKnow.Requestor.GetAsync($"/invalid/route");
+                Assert.Fail();
+            }
+            catch (ProKnowHttpException ex)
+            {
+                Assert.IsTrue(ex.Message.Contains("HttpError"));
+            }
+        }
+
+        [TestMethod]
+        public async Task GetBinaryAsyncTest()
+        {
+            int testNumber = 5;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient with an image set
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
+            var entitySummaries = patientItem.FindEntities(e => e.Type == "image_set");
+            var imageSetItem = await entitySummaries[0].GetAsync() as ImageSetItem;
+
+            // Get the data for the first image
+            var image = imageSetItem.Data.Images.First(i => i.Uid == "1.3.6.1.4.1.22213.2.26558.2.61");
+            var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
+                new KeyValuePair<string, string>("ProKnow-Key", imageSetItem.Key) };
+            var bytes = await _proKnow.Requestor.GetBinaryAsync($"/imagesets/{imageSetItem.Id}/images/{image.Tag}", headerKeyValuePairs);
+
+            // Verify the data
+            Assert.AreEqual(512 * 512 * 2, bytes.Length);
+            Assert.AreEqual(32, bytes[401]);
+            Assert.AreEqual(0, bytes[402]);
+            Assert.AreEqual(41, bytes[403]);
+            Assert.AreEqual(0, bytes[404]);
+            Assert.AreEqual(46, bytes[405]);
+            Assert.AreEqual(0, bytes[406]);
+            Assert.AreEqual(47, bytes[407]);
+            Assert.AreEqual(00, bytes[408]);
+            Assert.AreEqual(48, bytes[409]);
+            Assert.AreEqual(0, bytes[410]);
+        }
+
+        [TestMethod]
+        public async Task GetBinaryAsyncTest_HttpError()
+        {
+            try
+            {
+                await _proKnow.Requestor.GetBinaryAsync($"/invalid/route");
                 Assert.Fail();
             }
             catch (ProKnowHttpException ex)
@@ -110,7 +173,7 @@ namespace ProKnow.Test
         [TestMethod]
         public async Task PostAsyncTest()
         {
-            int testNumber = 3;
+            int testNumber = 7;
 
             // Create a workspace using the Requestor
             var workspaceName = $"SDK-{_testClassName}-{testNumber}";
@@ -118,7 +181,7 @@ namespace ProKnow.Test
             var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
             var json = JsonSerializer.Serialize(workspaceItem, jsonSerializerOptions);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            await _requestor.PostAsync("/workspaces", null, content);
+            await _proKnow.Requestor.PostAsync("/workspaces", null, content);
 
             // Verify that the workspace exists
             var workspaceItems = await _proKnow.Workspaces.QueryAsync();
@@ -130,7 +193,7 @@ namespace ProKnow.Test
         {
             try
             {
-                await _requestor.PostAsync($"/invalid/route");
+                await _proKnow.Requestor.PostAsync($"/invalid/route");
                 Assert.Fail();
             }
             catch (ProKnowHttpException ex)
@@ -142,11 +205,10 @@ namespace ProKnow.Test
         [TestMethod]
         public async Task PutAsyncTest()
         {
-            int testNumber = 4;
+            int testNumber = 9;
 
-            // Create a workspace using the Workspaces object
-            var workspaceName = $"SDK-{_testClassName}-{testNumber}";
-            var workspaceItem = await _proKnow.Workspaces.CreateAsync(workspaceName.ToLower(), workspaceName, false);
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Make and save workspace changes using the Requestor
             var workspaceName2 = $"SDK-{_testClassName}-{testNumber}-A";
@@ -157,7 +219,7 @@ namespace ProKnow.Test
                 { "protected", true }
             };
             var content = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
-            await _requestor.PutAsync($"/workspaces/{workspaceItem.Id}", null, content);
+            await _proKnow.Requestor.PutAsync($"/workspaces/{workspaceItem.Id}", null, content);
 
             // Retrieve the workspace
             workspaceItem = await _proKnow.Workspaces.FindAsync(w => w.Id == workspaceItem.Id);
@@ -173,7 +235,7 @@ namespace ProKnow.Test
         {
             try
             {
-                await _requestor.PutAsync($"/invalid/route");
+                await _proKnow.Requestor.PutAsync($"/invalid/route");
                 Assert.Fail();
             }
             catch (ProKnowHttpException ex)
@@ -185,7 +247,7 @@ namespace ProKnow.Test
         [TestMethod]
         public async Task StreamAsyncTest()
         {
-            int testNumber = 5;
+            int testNumber = 11;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -206,10 +268,10 @@ namespace ProKnow.Test
                 if (documentSummary != null)
                 {
                     // Stream the document to a new file using the Requestor object
-                    var outputDocumentPath = Path.Combine(Path.GetTempPath(), _testClassName, testNumber.ToString(), "test.pdf");
+                    var outputDocumentPath = Path.Combine(_downloadFolderRoot, testNumber.ToString(), "test.pdf");
                     var documentName = Path.GetFileName(outputDocumentPath);
                     var route = $"/workspaces/{workspaceItem.Id}/patients/{patientItem.Id}/documents/{documentSummary.Id}/{documentSummary.Name}";
-                    await _requestor.StreamAsync(route, outputDocumentPath);
+                    await _proKnow.Requestor.StreamAsync(route, outputDocumentPath);
 
                     // Make sure created document and streamed document sizes are the same
                     Assert.AreEqual(documentSummary.Size, new FileInfo(outputDocumentPath).Length);
@@ -221,7 +283,7 @@ namespace ProKnow.Test
         [TestMethod]
         public async Task StreamAsyncTest_ExistingDirectory()
         {
-            int testNumber = 6;
+            int testNumber = 12;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -242,12 +304,12 @@ namespace ProKnow.Test
                 if (documentSummary != null)
                 {
                     var route = $"/workspaces/{workspaceItem.Id}/patients/{patientItem.Id}/documents/{documentSummary.Id}/{documentSummary.Name}";
-                    var outputDocumentPath = Path.Combine(Path.GetTempPath(), _testClassName, testNumber.ToString());
+                    var outputDocumentPath = Path.Combine(_downloadFolderRoot, testNumber.ToString());
                     try
                     {
                         // Attempt to stream the document to an existing folder using the Requestor object
                         Directory.CreateDirectory(outputDocumentPath);
-                        await _requestor.StreamAsync(route, outputDocumentPath);
+                        await _proKnow.Requestor.StreamAsync(route, outputDocumentPath);
                         Assert.Fail();
                     }
                     catch (ProKnowException ex)
@@ -264,7 +326,7 @@ namespace ProKnow.Test
         {
             try
             {
-                await _requestor.StreamAsync("/invalid/route", "./path.dcm");
+                await _proKnow.Requestor.StreamAsync("/invalid/route", "./path.dcm");
                 Assert.Fail();
             }
             catch (ProKnowHttpException ex)

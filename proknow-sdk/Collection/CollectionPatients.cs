@@ -56,7 +56,7 @@ namespace ProKnow.Collection
                     { "workspace", _collectionItem.WorkspaceIds[0] }
                 };
             }
-            var responseJson = await _proKnow.Requestor.GetAsync(route, queryParameters);
+            var responseJson = await _proKnow.Requestor.GetAsync(route, null, queryParameters);
             return DeserializeCollectionPatientSummaries(responseJson);
         }
 
