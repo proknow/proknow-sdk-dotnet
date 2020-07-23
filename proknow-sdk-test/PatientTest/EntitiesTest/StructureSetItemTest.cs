@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Exceptions;
 using ProKnow.Test;
 using System;
@@ -95,6 +95,7 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a draft of that structure set
             using var draft = await structureSetItem.DraftAsync();
+
             // Add an ROI and commit (approve) the change
             await draft.CreateRoiAsync("thing1", Color.Magenta, "ORGAN");
             var approvedStructureSetItem = await draft.ApproveAsync("original + thing1");
@@ -234,6 +235,7 @@ namespace ProKnow.Patient.Entities.Test
 
             // Get a draft of the structure set
             using var draft = await structureSetItem.DraftAsync();
+
             // Discard the draft
             await draft.DiscardAsync();
 
@@ -263,6 +265,7 @@ namespace ProKnow.Patient.Entities.Test
 
             // Get a draft of the structure set
             using var draft = await structureSetItem.DraftAsync();
+
             // Try to download the draft and verify the exception
             try
             {
@@ -400,6 +403,7 @@ namespace ProKnow.Patient.Entities.Test
 
             // Get a draft of the structure set
             using var draft = await structureSetItem.DraftAsync();
+
             // Verify that the same structure set was returned
             Assert.AreEqual(structureSetItem.Id, draft.Id);
 
@@ -455,6 +459,7 @@ namespace ProKnow.Patient.Entities.Test
 
                 // Try to get another draft of the structure set
                 using var draft2 = await structureSetItem.DraftAsync();
+
                 // Save the new lock ID and expiration date
                 newLockId = draft2.DraftLock.Id;
                 newExpiresAt = DateTime.ParseExact(draft2.DraftLock.ExpiresAt, "yyyy-MM-dd'T'HH:mm:ss.fff'Z'",
@@ -481,6 +486,7 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a draft of the structure set
             using var draft = await structureSetItem.DraftAsync();
+
             // Try to download the draft and verify the exception
             try
             {
@@ -509,6 +515,7 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a draft of that structure set
             using var draft = await structureSetItem.DraftAsync();
+
             // Add an ROI and commit (approve) the change
             await draft.CreateRoiAsync("thing1", Color.Magenta, "ORGAN");
             var approvedStructureSetItem = await draft.ApproveAsync("original + thing1");
@@ -556,6 +563,7 @@ namespace ProKnow.Patient.Entities.Test
 
             // Create a draft of that structure set
             using var draft = await structureSetItem.DraftAsync();
+
             // Release the lock
             draft.ReleaseLock();
 

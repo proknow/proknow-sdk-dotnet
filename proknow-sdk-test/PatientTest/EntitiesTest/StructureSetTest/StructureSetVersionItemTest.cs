@@ -62,6 +62,7 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
 
             // Create a draft of the structure set
             using var draft = await structureSetItem.DraftAsync();
+
             // Get the version of the draft
             var versions = await draft.Versions.QueryAsync();
             var draftVersion = versions[0];
@@ -143,6 +144,7 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
 
             // Create a draft of the structure set
             using var draft = await structureSetItem.DraftAsync();
+
             // Get the version of the draft
             var versions = await draft.Versions.QueryAsync();
             var draftVersion = versions[0];
@@ -413,6 +415,7 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
 
             // Create a draft of that structure set
             using var draft = await structureSetItem.DraftAsync();
+
             // Get the version of that draft
             var versions = await draft.Versions.QueryAsync();
             var version = versions[0];
@@ -506,6 +509,7 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
 
             // Create a draft of that structure set
             using var draft = await structureSetItem.DraftAsync();
+
             // Get the version of the draft
             var versions = await draft.Versions.QueryAsync();
             var draftVersion = versions[0];

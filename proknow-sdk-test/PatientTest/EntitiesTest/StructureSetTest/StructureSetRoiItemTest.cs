@@ -82,6 +82,7 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
 
             // Get a draft of the structure set
             using var draft = await structureSetItem.DraftAsync();
+
             // Get the PTV
             roiItem = draft.Rois.First(r => r.Name == "PTV");
 

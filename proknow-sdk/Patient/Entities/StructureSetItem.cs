@@ -79,8 +79,8 @@ namespace ProKnow.Patient.Entities
             }
             var properties = new Dictionary<string, object>() { { "version", Data.VersionId }, { "rois", rois }, { "label", label }, { "message", message } };
             var requestContent = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
-            await _proKnow.Requestor.PostAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft/approve", headerKeyValuePairs, requestContent);
             StopRenewer();
+            await _proKnow.Requestor.PostAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft/approve", headerKeyValuePairs, requestContent);
             IsEditable = false;
             IsDraft = false;
             DraftLock = null;
@@ -136,8 +136,8 @@ namespace ProKnow.Patient.Entities
             }
             var properties = new Dictionary<string, object>() { { "version", Data.VersionId }, { "rois", rois } };
             var requestContent = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
-            await _proKnow.Requestor.PostAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft/discard", headerKeyValuePairs, requestContent);
             StopRenewer();
+            await _proKnow.Requestor.PostAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft/discard", headerKeyValuePairs, requestContent);
             IsEditable = false;
             DraftLock = null;
         }
