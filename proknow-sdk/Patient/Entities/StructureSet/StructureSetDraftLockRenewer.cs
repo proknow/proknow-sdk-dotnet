@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text.Json;
 using System.Threading;
-using ProKnow.Exceptions;
 
 namespace ProKnow.Patient.Entities.StructureSet
 {
