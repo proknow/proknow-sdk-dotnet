@@ -59,7 +59,7 @@ namespace ProKnow.Patient.Entities.StructureSet
         {
             _timer.Dispose();
             _timer = null;
-           _hasStarted = false;
+            _hasStarted = false;
         }
 
         /// <summary>
@@ -69,8 +69,16 @@ namespace ProKnow.Patient.Entities.StructureSet
         {
             if (_timer != null)
             {
-                var json = await _proKnow.Requestor.PutAsync($"/workspaces/{_structureSet.WorkspaceId}/structuresets/{_structureSet.Id}/draft/lock/{_structureSet.DraftLock.Id}");
-                _structureSet.DraftLock = JsonSerializer.Deserialize<StructureSetDraftLock>(json);
+                try
+                {
+                    var json = await _proKnow.Requestor.PutAsync($"/workspaces/{_structureSet.WorkspaceId}/structuresets/{_structureSet.Id}/draft/lock/{_structureSet.DraftLock.Id}");
+                    _structureSet.DraftLock = JsonSerializer.Deserialize<StructureSetDraftLock>(json);
+                }
+                catch (Exception ex)
+                {
+                    var patientSummary = await _proKnow.Patients.FindAsync(_structureSet.WorkspaceId, p => p.Id == _structureSet.PatientId);
+                    throw new Exception($"Error renewing draft lock for patient MRN '{patientSummary.Mrn}'.", ex);
+                }
             }
         }
     }

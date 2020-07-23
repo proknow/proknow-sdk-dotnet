@@ -1,4 +1,4 @@
-﻿﻿using ProKnow.Patient.Entities;
+﻿using ProKnow.Patient.Entities;
 using ProKnow.Patient.Registrations;
 using ProKnow.Upload;
 using System;

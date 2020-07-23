@@ -81,13 +81,16 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             Assert.IsFalse(roiItem.IsEditable());
 
             // Get a draft of the structure set
-            using var draft = await structureSetItem.DraftAsync();
+#pragma warning disable IDE0063 // Use simple 'using' statement
+            using (var draft = await structureSetItem.DraftAsync())
+#pragma warning restore IDE0063 // Use simple 'using' statement
+            {
+                // Get the PTV
+                roiItem = draft.Rois.First(r => r.Name == "PTV");
 
-            // Get the PTV
-            roiItem = draft.Rois.First(r => r.Name == "PTV");
-
-            // Verify that the PTV is editable
-            Assert.IsTrue(roiItem.IsEditable());
+                // Verify that the PTV is editable
+                Assert.IsTrue(roiItem.IsEditable());
+            }
         }
 
         [TestMethod]
