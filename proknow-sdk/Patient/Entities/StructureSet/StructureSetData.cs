@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace ProKnow.Patient.Entities
+namespace ProKnow.Patient.Entities.StructureSet
 {
     /// <summary>
     /// A container for the structure set entity data
@@ -27,10 +27,16 @@ namespace ProKnow.Patient.Entities
         public string Name { get; set; }
 
         /// <summary>
+        /// The key
+        /// </summary>
+        [JsonPropertyName("key")]
+        public string Key { get; set; }
+
+        /// <summary>
         /// The ROIs
         /// </summary>
         [JsonPropertyName("rois")]
-        public Roi[] Rois { get; set; }
+        public StructureSetRoiItem[] Rois { get; set; }
 
         /// <summary>
         /// Properties encountered during deserialization without matching members

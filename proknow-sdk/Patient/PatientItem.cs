@@ -95,7 +95,22 @@ namespace ProKnow.Patient
         
         //todo--Add CreateSpatialRegistrationObject method
 
-        //todo--Add CreateStructureSet method
+        /// <summary>
+        /// Creates a structure set asynchronously
+        /// </summary>
+        /// <param name="name">The structure set name</param>
+        /// <param name="imageSetId">The ProKnow ID of the referenced image set</param>
+        /// <returns>The entity summary of the created structure set</returns>
+        public async Task<EntitySummary> CreateStructureSetAsync(string name, string imageSetId)
+        {
+            var properties = new Dictionary<string, object>() { { "name", name }, { "image_set_id", imageSetId } };
+            var requestContent = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
+            var responseJson = await _proKnow.Requestor.PostAsync($"/workspaces/{WorkspaceId}/structuresets", null, requestContent);
+            var response = JsonSerializer.Deserialize<Dictionary<string, object>>(responseJson);
+            var structureSetId = response["id"].ToString();
+            await RefreshAsync();
+            return FindEntities(e => e.Id == structureSetId)[0];
+        }
 
         /// <summary>
         /// Deletes this patient item asynchronously

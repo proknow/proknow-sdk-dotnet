@@ -47,9 +47,30 @@ namespace ProKnow.Patient.Test
         }
 
         [TestMethod]
-        public async Task DeleteAsyncTest()
+        public async Task CreateStructureSetAsyncTest()
         {
             int testNumber = 1;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient with only images
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
+
+            // Get the image set ID
+            var imageSetSummary = patientItem.FindEntities(e => e.Type == "image_set")[0];
+
+            // Create a structure set
+            var structureSetSummary = await patientItem.CreateStructureSetAsync("Peaches", imageSetSummary.Id);
+
+            // Verify that the structure set was created
+            Assert.AreEqual("Peaches", (await structureSetSummary.GetAsync() as StructureSetItem).Data.Name);
+        }
+
+        [TestMethod]
+        public async Task DeleteAsyncTest()
+        {
+            int testNumber = 2;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -70,7 +91,7 @@ namespace ProKnow.Patient.Test
         [TestMethod]
         public async Task FindEntitiesTest()
         {
-            int testNumber = 2;
+            int testNumber = 3;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -88,7 +109,7 @@ namespace ProKnow.Patient.Test
         [TestMethod]
         public async Task FindSrosTest()
         {
-            int testNumber = 3;
+            int testNumber = 4;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -103,7 +124,7 @@ namespace ProKnow.Patient.Test
         [TestMethod]
         public async Task GetMetadataAsyncTest()
         {
-            int testNumber = 4;
+            int testNumber = 5;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -131,7 +152,7 @@ namespace ProKnow.Patient.Test
         [TestMethod]
         public async Task RefreshAsyncTest()
         {
-            int testNumber = 5;
+            int testNumber = 6;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -157,7 +178,7 @@ namespace ProKnow.Patient.Test
         [TestMethod]
         public async Task SaveAsyncTest()
         {
-            int testNumber = 6;
+            int testNumber = 7;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -199,7 +220,7 @@ namespace ProKnow.Patient.Test
         [TestMethod]
         public async Task SetMetadataAsyncTest()
         {
-            int testNumber = 7;
+            int testNumber = 8;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -228,7 +249,7 @@ namespace ProKnow.Patient.Test
         [TestMethod]
         public async Task UploadAsyncTest_FilePath()
         {
-            int testNumber = 8;
+            int testNumber = 9;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -259,7 +280,7 @@ namespace ProKnow.Patient.Test
         [TestMethod]
         public async Task UploadAsyncTest_FolderPath()
         {
-            int testNumber = 9;
+            int testNumber = 10;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -295,7 +316,7 @@ namespace ProKnow.Patient.Test
         [TestMethod]
         public async Task UploadAsyncTest_MultiplePaths()
         {
-            int testNumber = 10;
+            int testNumber = 11;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);

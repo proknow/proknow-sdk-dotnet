@@ -28,6 +28,11 @@
           "toc.yml",
           "*.md"
         ]
+      },
+      {
+        "files": [
+          "releaseHistory.md"
+        ]
       }
     ],
     "resource": [

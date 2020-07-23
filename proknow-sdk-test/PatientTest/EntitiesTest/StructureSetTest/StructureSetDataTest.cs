@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProKnow.Patient.Entities.Test
+namespace ProKnow.Patient.Entities.StructureSet.Test
 {
     [TestClass]
     public class StructureSetDataTest

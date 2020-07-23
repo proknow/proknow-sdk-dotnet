@@ -14,6 +14,7 @@ namespace ProKnow.Scorecard
         [JsonPropertyName("label")]
         public string Label { get; set; }
 
+        //todo--Use System.Drawing or System.Windows.Media for colors
         /// <summary>
         /// The RGB color values
         /// </summary>

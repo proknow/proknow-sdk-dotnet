@@ -16,7 +16,7 @@ namespace ProKnow.Patient.Entities.Test
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
         {
-            // Delete test workspace, if necessary
+            // Delete test workspaces, if necessary
             await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
 
             // Create download folder root
@@ -30,8 +30,8 @@ namespace ProKnow.Patient.Entities.Test
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
-            // Delete test workspace
-            await _proKnow.Workspaces.DeleteAsync(_workspaceId);
+            // Delete test workspaces
+            await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
 
             // Delete download folder
             if (Directory.Exists(_downloadFolderRoot))
