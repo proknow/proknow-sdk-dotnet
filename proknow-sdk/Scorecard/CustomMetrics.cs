@@ -14,7 +14,7 @@ namespace ProKnow.Scorecard
     /// </summary>
     public class CustomMetrics
     {
-        private ProKnowApi _proKnow;
+        private readonly ProKnowApi _proKnow;
         private IList<CustomMetricItem> _cache;
 
         /// <summary>

@@ -90,9 +90,11 @@ namespace ProKnow.Collection
         /// <returns></returns>
         public async Task SaveAsync()
         {
-            var properties = new Dictionary<string, object>();
-            properties.Add("name", Name);
-            properties.Add("description", Description);
+            var properties = new Dictionary<string, object>
+            {
+                { "name", Name },
+                { "description", Description }
+            };
             var requestJson = JsonSerializer.Serialize(properties);
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
             await _proKnow.Requestor.PutAsync($"/collections/{Id}", null, requestContent);

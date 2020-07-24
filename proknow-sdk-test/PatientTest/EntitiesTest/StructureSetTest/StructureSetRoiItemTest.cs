@@ -10,11 +10,12 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
     [TestClass]
     public class StructureSetRoiItemTest
     {
-        private static string _patientMrnAndName = "SDK-StructureSetRoiItemTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly string _patientMrnAndName = "SDK-StructureSetRoiItemTest";
 
         [ClassInitialize]
+#pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             // Delete test workspaces, if necessary
             await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
@@ -80,7 +81,9 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             Assert.IsFalse(roiItem.IsEditable());
 
             // Get a draft of the structure set
+#pragma warning disable IDE0063 // Use simple 'using' statement
             using (var draft = await structureSetItem.DraftAsync())
+#pragma warning restore IDE0063 // Use simple 'using' statement
             {
                 // Get the PTV
                 roiItem = draft.Rois.First(r => r.Name == "PTV");

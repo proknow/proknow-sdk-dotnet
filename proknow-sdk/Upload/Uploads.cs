@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using ProKnow.Exceptions;
 
@@ -17,13 +18,15 @@ namespace ProKnow.Upload
     /// </summary>
     public class Uploads
     {
+        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(4);
+
         private const int RETRY_DELAY = 200;
         private const int MAX_TOTAL_RETRY_DELAY = 30000;
         private const int MAX_RETRIES = MAX_TOTAL_RETRY_DELAY / RETRY_DELAY;
 
-        private ProKnowApi _proKnow;
-        private JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
-        private IList<string> _terminalStatuses = new List<string>() { "completed", "pending", "failed" };
+        private readonly ProKnowApi _proKnow;
+        private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+        private readonly IList<string> _terminalStatuses = new List<string>() { "completed", "pending", "failed" };
 
         /// <summary>
         /// Constructs an Uploads object
@@ -165,18 +168,21 @@ namespace ProKnow.Upload
         /// <returns>The result of the batch upload</returns>
         private async Task<UploadBatch> UploadFilesAsync(string workspaceId, IList<string> paths,  UploadFileOverrides overrides, bool doWait)
         {
-            var maxThreads = 4;
-            var q = new ConcurrentQueue<string>(paths);
             var tasks = new List<Task>();
             var initiateFileUploadResponses = new ConcurrentBag<InitiateFileUploadResponse>();
-            for (int n = 0; n < maxThreads; n++)
+            foreach (var path in paths)
             {
                 tasks.Add(Task.Run(async () =>
                 {
-                    while (q.TryDequeue(out string path))
+                    await _semaphore.WaitAsync();
+                    try
                     {
                         var uploadFileResults = await UploadFileAsync(workspaceId, path, overrides);
                         initiateFileUploadResponses.Add(uploadFileResults);
+                    }
+                    finally
+                    {
+                        _semaphore.Release();
                     }
                 }));
             }

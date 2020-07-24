@@ -9,11 +9,13 @@ namespace ProKnow.Collection.Test
     [TestClass]
     public class CollectionPatientSummaryTest
     {
-        private static string _testClassName = nameof(CollectionPatientSummaryTest);
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly string _testClassName = nameof(CollectionPatientSummaryTest);
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
 
         [ClassInitialize]
+#pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             // Delete test collections, if necessary
             await TestHelper.DeleteCollectionsAsync(_testClassName);

@@ -30,7 +30,7 @@ namespace ProKnow.Patient.Entities
         /// </remarks>
         public override Task<string> DownloadAsync(string path)
         {
-            string file = null;
+            string file;
             if (Directory.Exists(path))
             {
                 file = Path.Combine(path, $"RD.{Uid}.dcm");

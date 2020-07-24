@@ -11,11 +11,13 @@ namespace ProKnow.Upload.Test
     [TestClass]
     public class UploadBatchTest
     {
-        private static string _patientMrnAndName = "SDK-UploadBatchTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly string _patientMrnAndName = "SDK-UploadBatchTest";
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
 
         [ClassInitialize]
+#pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             // Delete test workspaces, if necessary
             await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);

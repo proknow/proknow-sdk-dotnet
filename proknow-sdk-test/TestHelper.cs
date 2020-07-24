@@ -13,7 +13,7 @@ namespace ProKnow.Test
     /// </summary>
     public static class TestHelper
     {
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
 
         /// <summary>
         /// Creates a test patient asynchronously

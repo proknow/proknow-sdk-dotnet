@@ -12,8 +12,8 @@ namespace ProKnow.Patient.Entities.Test
     [TestClass]
     public class EntityScorecardSummaryTest
     {
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static string _patientMrnAndName = "SDK-EntityScorecardSummaryTest";
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly string _patientMrnAndName = "SDK-EntityScorecardSummaryTest";
         private static string _workspaceId;
         private static EntitySummary _entitySummary;
         private static EntityScorecards _entityScorecards;

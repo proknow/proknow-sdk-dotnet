@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,12 +12,14 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
     [TestClass]
     public class StructureSetVersionItemTest
     {
-        private static string _patientMrnAndName = "SDK-StructureSetVersionItemTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
+        private static readonly string _patientMrnAndName = "SDK-StructureSetVersionItemTest";
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
 
         [ClassInitialize]
+#pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             // Delete test workspace, if necessary
             await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
@@ -59,7 +59,9 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
             // Create a draft of the structure set
+#pragma warning disable IDE0063 // Use simple 'using' statement
             using (var draft = await structureSetItem.DraftAsync())
+#pragma warning restore IDE0063 // Use simple 'using' statement
             {
                 // Get the version of the draft
                 var versions = await draft.Versions.QueryAsync();
@@ -142,7 +144,9 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
             // Create a draft of the structure set
+#pragma warning disable IDE0063 // Use simple 'using' statement
             using (var draft = await structureSetItem.DraftAsync())
+#pragma warning restore IDE0063 // Use simple 'using' statement
             {
                 // Get the version of the draft
                 var versions = await draft.Versions.QueryAsync();
@@ -414,7 +418,9 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
             // Create a draft of that structure set
+#pragma warning disable IDE0063 // Use simple 'using' statement
             using (var draft = await structureSetItem.DraftAsync())
+#pragma warning restore IDE0063 // Use simple 'using' statement
             {
                 // Get the version of that draft
                 var versions = await draft.Versions.QueryAsync();
@@ -509,7 +515,9 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
             // Create a draft of that structure set
+#pragma warning disable IDE0063 // Use simple 'using' statement
             using (var draft = await structureSetItem.DraftAsync())
+#pragma warning restore IDE0063 // Use simple 'using' statement
             {
                 // Get the version of the draft
                 var versions = await draft.Versions.QueryAsync();

@@ -21,8 +21,8 @@ namespace ProKnow
             AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
         });
 
-        private string _baseUrl;
-        private AuthenticationHeaderValue _authenticationHeaderValue;
+        private readonly string _baseUrl;
+        private readonly AuthenticationHeaderValue _authenticationHeaderValue;
 
         /// <summary>
         /// Constructs a requestor object

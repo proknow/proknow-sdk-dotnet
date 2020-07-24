@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text.Json;
 using System.Threading;
-using ProKnow.Exceptions;
 
 namespace ProKnow.Patient.Entities.StructureSet
 {
@@ -10,8 +9,8 @@ namespace ProKnow.Patient.Entities.StructureSet
     /// </summary>
     public class StructureSetDraftLockRenewer
     {
-        private ProKnowApi _proKnow;
-        private StructureSetItem _structureSet;
+        private readonly ProKnowApi _proKnow;
+        private readonly StructureSetItem _structureSet;
         private Timer _timer;
         private bool _hasStarted;
         private TimeSpan _lockRenewalBuffer;
@@ -69,8 +68,16 @@ namespace ProKnow.Patient.Entities.StructureSet
         {
             if (_timer != null)
             {
-                var json = await _proKnow.Requestor.PutAsync($"/workspaces/{_structureSet.WorkspaceId}/structuresets/{_structureSet.Id}/draft/lock/{_structureSet.DraftLock.Id}");
-                _structureSet.DraftLock = JsonSerializer.Deserialize<StructureSetDraftLock>(json);
+                try
+                {
+                    var json = await _proKnow.Requestor.PutAsync($"/workspaces/{_structureSet.WorkspaceId}/structuresets/{_structureSet.Id}/draft/lock/{_structureSet.DraftLock.Id}");
+                    _structureSet.DraftLock = JsonSerializer.Deserialize<StructureSetDraftLock>(json);
+                }
+                catch (Exception ex)
+                {
+                    var patientSummary = await _proKnow.Patients.FindAsync(_structureSet.WorkspaceId, p => p.Id == _structureSet.PatientId);
+                    throw new Exception($"Error renewing draft lock for patient MRN '{patientSummary.Mrn}'.", ex);
+                }
             }
         }
     }

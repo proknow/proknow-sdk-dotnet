@@ -10,14 +10,16 @@ namespace ProKnow.Patient.Entities.Test
     [TestClass]
     public class EntityItemTest
     {
-        private static string _patientMrnAndName = "SDK-EntityItemTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static Uploads _uploads = _proKnow.Uploads;
+        private static readonly string _patientMrnAndName = "SDK-EntityItemTest";
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly Uploads _uploads = _proKnow.Uploads;
         private static string _workspaceId;
         private static PatientSummary _patientSummary;
 
         [ClassInitialize]
+#pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             // Delete test workspace, if necessary
             await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);

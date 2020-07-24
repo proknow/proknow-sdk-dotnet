@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ProKnow.Patient.Entities.Test
@@ -14,13 +13,15 @@ namespace ProKnow.Patient.Entities.Test
     [TestClass]
     public class StructureSetItemTest
     {
-        private static string _patientMrnAndName = "SDK-StructureSetItemTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static int _lockRenewalBuffer = _proKnow.LockRenewalBuffer;
-        private static string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
+        private static readonly string _patientMrnAndName = "SDK-StructureSetItemTest";
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly int _lockRenewalBuffer = _proKnow.LockRenewalBuffer;
+        private static readonly string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
 
         [ClassInitialize]
+#pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             // Delete test workspace, if necessary
             await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
@@ -92,7 +93,9 @@ namespace ProKnow.Patient.Entities.Test
             _proKnow.LockRenewalBuffer = 360;
 
             // Create a draft of that structure set
+#pragma warning disable IDE0063 // Use simple 'using' statement
             using (var draft = await structureSetItem.DraftAsync())
+#pragma warning restore IDE0063 // Use simple 'using' statement
             {
                 // Add an ROI and commit (approve) the change
                 await draft.CreateRoiAsync("thing1", Color.Magenta, "ORGAN");
@@ -233,7 +236,9 @@ namespace ProKnow.Patient.Entities.Test
             _proKnow.LockRenewalBuffer = 360;
 
             // Get a draft of the structure set
+#pragma warning disable IDE0063 // Use simple 'using' statement
             using (var draft = await structureSetItem.DraftAsync())
+#pragma warning restore IDE0063 // Use simple 'using' statement
             {
                 // Discard the draft
                 await draft.DiscardAsync();
@@ -264,7 +269,9 @@ namespace ProKnow.Patient.Entities.Test
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
             // Get a draft of the structure set
+#pragma warning disable IDE0063 // Use simple 'using' statement
             using (var draft = await structureSetItem.DraftAsync())
+#pragma warning restore IDE0063 // Use simple 'using' statement
             {
                 // Try to download the draft and verify the exception
                 try
@@ -403,7 +410,9 @@ namespace ProKnow.Patient.Entities.Test
             _proKnow.LockRenewalBuffer = 360;
 
             // Get a draft of the structure set
+#pragma warning disable IDE0063 // Use simple 'using' statement
             using (var draft = await structureSetItem.DraftAsync())
+#pragma warning restore IDE0063 // Use simple 'using' statement
             {
                 // Verify that the same structure set was returned
                 Assert.AreEqual(structureSetItem.Id, draft.Id);
@@ -460,7 +469,9 @@ namespace ProKnow.Patient.Entities.Test
                     CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
 
                 // Try to get another draft of the structure set
+#pragma warning disable IDE0063 // Use simple 'using' statement
                 using (var draft2 = await structureSetItem.DraftAsync())
+#pragma warning restore IDE0063 // Use simple 'using' statement
                 {
                     // Save the new lock ID and expiration date
                     newLockId = draft2.DraftLock.Id;
@@ -488,7 +499,9 @@ namespace ProKnow.Patient.Entities.Test
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
             // Create a draft of the structure set
+#pragma warning disable IDE0063 // Use simple 'using' statement
             using (var draft = await structureSetItem.DraftAsync())
+#pragma warning restore IDE0063 // Use simple 'using' statement
             {
                 // Try to download the draft and verify the exception
                 try
@@ -518,7 +531,9 @@ namespace ProKnow.Patient.Entities.Test
             var originalRoiCount = structureSetItem.Rois.Length;
 
             // Create a draft of that structure set
+#pragma warning disable IDE0063 // Use simple 'using' statement
             using (var draft = await structureSetItem.DraftAsync())
+#pragma warning restore IDE0063 // Use simple 'using' statement
             {
                 // Add an ROI and commit (approve) the change
                 await draft.CreateRoiAsync("thing1", Color.Magenta, "ORGAN");
@@ -567,7 +582,9 @@ namespace ProKnow.Patient.Entities.Test
             _proKnow.LockRenewalBuffer = 360;
 
             // Create a draft of that structure set
+#pragma warning disable IDE0063 // Use simple 'using' statement
             using (var draft = await structureSetItem.DraftAsync())
+#pragma warning restore IDE0063 // Use simple 'using' statement
             {
                 // Release the lock
                 draft.ReleaseLock();

@@ -14,7 +14,7 @@ namespace ProKnow.Scorecard
     /// </summary>
     public class ScorecardTemplates
     {
-        private ProKnowApi _proKnow;
+        private readonly ProKnowApi _proKnow;
         private IList<ScorecardTemplateSummary> _cache;
 
         /// <summary>

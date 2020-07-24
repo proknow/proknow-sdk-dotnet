@@ -11,7 +11,7 @@ namespace ProKnow.Patient.Entities
     /// </summary>
     public class EntitySummary
     {
-        static private Dictionary<string, string> typeToRoutePartMap = new Dictionary<string, string>() {
+        private static readonly Dictionary<string, string> typeToRoutePartMap = new Dictionary<string, string>() {
             { "image_set", "imagesets"},
             { "structure_set", "structuresets" },
             { "plan", "plans" },

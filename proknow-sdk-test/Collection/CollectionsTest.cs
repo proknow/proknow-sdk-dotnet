@@ -13,14 +13,16 @@ namespace ProKnow.Collection.Test
     [TestClass]
     public class CollectionsTest
     {
-        private static string _baseName = "SDK-CollectionsTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static Uploads _uploads = _proKnow.Uploads;
+        private static readonly string _baseName = "SDK-CollectionsTest";
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly Uploads _uploads = _proKnow.Uploads;
         private static string _workspaceId;
         private static CollectionItem _collectionItem;
 
         [ClassInitialize]
+#pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             // Delete test collections, if necessary
             await TestHelper.DeleteCollectionsAsync(_baseName);

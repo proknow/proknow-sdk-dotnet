@@ -8,12 +8,13 @@ namespace ProKnow.Patient.Entities.Test
     [TestClass]
     public class DoseItemTest
     {
-        private static string _patientMrnAndName = "SDK-DoseItemTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
+        private static readonly string _patientMrnAndName = "SDK-DoseItemTest";
+        private static readonly string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
 
         [ClassInitialize]
+#pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             // Delete test workspace, if necessary
             await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);

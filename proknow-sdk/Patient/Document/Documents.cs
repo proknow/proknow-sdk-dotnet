@@ -12,7 +12,7 @@ namespace ProKnow.Patient.Document
     /// </summary>
     public class Documents
     {
-        private ProKnowApi _proKnow;
+        private readonly ProKnowApi _proKnow;
 
         /// <summary>
         /// Constructs a documents object
@@ -32,7 +32,7 @@ namespace ProKnow.Patient.Document
         /// <param name="documentName">Optional name for document, including file extension</param>
         public async Task CreateAsync(string workspaceId, string patientId, string path, string documentName = null)
         {
-            var documentLabel = documentName != null ? documentName : Path.GetFileName(path);
+            var documentLabel = documentName ?? Path.GetFileName(path);
             var route = $"/workspaces/{workspaceId}/patients/{patientId}/documents/{documentLabel}";
             using (var content = new MultipartFormDataContent())
             {

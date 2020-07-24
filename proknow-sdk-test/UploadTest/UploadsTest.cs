@@ -11,12 +11,14 @@ namespace ProKnow.Upload.Test
     [TestClass]
     public class UploadsTest
     {
-        private static string _testClassName = "SDK-UploadsTest";
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static Uploads _uploads = _proKnow.Uploads;
+        private static readonly string _testClassName = "SDK-UploadsTest";
+        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
+        private static readonly Uploads _uploads = _proKnow.Uploads;
 
         [ClassInitialize]
+#pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             // Delete test workspaces, if necessary
             await TestHelper.DeleteWorkspacesAsync(_testClassName);

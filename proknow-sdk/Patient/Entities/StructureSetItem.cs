@@ -168,7 +168,7 @@ namespace ProKnow.Patient.Entities
             {
                 throw new InvalidOperationError("Structure set drafts cannot be downloaded.");
             }
-            string file = null;
+            string file;
             if (Directory.Exists(path))
             {
                 file = Path.Combine(path, $"RS.{Uid}.dcm");
@@ -192,7 +192,7 @@ namespace ProKnow.Patient.Entities
         /// <returns>A draft structure set item</returns>
         public async Task<StructureSetItem> DraftAsync()
         {
-            StructureSetDraftLock draftLock = null;
+            StructureSetDraftLock draftLock;
             try
             {
                 // Create a structure set draft
@@ -210,8 +210,10 @@ namespace ProKnow.Patient.Entities
                 var lockJson = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}/draft/lock");
                 draftLock = JsonSerializer.Deserialize<StructureSetDraftLock>(lockJson);
             }
-            var queryParameters = new Dictionary<string, object>();
-            queryParameters.Add("version", "draft");
+            var queryParameters = new Dictionary<string, object>
+            {
+                { "version", "draft" }
+            };
             var responseJson = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}", queryParameters);
             var structureSetItem = JsonSerializer.Deserialize<StructureSetItem>(responseJson);
             structureSetItem.PostProcessDeserialization(_proKnow, WorkspaceId);
