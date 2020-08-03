@@ -9,18 +9,9 @@ namespace ProKnow.Patient.Entities.Test
     [TestClass]
     public class ImageSetItemTest
     {
-<<<<<<< HEAD
-        private static readonly string _patientMrnAndName = "SDK-ImageSetItemTest";
+        private static readonly string _testClassName = nameof(ImageSetItemTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static readonly Uploads _uploads = _proKnow.Uploads;
-        private static string _workspaceId;
-        private static string[] _uploadedFiles;
-        private static ImageSetItem _imageSetItem;
-=======
-        private static string _testClassName = nameof(ImageSetItemTest);
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static string _downloadFolder = Path.Combine(Path.GetTempPath(), _testClassName);
->>>>>>> Add ability to get image pixel data and convert some extension data into specific properties
+        private static readonly string _downloadFolder = Path.Combine(Path.GetTempPath(), _testClassName);
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter

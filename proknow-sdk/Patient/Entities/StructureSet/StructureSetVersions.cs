@@ -60,7 +60,7 @@ namespace ProKnow.Patient.Entities.StructureSet
             {
                 { "version", versionId }
             };
-            var responseJson = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{StructureSetId}", queryParameters);
+            var responseJson = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{StructureSetId}", null, queryParameters);
             var structureSetItem = JsonSerializer.Deserialize<StructureSetItem>(responseJson);
             structureSetItem.PostProcessDeserialization(_proKnow, WorkspaceId);
             structureSetItem.IsDraft = (versionId == "draft");

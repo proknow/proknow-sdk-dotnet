@@ -14,15 +14,9 @@ namespace ProKnow.Test
     [TestClass]
     public class RequestorTest
     {
-<<<<<<< HEAD
         private static readonly string _testClassName = nameof(RequestorTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static Requestor _requestor;
-=======
-        private static string _testClassName = nameof(RequestorTest);
-        private static ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _testClassName);
->>>>>>> Add ability to get image pixel data and convert some extension data into specific properties
+        private static readonly string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _testClassName);
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
@@ -32,19 +26,12 @@ namespace ProKnow.Test
             // Delete test workspaces, if necessary
             await TestHelper.DeleteWorkspacesAsync(_testClassName);
 
-<<<<<<< HEAD
-            // Create requestor
-            using StreamReader sr = new StreamReader(TestSettings.CredentialsFile);
-            var proKnowCredentials = JsonSerializer.Deserialize<ProKnowCredentials>(sr.ReadToEnd());
-            _requestor = new Requestor(TestSettings.BaseUrl, proKnowCredentials.Id, proKnowCredentials.Secret);
-=======
             // Create download folder root
             if (Directory.Exists(_downloadFolderRoot))
             {
                 Directory.Delete(_downloadFolderRoot, true);
             }
             Directory.CreateDirectory(_downloadFolderRoot);
->>>>>>> Add ability to get image pixel data and convert some extension data into specific properties
         }
 
         [ClassCleanup]
