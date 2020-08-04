@@ -11,21 +11,30 @@ namespace ProKnow.Scorecard.Test
     public class ScorecardTemplatesTest
     {
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static readonly string _baseName = "SDK-ScorecardTemplatesTest";
-        private static ComputedMetric _computedMetric;
-        private static CustomMetricItem _customMetricItem;
-        private static List<ComputedMetric> _computedMetrics;
-        private static List<CustomMetric> _customMetrics;
-        private static ScorecardTemplateItem _scorecardTemplateItem;
+        private static readonly string _testClassName = nameof(ScorecardTemplatesTest);
 
         [TestInitialize]
         public async Task ClassInitialize()
         {
-            // Cleanup from previous test failure, if necessary
+            // Cleanup from previous test stoppage or failure, if necessary
             await ClassCleanup();
+        }
+
+        [TestCleanup]
+        public async Task ClassCleanup()
+        {
+            // Delete scorecard templates and custom metrics created for this test
+            await TestHelper.DeleteScorecardTemplatesAsync(_testClassName);
+            await TestHelper.DeleteCustomMetricsAsync(_testClassName);
+        }
+
+        [TestMethod]
+        public async Task CreateAsyncTest()
+        {
+            var testNumber = 1;
 
             // Create computed metric for testing
-            _computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
+            var expectedComputedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
                 new List<MetricBin>() {
                     new MetricBin("IDEAL", new byte[] { Color.Green.R, Color.Green.G, Color.Green.B }),
                     new MetricBin("GOOD", new byte[] { Color.LightGreen.R, Color.LightGreen.G, Color.LightGreen.B }, 20),
@@ -35,141 +44,223 @@ namespace ProKnow.Scorecard.Test
                 });
 
             // Create custom metric for testing
-            _customMetricItem = await _proKnow.CustomMetrics.CreateAsync(_baseName, "patient", "number");
+            var expectedCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}", "patient", "number");
 
             // Add objectives to custom metric
-            _customMetricItem.Objectives = new List<MetricBin>()
+            expectedCustomMetricItem.Objectives = new List<MetricBin>()
             {
                 new MetricBin("PASS", new byte[] { 18, 191, 0 }, null, 90),
                 new MetricBin("FAIL", new byte[] { 255, 0, 0 })
             };
 
-            // Create scorecard template for testing
-            _computedMetrics = new List<ComputedMetric>() { _computedMetric };
-            _customMetrics = new List<CustomMetric>() { new CustomMetric(_customMetricItem.Name, _customMetricItem.Objectives) };
-            _scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync(_baseName, _computedMetrics, _customMetrics);
-        }
+            // Create a scorecard template
+            var expectedComputedMetrics = new List<ComputedMetric>() { expectedComputedMetric };
+            var expectedCustomMetrics = new List<CustomMetric>() { new CustomMetric(expectedCustomMetricItem.Name, expectedCustomMetricItem.Objectives) };
+            var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", expectedComputedMetrics, expectedCustomMetrics);
 
-        [TestCleanup]
-        public async Task ClassCleanup()
-        {
-            // Delete scorecard template and custom metric created for this test
-            await TestHelper.DeleteScorecardTemplatesAsync(_baseName);
-            await TestHelper.DeleteCustomMetricsAsync(_baseName);
-        }
-
-        [TestMethod]
-        public void CreateAsyncTest()
-        {
-            // Verify creation of scorecard template in test initialization
-            Assert.AreEqual(_baseName, _scorecardTemplateItem.Name);
-            Assert.AreEqual(1, _scorecardTemplateItem.ComputedMetrics.Count);
-            var computedMetric = _scorecardTemplateItem.ComputedMetrics[0];
-            Assert.AreEqual(_computedMetric.Type, computedMetric.Type);
-            Assert.AreEqual(_computedMetric.RoiName, computedMetric.RoiName);
-            Assert.AreEqual(_computedMetric.Arg1, computedMetric.Arg1);
-            Assert.AreEqual(_computedMetric.Arg2, computedMetric.Arg2);
-            Assert.AreEqual(_computedMetric.Objectives.Count, computedMetric.Objectives.Count);
-            for (var i = 0; i < _computedMetric.Objectives.Count; i++)
+            // Verify the returned scorecard template
+            Assert.AreEqual($"{_testClassName}-{testNumber}", scorecardTemplateItem.Name);
+            Assert.AreEqual(1, scorecardTemplateItem.ComputedMetrics.Count);
+            var actualComputedMetric = scorecardTemplateItem.ComputedMetrics[0];
+            Assert.AreEqual(expectedComputedMetric.Type, actualComputedMetric.Type);
+            Assert.AreEqual(expectedComputedMetric.RoiName, actualComputedMetric.RoiName);
+            Assert.AreEqual(expectedComputedMetric.Arg1, actualComputedMetric.Arg1);
+            Assert.AreEqual(expectedComputedMetric.Arg2, actualComputedMetric.Arg2);
+            Assert.AreEqual(expectedComputedMetric.Objectives.Count, actualComputedMetric.Objectives.Count);
+            for (var i = 0; i < actualComputedMetric.Objectives.Count; i++)
             {
-                Assert.AreEqual(_computedMetric.Objectives[i].Label, computedMetric.Objectives[i].Label);
-                Assert.AreEqual(_computedMetric.Objectives[i].Color[0], computedMetric.Objectives[i].Color[0]);
-                Assert.AreEqual(_computedMetric.Objectives[i].Color[1], computedMetric.Objectives[i].Color[1]);
-                Assert.AreEqual(_computedMetric.Objectives[i].Color[2], computedMetric.Objectives[i].Color[2]);
-                Assert.AreEqual(_computedMetric.Objectives[i].Min, computedMetric.Objectives[i].Min);
-                Assert.AreEqual(_computedMetric.Objectives[i].Max, computedMetric.Objectives[i].Max);
+                Assert.AreEqual(expectedComputedMetric.Objectives[i].Label, actualComputedMetric.Objectives[i].Label);
+                Assert.AreEqual(expectedComputedMetric.Objectives[i].Color[0], actualComputedMetric.Objectives[i].Color[0]);
+                Assert.AreEqual(expectedComputedMetric.Objectives[i].Color[1], actualComputedMetric.Objectives[i].Color[1]);
+                Assert.AreEqual(expectedComputedMetric.Objectives[i].Color[2], actualComputedMetric.Objectives[i].Color[2]);
+                Assert.AreEqual(expectedComputedMetric.Objectives[i].Min, actualComputedMetric.Objectives[i].Min);
+                Assert.AreEqual(expectedComputedMetric.Objectives[i].Max, actualComputedMetric.Objectives[i].Max);
             }
-            Assert.AreEqual(1, _scorecardTemplateItem.CustomMetrics.Count);
-            var customMetricItem = _scorecardTemplateItem.CustomMetrics[0];
-            Assert.AreEqual(_customMetricItem.Id, customMetricItem.Id);
+            Assert.AreEqual(1, scorecardTemplateItem.CustomMetrics.Count);
+            var actualCustomMetricItem = scorecardTemplateItem.CustomMetrics[0];
+            Assert.AreEqual(expectedCustomMetricItem.Id, actualCustomMetricItem.Id);
         }
 
         [TestMethod]
         public async Task DeleteAsyncTest()
         {
-            // Delete the scorecard template created in initialization
-            await _proKnow.ScorecardTemplates.DeleteAsync(_scorecardTemplateItem.Id);
+            var testNumber = 2;
+
+            // Create a scorecard template
+            var computedMetrics = new List<ComputedMetric>();
+            var customMetrics = new List<CustomMetric>();
+            var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+
+            // Delete the scorecard template
+            await _proKnow.ScorecardTemplates.DeleteAsync(scorecardTemplateItem.Id);
 
             // Verify the scorecard template was deleted
-            var scorecardTemplate = await _proKnow.ScorecardTemplates.FindAsync(t => t.Name == _baseName);
-            Assert.IsNull(scorecardTemplate);
-
-            // Restore the deleted scorecard template
-            _scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync(_baseName, _computedMetrics, _customMetrics);
+            var scorecardTemplateSummary = await _proKnow.ScorecardTemplates.FindAsync(t => t.Name == _testClassName);
+            Assert.IsNull(scorecardTemplateSummary);
         }
 
         [TestMethod]
         public async Task FindAsyncTest()
         {
-            var scorecardTemplate = await _proKnow.ScorecardTemplates.FindAsync(t => t.Name == _baseName);
-            Assert.AreEqual(_scorecardTemplateItem.Id, scorecardTemplate.Id);
-            Assert.AreEqual(_scorecardTemplateItem.Name, scorecardTemplate.Name);
+            var testNumber = 3;
+
+            // Create a scorecard template
+            var computedMetrics = new List<ComputedMetric>();
+            var customMetrics = new List<CustomMetric>();
+            var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+
+            // Find the created scorecard template
+            var scorecardTemplateSummary = await _proKnow.ScorecardTemplates.FindAsync(t => t.Name == scorecardTemplateItem.Name);
+
+            // Verify the returned scorecard template summary
+            Assert.AreEqual(scorecardTemplateItem.Id, scorecardTemplateSummary.Id);
+            Assert.AreEqual(scorecardTemplateItem.Name, scorecardTemplateSummary.Name);
         }
 
         [TestMethod]
         public async Task GetAsyncTest()
         {
-            var scorecardTemplateItem = await _proKnow.ScorecardTemplates.GetAsync(_scorecardTemplateItem.Id);
-            Assert.AreEqual(_baseName, scorecardTemplateItem.Name);
-            Assert.AreEqual(1, scorecardTemplateItem.ComputedMetrics.Count);
-            var computedMetric = scorecardTemplateItem.ComputedMetrics[0];
-            Assert.AreEqual(_computedMetric.Type, computedMetric.Type);
-            Assert.AreEqual(_computedMetric.RoiName, computedMetric.RoiName);
-            Assert.AreEqual(_computedMetric.Arg1, computedMetric.Arg1);
-            Assert.AreEqual(_computedMetric.Arg2, computedMetric.Arg2);
-            Assert.AreEqual(_computedMetric.Objectives.Count, computedMetric.Objectives.Count);
-            for (var i = 0; i < _computedMetric.Objectives.Count; i++)
+            var testNumber = 4;
+
+            // Create computed metric for testing
+            var expectedComputedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
+                new List<MetricBin>() {
+                    new MetricBin("IDEAL", new byte[] { Color.Green.R, Color.Green.G, Color.Green.B }),
+                    new MetricBin("GOOD", new byte[] { Color.LightGreen.R, Color.LightGreen.G, Color.LightGreen.B }, 20),
+                    new MetricBin("ACCEPTABLE", new byte[] { Color.Yellow.R, Color.Yellow.G, Color.Yellow.B }, 40, 60),
+                    new MetricBin("MARGINAL", new byte[] { Color.Orange.R, Color.Orange.G, Color.Orange.B }, null, 80),
+                    new MetricBin("UNACCEPTABLE", new byte[] { Color.Red.R, Color.Red.G, Color.Red.B })
+                });
+
+            // Create custom metric for testing
+            var expectedCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}", "patient", "number");
+
+            // Add objectives to custom metric
+            expectedCustomMetricItem.Objectives = new List<MetricBin>()
             {
-                Assert.AreEqual(_computedMetric.Objectives[i].Label, computedMetric.Objectives[i].Label);
-                Assert.AreEqual(_computedMetric.Objectives[i].Color[0], computedMetric.Objectives[i].Color[0]);
-                Assert.AreEqual(_computedMetric.Objectives[i].Color[1], computedMetric.Objectives[i].Color[1]);
-                Assert.AreEqual(_computedMetric.Objectives[i].Color[2], computedMetric.Objectives[i].Color[2]);
-                Assert.AreEqual(_computedMetric.Objectives[i].Min, computedMetric.Objectives[i].Min);
-                Assert.AreEqual(_computedMetric.Objectives[i].Max, computedMetric.Objectives[i].Max);
+                new MetricBin("PASS", new byte[] { 18, 191, 0 }, null, 90),
+                new MetricBin("FAIL", new byte[] { 255, 0, 0 })
+            };
+
+            // Create a scorecard template
+            var expectedComputedMetrics = new List<ComputedMetric>() { expectedComputedMetric };
+            var expectedCustomMetrics = new List<CustomMetric>() { new CustomMetric(expectedCustomMetricItem.Name, expectedCustomMetricItem.Objectives) };
+            var expectedScorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", expectedComputedMetrics, expectedCustomMetrics);
+
+            // Get that scorecard template
+            var actualScorecardTemplateItem = await _proKnow.ScorecardTemplates.GetAsync(expectedScorecardTemplateItem.Id);
+
+            // Verify the returned scorecard template
+            Assert.AreEqual(expectedScorecardTemplateItem.Name, actualScorecardTemplateItem.Name);
+            Assert.AreEqual(1, actualScorecardTemplateItem.ComputedMetrics.Count);
+            var actualComputedMetric = actualScorecardTemplateItem.ComputedMetrics[0];
+            Assert.AreEqual(expectedComputedMetric.Type, actualComputedMetric.Type);
+            Assert.AreEqual(expectedComputedMetric.RoiName, actualComputedMetric.RoiName);
+            Assert.AreEqual(expectedComputedMetric.Arg1, actualComputedMetric.Arg1);
+            Assert.AreEqual(expectedComputedMetric.Arg2, actualComputedMetric.Arg2);
+            Assert.AreEqual(expectedComputedMetric.Objectives.Count, actualComputedMetric.Objectives.Count);
+            for (var i = 0; i < actualComputedMetric.Objectives.Count; i++)
+            {
+                Assert.AreEqual(expectedComputedMetric.Objectives[i].Label, actualComputedMetric.Objectives[i].Label);
+                Assert.AreEqual(expectedComputedMetric.Objectives[i].Color[0], actualComputedMetric.Objectives[i].Color[0]);
+                Assert.AreEqual(expectedComputedMetric.Objectives[i].Color[1], actualComputedMetric.Objectives[i].Color[1]);
+                Assert.AreEqual(expectedComputedMetric.Objectives[i].Color[2], actualComputedMetric.Objectives[i].Color[2]);
+                Assert.AreEqual(expectedComputedMetric.Objectives[i].Min, actualComputedMetric.Objectives[i].Min);
+                Assert.AreEqual(expectedComputedMetric.Objectives[i].Max, actualComputedMetric.Objectives[i].Max);
             }
-            Assert.AreEqual(1, scorecardTemplateItem.CustomMetrics.Count);
-            var customMetricItem = scorecardTemplateItem.CustomMetrics[0];
-            Assert.AreEqual(_customMetricItem.Id, customMetricItem.Id);
+            Assert.AreEqual(1, actualScorecardTemplateItem.CustomMetrics.Count);
+            var actualCustomMetricItem = expectedScorecardTemplateItem.CustomMetrics[0];
+            Assert.AreEqual(expectedCustomMetricItem.Id, actualCustomMetricItem.Id);
         }
 
         [TestMethod]
         public async Task QueryAsyncTest()
         {
+            var testNumber = 5;
+
+            // Create a scorecard template
+            var computedMetrics = new List<ComputedMetric>();
+            var customMetrics = new List<CustomMetric>();
+            var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+
+            // Query for scorecard templates
             var scorecardTemplates = await _proKnow.ScorecardTemplates.QueryAsync();
-            var scorecardTemplate = scorecardTemplates.First(t => t.Id == _scorecardTemplateItem.Id);
-            Assert.AreEqual(_scorecardTemplateItem.Name, scorecardTemplate.Name);
+
+            // Verify that a summary of the created scorecard template was returned
+            var scorecardTemplateSummary = scorecardTemplates.First(t => t.Id == scorecardTemplateItem.Id);
+            Assert.AreEqual(scorecardTemplateItem.Name, scorecardTemplateSummary.Name);
         }
 
         [TestMethod]
         public async Task ResolveAsyncTest_Id()
         {
-            var scorecardTemplate = await _proKnow.ScorecardTemplates.ResolveAsync(_scorecardTemplateItem.Id);
-            Assert.AreEqual(_scorecardTemplateItem.Id, scorecardTemplate.Id);
-            Assert.AreEqual(_scorecardTemplateItem.Name, scorecardTemplate.Name);
+            var testNumber = 6;
+
+            // Create a scorecard template
+            var computedMetrics = new List<ComputedMetric>();
+            var customMetrics = new List<CustomMetric>();
+            var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+
+            // Resolve that scorecard template by providing the ID
+            var scorecardTemplateSummary = await _proKnow.ScorecardTemplates.ResolveAsync(scorecardTemplateItem.Id);
+
+            // Verify the returned scorecard template summary
+            Assert.AreEqual(scorecardTemplateItem.Id, scorecardTemplateSummary.Id);
+            Assert.AreEqual(scorecardTemplateItem.Name, scorecardTemplateSummary.Name);
         }
 
         [TestMethod]
         public async Task ResolveAsyncTest_Name()
         {
-            var scorecardTemplate = await _proKnow.ScorecardTemplates.ResolveAsync(_scorecardTemplateItem.Name);
-            Assert.AreEqual(_scorecardTemplateItem.Id, scorecardTemplate.Id);
-            Assert.AreEqual(_scorecardTemplateItem.Name, scorecardTemplate.Name);
+            var testNumber = 7;
+
+            // Create scorecard template
+            var computedMetrics = new List<ComputedMetric>();
+            var customMetrics = new List<CustomMetric>();
+            var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+
+            // Resolve that scorecard template by providing the name
+            var scorecardTemplateSummary = await _proKnow.ScorecardTemplates.ResolveAsync(scorecardTemplateItem.Name);
+
+            // Verify the returned scorecard template summary
+            Assert.AreEqual(scorecardTemplateItem.Id, scorecardTemplateSummary.Id);
+            Assert.AreEqual(scorecardTemplateItem.Name, scorecardTemplateSummary.Name);
         }
 
         [TestMethod]
         public async Task ResolveByIdAsyncTest()
         {
-            var scorecardTemplate = await _proKnow.ScorecardTemplates.ResolveByIdAsync(_scorecardTemplateItem.Id);
-            Assert.AreEqual(_scorecardTemplateItem.Id, scorecardTemplate.Id);
-            Assert.AreEqual(_scorecardTemplateItem.Name, scorecardTemplate.Name);
+            var testNumber = 8;
+
+            // Create a scorecard template
+            var computedMetrics = new List<ComputedMetric>();
+            var customMetrics = new List<CustomMetric>();
+            var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+
+            // Resolve that scorecard template by ID
+            var scorecardTemplateSummary = await _proKnow.ScorecardTemplates.ResolveByIdAsync(scorecardTemplateItem.Id);
+
+            // Verify the returned scorecard template summary
+            Assert.AreEqual(scorecardTemplateItem.Id, scorecardTemplateSummary.Id);
+            Assert.AreEqual(scorecardTemplateItem.Name, scorecardTemplateSummary.Name);
         }
 
         [TestMethod]
         public async Task ResolveByNameAsyncTest()
         {
-            var scorecardTemplate = await _proKnow.ScorecardTemplates.ResolveByNameAsync(_scorecardTemplateItem.Name);
-            Assert.AreEqual(_scorecardTemplateItem.Id, scorecardTemplate.Id);
-            Assert.AreEqual(_scorecardTemplateItem.Name, scorecardTemplate.Name);
+            var testNumber = 9;
+
+            // Create a scorecard template
+            var computedMetrics = new List<ComputedMetric>();
+            var customMetrics = new List<CustomMetric>();
+            var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+
+            // Resolve that scorecard template by name
+            var scorecardTemplateSummary = await _proKnow.ScorecardTemplates.ResolveByNameAsync(scorecardTemplateItem.Name);
+
+            // Verify the returned scorecard template summary
+            Assert.AreEqual(scorecardTemplateItem.Id, scorecardTemplateSummary.Id);
+            Assert.AreEqual(scorecardTemplateItem.Name, scorecardTemplateSummary.Name);
         }
     }
 }

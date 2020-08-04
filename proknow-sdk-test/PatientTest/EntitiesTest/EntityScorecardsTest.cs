@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Scorecard;
 using ProKnow.Test;
-using ProKnow.Upload;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -14,56 +13,42 @@ namespace ProKnow.Patient.Entities.Test
     public class EntityScorecardsTest
     {
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static readonly string _patientMrnAndName = "SDK-EntityScorecardsTest";
-        private static string _workspaceId;
-        private static EntitySummary _entitySummary;
-        private static EntityScorecards _entityScorecards;
-        private static ComputedMetric _computedMetric;
-        private static CustomMetricItem _customMetricItem;
-        private static List<ComputedMetric> _computedMetrics;
-        private static List<CustomMetric> _customMetrics;
-        private static EntityScorecardItem _entityScorecardItem;
+        private static readonly string _testClassName = nameof(EntityScorecardsTest);
 
         [TestInitialize]
         public async Task ClassInitialize()
         {
-            // Cleanup from previous test failure, if necessary
-            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
-            await TestHelper.DeleteCustomMetricsAsync(_patientMrnAndName);
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
+        }
+
+        [TestCleanup]
+        public async Task ClassCleanup()
+        {
+            // Delete test workspaces
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
+
+            // Delete existing custom metrics
+            await TestHelper.DeleteCustomMetricsAsync(_testClassName);
+        }
+
+        [TestMethod]
+        public async Task CreateAsyncTest()
+        {
+            var testNumber = 1;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
-            _workspaceId = workspaceItem.Id;
+            var workspace = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
-            // Create a test patient
-            var patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
-
-            // Upload test file
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RD.dcm");
-            var overrides = new UploadFileOverrides
-            {
-                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
-            };
-            await _proKnow.Uploads.UploadAsync(_workspaceId, uploadPath, overrides);
-
-            // Wait until uploaded test file has processed
-            while (true)
-            {
-                var patientItem = await patientSummary.GetAsync();
-                var entitySummaries = patientItem.FindEntities(t => t.Type == "dose");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
-                {
-                    _entitySummary = entitySummaries[0];
-                    await _entitySummary.GetAsync();
-                    break;
-                }
-            }
+            // Create a test patient with a dose
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var entitySummary = patientItem.FindEntities(e => e.Type == "dose")[0];
 
             // Create entity scorecards object
-            _entityScorecards = new EntityScorecards(_proKnow, _workspaceId, _entitySummary.Id);
+            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, entitySummary.Id);
 
-            // Create computed metric for testing
-            _computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
+            // Create computed metric
+            var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
                 new List<MetricBin>() {
                     new MetricBin("IDEAL", new byte[] { Color.Green.R, Color.Green.G, Color.Green.B }),
                     new MetricBin("GOOD", new byte[] { Color.LightGreen.R, Color.LightGreen.G, Color.LightGreen.B }, 20),
@@ -72,136 +57,279 @@ namespace ProKnow.Patient.Entities.Test
                     new MetricBin("UNACCEPTABLE", new byte[] { Color.Red.R, Color.Red.G, Color.Red.B })
                 });
 
-            // Create custom metric for testing
-            _customMetricItem = await _proKnow.CustomMetrics.CreateAsync(_patientMrnAndName, "dose", "number");
+            // Create custom metric
+            var customMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}", "dose", "number");
 
             // Add objectives to custom metric
-            var objectives = new List<MetricBin>()
+            customMetricItem.Objectives = new List<MetricBin>()
             {
                 new MetricBin("PASS", new byte[] { 18, 191, 0 }, null, 90),
                 new MetricBin("FAIL", new byte[] { 255, 0, 0 })
             };
-            _customMetricItem.Objectives = objectives;
 
             // Convert custom metric to schema expected by CreateAsync (name and objectives only)
-            var customMetric = new CustomMetric(_patientMrnAndName, objectives);
+            var customMetric = new CustomMetric(customMetricItem.Name, customMetricItem.Objectives);
 
-            // Create entity scorecard for testing
-            _computedMetrics = new List<ComputedMetric>() { _computedMetric };
-            _customMetrics = new List<CustomMetric>() { customMetric };
-            _entityScorecardItem = await _entityScorecards.CreateAsync(_patientMrnAndName, _computedMetrics, _customMetrics);
-        }
+            // Create entity scorecard
+            var computedMetrics = new List<ComputedMetric>() { computedMetric };
+            var customMetrics = new List<CustomMetric>() { customMetric };
+            var entityScorecardItem = await entityScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
 
-        [TestCleanup]
-        public async Task ClassCleanup()
-        {
-            // Delete test workspace
-            await _proKnow.Workspaces.DeleteAsync(_workspaceId);
-
-            // Delete custom metrics created for this test
-            await TestHelper.DeleteCustomMetricsAsync(_patientMrnAndName);
-        }
-
-        [TestMethod]
-        public void CreateAsyncTest()
-        {
-            // Verify creation of entity scorecard in test initialization
-            Assert.AreEqual(_patientMrnAndName, _entityScorecardItem.Name);
-            Assert.AreEqual(1, _entityScorecardItem.ComputedMetrics.Count);
-            var computedMetric = _entityScorecardItem.ComputedMetrics[0];
-            Assert.AreEqual(_computedMetric.Type, computedMetric.Type);
-            Assert.AreEqual(_computedMetric.RoiName, computedMetric.RoiName);
-            Assert.AreEqual(_computedMetric.Arg1, computedMetric.Arg1);
-            Assert.AreEqual(_computedMetric.Arg2, computedMetric.Arg2);
-            Assert.AreEqual(_computedMetric.Objectives.Count, computedMetric.Objectives.Count);
-            for (var i = 0; i < _computedMetric.Objectives.Count; i++)
+            // Verify created entity scorecard
+            Assert.AreEqual($"{_testClassName}-{testNumber}", entityScorecardItem.Name);
+            Assert.AreEqual(1, entityScorecardItem.ComputedMetrics.Count);
+            var createdComputedMetric = entityScorecardItem.ComputedMetrics[0];
+            Assert.AreEqual(computedMetric.Type, createdComputedMetric.Type);
+            Assert.AreEqual(computedMetric.RoiName, createdComputedMetric.RoiName);
+            Assert.AreEqual(computedMetric.Arg1, createdComputedMetric.Arg1);
+            Assert.AreEqual(computedMetric.Arg2, createdComputedMetric.Arg2);
+            Assert.AreEqual(computedMetric.Objectives.Count, createdComputedMetric.Objectives.Count);
+            for (var i = 0; i < createdComputedMetric.Objectives.Count; i++)
             {
-                Assert.AreEqual(_computedMetric.Objectives[i].Label, computedMetric.Objectives[i].Label);
-                Assert.AreEqual(_computedMetric.Objectives[i].Color[0], computedMetric.Objectives[i].Color[0]);
-                Assert.AreEqual(_computedMetric.Objectives[i].Color[1], computedMetric.Objectives[i].Color[1]);
-                Assert.AreEqual(_computedMetric.Objectives[i].Color[2], computedMetric.Objectives[i].Color[2]);
-                Assert.AreEqual(_computedMetric.Objectives[i].Min, computedMetric.Objectives[i].Min);
-                Assert.AreEqual(_computedMetric.Objectives[i].Max, computedMetric.Objectives[i].Max);
+                Assert.AreEqual(computedMetric.Objectives[i].Label, createdComputedMetric.Objectives[i].Label);
+                Assert.AreEqual(computedMetric.Objectives[i].Color[0], createdComputedMetric.Objectives[i].Color[0]);
+                Assert.AreEqual(computedMetric.Objectives[i].Color[1], createdComputedMetric.Objectives[i].Color[1]);
+                Assert.AreEqual(computedMetric.Objectives[i].Color[2], createdComputedMetric.Objectives[i].Color[2]);
+                Assert.AreEqual(computedMetric.Objectives[i].Min, createdComputedMetric.Objectives[i].Min);
+                Assert.AreEqual(computedMetric.Objectives[i].Max, createdComputedMetric.Objectives[i].Max);
             }
-            Assert.AreEqual(1, _entityScorecardItem.CustomMetrics.Count);
-            var customMetricItem = _entityScorecardItem.CustomMetrics[0];
-            Assert.AreEqual(_customMetricItem.Id, customMetricItem.Id);
-            Assert.AreEqual(_customMetricItem.Objectives.Count, customMetricItem.Objectives.Count);
-            for (var i = 0; i < _customMetricItem.Objectives.Count; i++)
+            Assert.AreEqual(1, entityScorecardItem.CustomMetrics.Count);
+            var createdCustomMetricItem = entityScorecardItem.CustomMetrics[0];
+            Assert.AreEqual(customMetricItem.Id, createdCustomMetricItem.Id);
+            Assert.AreEqual(customMetricItem.Objectives.Count, createdCustomMetricItem.Objectives.Count);
+            for (var i = 0; i < createdCustomMetricItem.Objectives.Count; i++)
             {
-                Assert.AreEqual(_customMetricItem.Objectives[i].Label, customMetricItem.Objectives[i].Label);
-                Assert.AreEqual(_customMetricItem.Objectives[i].Color[0], customMetricItem.Objectives[i].Color[0]);
-                Assert.AreEqual(_customMetricItem.Objectives[i].Color[1], customMetricItem.Objectives[i].Color[1]);
-                Assert.AreEqual(_customMetricItem.Objectives[i].Color[2], customMetricItem.Objectives[i].Color[2]);
-                Assert.AreEqual(_customMetricItem.Objectives[i].Min, customMetricItem.Objectives[i].Min);
-                Assert.AreEqual(_customMetricItem.Objectives[i].Max, customMetricItem.Objectives[i].Max);
+                Assert.AreEqual(customMetricItem.Objectives[i].Label, createdCustomMetricItem.Objectives[i].Label);
+                Assert.AreEqual(customMetricItem.Objectives[i].Color[0], createdCustomMetricItem.Objectives[i].Color[0]);
+                Assert.AreEqual(customMetricItem.Objectives[i].Color[1], createdCustomMetricItem.Objectives[i].Color[1]);
+                Assert.AreEqual(customMetricItem.Objectives[i].Color[2], createdCustomMetricItem.Objectives[i].Color[2]);
+                Assert.AreEqual(customMetricItem.Objectives[i].Min, createdCustomMetricItem.Objectives[i].Min);
+                Assert.AreEqual(customMetricItem.Objectives[i].Max, createdCustomMetricItem.Objectives[i].Max);
             }
         }
 
         [TestMethod]
         public async Task DeleteAsyncTest()
         {
+            var testNumber = 2;
+
+            // Create a test workspace
+            var workspace = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with a dose
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var entitySummary = patientItem.FindEntities(e => e.Type == "dose")[0];
+
+            // Create entity scorecards object
+            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, entitySummary.Id);
+
+            // Create computed metric
+            var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
+                new List<MetricBin>() {
+                    new MetricBin("IDEAL", new byte[] { Color.Green.R, Color.Green.G, Color.Green.B }),
+                    new MetricBin("GOOD", new byte[] { Color.LightGreen.R, Color.LightGreen.G, Color.LightGreen.B }, 20),
+                    new MetricBin("ACCEPTABLE", new byte[] { Color.Yellow.R, Color.Yellow.G, Color.Yellow.B }, 40, 60),
+                    new MetricBin("MARGINAL", new byte[] { Color.Orange.R, Color.Orange.G, Color.Orange.B }, null, 80),
+                    new MetricBin("UNACCEPTABLE", new byte[] { Color.Red.R, Color.Red.G, Color.Red.B })
+                });
+
+            // Create custom metric
+            var customMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}", "dose", "number");
+
+            // Add objectives to custom metric
+            customMetricItem.Objectives = new List<MetricBin>()
+            {
+                new MetricBin("PASS", new byte[] { 18, 191, 0 }, null, 90),
+                new MetricBin("FAIL", new byte[] { 255, 0, 0 })
+            };
+
+            // Convert custom metric to schema expected by CreateAsync (name and objectives only)
+            var customMetric = new CustomMetric(customMetricItem.Name, customMetricItem.Objectives);
+
+            // Create entity scorecard
+            var computedMetrics = new List<ComputedMetric>() { computedMetric };
+            var customMetrics = new List<CustomMetric>() { customMetric };
+            var entityScorecardItem = await entityScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+
             // Delete the entity scorecard created in initialization
-            await _entityScorecards.DeleteAsync(_entityScorecardItem.Id);
+            await entityScorecards.DeleteAsync(entityScorecardItem.Id);
 
             // Verify the entity scorecard was deleted
-            var entityScorecardSummary = await _entityScorecards.FindAsync(t => t.Name == _patientMrnAndName);
+            var entityScorecardSummary = await entityScorecards.FindAsync(t => t.Name == _testClassName);
             Assert.IsNull(entityScorecardSummary);
-
-            // Restore the deleted entity scorecard
-            _entityScorecardItem = await _entityScorecards.CreateAsync(_patientMrnAndName, _computedMetrics, _customMetrics);
         }
 
         [TestMethod]
         public async Task FindAsyncTest()
         {
-            var entityScorecardSummary = await _entityScorecards.FindAsync(t => t.Name == _patientMrnAndName);
-            Assert.AreEqual(_entityScorecardItem.Id, entityScorecardSummary.Id);
-            Assert.AreEqual(_entityScorecardItem.Name, entityScorecardSummary.Name);
+            var testNumber = 3;
+
+            // Create a test workspace
+            var workspace = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with a dose
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var entitySummary = patientItem.FindEntities(e => e.Type == "dose")[0];
+
+            // Create entity scorecards object
+            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, entitySummary.Id);
+
+            // Create computed metric
+            var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
+                new List<MetricBin>() {
+                    new MetricBin("IDEAL", new byte[] { Color.Green.R, Color.Green.G, Color.Green.B }),
+                    new MetricBin("GOOD", new byte[] { Color.LightGreen.R, Color.LightGreen.G, Color.LightGreen.B }, 20),
+                    new MetricBin("ACCEPTABLE", new byte[] { Color.Yellow.R, Color.Yellow.G, Color.Yellow.B }, 40, 60),
+                    new MetricBin("MARGINAL", new byte[] { Color.Orange.R, Color.Orange.G, Color.Orange.B }, null, 80),
+                    new MetricBin("UNACCEPTABLE", new byte[] { Color.Red.R, Color.Red.G, Color.Red.B })
+                });
+
+            // Create custom metric
+            var customMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}", "dose", "number");
+
+            // Add objectives to custom metric
+            customMetricItem.Objectives = new List<MetricBin>()
+            {
+                new MetricBin("PASS", new byte[] { 18, 191, 0 }, null, 90),
+                new MetricBin("FAIL", new byte[] { 255, 0, 0 })
+            };
+
+            // Convert custom metric to schema expected by CreateAsync (name and objectives only)
+            var customMetric = new CustomMetric(customMetricItem.Name, customMetricItem.Objectives);
+
+            // Create entity scorecard
+            var computedMetrics = new List<ComputedMetric>() { computedMetric };
+            var customMetrics = new List<CustomMetric>() { customMetric };
+            var entityScorecardItem = await entityScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+
+            var entityScorecardSummary = await entityScorecards.FindAsync(t => t.Name == $"{_testClassName}-{testNumber}");
+            Assert.AreEqual(entityScorecardItem.Id, entityScorecardSummary.Id);
+            Assert.AreEqual(entityScorecardItem.Name, entityScorecardSummary.Name);
         }
 
         [TestMethod]
         public async Task GetAsyncTest()
         {
-            var entityScorecardItem = await _entityScorecards.GetAsync(_entityScorecardItem.Id);
-            Assert.AreEqual(_patientMrnAndName, entityScorecardItem.Name);
-            Assert.AreEqual(1, entityScorecardItem.ComputedMetrics.Count);
-            var computedMetric = entityScorecardItem.ComputedMetrics[0];
-            Assert.AreEqual(_computedMetric.Type, computedMetric.Type);
-            Assert.AreEqual(_computedMetric.RoiName, computedMetric.RoiName);
-            Assert.AreEqual(_computedMetric.Arg1, computedMetric.Arg1);
-            Assert.AreEqual(_computedMetric.Arg2, computedMetric.Arg2);
-            Assert.AreEqual(_computedMetric.Objectives.Count, computedMetric.Objectives.Count);
-            for (var i = 0; i < _computedMetric.Objectives.Count; i++)
+            var testNumber = 4;
+
+            // Create a test workspace
+            var workspace = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with a dose
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var entitySummary = patientItem.FindEntities(e => e.Type == "dose")[0];
+
+            // Create entity scorecards object
+            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, entitySummary.Id);
+
+            // Create computed metric
+            var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
+                new List<MetricBin>() {
+                    new MetricBin("IDEAL", new byte[] { Color.Green.R, Color.Green.G, Color.Green.B }),
+                    new MetricBin("GOOD", new byte[] { Color.LightGreen.R, Color.LightGreen.G, Color.LightGreen.B }, 20),
+                    new MetricBin("ACCEPTABLE", new byte[] { Color.Yellow.R, Color.Yellow.G, Color.Yellow.B }, 40, 60),
+                    new MetricBin("MARGINAL", new byte[] { Color.Orange.R, Color.Orange.G, Color.Orange.B }, null, 80),
+                    new MetricBin("UNACCEPTABLE", new byte[] { Color.Red.R, Color.Red.G, Color.Red.B })
+                });
+
+            // Create custom metric
+            var customMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}", "dose", "number");
+
+            // Add objectives to custom metric
+            customMetricItem.Objectives = new List<MetricBin>()
             {
-                Assert.AreEqual(_computedMetric.Objectives[i].Label, computedMetric.Objectives[i].Label);
-                Assert.AreEqual(_computedMetric.Objectives[i].Color[0], computedMetric.Objectives[i].Color[0]);
-                Assert.AreEqual(_computedMetric.Objectives[i].Color[1], computedMetric.Objectives[i].Color[1]);
-                Assert.AreEqual(_computedMetric.Objectives[i].Color[2], computedMetric.Objectives[i].Color[2]);
-                Assert.AreEqual(_computedMetric.Objectives[i].Min, computedMetric.Objectives[i].Min);
-                Assert.AreEqual(_computedMetric.Objectives[i].Max, computedMetric.Objectives[i].Max);
+                new MetricBin("PASS", new byte[] { 18, 191, 0 }, null, 90),
+                new MetricBin("FAIL", new byte[] { 255, 0, 0 })
+            };
+
+            // Convert custom metric to schema expected by CreateAsync (name and objectives only)
+            var customMetric = new CustomMetric(customMetricItem.Name, customMetricItem.Objectives);
+
+            // Create entity scorecard
+            var computedMetrics = new List<ComputedMetric>() { computedMetric };
+            var customMetrics = new List<CustomMetric>() { customMetric };
+            var entityScorecardItem = await entityScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+
+            // Get the created entity scorecard
+            var createdEntityScorecardItem = await entityScorecards.GetAsync(entityScorecardItem.Id);
+            Assert.AreEqual($"{_testClassName}-{testNumber}", createdEntityScorecardItem.Name);
+            Assert.AreEqual(1, createdEntityScorecardItem.ComputedMetrics.Count);
+            var createdComputedMetric = createdEntityScorecardItem.ComputedMetrics[0];
+            Assert.AreEqual(computedMetric.Type, createdComputedMetric.Type);
+            Assert.AreEqual(computedMetric.RoiName, createdComputedMetric.RoiName);
+            Assert.AreEqual(computedMetric.Arg1, createdComputedMetric.Arg1);
+            Assert.AreEqual(computedMetric.Arg2, createdComputedMetric.Arg2);
+            Assert.AreEqual(computedMetric.Objectives.Count, createdComputedMetric.Objectives.Count);
+            for (var i = 0; i < createdComputedMetric.Objectives.Count; i++)
+            {
+                Assert.AreEqual(computedMetric.Objectives[i].Label, createdComputedMetric.Objectives[i].Label);
+                Assert.AreEqual(computedMetric.Objectives[i].Color[0], createdComputedMetric.Objectives[i].Color[0]);
+                Assert.AreEqual(computedMetric.Objectives[i].Color[1], createdComputedMetric.Objectives[i].Color[1]);
+                Assert.AreEqual(computedMetric.Objectives[i].Color[2], createdComputedMetric.Objectives[i].Color[2]);
+                Assert.AreEqual(computedMetric.Objectives[i].Min, createdComputedMetric.Objectives[i].Min);
+                Assert.AreEqual(computedMetric.Objectives[i].Max, createdComputedMetric.Objectives[i].Max);
             }
-            Assert.AreEqual(1, entityScorecardItem.CustomMetrics.Count);
-            var customMetricItem = entityScorecardItem.CustomMetrics[0];
-            Assert.AreEqual(_customMetricItem.Id, customMetricItem.Id);
-            Assert.AreEqual(_customMetricItem.Objectives.Count, customMetricItem.Objectives.Count);
-            for (var i = 0; i < _customMetricItem.Objectives.Count; i++)
+            Assert.AreEqual(1, createdEntityScorecardItem.CustomMetrics.Count);
+            var createdCustomMetricItem = createdEntityScorecardItem.CustomMetrics[0];
+            Assert.AreEqual(customMetricItem.Id, createdCustomMetricItem.Id);
+            Assert.AreEqual(customMetricItem.Objectives.Count, createdCustomMetricItem.Objectives.Count);
+            for (var i = 0; i < createdCustomMetricItem.Objectives.Count; i++)
             {
-                Assert.AreEqual(_customMetricItem.Objectives[i].Label, customMetricItem.Objectives[i].Label);
-                Assert.AreEqual(_customMetricItem.Objectives[i].Color[0], customMetricItem.Objectives[i].Color[0]);
-                Assert.AreEqual(_customMetricItem.Objectives[i].Color[1], customMetricItem.Objectives[i].Color[1]);
-                Assert.AreEqual(_customMetricItem.Objectives[i].Color[2], customMetricItem.Objectives[i].Color[2]);
-                Assert.AreEqual(_customMetricItem.Objectives[i].Min, customMetricItem.Objectives[i].Min);
-                Assert.AreEqual(_customMetricItem.Objectives[i].Max, customMetricItem.Objectives[i].Max);
+                Assert.AreEqual(customMetricItem.Objectives[i].Label, createdCustomMetricItem.Objectives[i].Label);
+                Assert.AreEqual(customMetricItem.Objectives[i].Color[0], createdCustomMetricItem.Objectives[i].Color[0]);
+                Assert.AreEqual(customMetricItem.Objectives[i].Color[1], createdCustomMetricItem.Objectives[i].Color[1]);
+                Assert.AreEqual(customMetricItem.Objectives[i].Color[2], createdCustomMetricItem.Objectives[i].Color[2]);
+                Assert.AreEqual(customMetricItem.Objectives[i].Min, createdCustomMetricItem.Objectives[i].Min);
+                Assert.AreEqual(customMetricItem.Objectives[i].Max, createdCustomMetricItem.Objectives[i].Max);
             }
         }
 
         [TestMethod]
         public async Task QueryAsyncTest()
         {
-            var entityScorecardSummaries = await _entityScorecards.QueryAsync();
-            var entityScorecardSummary = entityScorecardSummaries.First(t => t.Id == _entityScorecardItem.Id);
-            Assert.AreEqual(_entityScorecardItem.Name, entityScorecardSummary.Name);
+            var testNumber = 5;
+
+            // Create a test workspace
+            var workspace = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with a dose
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var entitySummary = patientItem.FindEntities(e => e.Type == "dose")[0];
+
+            // Create entity scorecards object
+            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, entitySummary.Id);
+
+            // Create computed metric
+            var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
+                new List<MetricBin>() {
+                    new MetricBin("IDEAL", new byte[] { Color.Green.R, Color.Green.G, Color.Green.B }),
+                    new MetricBin("GOOD", new byte[] { Color.LightGreen.R, Color.LightGreen.G, Color.LightGreen.B }, 20),
+                    new MetricBin("ACCEPTABLE", new byte[] { Color.Yellow.R, Color.Yellow.G, Color.Yellow.B }, 40, 60),
+                    new MetricBin("MARGINAL", new byte[] { Color.Orange.R, Color.Orange.G, Color.Orange.B }, null, 80),
+                    new MetricBin("UNACCEPTABLE", new byte[] { Color.Red.R, Color.Red.G, Color.Red.B })
+                });
+
+            // Create custom metric
+            var customMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}", "dose", "number");
+
+            // Add objectives to custom metric
+            customMetricItem.Objectives = new List<MetricBin>()
+            {
+                new MetricBin("PASS", new byte[] { 18, 191, 0 }, null, 90),
+                new MetricBin("FAIL", new byte[] { 255, 0, 0 })
+            };
+
+            // Convert custom metric to schema expected by CreateAsync (name and objectives only)
+            var customMetric = new CustomMetric(customMetricItem.Name, customMetricItem.Objectives);
+
+            // Create entity scorecard
+            var computedMetrics = new List<ComputedMetric>() { computedMetric };
+            var customMetrics = new List<CustomMetric>() { customMetric };
+            var entityScorecardItem = await entityScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+
+            var entityScorecardSummaries = await entityScorecards.QueryAsync();
+            var entityScorecardSummary = entityScorecardSummaries.First(t => t.Id == entityScorecardItem.Id);
+            Assert.AreEqual(entityScorecardItem.Name, entityScorecardSummary.Name);
         }
     }
 }

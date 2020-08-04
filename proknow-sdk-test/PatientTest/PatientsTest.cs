@@ -1,9 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Test;
-using ProKnow.Upload;
 using System;
-using System.IO;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ProKnow.Patient.Test
@@ -11,155 +9,175 @@ namespace ProKnow.Patient.Test
     [TestClass]
     public class PatientsTest
     {
-        private static readonly string _patientMrnAndName = "SDK-PatientsTest";
+        private static readonly string _testClassName = nameof(PatientsTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static readonly Uploads _uploads = _proKnow.Uploads;
-        private static string _workspaceId;
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspace, if necessary
-            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
-
-            // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
-            _workspaceId = workspaceItem.Id;
-
-            // Create a test patient
-            var patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
-
-            // Upload test files
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew");
-            var overrides = new UploadFileOverrides
-            {
-                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
-            };
-            await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
-
-            // Wait until uploaded test files have processed
-            while (true)
-            {
-                var patientItem = await patientSummary.GetAsync();
-                var entitySummaries = patientItem.FindEntities(e => e.PatientId == patientSummary.Id);
-                if (entitySummaries.Count() >= 4)
-                {
-                    var statuses = entitySummaries.Select(e => e.Status).Distinct();
-                    if (statuses.Count() == 1 && statuses.First() == "completed")
-                    {
-                        break;
-                    }
-                }
-            }
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
         }
 
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
-            // Delete test workspace
-            await _proKnow.Workspaces.DeleteAsync(_workspaceId);
+            // Delete test workspaces
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
         }
 
         [TestMethod]
         public async Task CreateAsyncTest()
         {
+            int testNumber = 1;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
             // Create a new patient
-            var patientItem = await _proKnow.Patients.CreateAsync(_workspaceId, $"{_patientMrnAndName}-Mrn-2",
-                $"{_patientMrnAndName}-Name-2", "1976-07-04", "F");
+            var patientItem = await _proKnow.Patients.CreateAsync(workspaceItem.Id, "Mrn", "Name", "1976-07-04", "F");
 
             // Verify the creation
-            Assert.AreEqual(_workspaceId, patientItem.WorkspaceId);
+            Assert.AreEqual(workspaceItem.Id, patientItem.WorkspaceId);
             Assert.IsFalse(String.IsNullOrEmpty(patientItem.Id));
-            Assert.AreEqual($"{_patientMrnAndName}-Mrn-2", patientItem.Mrn);
-            Assert.AreEqual($"{_patientMrnAndName}-Name-2", patientItem.Name);
+            Assert.AreEqual("Mrn", patientItem.Mrn);
+            Assert.AreEqual($"Name", patientItem.Name);
             Assert.AreEqual("1976-07-04", patientItem.BirthDate);
             Assert.AreEqual("F", patientItem.Sex);
-
-            // Cleanup
-            await _proKnow.Patients.DeleteAsync(_workspaceId, patientItem.Id);
         }
 
         [TestMethod]
         public async Task DeleteAsyncTest()
         {
-            // Create a new patient
-            var patientItem = await _proKnow.Patients.CreateAsync(_workspaceId, $"{_patientMrnAndName}-Mrn-3",
-                $"{_patientMrnAndName}-Name-3", "1960-01-01", "M");
+            int testNumber = 2;
 
-            // Verify the creation
-            var patientSummary = await _proKnow.Patients.FindAsync(_workspaceId, p => p.Name == $"{_patientMrnAndName}-Name-3");
-            Assert.IsNotNull(patientSummary);
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
 
             // Delete it
-            await _proKnow.Patients.DeleteAsync(_workspaceId, patientItem.Id);
+            await _proKnow.Patients.DeleteAsync(workspaceItem.Id, patientItem.Id);
 
             // Verify the deletion
-            patientSummary = await _proKnow.Patients.FindAsync(_workspaceId, p => p.Name == $"{_patientMrnAndName}-Name-3");
-            Assert.IsNull(patientSummary);
+            var patientSummaries = await _proKnow.Patients.LookupAsync(workspaceItem.Id, new List<string> { patientItem.Mrn });
+            Assert.IsNull(patientSummaries[0]);
         }
 
         [TestMethod]
         public async Task FindAsyncTest()
         {
-            var patientSummary = await _proKnow.Patients.FindAsync(_workspaceId, p => p.Name == _patientMrnAndName);
-            Assert.AreEqual(patientSummary.Name, _patientMrnAndName);
+            int testNumber = 3;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
+
+            // Find the created patient
+            var patientSummary = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Id == patientItem.Id);
+
+            // Verify the returned patient
+            Assert.AreEqual(patientItem.Name, patientSummary.Name);
         }
 
         [TestMethod]
         public async Task GetAsyncTest()
         {
-            var patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceId);
-            var patientId = patientSummaries.First(p => p.Name == _patientMrnAndName).Id;
-            var patientItem = await _proKnow.Patients.GetAsync(_workspaceId, patientId);
-            Assert.AreEqual(patientItem.Id, patientId);
+            int testNumber = 4;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
+
+            // Get the created patient
+            var createdPatientItem = await _proKnow.Patients.GetAsync(workspaceItem.Id, patientItem.Id);
+
+            // Verify the return patient
+            Assert.AreEqual(patientItem.Id, createdPatientItem.Id);
         }
 
         [TestMethod]
         public async Task LookupAsyncTest()
         {
-            var myPatientSummaries = await _proKnow.Patients.LookupAsync(_workspaceId, 
-                new string[] { "invalidMrn", _patientMrnAndName });
-            Assert.IsTrue(myPatientSummaries.Count == 2);
-            Assert.IsNull(myPatientSummaries[0]);
-            Assert.AreEqual(myPatientSummaries[1].Name, _patientMrnAndName);
+            int testNumber = 5;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
+
+            // Lookup patients by MRN (invalid and valid)
+            var patientSummaries = await _proKnow.Patients.LookupAsync(workspaceItem.Id, new string[] { "invalidMrn", patientItem.Mrn });
+
+            // Verify the returned patient summaries
+            Assert.IsTrue(patientSummaries.Count == 2);
+            Assert.IsNull(patientSummaries[0]);
+            Assert.AreEqual(patientItem.Name, patientSummaries[1].Name);
         }
 
         [TestMethod]
         public async Task QueryAsyncTest_NoSearchString()
         {
-            var patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceId);
+            int testNumber = 6;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
+
+            // Query for patients
+            var patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id);
+
+            // Verify the returned patient summaries
             Assert.IsTrue(patientSummaries.Count == 1);
+            Assert.AreEqual(patientItem.Name, patientSummaries[0].Name);
         }
 
         [TestMethod]
         public async Task QueryAsyncTest_NonMatchingSearchString()
         {
-            var patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceId, "foobar");
+            int testNumber = 7;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient
+            await TestHelper.CreatePatientAsync(_testClassName, testNumber);
+
+            // Query with a non-matching search string
+            var patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id, "foobar");
+
+            // Verify that no patient summaries were returned
             Assert.IsTrue(patientSummaries.Count == 0);
         }
 
         [TestMethod]
         public async Task QueryAsyncTest_MatchingSearchString()
         {
-            // Change patient name so it doesn't match MRN
-            var patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceId);
-            var patientItem = await patientSummaries.First().GetAsync();
-            patientItem.Name = $"{patientItem.Name}-Name";
-            await patientItem.SaveAsync();
+            int testNumber = 8;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
 
             // Verify with matching MRN
-            patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceId, patientItem.Mrn);
+            var patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id, patientItem.Mrn);
             Assert.IsTrue(patientSummaries.Count == 1);
 
             // Verify with matching name
-            patientSummaries = await _proKnow.Patients.QueryAsync(_workspaceId, patientItem.Name);
+            patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id, patientItem.Name);
             Assert.IsTrue(patientSummaries.Count == 1);
-
-            // Restore patient name to original
-            patientItem.Name = _patientMrnAndName;
-            await patientItem.SaveAsync();
         }
     }
 }

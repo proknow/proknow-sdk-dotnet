@@ -10,7 +10,7 @@ namespace ProKnow.Upload.Test
     [TestClass]
     public class UploadSroSummaryTest
     {
-        private static readonly string _patientMrnAndName = "SDK-UploadSroSummaryTest";
+        private static readonly string _testClassName = nameof(UploadSroSummaryTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
 
         [ClassInitialize]
@@ -18,15 +18,15 @@ namespace ProKnow.Upload.Test
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspace, if necessary
-            await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
         }
 
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
             // Delete test workspaces
-            await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
         }
 
         [TestMethod]
@@ -35,7 +35,7 @@ namespace ProKnow.Upload.Test
             var testNumber = 1;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Upload test data
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro");
@@ -54,7 +54,7 @@ namespace ProKnow.Upload.Test
             // Get the full representation of the patient, entities, and SRO
             var ctImageSetItem = await uploadCtEntitySummary.GetAsync();
             var mrImageSetItem = await uploadMrEntitySummary.GetAsync();
-            var sroItem = await uploadSroSummary.GetAsync() as SroItem;
+            var sroItem = await uploadSroSummary.GetAsync();
 
             // Verify the contents
             Assert.AreEqual(workspaceItem.Id, sroItem.WorkspaceId);

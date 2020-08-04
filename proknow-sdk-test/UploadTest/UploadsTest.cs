@@ -11,17 +11,16 @@ namespace ProKnow.Upload.Test
     [TestClass]
     public class UploadsTest
     {
-        private static readonly string _testClassName = "SDK-UploadsTest";
+        private static readonly string _testClassName = nameof(UploadsTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static readonly Uploads _uploads = _proKnow.Uploads;
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspaces, if necessary
-            await TestHelper.DeleteWorkspacesAsync(_testClassName);
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
         }
 
         [ClassCleanup]
@@ -48,7 +47,7 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            var uploadBatch = await _uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
+            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
 
             // Wait until uploaded test file has processed
             while (true)
@@ -58,7 +57,7 @@ namespace ProKnow.Upload.Test
                 if (entitySummaries.Count == 1 && entitySummaries[0].Status == "completed")
                 {
                     // Make sure the uploaded data is the same
-                    Assert.AreEqual(entitySummaries[0].Uid, "2.16.840.1.114337.1.1.1535997926.0");
+                    Assert.AreEqual("2.16.840.1.114337.1.1.1535997926.0", entitySummaries[0].Uid);
 
                     break;
                 }
@@ -82,7 +81,7 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            var uploadBatch = await _uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
+            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
 
             // Wait until uploaded test files have processed
             while (true)
@@ -120,7 +119,7 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            var uploadBatch = await _uploads.UploadAsync(workspaceItem.Id, uploadPaths, overrides);
+            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPaths, overrides);
 
             // Verify test folder and test file were uploaded (may have to wait for files to be processed)
             while (true)

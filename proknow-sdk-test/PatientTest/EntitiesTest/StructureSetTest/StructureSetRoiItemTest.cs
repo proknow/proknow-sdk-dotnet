@@ -10,22 +10,22 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
     [TestClass]
     public class StructureSetRoiItemTest
     {
-        private static readonly string _patientMrnAndName = "SDK-StructureSetRoiItemTest";
+        private static readonly string _testClassName = nameof(StructureSetRoiItemTest);
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspaces, if necessary
-            await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
         }
 
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
             // Delete test workspaces
-            await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
         }
 
         [TestMethod]
@@ -34,10 +34,10 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             var testNumber = 1;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with a structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -58,7 +58,7 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             await structureSetItem.RefreshAsync();
 
             // Verify that the PTV was deleted
-            Assert.IsFalse(structureSetItem.Rois.Where(r => r.Name == "PTV").Any());
+            Assert.IsFalse(structureSetItem.Rois.Any(r => r.Name == "PTV"));
         }
 
         [TestMethod]
@@ -67,10 +67,10 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             var testNumber = 2;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with a structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -99,10 +99,10 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             var testNumber = 3;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with a structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -129,7 +129,7 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             await structureSetItem.RefreshAsync();
 
             // Verify that changes to the PTV were saved
-            Assert.IsFalse(structureSetItem.Rois.Where(r => r.Name == "PTV").Any());
+            Assert.IsFalse(structureSetItem.Rois.Any(r => r.Name == "PTV"));
             var roiItem2 = structureSetItem.Rois.First(r => r.Name == "PTV2");
             Assert.AreEqual(roiItem0.Tag, roiItem2.Tag);
             Assert.AreEqual(Color.Blue.ToArgb(), roiItem2.Color.ToArgb());

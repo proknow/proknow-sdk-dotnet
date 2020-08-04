@@ -8,22 +8,18 @@ namespace ProKnow.Patient.Entities.Test
     [TestClass]
     public class PlanItemTest
     {
-        private static readonly string _patientMrnAndName = "SDK-PlanItemTest";
-        private static readonly string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
+        private static readonly string _testClassName = nameof(PlanItemTest);
+        private static readonly string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _testClassName);
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspaces, if necessary
-            await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
 
             // Create download folder root
-            if (Directory.Exists(_downloadFolderRoot))
-            {
-                Directory.Delete(_downloadFolderRoot, true);
-            }
             Directory.CreateDirectory(_downloadFolderRoot);
         }
 
@@ -31,7 +27,7 @@ namespace ProKnow.Patient.Entities.Test
         public static async Task ClassCleanup()
         {
             // Delete test workspaces
-            await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
 
             // Delete download folder
             if (Directory.Exists(_downloadFolderRoot))
@@ -46,11 +42,10 @@ namespace ProKnow.Patient.Entities.Test
             var testNumber = 1;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            var workspaceId = workspaceItem.Id;
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);
             var entitySummaries = patientItem.FindEntities(e => e.Type == "plan");
             var planItem = await entitySummaries[0].GetAsync() as PlanItem;
 
@@ -74,11 +69,10 @@ namespace ProKnow.Patient.Entities.Test
             var testNumber = 2;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            var workspaceId = workspaceItem.Id;
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);
             var entitySummaries = patientItem.FindEntities(e => e.Type == "plan");
             var planItem = await entitySummaries[0].GetAsync() as PlanItem;
 
@@ -103,11 +97,10 @@ namespace ProKnow.Patient.Entities.Test
             var testNumber = 3;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            var workspaceId = workspaceItem.Id;
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);
             var entitySummaries = patientItem.FindEntities(e => e.Type == "plan");
             var planItem = await entitySummaries[0].GetAsync() as PlanItem;
 
@@ -130,11 +123,10 @@ namespace ProKnow.Patient.Entities.Test
             var testNumber = 4;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
-            var workspaceId = workspaceItem.Id;
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);
             var entitySummaries = patientItem.FindEntities(e => e.Type == "plan");
             var planItem = await entitySummaries[0].GetAsync() as PlanItem;
 

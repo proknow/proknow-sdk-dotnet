@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Test;
-using ProKnow.Upload;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,84 +9,62 @@ namespace ProKnow.Patient.Document.Test
     [TestClass]
     public class DocumentsTest
     {
-        private static readonly string _patientMrnAndName = "SDK-DocumentsTest";
+        private static readonly string _testClassName = nameof(DocumentsTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static readonly Uploads _uploads = _proKnow.Uploads;
-        private static readonly Documents _documents = _proKnow.Patients.Documents;
-        private static string _workspaceId;
-        private static string _patientId;
+        private static readonly string _testDocumentPath = Path.Combine(TestSettings.TestDataRootDirectory, "dummy.pdf");
+        private static readonly string _outputFolderPath = Path.Combine(Path.GetTempPath(), _testClassName);
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspace, if necessary
-            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
-
-            // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
-            _workspaceId = workspaceItem.Id;
-
-            // Create a test patient
-            var patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
-            _patientId = patientSummary.Id;
-
-            // Upload test files
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew");
-            var overrides = new UploadFileOverrides
-            {
-                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
-            };
-            await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
-
-            // Wait until uploaded test files have processed
-            while (true)
-            {
-                var patientItem = await patientSummary.GetAsync();
-                var entitySummaries = patientItem.FindEntities(e => e.PatientId == patientSummary.Id);
-                if (entitySummaries.Count() >= 4)
-                {
-                    var statuses = entitySummaries.Select(e => e.Status).Distinct();
-                    if (statuses.Count() == 1 && statuses.First() == "completed")
-                    {
-                        break;
-                    }
-                }
-            }
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
         }
 
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
-            // Delete test workspace
-            await _proKnow.Workspaces.DeleteAsync(_workspaceId);
+            // Delete output folder
+            if (Directory.Exists(_outputFolderPath))
+            {
+                Directory.Delete(_outputFolderPath, recursive: true);
+            }
+
+            // Delete test workspaces
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
         }
 
         [TestMethod]
         public async Task CreateAsyncTest()
         {
+            var testNumber = 1;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+
             // Create the document
-            var inputDocumentPath = Path.Combine(TestSettings.TestDataRootDirectory, "dummy.pdf");
-            await _documents.CreateAsync(_workspaceId, _patientId, inputDocumentPath, "CreateAsyncTest.pdf");
+            await _proKnow.Patients.Documents.CreateAsync(workspaceItem.Id, patientItem.Id, _testDocumentPath, $"{_testClassName}-{testNumber}.pdf");
 
             // Wait until the document processing has completed
             while (true)
             {
                 // Query patient documents so we can get the document ID
-                var documentSummaries = await _documents.QueryAsync(_workspaceId, _patientId);
-                var documentSummary = documentSummaries.FirstOrDefault(d => d.Name == "CreateAsyncTest.pdf");
+                var documentSummaries = await _proKnow.Patients.Documents.QueryAsync(workspaceItem.Id, patientItem.Id);
+                var documentSummary = documentSummaries.FirstOrDefault(d => d.Name == $"{_testClassName}-{testNumber}.pdf");
                 if (documentSummary != null)
                 {
                     // Stream document to a new file
-                    var outputDocumentPath = Path.Combine(Path.GetTempPath(), _patientMrnAndName, "CreateAsyncTest.pdf");
-                    await _documents.StreamAsync(_workspaceId, _patientId, documentSummary.Id, outputDocumentPath);
+                    var outputDocumentPath = Path.Combine(Path.GetTempPath(), _testClassName, $"{_testClassName}-{testNumber}.pdf");
+                    await _proKnow.Patients.Documents.StreamAsync(workspaceItem.Id, patientItem.Id, documentSummary.Id, outputDocumentPath);
 
                     // Make sure created document and streamed document sizes are the same
                     Assert.AreEqual(documentSummary.Size, new FileInfo(outputDocumentPath).Length);
 
-                    // Delete the streamed document
-                    File.Delete(outputDocumentPath);
                     return;
                 }
             }
@@ -96,26 +73,33 @@ namespace ProKnow.Patient.Document.Test
         [TestMethod]
         public async Task DeleteAsyncTest()
         {
-            // Create a document
-            var documentPath = Path.Combine(TestSettings.TestDataRootDirectory, "dummy.pdf");
-            await _proKnow.Patients.Documents.CreateAsync(_workspaceId, _patientId, documentPath, "DeleteAsyncTest.pdf");
+            var testNumber = 2;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+
+            // Create the document
+            await _proKnow.Patients.Documents.CreateAsync(workspaceItem.Id, patientItem.Id, _testDocumentPath, $"{_testClassName}-{testNumber}.pdf");
 
             // Wait, if necessary, until document processing has completed
             while (true)
             {
                 // Query patient documents so we can get the document ID
-                var documentSummaries = await _documents.QueryAsync(_workspaceId, _patientId);
-                var documentSummary = documentSummaries.FirstOrDefault(d => d.Name == "DeleteAsyncTest.pdf");
+                var documentSummaries = await _proKnow.Patients.Documents.QueryAsync(workspaceItem.Id, patientItem.Id);
+                var documentSummary = documentSummaries.FirstOrDefault(d => d.Name == $"{_testClassName}-{testNumber}.pdf");
                 if (documentSummary != null)
                 {
                     // Delete the document
-                    await _documents.DeleteAsync(_workspaceId, _patientId, documentSummary.Id);
+                    await _proKnow.Patients.Documents.DeleteAsync(workspaceItem.Id, patientItem.Id, documentSummary.Id);
 
                     // Wait, if necessary, until document deletion has completed
                     while (true)
                     {
-                        documentSummaries = await _documents.QueryAsync(_workspaceId, _patientId);
-                        documentSummary = documentSummaries.FirstOrDefault(d => d.Name == "DeleteAsyncTest.pdf");
+                        documentSummaries = await _proKnow.Patients.Documents.QueryAsync(workspaceItem.Id, patientItem.Id);
+                        documentSummary = documentSummaries.FirstOrDefault(d => d.Name == $"{_testClassName}-{testNumber}.pdf");
                         if (documentSummary == null)
                         {
                             return;
@@ -128,16 +112,23 @@ namespace ProKnow.Patient.Document.Test
         [TestMethod]
         public async Task QueryAsyncTest()
         {
-            // Create a document
-            var documentPath = Path.Combine(TestSettings.TestDataRootDirectory, "dummy.pdf");
-            await _proKnow.Patients.Documents.CreateAsync(_workspaceId, _patientId, documentPath, "QueryAsyncTest.pdf");
+            var testNumber = 3;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+
+            // Create the document
+            await _proKnow.Patients.Documents.CreateAsync(workspaceItem.Id, patientItem.Id, _testDocumentPath, $"{_testClassName}-{testNumber}.pdf");
 
             // Wait, if necessary, until document processing has completed
             while (true)
             {
                 // Verify the document added is in the query results
-                var documentSummaries = await _proKnow.Patients.Documents.QueryAsync(_workspaceId, _patientId);
-                var documentSummary = documentSummaries.FirstOrDefault(d => d.Name == "QueryAsyncTest.pdf");
+                var documentSummaries = await _proKnow.Patients.Documents.QueryAsync(workspaceItem.Id, patientItem.Id);
+                var documentSummary = documentSummaries.FirstOrDefault(d => d.Name == $"{_testClassName}-{testNumber}.pdf");
                 if (documentSummary != null)
                 {
                     return;
@@ -148,27 +139,32 @@ namespace ProKnow.Patient.Document.Test
         [TestMethod]
         public async Task StreamAsyncTest()
         {
-            // Create a document
-            var documentPath = Path.Combine(TestSettings.TestDataRootDirectory, "dummy.pdf");
-            await _proKnow.Patients.Documents.CreateAsync(_workspaceId, _patientId, documentPath, "StreamAsyncTest.pdf");
+            var testNumber = 4;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+
+            // Create the document
+            await _proKnow.Patients.Documents.CreateAsync(workspaceItem.Id, patientItem.Id, _testDocumentPath, $"{_testClassName}-{testNumber}.pdf");
 
             // Wait, if necessary, until document processing has completed
             while (true)
             {
                 // Query patient documents so we can get the document ID
-                var documentSummaries = await _documents.QueryAsync(_workspaceId, _patientId);
-                var documentSummary = documentSummaries.FirstOrDefault(d => d.Name == "StreamAsyncTest.pdf");
+                var documentSummaries = await _proKnow.Patients.Documents.QueryAsync(workspaceItem.Id, patientItem.Id);
+                var documentSummary = documentSummaries.FirstOrDefault(d => d.Name == $"{_testClassName}-{testNumber}.pdf");
                 if (documentSummary != null)
                 {
                     // Stream document to a new file
-                    var outputDocumentPath = Path.Combine(Path.GetTempPath(), _patientMrnAndName, "StreamAsyncTest.pdf");
-                    await _documents.StreamAsync(_workspaceId, _patientId, documentSummary.Id, outputDocumentPath);
+                    var outputDocumentPath = Path.Combine(_outputFolderPath, $"{_testClassName}-{testNumber}.pdf");
+                    await _proKnow.Patients.Documents.StreamAsync(workspaceItem.Id, patientItem.Id, documentSummary.Id, outputDocumentPath);
 
                     // Make sure created document and streamed document sizes are the same
                     Assert.AreEqual(documentSummary.Size, new FileInfo(outputDocumentPath).Length);
 
-                    // Delete the streamed document
-                    File.Delete(outputDocumentPath);
                     return;
                 }
             }
@@ -177,24 +173,31 @@ namespace ProKnow.Patient.Document.Test
         [TestMethod]
         public async Task UpdateAsyncTest()
         {
+            var testNumber = 5;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+
             // Create the document
-            var originalDocumentPath = Path.Combine(TestSettings.TestDataRootDirectory, "dummy.pdf");
-            await _documents.CreateAsync(_workspaceId, _patientId, originalDocumentPath, "UpdateAsyncTest.pdf");
+            await _proKnow.Patients.Documents.CreateAsync(workspaceItem.Id, patientItem.Id, _testDocumentPath, $"{_testClassName}-{testNumber}.pdf");
 
             // Wait until the document processing has completed
             while (true)
             {
                 // Query patient documents so we can get the document ID
-                var documentSummaries = await _documents.QueryAsync(_workspaceId, _patientId);
-                var documentSummary = documentSummaries.FirstOrDefault(d => d.Name == "UpdateAsyncTest.pdf");
+                var documentSummaries = await _proKnow.Patients.Documents.QueryAsync(workspaceItem.Id, patientItem.Id);
+                var documentSummary = documentSummaries.FirstOrDefault(d => d.Name == $"{_testClassName}-{testNumber}.pdf");
                 if (documentSummary != null)
                 {
                     // Update the document
-                    await _documents.UpdateAsync(_workspaceId, _patientId, documentSummary.Id, "UpdateAsyncTest2.pdf", "category");
+                    await _proKnow.Patients.Documents.UpdateAsync(workspaceItem.Id, patientItem.Id, documentSummary.Id, $"{_testClassName}-{testNumber}-2.pdf", "category");
 
                     // Keep querying patient documents until update is finished
-                    documentSummaries = await _documents.QueryAsync(_workspaceId, _patientId);
-                    documentSummary = documentSummaries.FirstOrDefault(d => d.Name == "UpdateAsyncTest2.pdf");
+                    documentSummaries = await _proKnow.Patients.Documents.QueryAsync(workspaceItem.Id, patientItem.Id);
+                    documentSummary = documentSummaries.FirstOrDefault(d => d.Name == $"{_testClassName}-{testNumber}-2.pdf");
                     if (documentSummary != null)
                     {
                         Assert.AreEqual("category", documentSummary.Category);
