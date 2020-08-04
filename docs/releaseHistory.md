@@ -4,6 +4,12 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.0.21
+
+*New Features and Enhancements*
+- Add GetImageDataAsync method to ImageSetItem class to retrieve pixel data
+- In ImageSetData and Image classes, replace many ExtensionData with concrete properties
+
 ## v0.0.20
 
 *Bug fixes*
