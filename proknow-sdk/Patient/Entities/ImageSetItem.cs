@@ -12,6 +12,12 @@ namespace ProKnow.Patient.Entities
     public class ImageSetItem : EntityItem
     {
         /// <summary>
+        /// JSON web token (JWT) for image set data
+        /// </summary>
+        [JsonPropertyName("key")]
+        public string Key { get; set; }
+
+        /// <summary>
         /// Type-specific entity data
         /// </summary>
         [JsonPropertyName("data")]
@@ -54,6 +60,17 @@ namespace ProKnow.Patient.Entities
             return folder;
         }
 
-        //todo--Implement GetImageData() method
+        /// <summary>
+        /// Gets the pixel data for a specified image asynchronously
+        /// </summary>
+        /// <param name="index">The index of the image</param>
+        /// <returns>The pixel data as a byte array</returns>
+        public Task<byte[]> GetImageDataAsync(int index)
+        {
+            var image = Data.Images[index];
+            var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
+                new KeyValuePair<string, string>("ProKnow-Key", Key) };
+            return _proKnow.Requestor.GetBinaryAsync($"/imagesets/{Id}/images/{image.Tag}", headerKeyValuePairs);
+        }
     }
 }

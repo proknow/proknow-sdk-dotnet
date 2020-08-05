@@ -214,7 +214,7 @@ namespace ProKnow.Patient.Entities
             {
                 { "version", "draft" }
             };
-            var responseJson = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}", queryParameters);
+            var responseJson = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/structuresets/{Id}", null, queryParameters);
             var structureSetItem = JsonSerializer.Deserialize<StructureSetItem>(responseJson);
             structureSetItem.PostProcessDeserialization(_proKnow, WorkspaceId);
             structureSetItem.IsEditable = true;

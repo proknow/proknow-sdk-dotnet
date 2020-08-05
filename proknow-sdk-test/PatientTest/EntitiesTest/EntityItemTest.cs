@@ -10,58 +10,43 @@ namespace ProKnow.Patient.Entities.Test
     [TestClass]
     public class EntityItemTest
     {
-        private static readonly string _patientMrnAndName = "SDK-EntityItemTest";
+        private static readonly string _testClassName = nameof(EntityItemTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static readonly Uploads _uploads = _proKnow.Uploads;
-        private static string _workspaceId;
-        private static PatientSummary _patientSummary;
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspace, if necessary
-            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
+            // Delete existing custom metrics, if necessary
+            await TestHelper.DeleteCustomMetricsAsync(_testClassName);
 
-            // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
-            _workspaceId = workspaceItem.Id;
-
-            // Create a test patient
-            _patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
+            // Delete test workspaces, if necessary
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
         }
 
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
-            // Delete test workspace
-            await _proKnow.Workspaces.DeleteAsync(_workspaceId);
+            // Delete test workspaces
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
+
+            // Delete custom metrics
+            await TestHelper.DeleteCustomMetricsAsync(_testClassName);
         }
 
         [TestMethod]
         public async Task DeleteAsyncTest()
         {
-            // Upload test file
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RP.dcm");
-            var overrides = new UploadFileOverrides
-            {
-                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
-            };
-            await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
+            var testNumber = 1;
 
-            // Wait until uploaded test file has processed
-            PlanItem planItem = null;
-            while (true)
-            {
-                var patientItem = await _patientSummary.GetAsync();
-                var entitySummaries = patientItem.FindEntities(t => t.Type == "plan");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
-                {
-                    planItem = await entitySummaries[0].GetAsync() as PlanItem;
-                    break;
-                }
-            }
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with a plan
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);
+            var entitySummaries = patientItem.FindEntities(e => e.Type == "plan");
+            var planItem = await entitySummaries[0].GetAsync() as PlanItem;
 
             // Delete entity
             await planItem.DeleteAsync();
@@ -69,8 +54,8 @@ namespace ProKnow.Patient.Entities.Test
             // Verify it was deleted
             while (true)
             {
-                var patientItem = await _patientSummary.GetAsync();
-                var entitySummaries = patientItem.FindEntities(t => t.Type == "plan");
+                await patientItem.RefreshAsync();
+                entitySummaries = patientItem.FindEntities(t => t.Type == "plan");
                 if (entitySummaries.Count == 0)
                 {
                     break;
@@ -81,29 +66,18 @@ namespace ProKnow.Patient.Entities.Test
         [TestMethod]
         public async Task GetMetadataAsyncTest()
         {
-            // Upload test file
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RD.dcm");
-            var overrides = new UploadFileOverrides
-            {
-                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
-            };
-            await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
+            var testNumber = 2;
 
-            // Wait until uploaded test file has processed
-            DoseItem doseItem = null;
-            while (true)
-            {
-                var patientItem = await _patientSummary.GetAsync();
-                var entitySummaries = patientItem.FindEntities(t => t.Type == "dose");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
-                {
-                    doseItem = await entitySummaries[0].GetAsync() as DoseItem;
-                    break;
-                }
-            }
-            
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with a dose
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var entitySummaries = patientItem.FindEntities(e => e.Type == "dose");
+            var doseItem = await entitySummaries[0].GetAsync() as DoseItem;
+
             // Create custom metric for testing
-            var customMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_patientMrnAndName}-1", "dose", "number");
+            var customMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}", "dose", "number");
 
             // Set test metadata
             doseItem.Metadata.Add(customMetricItem.Id, 3.141);
@@ -114,91 +88,55 @@ namespace ProKnow.Patient.Entities.Test
             // Verify metadata
             Assert.AreEqual(1, metadata.Keys.Count);
             Assert.AreEqual(3.141, metadata[customMetricItem.Name]);
-
-            // Cleanup
-            await doseItem.DeleteAsync();
-            await _proKnow.CustomMetrics.DeleteAsync(customMetricItem.Id);
         }
 
         [TestMethod]
         public async Task SaveAsyncTest()
         {
-            // Upload test file
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RS.dcm");
-            var overrides = new UploadFileOverrides
-            {
-                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
-            };
-            await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
+            var testNumber = 3;
 
-            // Wait until uploaded test file has processed
-            EntitySummary entitySummary = null;
-            StructureSetItem structureSetItem = null;
-            while (true)
-            {
-                var patientItem = await _patientSummary.GetAsync();
-                var entitySummaries = patientItem.FindEntities(t => t.Type == "structure_set");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
-                {
-                    entitySummary = entitySummaries[0];
-                    structureSetItem = await entitySummary.GetAsync() as StructureSetItem;
-                    break;
-                }
-            }
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with a structure set
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
+            var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
             // Create custom metric for testing
-            var customMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_patientMrnAndName}-2", "structure_set", "number");
+            var customMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}", "structure_set", "number");
 
             // Set description and metadata
-            structureSetItem.Description = _patientMrnAndName;
+            structureSetItem.Description = _testClassName;
             structureSetItem.Metadata.Add(customMetricItem.Id, 1);
 
             // Save entity changes
             await structureSetItem.SaveAsync();
 
             // Refresh entity
-            structureSetItem = await entitySummary.GetAsync() as StructureSetItem;
+            await structureSetItem.RefreshAsync();
 
             // Verify changes were saved
-            Assert.AreEqual(_patientMrnAndName, structureSetItem.Description);
+            Assert.AreEqual(_testClassName, structureSetItem.Description);
             Assert.AreEqual(1, structureSetItem.Metadata.Keys.Count);
             Assert.AreEqual(1, structureSetItem.Metadata[customMetricItem.Id]);
-
-            // Cleanup
-            await structureSetItem.DeleteAsync();
-            await _proKnow.CustomMetrics.DeleteAsync(customMetricItem.Id);
         }
 
         [TestMethod]
         public async Task SetMetadataAsyncTest()
         {
-            // Upload test files
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
-            var overrides = new UploadFileOverrides
-            {
-                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
-            };
-            await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
-            var uploadedFiles = Directory.GetFiles(uploadPath);
+            var testNumber = 4;
 
-            // Wait until uploaded test files have processed
-            ImageSetItem imageSetItem = null;
-            while (true)
-            {
-                var patientItem = await _patientSummary.GetAsync();
-                var entitySummaries = patientItem.FindEntities(t => t.Type == "image_set");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
-                {
-                    imageSetItem = await entitySummaries[0].GetAsync() as ImageSetItem;
-                    if (imageSetItem.Data.Images.Count == uploadedFiles.Length)
-                    {
-                        break;
-                    }
-                }
-            }
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with an image set
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
+            var entitySummaries = patientItem.FindEntities(e => e.Type == "image_set");
+            var imageSetItem = await entitySummaries[0].GetAsync() as ImageSetItem;
 
             // Create custom metric for testing
-            var customMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_patientMrnAndName}-3", "image_set", 
+            var customMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}", "image_set", 
                 "enum", new string[] { "one", "two", "three" });
 
             // Set metadata
@@ -208,10 +146,6 @@ namespace ProKnow.Patient.Entities.Test
             // Verify metadata was set
             Assert.AreEqual(1, imageSetItem.Metadata.Keys.Count);
             Assert.AreEqual("two", imageSetItem.Metadata[customMetricItem.Id]);
-
-            // Cleanup
-            await imageSetItem.DeleteAsync();
-            await _proKnow.CustomMetrics.DeleteAsync(customMetricItem.Id);
         }
     }
 }

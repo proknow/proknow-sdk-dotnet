@@ -43,7 +43,7 @@ namespace ProKnow
         /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
         /// <param name="content">Optional content for the body</param>
         /// <returns>A task that returns the response as a string</returns>
-        /// <exception cref="ProKnow.Exceptions.ProKnowHttpException">If the HTTP request is not successful</exception>
+        /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
         public async Task<string> DeleteAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Delete, $"{_baseUrl}/{route}");
@@ -60,22 +60,55 @@ namespace ProKnow
                 request.Content = content;
             }
             var response = await _httpClient.SendAsync(request);
-            return await HandleResponseAsync(response);
+            return await HandleStringResponseAsync(response);
         }
 
         /// <summary>
-        /// Issues an asynchronous HTTP GET request
+        /// Issues an asynchronous HTTP GET request that expects a string response
         /// </summary>
         /// <param name="route">The API route to use in the request</param>
+        /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
         /// <param name="queryParameters">Optional query parameters</param>
         /// <returns>A task that returns the response as a string</returns>
-        /// <exception cref="ProKnow.Exceptions.ProKnowHttpException">If the HTTP request is not successful</exception>
-        public async Task<string> GetAsync(string route, Dictionary<string, object> queryParameters = null)
+        /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
+        public async Task<string> GetAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null,
+            Dictionary<string, object> queryParameters = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, BuildUriString($"{_baseUrl}/{route}", queryParameters));
             request.Headers.Authorization = _authenticationHeaderValue;
+            if (headerKeyValuePairs != null)
+            {
+                foreach (var kvp in headerKeyValuePairs)
+                {
+                    request.Headers.Add(kvp.Key, kvp.Value);
+                }
+            }
             var response = await _httpClient.SendAsync(request);
-            return await HandleResponseAsync(response);
+            return await HandleStringResponseAsync(response);
+        }
+
+        /// <summary>
+        /// Issues an asynchronous HTTP GET request that expects a binary response
+        /// </summary>
+        /// <param name="route">The API route to use in the request</param>
+        /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
+        /// <param name="queryParameters">Optional query parameters</param>
+        /// <returns>A task that returns the response as a string</returns>
+        /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
+        public async Task<byte[]> GetBinaryAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null,
+            Dictionary<string, object> queryParameters = null)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, BuildUriString($"{_baseUrl}/{route}", queryParameters));
+            request.Headers.Authorization = _authenticationHeaderValue;
+            if (headerKeyValuePairs != null)
+            {
+                foreach (var kvp in headerKeyValuePairs)
+                {
+                    request.Headers.Add(kvp.Key, kvp.Value);
+                }
+            }
+            var response = await _httpClient.SendAsync(request);
+            return await HandleBinaryResponseAsync(response);
         }
 
         /// <summary>
@@ -85,7 +118,7 @@ namespace ProKnow
         /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
         /// <param name="content">Optional content for the body</param>
         /// <returns>A task that returns the response as a string</returns>
-        /// <exception cref="ProKnow.Exceptions.ProKnowHttpException">If the HTTP request is not successful</exception>
+        /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
         public async Task<string> PostAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/{route}");
@@ -102,7 +135,7 @@ namespace ProKnow
                 request.Content = content;
             }
             var response = await _httpClient.SendAsync(request);
-            return await HandleResponseAsync(response);
+            return await HandleStringResponseAsync(response);
         }
 
         /// <summary>
@@ -112,7 +145,7 @@ namespace ProKnow
         /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
         /// <param name="content">Optional content for the body</param>
         /// <returns>A task that returns the response as a string</returns>
-        /// <exception cref="ProKnow.Exceptions.ProKnowHttpException">If the HTTP request is not successful</exception>
+        /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
         public async Task<string> PutAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
             var request = new HttpRequestMessage(HttpMethod.Put, $"{_baseUrl}/{route}");
@@ -129,7 +162,7 @@ namespace ProKnow
                 request.Content = content;
             }
             var response = await _httpClient.SendAsync(request);
-            return await HandleResponseAsync(response);
+            return await HandleStringResponseAsync(response);
         }
 
         /// <summary>
@@ -138,8 +171,8 @@ namespace ProKnow
         /// <param name="route">The API route to use in the request</param>
         /// <param name="path">The full path to the file to which to write the response</param>
         /// <returns>The full path to the file containing the response</returns>
-        /// <exception cref="ProKnow.Exceptions.ProKnowException">If path is to an existing directory rather than to a new or existing file</exception>
-        /// <exception cref="ProKnow.Exceptions.ProKnowHttpException">If the HTTP request is not successful</exception>
+        /// <exception cref="ProKnowException">If path is to an existing directory rather than to a new or existing file</exception>
+        /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
         public async Task<string> StreamAsync(string route, string path)
         {
             if (Directory.Exists(path))
@@ -198,12 +231,12 @@ namespace ProKnow
         }
 
         /// <summary>
-        /// Handles the response from an HTTP request
+        /// Handles a response with string content from an HTTP request
         /// </summary>
         /// <param name="response">The response</param>
         /// <returns>A task that returns the response as a string</returns>
-        /// <exception cref="ProKnow.Exceptions.ProKnowHttpException">If the HTTP request is not successful</exception>
-        private async Task<string> HandleResponseAsync(HttpResponseMessage response)
+        /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
+        private async Task<string> HandleStringResponseAsync(HttpResponseMessage response)
         {
             var content = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
@@ -211,6 +244,21 @@ namespace ProKnow
                 throw new ProKnowHttpException(response.StatusCode.ToString(), content);
             }
             return content;
+        }
+
+        /// <summary>
+        /// Handles a response with binary content from an HTTP request
+        /// </summary>
+        /// <param name="response">The response</param>
+        /// <returns>A task that returns the response as a byte array</returns>
+        /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
+        private async Task<byte[]> HandleBinaryResponseAsync(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ProKnowHttpException(response.StatusCode.ToString(), await response.Content.ReadAsStringAsync());
+            }
+            return await response.Content.ReadAsByteArrayAsync();
         }
     }
 }

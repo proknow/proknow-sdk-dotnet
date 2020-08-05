@@ -108,7 +108,7 @@ namespace ProKnow.Collection
                 var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
                 queryParameters.Add("workspace", workspaceItem.Id);
             }
-            var json = await _proKnow.Requestor.GetAsync($"/collections", queryParameters);
+            var json = await _proKnow.Requestor.GetAsync($"/collections", null, queryParameters);
             return DeserializeCollections(json);
         }
 

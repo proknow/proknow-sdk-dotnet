@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Test;
-using ProKnow.Upload;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -9,85 +9,92 @@ namespace ProKnow.Patient.Entities.Test
     [TestClass]
     public class ImageSetItemTest
     {
-        private static readonly string _patientMrnAndName = "SDK-ImageSetItemTest";
+        private static readonly string _testClassName = nameof(ImageSetItemTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static readonly Uploads _uploads = _proKnow.Uploads;
-        private static string _workspaceId;
-        private static string[] _uploadedFiles;
-        private static ImageSetItem _imageSetItem;
+        private static readonly string _downloadFolder = Path.Combine(Path.GetTempPath(), _testClassName);
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspace, if necessary
-            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
-
-            // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
-            _workspaceId = workspaceItem.Id;
-
-            // Create a test patient
-            var patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
-
-            // Upload test files
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
-            var overrides = new UploadFileOverrides
+            // Delete download directory, if necessary
+            if (Directory.Exists(_downloadFolder))
             {
-                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
-            };
-            await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
-            _uploadedFiles = Directory.GetFiles(uploadPath);
-
-            // Wait until uploaded test files have processed
-            while (true)
-            {
-                var patientItem = await patientSummary.GetAsync();
-                var entitySummaries = patientItem.FindEntities(t => t.Type == "image_set");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
-                {
-                    _imageSetItem = await entitySummaries[0].GetAsync() as ImageSetItem;
-                    if (_imageSetItem.Data.Images.Count == _uploadedFiles.Length)
-                    {
-                        break;
-                    }
-                }
+                Directory.Delete(_downloadFolder, true);
             }
+
+            // Delete test workspaces, if necessary
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
         }
 
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
-            // Delete test workspace
-            await _proKnow.Workspaces.DeleteAsync(_workspaceId);
+            // Delete test workspaces
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
+
+            // Delete download directory
+            if (Directory.Exists(_downloadFolder))
+            {
+                Directory.Delete(_downloadFolder, true);
+            }
         }
 
         [TestMethod]
         public async Task DownloadAsyncTest()
         {
+            var testNumber = 1;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with an imageset
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
+            var entitySummaries = patientItem.FindEntities(e => e.Type == "image_set");
+            var imageSetItem = await entitySummaries[0].GetAsync() as ImageSetItem;
+
             // Download the image set
-            string downloadFolder = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
-            string downloadPath = await _imageSetItem.DownloadAsync(downloadFolder);
+            string downloadPath = await imageSetItem.DownloadAsync(_downloadFolder);
             var downloadedFiles = Directory.GetFiles(downloadPath);
 
             // Make sure the same number of images were downloaded
-            Assert.AreEqual(_uploadedFiles.Length, downloadedFiles.Length);
+            Assert.AreEqual(5, downloadedFiles.Length);
 
-            // Find one downloaded file that matches (don't need to check them all!)
-            var doesMatch = false;
-            foreach (var downloadedFile in downloadedFiles)
-            {
-                if (TestHelper.FileEquals(_uploadedFiles[0], downloadedFile))
-                {
-                    doesMatch = true;
-                    break;
-                }
-            }
-            Assert.IsTrue(doesMatch);
+            // Check contents of one downloaded file (don't need to check them all!)
+            var uploadedFile = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT", "CT.1.dcm");
+            var downloadedFile = Path.Combine(downloadPath, $"CT.1.3.6.1.4.1.22213.2.26558.2.57");
+            Assert.IsTrue(TestHelper.FileEquals(uploadedFile, downloadedFile));
+        }
 
-            // Cleanup
-            Directory.Delete(downloadFolder, true);
+        [TestMethod]
+        public async Task GetImageDataTest()
+        {
+            int testNumber = 2;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient with an image set
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
+            var entitySummaries = patientItem.FindEntities(e => e.Type == "image_set");
+            var imageSetItem = await entitySummaries[0].GetAsync() as ImageSetItem;
+
+            // Get the data for the first image
+            var bytes = await imageSetItem.GetImageDataAsync(0);
+
+            // Verify the data
+            Assert.AreEqual(512 * 512 * 2, bytes.Length);
+            Assert.AreEqual(32, bytes[401]);
+            Assert.AreEqual(0, bytes[402]);
+            Assert.AreEqual(41, bytes[403]);
+            Assert.AreEqual(0, bytes[404]);
+            Assert.AreEqual(46, bytes[405]);
+            Assert.AreEqual(0, bytes[406]);
+            Assert.AreEqual(47, bytes[407]);
+            Assert.AreEqual(00, bytes[408]);
+            Assert.AreEqual(48, bytes[409]);
+            Assert.AreEqual(0, bytes[410]);
         }
     }
 }

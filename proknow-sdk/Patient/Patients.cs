@@ -183,7 +183,7 @@ namespace ProKnow.Patient
             {
                 queryParameters = new Dictionary<string, object>() { { "search", searchString } };
             }
-            var json = await _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/patients", queryParameters);
+            var json = await _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/patients", null, queryParameters);
             return DeserializePatients(workspaceId, json);
         }
 

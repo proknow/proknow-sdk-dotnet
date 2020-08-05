@@ -295,13 +295,13 @@ namespace ProKnow.Upload
             // Create the collection of unresolved upload IDs
             var unresolvedUploads = new List<string>(initiateUploadFileResponses.Select(r => r.Id));
 
-            Dictionary<string, object> query = null;
+            Dictionary<string, object> queryParameters = null;
             long lastUpdatedAt = 0;
             var numberOfRetries = 0;
             while (unresolvedUploads.Count > 0 && numberOfRetries < MAX_RETRIES)
             {
                 // Query the current status of the uploads, filtering those whose status has changed since the previous query
-                var uploadStatusResultsJson = await _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/uploads/", query);
+                var uploadStatusResultsJson = await _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/uploads/", null, queryParameters);
                 var uploadStatusResults = JsonSerializer.Deserialize<IList<UploadStatusResult>>(uploadStatusResultsJson);
 
                 // Remove any uploads that reached terminal status from the collection of unresolved uploads, keeping track of last updated
@@ -322,13 +322,13 @@ namespace ProKnow.Upload
                             // Update the query parameters to the latest upload to reach terminal status
                             if (uploadStatusResult.UpdatedAt > lastUpdatedAt)
                             {
-                                if (query == null)
+                                if (queryParameters == null)
                                 {
-                                    query = new Dictionary<string, object>();
+                                    queryParameters = new Dictionary<string, object>();
                                 }
                                 lastUpdatedAt = uploadStatusResult.UpdatedAt;
-                                query["updated"] = lastUpdatedAt;
-                                query["after"] = uploadStatusResult.Id;
+                                queryParameters["updated"] = lastUpdatedAt;
+                                queryParameters["after"] = uploadStatusResult.Id;
                             }
                         }
                     }
