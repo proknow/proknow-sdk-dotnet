@@ -9,7 +9,6 @@ namespace ProKnow.Patient.Entities.Test
     public class ImageSetItemTest
     {
         private static readonly string _testClassName = nameof(ImageSetItemTest);
-        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
         private static readonly string _downloadFolder = Path.Combine(Path.GetTempPath(), _testClassName);
 
         [ClassInitialize]
@@ -40,7 +39,7 @@ namespace ProKnow.Patient.Entities.Test
             var testNumber = 1;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an imageset
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
@@ -66,7 +65,7 @@ namespace ProKnow.Patient.Entities.Test
             int testNumber = 2;
 
             // Create a workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient with an image set
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
