@@ -6,9 +6,12 @@ All releases in the v0.x.x series are subject to breaking changes from one versi
 
 ## v0.0.22
 
+*Enhancements*
+- Refactor and fix possible threading issues in unit tests
+- Replace use of generic ApplicationException with more specific InvalidOperationError
+
 *Bug fixes*
-- Ensure that structure set draft lock renewer timer does not fire after edit lock has been removed
-- Refactored, standardized, and optimized unit tests
+- Ensure that a structure set draft lock renewer timer does not fire after the edit lock has been removed
 
 ## v0.0.21
 
