@@ -74,18 +74,10 @@ namespace ProKnow.Patient.Test
             await patientSummary.UploadAsync(uploadPath, overrides);
 
             // Verify file was uploaded
-            while (true)
-            {
-                await patientItem.RefreshAsync();
-                var entitySummaries = patientItem.FindEntities(t => t.Type == "plan");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
-                {
-                    // Make sure the uploaded data is the same
-                    Assert.AreEqual("2.16.840.1.114337.1.1.1535997926.0", entitySummaries[0].Uid);
-
-                    break;
-                }
-            }
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => t.Type == "plan");
+            Assert.AreEqual(1, entitySummaries.Count);
+            Assert.AreEqual("2.16.840.1.114337.1.1.1535997926.0", entitySummaries[0].Uid);
         }
 
         [TestMethod]
@@ -110,19 +102,11 @@ namespace ProKnow.Patient.Test
 
             // Very all files were uploaded
             var uploadedFiles = Directory.GetFiles(uploadPath);
-            while (true)
-            {
-                await patientItem.RefreshAsync();
-                var entitySummaries = patientItem.FindEntities(t => t.Type == "image_set");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
-                {
-                    var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
-                    if (entityItem.Data.Images.Count == uploadedFiles.Length)
-                    {
-                        break;
-                    }
-                }
-            }
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => t.Type == "image_set");
+            Assert.AreEqual(1, entitySummaries.Count);
+            var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
+            Assert.AreEqual(uploadedFiles.Length, entityItem.Data.Images.Count);
         }
 
         [TestMethod]
@@ -149,33 +133,17 @@ namespace ProKnow.Patient.Test
 
             // Verify all CT files were uploaded
             var uploadedCtFiles = Directory.GetFiles(uploadPath1);
-            while (true)
-            {
-                await patientItem.RefreshAsync();
-                var entitySummaries = patientItem.FindEntities(t => t.Type == "image_set");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
-                {
-                    var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
-                    if (entityItem.Data.Images.Count == uploadedCtFiles.Length)
-                    {
-                        break;
-                    }
-                }
-            }
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => t.Type == "image_set");
+            Assert.AreEqual(1, entitySummaries.Count);
+            var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
+            Assert.AreEqual(uploadedCtFiles.Length, entityItem.Data.Images.Count);
 
             // Verify plan file was uploaded
-            while (true)
-            {
-                await patientItem.RefreshAsync();
-                var entitySummaries = patientItem.FindEntities(t => t.Type == "plan");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
-                {
-                    // Make sure the uploaded data is the same
-                    Assert.AreEqual("2.16.840.1.114337.1.1.1535997926.0", entitySummaries[0].Uid);
-
-                    break;
-                }
-            }
+            await patientItem.RefreshAsync();
+            entitySummaries = patientItem.FindEntities(t => t.Type == "plan");
+            Assert.AreEqual(1, entitySummaries.Count);
+            Assert.AreEqual("2.16.840.1.114337.1.1.1535997926.0", entitySummaries[0].Uid);
         }
     }
 }

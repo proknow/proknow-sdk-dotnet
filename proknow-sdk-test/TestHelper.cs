@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ProKnow.Exceptions;
 using ProKnow.Patient;
 using ProKnow.Upload;
 using System;
@@ -74,21 +75,14 @@ namespace ProKnow.Test
                 var uploadedEntityIds = uploadBatch.Patients.SelectMany(p => p.Entities.Select(e => e.Id));
                 var uploadedSroIds = uploadBatch.Patients.SelectMany(p => p.Sros.Select(s => s.Id));
 
-                // Wait until uploaded test files have processed
-                while (true)
+                // Make sure returned upload batch matches user-specified number of entities
+                if (uploadedEntityIds.Count() + uploadedSroIds.Count() != numberOfEntitiesAndSros)
                 {
-                    await patientItem.RefreshAsync();
-                    var entitySummaries = patientItem.FindEntities(e => uploadedEntityIds.Contains(e.Id));
-                    var sroSummaries = patientItem.Studies.SelectMany(s => s.Sros.Where(r => uploadedSroIds.Contains(r.Id))).ToList();
-                    if (entitySummaries.Count() + sroSummaries.Count() == numberOfEntitiesAndSros)
-                    {
-                        var statuses = entitySummaries.Select(e => e.Status).Union(sroSummaries.Select(s => s.Status)).Distinct().ToList();
-                        if (statuses.Count == 1 && statuses[0] == "completed")
-                        {
-                            break;
-                        }
-                    }
+                    throw new ProKnowException($"Upload batch count of {uploadedEntityIds.Count() + uploadedSroIds.Count()} does not equal user-specified count of {numberOfEntitiesAndSros}.");
                 }
+
+                // Refresh patient
+                await patientItem.RefreshAsync();
             }
 
             // Add custom metric values
@@ -96,6 +90,7 @@ namespace ProKnow.Test
             {
                 await patientItem.SetMetadataAsync(metadata);
                 await patientItem.SaveAsync();
+                await patientItem.RefreshAsync();
             }
 
             return patientItem;

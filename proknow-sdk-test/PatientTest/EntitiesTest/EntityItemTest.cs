@@ -48,15 +48,9 @@ namespace ProKnow.Patient.Entities.Test
             await planItem.DeleteAsync();
 
             // Verify it was deleted
-            while (true)
-            {
-                await patientItem.RefreshAsync();
-                entitySummaries = patientItem.FindEntities(t => t.Type == "plan");
-                if (entitySummaries.Count == 0)
-                {
-                    break;
-                }
-            }
+            await patientItem.RefreshAsync();
+            entitySummaries = patientItem.FindEntities(t => t.Type == "plan");
+            Assert.AreEqual(0, entitySummaries.Count);
         }
 
         [TestMethod]

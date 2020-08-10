@@ -277,16 +277,10 @@ namespace ProKnow.Patient.Test
             };
             await patientItem.UploadAsync(uploadPath, overrides);
 
-            // Verify test file was uploaded (may have to wait for file to be processed)
-            while (true)
-            {
-                await patientItem.RefreshAsync();
-                var entitySummaries = patientItem.FindEntities(t => true);
-                if (entitySummaries.Count == 1)
-                {
-                    break;
-                }
-            }
+            // Verify test file was uploaded
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => true);
+            Assert.AreEqual(1, entitySummaries.Count);
         }
 
         [TestMethod]
@@ -308,20 +302,12 @@ namespace ProKnow.Patient.Test
             };
             await patientItem.UploadAsync(uploadPath, overrides);
 
-            // Verify test folder was uploaded (may have to wait for files to be processed)
-            while (true)
-            {
-                await patientItem.RefreshAsync();
-                var entitySummaries = patientItem.FindEntities(t => true);
-                if (entitySummaries.Count == 1 && entitySummaries[0].Status == "completed")
-                {
-                    var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
-                    if (entityItem.Data.Images.Count == 5)
-                    {
-                        break;
-                    }
-                }
-            }
+            // Verify test folder was uploaded
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => true);
+            Assert.AreEqual(1, entitySummaries.Count);
+            var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
+            Assert.AreEqual(5, entityItem.Data.Images.Count);
         }
 
         [TestMethod]
@@ -345,21 +331,14 @@ namespace ProKnow.Patient.Test
             };
             await patientItem.UploadAsync(uploadPaths, overrides);
 
-            // Verify test folder and test file were uploaded (may have to wait for files to be processed)
-            while (true)
-            {
-                await patientItem.RefreshAsync();
-                var entitySummaries = patientItem.FindEntities(t => true);
-                if (entitySummaries.Count == 2 && entitySummaries[0].Status == "completed" && entitySummaries[1].Status == "completed")
-                {
-                    var imageSetSummary = patientItem.FindEntities(t => t.Type == "image_set")[0];
-                    var entityItem = await imageSetSummary.GetAsync() as ImageSetItem;
-                    if (entityItem.Data.Images.Count == 5)
-                    {
-                        break;
-                    }
-                }
-            }
+            // Verify test folder and test file were uploaded
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => true);
+            Assert.AreEqual(2, entitySummaries.Count);
+            var imageSetSummary = patientItem.FindEntities(t => t.Type == "image_set")[0];
+            var entityItem = await imageSetSummary.GetAsync() as ImageSetItem;
+            Assert.AreEqual(5, entityItem.Data.Images.Count);
+            Assert.AreEqual(1, patientItem.FindEntities(t => t.Type == "structure_set").Count);
         }
     }
 }

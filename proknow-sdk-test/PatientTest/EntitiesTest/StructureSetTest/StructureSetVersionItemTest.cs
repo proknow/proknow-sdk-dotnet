@@ -199,23 +199,13 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             {
                 Patient = new PatientCreateSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
             };
-            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, actualDownloadPath, overrides, true);
-            StructureSetItem structureSetItem2;
-            while (true)
-            {
-                var patientSummaries = await _proKnow.Patients.LookupAsync(workspaceItem.Id, new string[] { $"{patientItem.Mrn}2" });
-                if (patientSummaries[0] != null)
-                {
-                    var patientSummary2 = patientSummaries[0];
-                    var patientItem2 = await patientSummary2.GetAsync();
-                    var entitySummary2 = patientItem2.FindEntities(e => true)[0];
-                    if (entitySummary2.Status == "completed")
-                    {
-                        structureSetItem2 = (await entitySummary2.GetAsync()) as StructureSetItem;
-                        break;
-                    }
-                }
-            }
+            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, actualDownloadPath, overrides);
+
+            // Get the uploaded structure set
+            var patientSummary2 = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Mrn == $"{patientItem.Mrn}2");
+            var patientItem2 = await patientSummary2.GetAsync();
+            var entitySummary2 = patientItem2.FindEntities(e => true)[0];
+            var structureSetItem2 = (await entitySummary2.GetAsync()) as StructureSetItem;
 
             // Verify that the version downloaded (and uploaded to a new patient) was correct
             Assert.IsTrue(structureSetItem2.Rois.Any(r => r.Name == "thing1"));
@@ -260,23 +250,13 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             {
                 Patient = new PatientCreateSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
             };
-            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, actualDownloadPath, overrides, true);
-            StructureSetItem structureSetItem2;
-            while (true)
-            {
-                var patientSummaries = await _proKnow.Patients.LookupAsync(workspaceItem.Id, new string[] { $"{patientItem.Mrn}2" });
-                if (patientSummaries[0] != null)
-                {
-                    var patientSummary2 = patientSummaries[0];
-                    var patientItem2 = await patientSummary2.GetAsync();
-                    var entitySummary2 = patientItem2.FindEntities(e => true)[0];
-                    if (entitySummary2.Status == "completed")
-                    {
-                        structureSetItem2 = (await entitySummary2.GetAsync()) as StructureSetItem;
-                        break;
-                    }
-                }
-            }
+            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, actualDownloadPath, overrides);
+
+            // Get the uploaded structure set
+            var patientSummary2 = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Mrn == $"{patientItem.Mrn}2");
+            var patientItem2 = await patientSummary2.GetAsync();
+            var entitySummary2 = patientItem2.FindEntities(e => true)[0];
+            var structureSetItem2 = (await entitySummary2.GetAsync()) as StructureSetItem;
 
             // Verify that the version downloaded (and uploaded to a new patient) was correct
             Assert.IsTrue(structureSetItem2.Rois.Any(r => r.Name == "thing1"));
@@ -319,23 +299,13 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             {
                 Patient = new PatientCreateSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
             };
-            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, actualDownloadPath, overrides, true);
-            StructureSetItem structureSetItem2;
-            while (true)
-            {
-                var patientSummaries = await _proKnow.Patients.LookupAsync(workspaceItem.Id, new string[] { $"{patientItem.Mrn}2" });
-                if (patientSummaries[0] != null)
-                {
-                    var patientSummary2 = patientSummaries[0];
-                    var patientItem2 = await patientSummary2.GetAsync();
-                    var entitySummary2 = patientItem2.FindEntities(e => true)[0];
-                    if (entitySummary2.Status == "completed")
-                    {
-                        structureSetItem2 = (await entitySummary2.GetAsync()) as StructureSetItem;
-                        break;
-                    }
-                }
-            }
+            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, actualDownloadPath, overrides);
+
+            // Get the uploaded structure set
+            var patientSummary2 = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Mrn == $"{patientItem.Mrn}2");
+            var patientItem2 = await patientSummary2.GetAsync();
+            var entitySummary2 = patientItem2.FindEntities(e => true)[0];
+            var structureSetItem2 = (await entitySummary2.GetAsync()) as StructureSetItem;
 
             // Verify that the version downloaded (and uploaded to a new patient) was correct
             Assert.IsTrue(structureSetItem2.Rois.Any(r => r.Name == "thing1"));
@@ -378,23 +348,13 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             {
                 Patient = new PatientCreateSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
             };
-            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, actualDownloadPath, overrides, true);
-            StructureSetItem structureSetItem2;
-            while (true)
-            {
-                var patientSummaries = await _proKnow.Patients.LookupAsync(workspaceItem.Id, new string[] { $"{patientItem.Mrn}2" });
-                if (patientSummaries[0] != null)
-                {
-                    var patientSummary2 = patientSummaries[0];
-                    var patientItem2 = await patientSummary2.GetAsync();
-                    var entitySummary2 = patientItem2.FindEntities(e => true)[0];
-                    if (entitySummary2.Status == "completed")
-                    {
-                        structureSetItem2 = (await entitySummary2.GetAsync()) as StructureSetItem;
-                        break;
-                    }
-                }
-            }
+            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, actualDownloadPath, overrides);
+
+            // Get the uploaded structure set
+            var patientSummary2 = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Mrn == $"{patientItem.Mrn}2");
+            var patientItem2 = await patientSummary2.GetAsync();
+            var entitySummary2 = patientItem2.FindEntities(e => true)[0];
+            var structureSetItem2 = (await entitySummary2.GetAsync()) as StructureSetItem;
 
             // Verify that the version downloaded (and uploaded to a new patient) was correct
             Assert.IsTrue(structureSetItem2.Rois.Any(r => r.Name == "thing1"));

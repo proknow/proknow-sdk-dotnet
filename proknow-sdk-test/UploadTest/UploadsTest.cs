@@ -49,19 +49,11 @@ namespace ProKnow.Upload.Test
             };
             await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
 
-            // Wait until uploaded test file has processed
-            while (true)
-            {
-                await patientItem.RefreshAsync();
-                var entitySummaries = patientItem.FindEntities(t => true);
-                if (entitySummaries.Count == 1 && entitySummaries[0].Status == "completed")
-                {
-                    // Make sure the uploaded data is the same
-                    Assert.AreEqual("2.16.840.1.114337.1.1.1535997926.0", entitySummaries[0].Uid);
-
-                    break;
-                }
-            }
+            // Verify file was uploaded
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => true);
+            Assert.AreEqual(1, entitySummaries.Count);
+            Assert.AreEqual("2.16.840.1.114337.1.1.1535997926.0", entitySummaries[0].Uid);
         }
 
         [TestMethod]
@@ -83,21 +75,12 @@ namespace ProKnow.Upload.Test
             };
             await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
 
-            // Wait until uploaded test files have processed
-            while (true)
-            {
-                await patientItem.RefreshAsync();
-                var entitySummaries = patientItem.FindEntities(t => true);
-                if (entitySummaries.Count == 1 && entitySummaries[0].Status == "completed")
-                {
-                    // Make sure the uploaded data is the same
-                    var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
-                    if (entityItem.Data.Images.Count == 5)
-                    {
-                        break;
-                    }
-                }
-            }
+            // Verify files were uploaded
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => true);
+            Assert.AreEqual(1, entitySummaries.Count);
+            var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
+            Assert.AreEqual(5, entityItem.Data.Images.Count);
         }
 
         [TestMethod]
@@ -121,21 +104,13 @@ namespace ProKnow.Upload.Test
             };
             await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPaths, overrides);
 
-            // Verify test folder and test file were uploaded (may have to wait for files to be processed)
-            while (true)
-            {
-                await patientItem.RefreshAsync();
-                var entitySummaries = patientItem.FindEntities(t => true);
-                if (entitySummaries.Count == 2 && entitySummaries[0].Status == "completed" && entitySummaries[1].Status == "completed")
-                {
-                    var imageSetSummary = patientItem.FindEntities(t => t.Type == "image_set")[0];
-                    var entityItem = await imageSetSummary.GetAsync() as ImageSetItem;
-                    if (entityItem.Data.Images.Count == 5)
-                    {
-                        break;
-                    }
-                }
-            }
+            // Verify test folder and test file were uploaded
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => true);
+            Assert.AreEqual(2, entitySummaries.Count);
+            var imageSetSummary = patientItem.FindEntities(t => t.Type == "image_set")[0];
+            var entityItem = await imageSetSummary.GetAsync() as ImageSetItem;
+            Assert.AreEqual(5, entityItem.Data.Images.Count);
         }
     }
 }
