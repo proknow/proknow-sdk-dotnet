@@ -4,6 +4,12 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.0.22
+
+*Bug fixes*
+- Ensure that structure set draft lock renewer timer does not fire after edit lock has been removed
+- Refactored, standardized, and optimized unit tests
+
 ## v0.0.21
 
 *New Features and Enhancements*
