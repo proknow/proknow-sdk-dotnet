@@ -52,7 +52,7 @@ namespace ProKnow.Upload
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
-        /// await pk.Uploads.UploadAsync("Upload Test", "DICOM");
+        /// await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
         /// </code>
         /// </example>
         public async Task<UploadBatch> UploadAsync(string workspace, string path, UploadFileOverrides overrides = null,
