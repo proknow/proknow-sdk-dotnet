@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Test;
-using ProKnow.Upload;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,64 +9,40 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
     [TestClass]
     public class StructureSetDataTest
     {
-        private static readonly string _patientMrnAndName = "SDK-StructureSetDataTest";
-        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static readonly Uploads _uploads = _proKnow.Uploads;
-        private static string _workspaceId;
-        private static string _uploadPath;
-        private static PatientItem _patientItem;
-        private static StructureSetData _structureSetData;
+        private static readonly string _testClassName = nameof(StructureSetDataTest);
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspace, if necessary
-            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
-
-            // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
-            _workspaceId = workspaceItem.Id;
-
-            // Create a test patient
-            var patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
-
-            // Upload test file
-            _uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RS.dcm");
-            var overrides = new UploadFileOverrides
-            {
-                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
-            };
-            await _uploads.UploadAsync(_workspaceId, _uploadPath, overrides);
-
-            // Wait until uploaded test file has processed
-            while (true)
-            {
-                _patientItem = await patientSummary.GetAsync();
-                var entitySummaries = _patientItem.FindEntities(t => t.Type == "structure_set");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
-                {
-                    var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
-                    _structureSetData = structureSetItem.Data;
-                    break;
-                }
-            }
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
         }
 
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
-            // Delete test workspace
-            await _proKnow.Workspaces.DeleteAsync(_workspaceId);
+            // Delete test workspaces
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
         }
 
         [TestMethod]
-        public void RoisTest()
+        public async Task RoisTest()
         {
-            Assert.AreEqual(3, _structureSetData.Rois.Length);
+            var testNumber = 1;
+
+            // Create a test workspace
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
+            var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
+            var structureSetData = structureSetItem.Data;
+
             var expectedNames = new string[] { "BODY", "PAROTID_LT", "PTV" }.ToHashSet();
-            var actualNames = _structureSetData.Rois.Select(r => r.Name).ToHashSet();
+            var actualNames = structureSetData.Rois.Select(r => r.Name).ToHashSet();
             Assert.IsTrue(expectedNames.SetEquals(actualNames));
         }
     }

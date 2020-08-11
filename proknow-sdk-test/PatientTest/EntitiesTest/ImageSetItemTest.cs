@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Test;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -10,7 +9,6 @@ namespace ProKnow.Patient.Entities.Test
     public class ImageSetItemTest
     {
         private static readonly string _testClassName = nameof(ImageSetItemTest);
-        private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
         private static readonly string _downloadFolder = Path.Combine(Path.GetTempPath(), _testClassName);
 
         [ClassInitialize]
@@ -18,14 +16,8 @@ namespace ProKnow.Patient.Entities.Test
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete download directory, if necessary
-            if (Directory.Exists(_downloadFolder))
-            {
-                Directory.Delete(_downloadFolder, true);
-            }
-
-            // Delete test workspaces, if necessary
-            await TestHelper.DeleteWorkspacesAsync(_testClassName);
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
         }
 
         [ClassCleanup]
@@ -47,7 +39,7 @@ namespace ProKnow.Patient.Entities.Test
             var testNumber = 1;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an imageset
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
@@ -73,7 +65,7 @@ namespace ProKnow.Patient.Entities.Test
             int testNumber = 2;
 
             // Create a workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient with an image set
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);

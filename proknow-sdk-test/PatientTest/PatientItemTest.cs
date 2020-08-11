@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Patient.Entities;
-using ProKnow.Scorecard;
 using ProKnow.Test;
 using ProKnow.Upload;
 using System.Collections.Generic;
@@ -15,27 +14,14 @@ namespace ProKnow.Patient.Test
     {
         private static readonly string _testClassName = nameof(PatientItemTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static readonly Uploads _uploads = _proKnow.Uploads;
-        private static CustomMetricItem _enumCustomMetricItem;
-        private static CustomMetricItem _numberCustomMetricItem;
-        private static CustomMetricItem _stringCustomMetricItem;
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete existing custom metrics, if necessary
-            await TestHelper.DeleteCustomMetricsAsync(_testClassName);
-
-            // Create custom metrics for testing
-            _enumCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-enum", "patient", "enum",
-                new string[] { "one", "two", "three" });
-            _numberCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-number", "patient", "number");
-            _stringCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-string", "patient", "string");
-
-            // Delete test workspaces, if necessary
-            await TestHelper.DeleteWorkspacesAsync(_testClassName);
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
         }
 
         [ClassCleanup]
@@ -54,7 +40,7 @@ namespace ProKnow.Patient.Test
             int testNumber = 1;
 
             // Create a workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient with only images
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
@@ -96,7 +82,7 @@ namespace ProKnow.Patient.Test
             int testNumber = 3;
 
             // Create a workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
@@ -114,7 +100,7 @@ namespace ProKnow.Patient.Test
             int testNumber = 4;
 
             // Create a workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Sro", 3);
@@ -128,15 +114,21 @@ namespace ProKnow.Patient.Test
         {
             int testNumber = 5;
 
+            // Create custom metrics
+            var enumCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}-enum", "patient", "enum",
+                new string[] { "one", "two", "three" });
+            var numberCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}-number", "patient", "number");
+            var stringCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}-string", "patient", "string");
+
             // Create a workspace
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient with metadata
             var metadata = new Dictionary<string, object>
             {
-                { _enumCustomMetricItem.Name, "one" },
-                { _numberCustomMetricItem.Name, 1 },
-                { _stringCustomMetricItem.Name, "I" }
+                { enumCustomMetricItem.Name, "one" },
+                { numberCustomMetricItem.Name, 1 },
+                { stringCustomMetricItem.Name, "I" }
             };
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, null, 0, null, null, metadata);
 
@@ -145,12 +137,12 @@ namespace ProKnow.Patient.Test
 
             // Verify the resolved metadata
             Assert.AreEqual(3, resolvedMetadata.Keys.Count);
-            Assert.IsTrue(resolvedMetadata.ContainsKey(_enumCustomMetricItem.Name));
-            Assert.AreEqual("one", resolvedMetadata[_enumCustomMetricItem.Name]);
-            Assert.IsTrue(resolvedMetadata.ContainsKey(_numberCustomMetricItem.Name));
-            Assert.AreEqual(1, resolvedMetadata[_numberCustomMetricItem.Name]);
-            Assert.IsTrue(resolvedMetadata.ContainsKey(_stringCustomMetricItem.Name));
-            Assert.AreEqual("I", resolvedMetadata[_stringCustomMetricItem.Name]);
+            Assert.IsTrue(resolvedMetadata.ContainsKey(enumCustomMetricItem.Name));
+            Assert.AreEqual("one", resolvedMetadata[enumCustomMetricItem.Name]);
+            Assert.IsTrue(resolvedMetadata.ContainsKey(numberCustomMetricItem.Name));
+            Assert.AreEqual(1, resolvedMetadata[numberCustomMetricItem.Name]);
+            Assert.IsTrue(resolvedMetadata.ContainsKey(stringCustomMetricItem.Name));
+            Assert.AreEqual("I", resolvedMetadata[stringCustomMetricItem.Name]);
         }
 
         [TestMethod]
@@ -184,6 +176,12 @@ namespace ProKnow.Patient.Test
         {
             int testNumber = 7;
 
+            // Create custom metrics
+            var enumCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}-enum", "patient", "enum",
+                new string[] { "one", "two", "three" });
+            var numberCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}-number", "patient", "number");
+            var stringCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}-string", "patient", "string");
+
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
@@ -198,9 +196,9 @@ namespace ProKnow.Patient.Test
             patientItem.Sex = "M";
             var metadata = new Dictionary<string, object>
             {
-                { _enumCustomMetricItem.Name, "one" },
-                { _numberCustomMetricItem.Name, 1 },
-                { _stringCustomMetricItem.Name, "I" }
+                { enumCustomMetricItem.Name, "one" },
+                { numberCustomMetricItem.Name, 1 },
+                { stringCustomMetricItem.Name, "I" }
             };
             await patientItem.SetMetadataAsync(metadata);
 
@@ -215,18 +213,24 @@ namespace ProKnow.Patient.Test
             Assert.AreEqual("1776-07-04", patientItem2.BirthDate);
             Assert.AreEqual("M", patientItem2.Sex);
             Assert.AreEqual(3, patientItem2.Metadata.Keys.Count);
-            Assert.IsTrue(patientItem2.Metadata.ContainsKey(_enumCustomMetricItem.Id));
-            Assert.AreEqual("one", patientItem2.Metadata[_enumCustomMetricItem.Id]);
-            Assert.IsTrue(patientItem2.Metadata.ContainsKey(_numberCustomMetricItem.Id));
-            Assert.AreEqual(1, patientItem2.Metadata[_numberCustomMetricItem.Id]);
-            Assert.IsTrue(patientItem2.Metadata.ContainsKey(_stringCustomMetricItem.Id));
-            Assert.AreEqual("I", patientItem2.Metadata[_stringCustomMetricItem.Id]);
+            Assert.IsTrue(patientItem2.Metadata.ContainsKey(enumCustomMetricItem.Id));
+            Assert.AreEqual("one", patientItem2.Metadata[enumCustomMetricItem.Id]);
+            Assert.IsTrue(patientItem2.Metadata.ContainsKey(numberCustomMetricItem.Id));
+            Assert.AreEqual(1, patientItem2.Metadata[numberCustomMetricItem.Id]);
+            Assert.IsTrue(patientItem2.Metadata.ContainsKey(stringCustomMetricItem.Id));
+            Assert.AreEqual("I", patientItem2.Metadata[stringCustomMetricItem.Id]);
         }
 
         [TestMethod]
         public async Task SetMetadataAsyncTest()
         {
             int testNumber = 8;
+
+            // Create custom metrics
+            var enumCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}-enum", "patient", "enum",
+                new string[] { "one", "two", "three" });
+            var numberCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}-number", "patient", "number");
+            var stringCustomMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}-string", "patient", "string");
 
             // Create a workspace
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -238,20 +242,20 @@ namespace ProKnow.Patient.Test
             // Set the metadata
             var metadata = new Dictionary<string, object>
             {
-                { _enumCustomMetricItem.Name, "one" },
-                { _numberCustomMetricItem.Name, 1 },
-                { _stringCustomMetricItem.Name, "I" }
+                { enumCustomMetricItem.Name, "one" },
+                { numberCustomMetricItem.Name, 1 },
+                { stringCustomMetricItem.Name, "I" }
             };
             await patientItem.SetMetadataAsync(metadata);
 
             // Verify the metadata property was set using resolved ProKnow IDs
             Assert.AreEqual(3, patientItem.Metadata.Keys.Count);
-            Assert.IsTrue(patientItem.Metadata.ContainsKey(_enumCustomMetricItem.Id));
-            Assert.AreEqual("one", patientItem.Metadata[_enumCustomMetricItem.Id]);
-            Assert.IsTrue(patientItem.Metadata.ContainsKey(_numberCustomMetricItem.Id));
-            Assert.AreEqual(1, patientItem.Metadata[_numberCustomMetricItem.Id]);
-            Assert.IsTrue(patientItem.Metadata.ContainsKey(_stringCustomMetricItem.Id));
-            Assert.AreEqual("I", patientItem.Metadata[_stringCustomMetricItem.Id]);
+            Assert.IsTrue(patientItem.Metadata.ContainsKey(enumCustomMetricItem.Id));
+            Assert.AreEqual("one", patientItem.Metadata[enumCustomMetricItem.Id]);
+            Assert.IsTrue(patientItem.Metadata.ContainsKey(numberCustomMetricItem.Id));
+            Assert.AreEqual(1, patientItem.Metadata[numberCustomMetricItem.Id]);
+            Assert.IsTrue(patientItem.Metadata.ContainsKey(stringCustomMetricItem.Id));
+            Assert.AreEqual("I", patientItem.Metadata[stringCustomMetricItem.Id]);
         }
 
         [TestMethod]
@@ -260,7 +264,7 @@ namespace ProKnow.Patient.Test
             int testNumber = 9;
 
             // Create a workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient without data
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
@@ -271,18 +275,12 @@ namespace ProKnow.Patient.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            var uploadBatch = await patientItem.UploadAsync(uploadPath, overrides);
+            await patientItem.UploadAsync(uploadPath, overrides);
 
-            // Verify test file was uploaded (may have to wait for file to be processed)
-            while (true)
-            {
-                await patientItem.RefreshAsync();
-                var entitySummaries = patientItem.FindEntities(t => true);
-                if (entitySummaries.Count == 1)
-                {
-                    break;
-                }
-            }
+            // Verify test file was uploaded
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => true);
+            Assert.AreEqual(1, entitySummaries.Count);
         }
 
         [TestMethod]
@@ -291,7 +289,7 @@ namespace ProKnow.Patient.Test
             int testNumber = 10;
 
             // Create a workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient without data
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
@@ -302,23 +300,14 @@ namespace ProKnow.Patient.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            var uploadBatch = await patientItem.UploadAsync(uploadPath, overrides);
-            var uploadedFiles = Directory.GetFiles(uploadPath);
+            await patientItem.UploadAsync(uploadPath, overrides);
 
-            // Verify test folder was uploaded (may have to wait for files to be processed)
-            while (true)
-            {
-                await patientItem.RefreshAsync();
-                var entitySummaries = patientItem.FindEntities(t => true);
-                if (entitySummaries.Count == 1 && entitySummaries[0].Status == "completed")
-                {
-                    var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
-                    if (entityItem.Data.Images.Count == 5)
-                    {
-                        break;
-                    }
-                }
-            }
+            // Verify test folder was uploaded
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => true);
+            Assert.AreEqual(1, entitySummaries.Count);
+            var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
+            Assert.AreEqual(5, entityItem.Data.Images.Count);
         }
 
         [TestMethod]
@@ -327,7 +316,7 @@ namespace ProKnow.Patient.Test
             int testNumber = 11;
 
             // Create a workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient without data
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
@@ -340,23 +329,16 @@ namespace ProKnow.Patient.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            var uploadBatch = await patientItem.UploadAsync(uploadPaths, overrides);
+            await patientItem.UploadAsync(uploadPaths, overrides);
 
-            // Verify test folder and test file were uploaded (may have to wait for files to be processed)
-            while (true)
-            {
-                await patientItem.RefreshAsync();
-                var entitySummaries = patientItem.FindEntities(t => true);
-                if (entitySummaries.Count == 2 && entitySummaries[0].Status == "completed" && entitySummaries[1].Status == "completed")
-                {
-                    var imageSetSummary = patientItem.FindEntities(t => t.Type == "image_set")[0];
-                    var entityItem = await imageSetSummary.GetAsync() as ImageSetItem;
-                    if (entityItem.Data.Images.Count == 5)
-                    {
-                        break;
-                    }
-                }
-            }
+            // Verify test folder and test file were uploaded
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => true);
+            Assert.AreEqual(2, entitySummaries.Count);
+            var imageSetSummary = patientItem.FindEntities(t => t.Type == "image_set")[0];
+            var entityItem = await imageSetSummary.GetAsync() as ImageSetItem;
+            Assert.AreEqual(5, entityItem.Data.Images.Count);
+            Assert.AreEqual(1, patientItem.FindEntities(t => t.Type == "structure_set").Count);
         }
     }
 }

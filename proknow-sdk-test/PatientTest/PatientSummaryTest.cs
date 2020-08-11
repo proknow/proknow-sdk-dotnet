@@ -11,160 +11,139 @@ namespace ProKnow.Patient.Test
     [TestClass]
     public class PatientSummaryTest
     {
-        private static readonly string _patientMrnAndName = "SDK-PatientSummaryTest";
+        private static readonly string _testClassName = nameof(PatientSummaryTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static string _workspaceId;
-        private static PatientSummary _patientSummary;
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspace, if necessary
-            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
-
-            // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
-            _workspaceId = workspaceItem.Id;
-
-            // Create a test patient
-            _patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
         }
 
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
-            // Delete test workspace
-            await _proKnow.Workspaces.DeleteAsync(_workspaceId);
+            // Delete test workspaces
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
         }
 
         [TestMethod]
         public async Task GetAsyncTest()
         {
+            int testNumber = 1;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
+            var patientSummary = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Id == patientItem.Id);
+
             // Get the patient item
-            var patientItem = await _patientSummary.GetAsync();
+            var createdPatientItem = await patientSummary.GetAsync();
 
             // Verify the returned patient item
-            Assert.AreEqual(_patientSummary.Id, patientItem.Id);
-            Assert.AreEqual(_patientSummary.Mrn, patientItem.Mrn);
-            Assert.AreEqual(_patientSummary.Name, patientItem.Name);
-            Assert.AreEqual(_patientSummary.BirthDate, patientItem.BirthDate);
-            Assert.AreEqual(_patientSummary.Sex, patientItem.Sex);
+            Assert.AreEqual(patientSummary.Id, createdPatientItem.Id);
+            Assert.AreEqual(patientSummary.Mrn, createdPatientItem.Mrn);
+            Assert.AreEqual(patientSummary.Name, createdPatientItem.Name);
+            Assert.AreEqual(patientSummary.BirthDate, createdPatientItem.BirthDate);
+            Assert.AreEqual(patientSummary.Sex, createdPatientItem.Sex);
         }
 
         [TestMethod]
         public async Task UploadAsyncTest_SingleFile()
         {
+            int testNumber = 2;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
+            var patientSummary = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Id == patientItem.Id);
+
             // Upload test file
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RP.dcm");
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
+                Patient = new PatientCreateSchema { Name = patientItem.Name, Mrn = patientItem.Mrn }
             };
-            var uploadBatch = await _patientSummary.UploadAsync(uploadPath, overrides);
+            await patientSummary.UploadAsync(uploadPath, overrides);
 
-            // Wait until uploaded test file has processed
-            PatientItem patientItem;
-            while (true)
-            {
-                patientItem = await _patientSummary.GetAsync();
-                var entitySummaries = patientItem.FindEntities(t => t.Type == "plan");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
-                {
-                    // Make sure the uploaded data is the same
-                    Assert.AreEqual(entitySummaries[0].Uid, "2.16.840.1.114337.1.1.1535997926.0");
-
-                    // Cleanup (in case there are other tests using the same patient)
-                    await entitySummaries[0].DeleteAsync();
-
-                    break;
-                }
-            }
+            // Verify file was uploaded
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => t.Type == "plan");
+            Assert.AreEqual(1, entitySummaries.Count);
+            Assert.AreEqual("2.16.840.1.114337.1.1.1535997926.0", entitySummaries[0].Uid);
         }
 
         [TestMethod]
         public async Task UploadAsyncTest_SingleFolder()
         {
+            int testNumber = 3;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
+            var patientSummary = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Id == patientItem.Id);
+
             // Upload test folder
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
+                Patient = new PatientCreateSchema { Name = patientItem.Name, Mrn = patientItem.Mrn }
             };
-            var uploadBatch = await _patientSummary.UploadAsync(uploadPath, overrides);
+            await patientSummary.UploadAsync(uploadPath, overrides);
 
-            // Wait until uploaded test files have processed
+            // Very all files were uploaded
             var uploadedFiles = Directory.GetFiles(uploadPath);
-            PatientItem patientItem;
-            while (true)
-            {
-                patientItem = await _patientSummary.GetAsync();
-                var entitySummaries = patientItem.FindEntities(t => t.Type == "image_set");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
-                {
-                    // Make sure the uploaded data is the same
-                    var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
-                    if (entityItem.Data.Images.Count == uploadedFiles.Length)
-
-                        // Cleanup (in case there are other tests using the same image set)
-                        await entityItem.DeleteAsync();
-
-                    break;
-                }
-            }
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => t.Type == "image_set");
+            Assert.AreEqual(1, entitySummaries.Count);
+            var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
+            Assert.AreEqual(uploadedFiles.Length, entityItem.Data.Images.Count);
         }
 
         [TestMethod]
         public async Task UploadAsyncTest_MultipleFilesAndOrFolders()
         {
+            int testNumber = 4;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
+            var patientSummary = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Id == patientItem.Id);
+
             // Upload test folder and file
             var uploadPath1 = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
             var uploadPath2 = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RP.dcm");
             var uploadPaths = new List<string>() { uploadPath1, uploadPath2 };
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
+                Patient = new PatientCreateSchema { Name = patientItem.Name, Mrn = patientItem.Mrn }
             };
-            var uploadBatch = await _patientSummary.UploadAsync(uploadPaths, overrides);
+            await patientSummary.UploadAsync(uploadPaths, overrides);
 
-
-            // Wait until uploaded CT files have processed
+            // Verify all CT files were uploaded
             var uploadedCtFiles = Directory.GetFiles(uploadPath1);
-            PatientItem patientItem;
-            while (true)
-            {
-                patientItem = await _patientSummary.GetAsync();
-                var entitySummaries = patientItem.FindEntities(t => t.Type == "image_set");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
-                {
-                    // Make sure the uploaded data is the same
-                    var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
-                    if (entityItem.Data.Images.Count == uploadedCtFiles.Length)
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => t.Type == "image_set");
+            Assert.AreEqual(1, entitySummaries.Count);
+            var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
+            Assert.AreEqual(uploadedCtFiles.Length, entityItem.Data.Images.Count);
 
-                        // Cleanup (in case there are other tests using the same image set)
-                        await entityItem.DeleteAsync();
-
-                    break;
-                }
-            }
-
-            // Wait until upload plan file has processed
-            while (true)
-            {
-                patientItem = await _patientSummary.GetAsync();
-                var entitySummaries = patientItem.FindEntities(t => t.Type == "plan");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
-                {
-                    // Make sure the uploaded data is the same
-                    Assert.AreEqual(entitySummaries[0].Uid, "2.16.840.1.114337.1.1.1535997926.0");
-
-                    // Cleanup (in case there are other tests using the same patient)
-                    await entitySummaries[0].DeleteAsync();
-
-                    break;
-                }
-            }
+            // Verify plan file was uploaded
+            await patientItem.RefreshAsync();
+            entitySummaries = patientItem.FindEntities(t => t.Type == "plan");
+            Assert.AreEqual(1, entitySummaries.Count);
+            Assert.AreEqual("2.16.840.1.114337.1.1.1535997926.0", entitySummaries[0].Uid);
         }
     }
 }

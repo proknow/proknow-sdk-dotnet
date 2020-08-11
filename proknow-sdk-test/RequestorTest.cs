@@ -23,14 +23,10 @@ namespace ProKnow.Test
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspaces, if necessary
-            await TestHelper.DeleteWorkspacesAsync(_testClassName);
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
 
             // Create download folder root
-            if (Directory.Exists(_downloadFolderRoot))
-            {
-                Directory.Delete(_downloadFolderRoot, true);
-            }
             Directory.CreateDirectory(_downloadFolderRoot);
         }
 
@@ -93,7 +89,7 @@ namespace ProKnow.Test
             var workspaceItems = JsonSerializer.Deserialize<IList<WorkspaceItem>>(json);
 
             // Verify that the created workspace was one of the workspaces returned
-            Assert.IsNotNull(await _proKnow.Workspaces.FindAsync(w => w.Name == workspaceItem.Name));
+            Assert.IsTrue(workspaceItems.Any(w => w.Name == workspaceItem.Name));
         }
 
         [TestMethod]
@@ -116,7 +112,7 @@ namespace ProKnow.Test
             int testNumber = 5;
 
             // Create a workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient with an image set
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
@@ -256,7 +252,6 @@ namespace ProKnow.Test
                 {
                     // Stream the document to a new file using the Requestor object
                     var outputDocumentPath = Path.Combine(_downloadFolderRoot, testNumber.ToString(), "test.pdf");
-                    var documentName = Path.GetFileName(outputDocumentPath);
                     var route = $"/workspaces/{workspaceItem.Id}/patients/{patientItem.Id}/documents/{documentSummary.Id}/{documentSummary.Name}";
                     await _proKnow.Requestor.StreamAsync(route, outputDocumentPath);
 

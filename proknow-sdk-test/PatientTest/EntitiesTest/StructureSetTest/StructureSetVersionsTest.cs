@@ -10,22 +10,22 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
     [TestClass]
     public class StructureSetVersionsTest
     {
-        private static readonly string _patientMrnAndName = "SDK-StructureSetVersionsTest";
+        private static readonly string _testClassName = nameof(StructureSetVersionsTest);
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspace, if necessary
-            await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
         }
 
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
             // Delete test workspaces
-            await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
         }
 
         [TestMethod]
@@ -34,10 +34,10 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             var testNumber = 1;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an image set and structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, "Becker^Matthew", 4);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -74,8 +74,8 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             // Verify the version was deleted
             versions = await structureSetItem.Versions.QueryAsync();
             Assert.AreEqual(2, versions.Count);
-            Assert.IsTrue(versions.Where(v => v.Label == "original").Any());
-            Assert.IsTrue(versions.Where(v => v.Label == "original + thing1 + thing2").Any());
+            Assert.IsTrue(versions.Any(v => v.Label == "original"));
+            Assert.IsTrue(versions.Any(v => v.Label == "original + thing1 + thing2"));
         }
 
         [TestMethod]
@@ -84,10 +84,10 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             var testNumber = 2;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with a structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem1 = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -112,10 +112,10 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             var testNumber = 3;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with a structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -138,9 +138,9 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             // Query the versions and verify the results
             var structureSetVersionItems = await structureSetItem.Versions.QueryAsync();
             Assert.AreEqual(3, structureSetVersionItems.Count);
-            Assert.IsTrue(structureSetVersionItems.Where(v => v.Label == null).Any());
-            Assert.IsTrue(structureSetVersionItems.Where(v => v.Label == "original + thing1").Any());
-            Assert.IsTrue(structureSetVersionItems.Where(v => v.Label == "original + thing1 + thing2").Any());
+            Assert.IsTrue(structureSetVersionItems.Any(v => v.Label == null));
+            Assert.IsTrue(structureSetVersionItems.Any(v => v.Label == "original + thing1"));
+            Assert.IsTrue(structureSetVersionItems.Any(v => v.Label == "original + thing1 + thing2"));
         }
     }
 }

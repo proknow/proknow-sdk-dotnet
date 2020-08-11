@@ -84,7 +84,7 @@ namespace ProKnow.Upload
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
-        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "DICOM");
+        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
         /// var entityItems = new List&lt;EntityItem&gt;();
         /// foreach (var patient in uploadBatch.Patients)
         /// {

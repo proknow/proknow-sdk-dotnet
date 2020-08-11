@@ -1,4 +1,6 @@
-﻿using ProKnow.Patient;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ProKnow.Exceptions;
+using ProKnow.Patient;
 using ProKnow.Upload;
 using System;
 using System.Collections.Generic;
@@ -11,20 +13,30 @@ namespace ProKnow.Test
     /// <summary>
     /// Test utilities
     /// </summary>
+    [TestClass]
     public static class TestHelper
     {
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
 
-        /// <summary>
-        /// Creates a test patient asynchronously
-        /// </summary>
-        /// <param name="testClassName">The test class name</param>
-        /// <returns>The summary of the created patient</returns>
-        public static async Task<PatientSummary> CreatePatientAsync(string testClassName)
+        [AssemblyCleanup()]
+        public static async Task AssemblyCleanup()
         {
-            var workspaceItem = await _proKnow.Workspaces.ResolveAsync(testClassName);
-            await _proKnow.Patients.CreateAsync(workspaceItem.Id, testClassName, testClassName);
-            return await _proKnow.Patients.FindAsync(workspaceItem.Id, t => t.Name == testClassName);
+            // Delete any extraneous SDK test workspaces
+            var workspaces = await _proKnow.Workspaces.QueryAsync();
+            foreach (var workspace in workspaces)
+            {
+                // Make sure workspace name starts with "SDK-" and contains "Test" to protect from accidental deletion of workspaces
+                if (workspace.Name.StartsWith("SDK-") && workspace.Name.Contains("Test"))
+                {
+                    // Turn off protection, if necessary
+                    if (workspace.Protected)
+                    {
+                        workspace.Protected = false;
+                        await workspace.SaveAsync();
+                    }
+                    await _proKnow.Workspaces.DeleteAsync(workspace.Id);
+                }
+            }
         }
 
         /// <summary>
@@ -63,21 +75,14 @@ namespace ProKnow.Test
                 var uploadedEntityIds = uploadBatch.Patients.SelectMany(p => p.Entities.Select(e => e.Id));
                 var uploadedSroIds = uploadBatch.Patients.SelectMany(p => p.Sros.Select(s => s.Id));
 
-                // Wait until uploaded test files have processed
-                while (true)
+                // Make sure returned upload batch matches user-specified number of entities
+                if (uploadedEntityIds.Count() + uploadedSroIds.Count() != numberOfEntitiesAndSros)
                 {
-                    await patientItem.RefreshAsync();
-                    var entitySummaries = patientItem.FindEntities(e => uploadedEntityIds.Contains(e.Id));
-                    var sroSummaries = patientItem.Studies.SelectMany(s => s.Sros.Where(r => uploadedSroIds.Contains(r.Id))).ToList();
-                    if (entitySummaries.Count() + sroSummaries.Count() == numberOfEntitiesAndSros)
-                    {
-                        var statuses = entitySummaries.Select(e => e.Status).Union(sroSummaries.Select(s => s.Status)).Distinct().ToList();
-                        if (statuses.Count == 1 && statuses[0] == "completed")
-                        {
-                            break;
-                        }
-                    }
+                    throw new ProKnowException($"Upload batch count of {uploadedEntityIds.Count() + uploadedSroIds.Count()} does not equal user-specified count of {numberOfEntitiesAndSros}.");
                 }
+
+                // Refresh patient
+                await patientItem.RefreshAsync();
             }
 
             // Add custom metric values
@@ -85,19 +90,10 @@ namespace ProKnow.Test
             {
                 await patientItem.SetMetadataAsync(metadata);
                 await patientItem.SaveAsync();
+                await patientItem.RefreshAsync();
             }
 
             return patientItem;
-        }
-
-        /// <summary>
-        /// Creates a test workspace asynchronously
-        /// </summary>
-        /// <param name="testClassName">The test class name</param>
-        /// <returns>The created workspace item</returns>
-        public static async Task<WorkspaceItem> CreateWorkspaceAsync(string testClassName)
-        {
-            return await _proKnow.Workspaces.CreateAsync(testClassName.ToLower(), testClassName, false);
         }
 
         /// <summary>
@@ -140,21 +136,6 @@ namespace ProKnow.Test
         }
 
         /// <summary>
-        /// Deletes a test custom metric asynchronously
-        /// </summary>
-        /// <param name="customMetric">The ProKnow ID or name of the custom metric</param>
-        public static async Task DeleteCustomMetricAsync(string customMetric)
-        {
-            // If the custom metric exists
-            var customMetricItem = await _proKnow.CustomMetrics.ResolveAsync(customMetric);
-            if (customMetricItem != null)
-            {
-                // Request the deletion
-                await _proKnow.CustomMetrics.DeleteAsync(customMetricItem.Id);
-            }
-        }
-
-        /// <summary>
         /// Deletes all of the custom metrics for a test
         /// </summary>
         /// <param name="testClassName">The test class name</param>
@@ -187,22 +168,6 @@ namespace ProKnow.Test
         }
 
         /// <summary>
-        /// Deletes a test workspace asynchronously
-        /// </summary>
-        /// <param name="testClassName">The test class name</param>
-        public static async Task DeleteWorkspaceAsync(string testClassName)
-        {
-            // If the workspace exists
-            IList<WorkspaceItem> workspaces = await _proKnow.Workspaces.QueryAsync();
-            var workspaceItem = workspaces.FirstOrDefault(w => w.Name == testClassName);
-            if (workspaceItem != null)
-            {
-                // Request the deletion
-                await _proKnow.Workspaces.DeleteAsync(workspaceItem.Id);
-            }
-        }
-
-        /// <summary>
         /// Deletes all workspaces for a test asynchronously
         /// </summary>
         /// <param name="testClassName">The test class name</param>
@@ -211,8 +176,8 @@ namespace ProKnow.Test
             var workspaces = await _proKnow.Workspaces.QueryAsync();
             foreach (var workspace in workspaces)
             {
-                // Include "SDK" to protect from accidental deletion of workspaces
-                if (workspace.Name.Contains("SDK") && workspace.Name.Contains(testClassName))
+                // Make sure workspace name starts with "SDK-" and contains test class name to protect from accidental deletion of workspaces
+                if (workspace.Name.StartsWith("SDK-") && workspace.Name.Contains(testClassName))
                 {
                     // Turn off protection, if necessary
                     if (workspace.Protected)

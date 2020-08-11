@@ -52,7 +52,7 @@ namespace ProKnow.Upload
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
-        /// await pk.Uploads.UploadAsync("Upload Test", "DICOM");
+        /// await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
         /// </code>
         /// </example>
         public async Task<UploadBatch> UploadAsync(string workspace, string path, UploadFileOverrides overrides = null,
@@ -310,26 +310,22 @@ namespace ProKnow.Upload
                     // Update the mapping of upload ID to status result
                     uploadIdToStatusResultsMap[uploadStatusResult.Id] = uploadStatusResult;
 
-                    // If this upload was not previously resolved
-                    if (unresolvedUploads.Contains(uploadStatusResult.Id))
+                    // If this upload was not previously resolved and has reached terminal status
+                    if (unresolvedUploads.Contains(uploadStatusResult.Id) && _terminalStatuses.Contains(uploadStatusResult.Status))
                     {
-                        // If this upload has reached terminal status
-                        if (_terminalStatuses.Contains(uploadStatusResult.Status))
-                        {
-                            // Indicate this upload is resolved
-                            unresolvedUploads.Remove(uploadStatusResult.Id);
+                        // Indicate this upload is resolved
+                        unresolvedUploads.Remove(uploadStatusResult.Id);
 
-                            // Update the query parameters to the latest upload to reach terminal status
-                            if (uploadStatusResult.UpdatedAt > lastUpdatedAt)
+                        // Update the query parameters to the latest upload to reach terminal status
+                        if (uploadStatusResult.UpdatedAt > lastUpdatedAt)
+                        {
+                            if (queryParameters == null)
                             {
-                                if (queryParameters == null)
-                                {
-                                    queryParameters = new Dictionary<string, object>();
-                                }
-                                lastUpdatedAt = uploadStatusResult.UpdatedAt;
-                                queryParameters["updated"] = lastUpdatedAt;
-                                queryParameters["after"] = uploadStatusResult.Id;
+                                queryParameters = new Dictionary<string, object>();
                             }
+                            lastUpdatedAt = uploadStatusResult.UpdatedAt;
+                            queryParameters["updated"] = lastUpdatedAt;
+                            queryParameters["after"] = uploadStatusResult.Id;
                         }
                     }
                 }

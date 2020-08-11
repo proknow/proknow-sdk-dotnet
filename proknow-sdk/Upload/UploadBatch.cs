@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProKnow.Exceptions;
+using System;
 using System.Collections.Generic;
 
 namespace ProKnow.Upload
@@ -86,8 +87,8 @@ namespace ProKnow.Upload
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
-        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "DICOM");
-        /// var path = Path.GetFullPath(Path.Join("DICOM", "plan.dcm"));
+        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
+        /// var path = Path.GetFullPath(Path.Join("./DICOM", "plan.dcm"));
         /// var uploadPatientSummary = uploadBatch.FindPatient(path);
         /// </code>
         /// </example>
@@ -100,9 +101,9 @@ namespace ProKnow.Upload
                 {
                     return _patientLookup[uploadStatusResult.Patient.Id];
                 }
-                throw new ApplicationException($"The upload for '{path}' is not complete.");
+                throw new InvalidOperationError($"The upload for '{path}' is not complete.");
             }
-            throw new ApplicationException($"The upload for '{path}' was not found in the batch.");
+            throw new InvalidOperationError($"The upload for '{path}' was not found in the batch.");
         }
 
         /// <summary>
@@ -117,8 +118,8 @@ namespace ProKnow.Upload
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
-        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "DICOM");
-        /// var path = Path.GetFullPath(Path.Join("DICOM", "plan.dcm"));
+        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
+        /// var path = Path.GetFullPath(Path.Join("./DICOM", "plan.dcm"));
         /// var uploadEntitySummary = uploadBatch.FindEntity(path);
         /// </code>
         /// </example>
@@ -133,11 +134,11 @@ namespace ProKnow.Upload
                     {
                         return _entityLookup[uploadStatusResult.Entity.Id];
                     }
-                    throw new ApplicationException($"The uploaded file '{path}' is not an entity.");
+                    throw new InvalidOperationError($"The uploaded file '{path}' is not an entity.");
                 }
-                throw new ApplicationException($"The upload for '{path}' is not complete.");
+                throw new InvalidOperationError($"The upload for '{path}' is not complete.");
             }
-            throw new ApplicationException($"The upload for '{path}' was not found in the batch.");
+            throw new InvalidOperationError($"The upload for '{path}' was not found in the batch.");
         }
 
         /// <summary>
@@ -168,11 +169,11 @@ namespace ProKnow.Upload
                     {
                         return _sroLookup[uploadStatusResult.Sro.Id];
                     }
-                    throw new ApplicationException($"The uploaded file '{path}' is not a spatial registration object.");
+                    throw new InvalidOperationError($"The uploaded file '{path}' is not a spatial registration object.");
                 }
-                throw new ApplicationException($"The upload for '{path}' is not complete.");
+                throw new InvalidOperationError($"The upload for '{path}' is not complete.");
             }
-            throw new ApplicationException($"The upload for '{path}' was not found in the batch.");
+            throw new InvalidOperationError($"The upload for '{path}' was not found in the batch.");
         }
     }
 }

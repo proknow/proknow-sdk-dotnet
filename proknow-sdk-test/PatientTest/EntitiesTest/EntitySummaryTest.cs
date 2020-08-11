@@ -1,8 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Test;
-using ProKnow.Upload;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProKnow.Patient.Entities.Test
@@ -10,92 +8,48 @@ namespace ProKnow.Patient.Entities.Test
     [TestClass]
     public class EntitySummaryTest
     {
-        private static readonly string _patientMrnAndName = "SDK-EntitySummaryTest";
+        private static readonly string _testClassName = nameof(EntitySummaryTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static readonly Uploads _uploads = _proKnow.Uploads;
-        private static string _workspaceId;
-        private static PatientItem _patientItem;
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspace, if necessary
-            await TestHelper.DeleteWorkspaceAsync(_patientMrnAndName);
-
-            // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName);
-            _workspaceId = workspaceItem.Id;
-
-            // Create a test patient
-            var patientSummary = await TestHelper.CreatePatientAsync(_patientMrnAndName);
-
-            // Upload test files
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew");
-            var overrides = new UploadFileOverrides
-            {
-                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
-            };
-            await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
-
-            // Wait until uploaded test files have processed
-            while (true)
-            {
-                _patientItem = await patientSummary.GetAsync();
-                var entitySummaries = _patientItem.FindEntities(e => e.PatientId == patientSummary.Id);
-                if (entitySummaries.Count() >= 4)
-                {
-                    var statuses = entitySummaries.Select(e => e.Status).Distinct();
-                    if (statuses.Count() == 1 && statuses.First() == "completed")
-                    {
-                        break;
-                    }
-                }
-            }
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
         }
 
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
-            // Delete test workspace
-            await _proKnow.Workspaces.DeleteAsync(_workspaceId);
+            // Delete test workspaces
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
         }
 
         [TestMethod]
         public async Task DeleteAsyncTest()
         {
-            // Get existing entity summary
-            var entitySummary = _patientItem.FindEntities(e => e.Type == "plan")[0];
+            var testNumber = 1;
 
-            // Delete entity
+            // Create a test workspace
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with a plan
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);
+
+            // Get the entity summary for the plan
+            var entitySummary = patientItem.FindEntities(e => e.Type == "plan")[0];
+
+            // Delete the entity
             await entitySummary.DeleteAsync();
 
             // Verify it was deleted
             while (true)
             {
-                await _patientItem.RefreshAsync();
-                var entitySummaries = _patientItem.FindEntities(t => t.Type == "plan");
+                await patientItem.RefreshAsync();
+                var entitySummaries = patientItem.FindEntities(t => t.Type == "plan");
                 if (entitySummaries.Count == 0)
-                {
-                    break;
-                }
-            }
-
-            // Restore test file in case another test needs it
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RP.dcm");
-            var overrides = new UploadFileOverrides
-            {
-                Patient = new PatientCreateSchema { Name = _patientMrnAndName, Mrn = _patientMrnAndName }
-            };
-            await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
-
-            // Wait until uploaded test file has processed
-            while (true)
-            {
-                await _patientItem.RefreshAsync();
-                var entitySummaries = _patientItem.FindEntities(t => t.Type == "plan");
-                if (entitySummaries.Count > 0 && entitySummaries[0].Status == "completed")
                 {
                     break;
                 }
@@ -105,40 +59,84 @@ namespace ProKnow.Patient.Entities.Test
         [TestMethod]
         public async Task ImageSet_GetAsyncTest()
         {
-            var entitySummary = _patientItem.FindEntities(e => e.Type == "image_set")[0];
+            var testNumber = 2;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with an image set
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
+            var entitySummary = patientItem.FindEntities(e => e.Type == "image_set")[0];
+
+            // Get the image set item from the entity summary
             var imageSetItem = await entitySummary.GetAsync();
-            Assert.AreEqual(imageSetItem.WorkspaceId, _workspaceId);
-            Assert.AreEqual(imageSetItem.PatientId, _patientItem.Id);
+
+            // Verify the returned image set item
+            Assert.AreEqual(imageSetItem.WorkspaceId, workspaceItem.Id);
+            Assert.AreEqual(imageSetItem.PatientId, patientItem.Id);
             Assert.AreEqual(imageSetItem.Id, entitySummary.Id);
         }
 
         [TestMethod]
         public async Task StructureSet_GetAsyncTest()
         {
-            var entitySummary = _patientItem.FindEntities(e => e.Type == "structure_set")[0];
+            var testNumber = 3;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with a structure set
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var entitySummary = patientItem.FindEntities(e => e.Type == "structure_set")[0];
+
+            // Get the structure set item from the entity summary
             var structureSetItem = await entitySummary.GetAsync();
-            Assert.AreEqual(structureSetItem.WorkspaceId, _workspaceId);
-            Assert.AreEqual(structureSetItem.PatientId, _patientItem.Id);
+
+            // Verify the returned structure set item
+            Assert.AreEqual(structureSetItem.WorkspaceId, workspaceItem.Id);
+            Assert.AreEqual(structureSetItem.PatientId, patientItem.Id);
             Assert.AreEqual(structureSetItem.Id, entitySummary.Id);
         }
 
         [TestMethod]
         public async Task Plan_GetAsyncTest()
         {
-            var entitySummary = _patientItem.FindEntities(e => e.Type == "plan")[0];
+            var testNumber = 4;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with a plan
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);
+            var entitySummary = patientItem.FindEntities(e => e.Type == "plan")[0];
+
+            // Get the plan item from the entity summary
             var planItem = await entitySummary.GetAsync();
-            Assert.AreEqual(planItem.WorkspaceId, _workspaceId);
-            Assert.AreEqual(planItem.PatientId, _patientItem.Id);
+
+            // Verify the returned plan item
+            Assert.AreEqual(planItem.WorkspaceId, workspaceItem.Id);
+            Assert.AreEqual(planItem.PatientId, patientItem.Id);
             Assert.AreEqual(planItem.Id, entitySummary.Id);
         }
 
         [TestMethod]
         public async Task Dose_GetAsyncTest()
         {
-            var entitySummary = _patientItem.FindEntities(e => e.Type == "dose")[0];
+            var testNumber = 5;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with a dose
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var entitySummary = patientItem.FindEntities(e => e.Type == "dose")[0];
+
+            // Get the dose item from the entity summary
             var doseItem = await entitySummary.GetAsync();
-            Assert.AreEqual(doseItem.WorkspaceId, _workspaceId);
-            Assert.AreEqual(doseItem.PatientId, _patientItem.Id);
+
+            // Verify the returned dose item
+            Assert.AreEqual(doseItem.WorkspaceId, workspaceItem.Id);
+            Assert.AreEqual(doseItem.PatientId, patientItem.Id);
             Assert.AreEqual(doseItem.Id, entitySummary.Id);
         }
     }

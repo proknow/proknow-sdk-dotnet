@@ -1,10 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProKnow.Patient;
 using ProKnow.Test;
-using ProKnow.Upload;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProKnow.Collection.Test
@@ -12,81 +9,55 @@ namespace ProKnow.Collection.Test
     [TestClass]
     public class CollectionSummaryTest
     {
-        private static readonly string _baseName = "SDK-CollectionSummaryTest";
+        private static readonly string _testClassName = nameof(CollectionSummaryTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static readonly Uploads _uploads = _proKnow.Uploads;
-        private static string _workspaceId;
-        private static CollectionItem _collectionItem;
-        private static CollectionSummary _collectionSummary;
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test collections, if necessary
-            await TestHelper.DeleteCollectionsAsync(_baseName);
-
-            // Delete test workspace, if necessary
-            await TestHelper.DeleteWorkspaceAsync(_baseName);
-
-            // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_baseName);
-            _workspaceId = workspaceItem.Id;
-
-            // Create a test patient
-            var patientSummary = await TestHelper.CreatePatientAsync(_baseName);
-
-            // Upload test files
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew");
-            var overrides = new UploadFileOverrides
-            {
-                Patient = new PatientCreateSchema { Name = _baseName, Mrn = _baseName }
-            };
-            await _uploads.UploadAsync(_workspaceId, uploadPath, overrides);
-
-            // Wait until uploaded test files have processed
-            while (true)
-            {
-                var patientItem = await patientSummary.GetAsync();
-                var entitySummaries = patientItem.FindEntities(e => e.PatientId == patientSummary.Id);
-                if (entitySummaries.Count() >= 4)
-                {
-                    var statuses = entitySummaries.Select(e => e.Status).Distinct();
-                    if (statuses.Count() == 1 && statuses.First() == "completed")
-                    {
-                        break;
-                    }
-                }
-            }
-
-            // Create a test collection
-            _collectionItem = await _proKnow.Collections.CreateAsync($"{_baseName}-Name", $"{_baseName}-Description",
-                "workspace", new List<string>() { _workspaceId });
-            var collectionSummaries = await _proKnow.Collections.QueryAsync(_workspaceId);
-            _collectionSummary = collectionSummaries[0];
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
         }
 
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
             // Delete test collection
-            await _proKnow.Collections.DeleteAsync(_collectionItem.Id);
+            await TestHelper.DeleteCollectionsAsync(_testClassName);
 
             // Delete test workspace
-            await _proKnow.Workspaces.DeleteAsync(_workspaceId);
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
         }
 
         [TestMethod]
         public async Task GetAsyncTest()
         {
-            var collectionItem = await _collectionSummary.GetAsync();
-            Assert.AreEqual(_collectionItem.Id, collectionItem.Id);
-            Assert.AreEqual(_collectionItem.Name, collectionItem.Name);
-            Assert.AreEqual(_collectionItem.Description, collectionItem.Description);
-            Assert.AreEqual(_collectionItem.Type, collectionItem.Type);
-            Assert.AreEqual(1, collectionItem.WorkspaceIds.Count);
-            Assert.AreEqual(_workspaceId, collectionItem.WorkspaceIds[0]);
+            var testNumber = 1;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+
+            // Create a test collection
+            var collectionItem = await _proKnow.Collections.CreateAsync($"{_testClassName}-{testNumber}-Name", $"{_testClassName}-{testNumber}-Description",
+                "workspace", new List<string>() { workspaceItem.Id });
+            var collectionSummaries = await _proKnow.Collections.QueryAsync(workspaceItem.Id);
+            var collectionSummary = collectionSummaries[0];
+
+            // Get the collection from the collection summary
+            var collectionItem2 = await collectionSummary.GetAsync();
+
+            // Verify the returned collection
+            Assert.AreEqual(collectionItem.Id, collectionItem2.Id);
+            Assert.AreEqual(collectionItem.Name, collectionItem2.Name);
+            Assert.AreEqual(collectionItem.Description, collectionItem2.Description);
+            Assert.AreEqual(collectionItem.Type, collectionItem2.Type);
+            Assert.AreEqual(1, collectionItem2.WorkspaceIds.Count);
+            Assert.AreEqual(workspaceItem.Id, collectionItem2.WorkspaceIds[0]);
         }
     }
 }

@@ -17,11 +17,8 @@ namespace ProKnow.Collection.Test
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test collections, if necessary
-            await TestHelper.DeleteCollectionsAsync(_testClassName);
-
-            // Delete test workspaces, if necessary
-            await TestHelper.DeleteWorkspacesAsync(_testClassName);
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
         }
 
         [ClassCleanup]

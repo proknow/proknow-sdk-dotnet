@@ -8,22 +8,18 @@ namespace ProKnow.Patient.Registrations.Test
     [TestClass]
     public class SroSummaryTest
     {
-        private static readonly string _patientMrnAndName = "SDK-SroSummaryTest";
-        private static readonly string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
+        private static readonly string _testClassName = nameof(SroSummaryTest);
+        private static readonly string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _testClassName);
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspace, if necessary
-            await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
 
             // Create download folder root
-            if (Directory.Exists(_downloadFolderRoot))
-            {
-                Directory.Delete(_downloadFolderRoot, true);
-            }
             Directory.CreateDirectory(_downloadFolderRoot);
         }
 
@@ -31,7 +27,7 @@ namespace ProKnow.Patient.Registrations.Test
         public static async Task ClassCleanup()
         {
             // Delete test workspaces
-            await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
 
             // Delete download folder
             if (Directory.Exists(_downloadFolderRoot))
@@ -46,10 +42,10 @@ namespace ProKnow.Patient.Registrations.Test
             var testNumber = 1;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, "Sro", 3);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Sro", 3);
 
             // Get the full representation of the image sets and SRO
             var ctImageSetItem = await patientItem.FindEntities(e => e.Modality == "CT")[0].GetAsync();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProKnow.Exceptions;
+using System;
 using System.Text.Json;
 using System.Threading;
 
@@ -14,6 +15,7 @@ namespace ProKnow.Patient.Entities.StructureSet
         private Timer _timer;
         private bool _hasStarted;
         private TimeSpan _lockRenewalBuffer;
+        private readonly TimeSpan _timerDisposalTimeout;
 
         /// <summary>
         /// Creates a StructureSetDraftLockRenewer
@@ -27,6 +29,7 @@ namespace ProKnow.Patient.Entities.StructureSet
             _timer = null;
             _hasStarted = false;
             _lockRenewalBuffer = new TimeSpan(0, 0, proKnow.LockRenewalBuffer);
+            _timerDisposalTimeout = TimeSpan.FromSeconds(10);
         }
 
         /// <summary>
@@ -56,7 +59,15 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// </summary>
         public void Stop()
         {
-            _timer.Dispose();
+            // Wait for the timer to be disposed so that all Run callbacks, which are queued on another thread, have completed
+            using (var waitHandle = new ManualResetEvent(false))
+            {
+                // If this is the first time we've tried to dispose the timer, wait a few seconds for it to be disposed (it must wait for queued Run callbacks to finish)
+                if (_timer.Dispose(waitHandle) && !waitHandle.WaitOne(_timerDisposalTimeout))
+                {
+                    throw new TimeoutException("Timeout waiting for structure set draft lock renewer timer to stop.");
+                }
+            }
             _timer = null;
             _hasStarted = false;
         }
@@ -73,10 +84,11 @@ namespace ProKnow.Patient.Entities.StructureSet
                     var json = await _proKnow.Requestor.PutAsync($"/workspaces/{_structureSet.WorkspaceId}/structuresets/{_structureSet.Id}/draft/lock/{_structureSet.DraftLock.Id}");
                     _structureSet.DraftLock = JsonSerializer.Deserialize<StructureSetDraftLock>(json);
                 }
-                catch (Exception ex)
+                catch (ProKnowException ex)
                 {
+                    var workspace = await _proKnow.Workspaces.ResolveByIdAsync(_structureSet.WorkspaceId);
                     var patientSummary = await _proKnow.Patients.FindAsync(_structureSet.WorkspaceId, p => p.Id == _structureSet.PatientId);
-                    throw new Exception($"Error renewing draft lock for patient MRN '{patientSummary.Mrn}'.", ex);
+                    throw new ProKnowException($"Error renewing draft lock for workspace '{workspace.Name}' patient '{patientSummary.Mrn}'.  Inner exception:  {ex.Message}.");
                 }
             }
         }

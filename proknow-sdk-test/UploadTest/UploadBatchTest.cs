@@ -11,7 +11,7 @@ namespace ProKnow.Upload.Test
     [TestClass]
     public class UploadBatchTest
     {
-        private static readonly string _patientMrnAndName = "SDK-UploadBatchTest";
+        private static readonly string _testClassName = nameof(UploadBatchTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
 
         [ClassInitialize]
@@ -19,15 +19,15 @@ namespace ProKnow.Upload.Test
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspaces, if necessary
-            await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
         }
 
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
             // Delete test workspaces
-            await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
         }
 
         [TestMethod]
@@ -36,7 +36,7 @@ namespace ProKnow.Upload.Test
             var testNumber = 1;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Upload test data
             var mrUploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "mr.dcm");
@@ -84,7 +84,7 @@ namespace ProKnow.Upload.Test
             var testNumber = 2;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Upload test data
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "mr.dcm");
@@ -114,7 +114,7 @@ namespace ProKnow.Upload.Test
             var testNumber = 3;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Upload test data
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm");

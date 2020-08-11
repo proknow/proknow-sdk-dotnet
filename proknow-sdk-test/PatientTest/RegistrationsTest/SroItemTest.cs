@@ -8,22 +8,18 @@ namespace ProKnow.Patient.Registrations.Test
     [TestClass]
     public class SroItemTest
     {
-        private static readonly string _patientMrnAndName = "SDK-SroItemTest";
-        private static readonly string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _patientMrnAndName);
+        private static readonly string _testClassName = nameof(SroItemTest);
+        private static readonly string _downloadFolderRoot = Path.Combine(Path.GetTempPath(), _testClassName);
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
         public static async Task ClassInitialize(TestContext testContext)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            // Delete test workspace, if necessary
-            await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
+            // Cleanup from previous test stoppage or failure, if necessary
+            await ClassCleanup();
 
             // Create download folder root
-            if (Directory.Exists(_downloadFolderRoot))
-            {
-                Directory.Delete(_downloadFolderRoot, true);
-            }
             Directory.CreateDirectory(_downloadFolderRoot);
         }
 
@@ -31,7 +27,7 @@ namespace ProKnow.Patient.Registrations.Test
         public static async Task ClassCleanup()
         {
             // Delete test workspaces
-            await TestHelper.DeleteWorkspacesAsync(_patientMrnAndName);
+            await TestHelper.DeleteWorkspacesAsync(_testClassName);
 
             // Delete download folder
             if (Directory.Exists(_downloadFolderRoot))
@@ -46,10 +42,10 @@ namespace ProKnow.Patient.Registrations.Test
             var testNumber = 1;
 
             // Create a test workspace
-            await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
             var sroSummary = patientItem.Studies[0].Sros[0];
             var sroItem = await sroSummary.GetAsync();
 
@@ -73,10 +69,10 @@ namespace ProKnow.Patient.Registrations.Test
             var testNumber = 2;
 
             // Create a test workspace
-            await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
             var sroSummary = patientItem.Studies[0].Sros[0];
             var sroItem = await sroSummary.GetAsync();
 
@@ -101,10 +97,10 @@ namespace ProKnow.Patient.Registrations.Test
             var testNumber = 3;
 
             // Create a test workspace
-            await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
             var sroSummary = patientItem.Studies[0].Sros[0];
             var sroItem = await sroSummary.GetAsync();
 
@@ -127,10 +123,10 @@ namespace ProKnow.Patient.Registrations.Test
             var testNumber = 4;
 
             // Create a test workspace
-            await TestHelper.CreateWorkspaceAsync(_patientMrnAndName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_patientMrnAndName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
             var sroSummary = patientItem.Studies[0].Sros[0];
             var sroItem = await sroSummary.GetAsync();
 

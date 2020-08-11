@@ -76,7 +76,7 @@ namespace ProKnow.Upload
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
-        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "DICOM");
+        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
         /// var patientItems = await Task.WhenAll(uploadBatch.Patients.Select(async p => await p.GetAsync()));
         /// </code>
         /// </example>
