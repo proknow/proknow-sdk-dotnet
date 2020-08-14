@@ -47,6 +47,12 @@ namespace ProKnow.Patient.Entities
         public StructureSetRoiItem[] Rois { get; internal set; }
 
         /// <summary>
+        /// The key use to retrieve contour and point data for the ROIs
+        /// </summary>
+        [JsonPropertyName("key")]
+        public string Key { get; set; }
+
+        /// <summary>
         /// The object for interacting with versions of the structure set
         /// </summary>
         [JsonIgnore]
@@ -203,7 +209,7 @@ namespace ProKnow.Patient.Entities
             {
                 if (ex.StatusCode != "Conflict")
                 {
-                    throw ex;
+                    throw;
                 }
 
                 // Get the structure set draft lock

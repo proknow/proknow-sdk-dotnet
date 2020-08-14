@@ -27,12 +27,6 @@ namespace ProKnow.Patient.Entities.StructureSet
         public string Name { get; set; }
 
         /// <summary>
-        /// The key
-        /// </summary>
-        [JsonPropertyName("key")]
-        public string Key { get; set; }
-
-        /// <summary>
         /// The ROIs
         /// </summary>
         [JsonPropertyName("rois")]
