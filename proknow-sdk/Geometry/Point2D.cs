@@ -32,7 +32,7 @@
         /// <returns>A string representation of this object</returns>
         public override string ToString()
         {
-            return $"{X.ToString("0.###")}, {Z.ToString("0.###")}";
+            return $"{X:0.###}, {Z:0.###}";
         }
     }
 }
