@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ProKnow.Patient.Entities.StructureSet.Test
 {
     [TestClass]
-    internal class StructureSetRoiItemTest
+    public class StructureSetRoiItemTest
     {
         private static readonly string _testClassName = nameof(StructureSetRoiItemTest);
 
@@ -140,6 +140,9 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
 
                 // Verify that the PTV is editable
                 Assert.IsTrue(roiItem.IsEditable());
+
+                // Prevent optimizer from disposing draft prematurely
+                Assert.IsNotNull(draft);
             }
         }
 

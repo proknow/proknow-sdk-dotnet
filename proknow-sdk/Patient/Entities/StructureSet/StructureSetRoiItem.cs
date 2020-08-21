@@ -138,6 +138,7 @@ namespace ProKnow.Patient.Entities.StructureSet
                 new KeyValuePair<string, string>("ProKnow-Key", _structureSetItem.Key) };
             var responseJson = await _proKnow.Requestor.GetAsync($"/structuresets/{_structureSetItem.Id}/rois/{Tag}", headerKeyValuePairs);
             var structureSetRoiData = JsonSerializer.Deserialize<StructureSetRoiData>(responseJson);
+            structureSetRoiData.PostProcessDeserialization(_proKnow, _structureSetItem, this);
             return structureSetRoiData;
         }
 
