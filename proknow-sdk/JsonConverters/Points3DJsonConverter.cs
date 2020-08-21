@@ -1,15 +1,16 @@
 ﻿using ProKnow.Exceptions;
+using ProKnow.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ProKnow.Patient.Entities.StructureSet
+namespace ProKnow.JsonConverters
 {
     /// <summary>
     /// Converts 3D points in mm to and from their JSON representation as numeric arrays of X, Y and Z coordinates in 1/1000 mm for each point
     /// </summary>
-    internal class StructureSetRoiContourPointsConverter : JsonConverter<Point3D[]>
+    public class Points3DJsonConverter : JsonConverter<Point3D[]>
     {
         /// <summary>
         /// Reads 3D points in mm from their JSON representation as numeric arrays of X, Y and Z coordinates in 1/1000 mm for each point

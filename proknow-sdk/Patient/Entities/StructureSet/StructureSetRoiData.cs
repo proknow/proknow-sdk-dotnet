@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ProKnow.Geometry;
+using ProKnow.JsonConverters;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace ProKnow.Patient.Entities.StructureSet
@@ -18,7 +20,7 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// The points
         /// </summary>
         [JsonPropertyName("points")]
-        [JsonConverter(typeof(StructureSetRoiContourPointsConverter))]
+        [JsonConverter(typeof(Points3DJsonConverter))]
         public Point3D[] Points { get; set; }
 
         /// <summary>
@@ -27,4 +29,8 @@ namespace ProKnow.Patient.Entities.StructureSet
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; }
     }
+
+    //todo--Add IsEditable()
+
+    //todo--Add SaveAsync()
 }

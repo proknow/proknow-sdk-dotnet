@@ -499,7 +499,7 @@ namespace ProKnow.Patient.Entities.Test
             using (var draft = await structureSetItem.DraftAsync())
 #pragma warning restore IDE0063 // Use simple 'using' statement
             {
-                // Try to download the draft and verify the exception
+                // Try to refresh the draft and verify the exception
                 try
                 {
                     await draft.RefreshAsync();

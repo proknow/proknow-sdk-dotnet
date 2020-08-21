@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ProKnow.Exceptions;
+using ProKnow.JsonConverters;
 using ProKnow.Patient.Entities.StructureSet;
 
 namespace ProKnow.Patient.Entities

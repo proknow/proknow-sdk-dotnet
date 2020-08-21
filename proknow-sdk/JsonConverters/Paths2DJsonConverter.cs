@@ -1,15 +1,16 @@
 ﻿using ProKnow.Exceptions;
+using ProKnow.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ProKnow.Patient.Entities.StructureSet
+namespace ProKnow.JsonConverters
 {
     /// <summary>
     /// Converts paths of 2D points in mm to and from their JSON representation as numeric arrays of consecutive X and Z coordinates in 1/1000 mm for each point in a path
     /// </summary>
-    public class StructureSetRoiContourPathsConverter : JsonConverter<Point2D[][]>
+    public class Paths2DJsonConverter : JsonConverter<Point2D[][]>
     {
         /// <summary>
         /// Reads paths of 2D points in mm from their JSON representation as numeric arrays of consecutive X and Z coordinates in 1/1000 mm for each point in a path

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using ProKnow.JsonConverters;
+using System.Text.Json.Serialization;
 
 namespace ProKnow.Scorecard
 {

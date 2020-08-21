@@ -1,9 +1,10 @@
-﻿using System;
+﻿using ProKnow.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ProKnow
+namespace ProKnow.JsonConverters
 {
     /// <summary>
     /// Converts a byte array to and from its JSON representation
@@ -35,14 +36,14 @@ namespace ProKnow
                             // skip
                             break;
                         default:
-                            throw new Exception($"Unexpected token when reading bytes: {reader.TokenType}");
+                            throw new ProKnowException($"Unexpected token when reading bytes: {reader.TokenType}");
                     }
                 }
-                throw new Exception("Unexpected end when reading bytes.");
+                throw new ProKnowException("Unexpected end when reading bytes.");
             }
             else
             {
-                throw new Exception($"Unexpected token parsing binary.  Expected StartArray, got {reader.TokenType}.");
+                throw new ProKnowException($"Unexpected token parsing binary.  Expected StartArray, got {reader.TokenType}.");
             }
         }
 

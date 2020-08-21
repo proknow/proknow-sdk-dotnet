@@ -1,4 +1,4 @@
-﻿namespace ProKnow.Patient.Entities.StructureSet
+﻿namespace ProKnow.Geometry
 {
     /// <summary>
     /// Represents a 2D point in couch IEC coordinates
