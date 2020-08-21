@@ -52,6 +52,42 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// <summary>
         /// Saves this ROI contour and point data asynchronously
         /// </summary>
+        /// <example>This example shows how to modify the contour data of an ROI, add a point ROI, commit the change,
+        /// and refresh the structure set:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
+        /// var workspaceItem = await _proKnow.Workspaces.FindAsync(w => w.Name == "Clinical");
+        /// var patientSummary = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Name == "Example");
+        /// var patientItem = await patientSummary.GetAsync();
+        /// var structureSetItem = patientItem.FindEntities(e => e.Type == "structure_set")[0];
+        /// using (var draft = await structureSetItem.DraftAsync())
+        /// {
+        ///     var roiItem1 = draft.Rois.First(r => r.Name == "PTV");
+        ///     var roiData1 = await roiItem1.GetDataAsync();
+        ///     roiData1.Contours = new StructureSetRoiContour[] {
+        ///         new StructureSetRoiContour() {
+        ///             Position = 1.5,
+        ///             Paths = new Point2D[][] { new Point2D[] { new Point2D(-20, 0), new Point2D(-20, 30), new Point2D(10, 30), new Point2D(10, 0) } }
+        ///             },
+        ///         new StructureSetRoiContour() {
+        ///             Position = 3.5,
+        ///             Paths = new Point2D[][] { new Point2D[] { new Point2D(-25, -5), new Point2D(-25, 35), new Point2D(15, 35), new Point2D(15, -5) } }
+        ///         } };
+        ///     await roiData1.SaveAsync();
+        ///
+        ///     var roiItem2 = await draft.CreateRoiAsync("ISO", Color.Yellow, "ISOCENTER");
+        ///     var roiData2 = await roiItem2.GetDataAsync();
+        ///     var roiData2.Points = new Point3D[] { new Point3D(-5, 1.5, 15) };
+        ///     await roiData2.SaveAsync();
+        ///
+        ///     await draft.ApproveAsync();
+        /// }
+        /// await structureSetItem.RefreshAsync();
+        /// </code>
+        /// </example>
         public async Task SaveAsync()
         {
             if (!IsEditable())

@@ -158,6 +158,7 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// refresh the structure set:
         /// <code>
         /// using ProKnow;
+        /// using System.Drawing;
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
@@ -168,7 +169,10 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// using (var draft = await structureSetItem.DraftAsync())
         /// {
         ///     var roiItem = draft.Rois.First(r => r.Name == "PTV");
-        ///     await roiItem.DeleteAsync();
+        ///     roiItem.Name = "GTV";
+        ///     roiItem.Color = Color.Orange;
+        ///     roiItem.Type = "TREATED_VOLUME";
+        ///     await roiItem.SaveAsync();
         ///     await draft.ApproveAsync();
         /// }
         /// await structureSetItem.RefreshAsync();

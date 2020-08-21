@@ -4,6 +4,12 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.0.23
+
+*New Features and Enhancements*
+- Add GetDataAsync method to StructureSetItem class to retrieve contour and point data (StructureSetRoiData)
+- Add SaveAsync method to StructureSetRoiData class to save contour and point data
+
 ## v0.0.22
 
 *Enhancements*
