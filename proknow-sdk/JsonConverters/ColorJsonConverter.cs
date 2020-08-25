@@ -1,10 +1,11 @@
-﻿using System;
+﻿using ProKnow.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ProKnow
+namespace ProKnow.JsonConverters
 {
     /// <summary>
     /// Converts a color to and from its JSON representation as an numeric array with three red, green, and blue elements.
@@ -33,21 +34,21 @@ namespace ProKnow
                         case JsonTokenType.EndArray:
                             if (byteList.Count != 3)
                             {
-                                throw new Exception("The numeric array must have three elements.");
+                                throw new ProKnowException("The numeric array must have three elements.");
                             }
                             return Color.FromArgb(byteList[0], byteList[1], byteList[2]);
                         case JsonTokenType.Comment:
                             // skip
                             break;
                         default:
-                            throw new Exception($"Unexpected token when reading bytes: {reader.TokenType}");
+                            throw new ProKnowException($"Unexpected token when reading bytes: {reader.TokenType}");
                     }
                 }
-                throw new Exception("Unexpected end when reading bytes.");
+                throw new ProKnowException("Unexpected end when reading bytes.");
             }
             else
             {
-                throw new Exception($"Unexpected token parsing binary.  Expected StartArray, got {reader.TokenType}.");
+                throw new ProKnowException($"Unexpected token parsing binary.  Expected StartArray, got {reader.TokenType}.");
             }
         }
 

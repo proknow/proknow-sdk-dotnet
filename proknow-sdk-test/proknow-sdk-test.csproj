@@ -64,9 +64,13 @@
     <None Update="TestData\Sro\reg.dcm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestData\StructureSet\RS.Points.dcm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="TestData\StructureSet\" />
     <Folder Include="TestData\Sro\" />
   </ItemGroup>
 

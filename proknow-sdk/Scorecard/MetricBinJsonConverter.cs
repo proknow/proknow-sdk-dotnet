@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProKnow.JsonConverters;
+using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -75,30 +76,30 @@ namespace ProKnow.Scorecard
         /// Writes a metric bin in its JSON representation
         /// </summary>
         /// <param name="writer">The JSON writer</param>
-        /// <param name="metricBin">The metric bin to write</param>
+        /// <param name="value">The metric bin to write</param>
         /// <param name="options">The JSON serializer options</param>
-        public override void Write(Utf8JsonWriter writer, MetricBin metricBin, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, MetricBin value, JsonSerializerOptions options)
         {
             writer.WriteStartObject();
 
             // label
             writer.WritePropertyName(_labelKey);
-            writer.WriteStringValue(metricBin.Label);
+            writer.WriteStringValue(value.Label);
 
             // color
             writer.WritePropertyName(_colorKey);
-            _byteArrayJsonConverter.Write(writer, metricBin.Color, options);
+            _byteArrayJsonConverter.Write(writer, value.Color, options);
 
             // min
-            if (metricBin.Min.HasValue)
+            if (value.Min.HasValue)
             {
-                writer.WriteNumber(_minKey, metricBin.Min.Value);
+                writer.WriteNumber(_minKey, value.Min.Value);
             }
 
             // max
-            if (metricBin.Max.HasValue)
+            if (value.Max.HasValue)
             {
-                writer.WriteNumber(_maxKey, metricBin.Max.Value);
+                writer.WriteNumber(_maxKey, value.Max.Value);
             }
 
             writer.WriteEndObject();

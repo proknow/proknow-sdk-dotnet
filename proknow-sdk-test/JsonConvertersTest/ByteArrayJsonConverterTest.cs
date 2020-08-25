@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text.Json;
 
-namespace ProKnow.Test
+namespace ProKnow.JsonConverters.Test
 {
     [TestClass]
     public class ByteArrayJsonConverterTest
@@ -27,7 +27,7 @@ namespace ProKnow.Test
             var bytes = new byte[] { 255, 128, 0 };
             var jsonSerializerOptions = new JsonSerializerOptions();
             jsonSerializerOptions.Converters.Add(_byteArrayJsonConverter);
-            var jsonString = JsonSerializer.Serialize<byte[]>(bytes, jsonSerializerOptions);
+            var jsonString = JsonSerializer.Serialize(bytes, jsonSerializerOptions);
             Assert.AreEqual("[255,128,0]", jsonString);
         }
     }

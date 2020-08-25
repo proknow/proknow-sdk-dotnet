@@ -62,9 +62,59 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
         }
 
         [TestMethod]
-        public async Task IsEditableTest()
+        public async Task GetDataAsyncTest_Contours()
         {
             var testNumber = 2;
+
+            // Create a test workspace
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with a structure set
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
+            var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
+
+            // Get the data for an ROI
+            var structureSetRoiItem = structureSetItem.Rois.First(r => r.Name == "PTV");
+            var structureSetRoiData = await structureSetRoiItem.GetDataAsync();
+
+            // Verify the contour data
+            Assert.AreEqual(3, structureSetRoiData.Contours.Length);
+            Assert.AreEqual(297.5, structureSetRoiData.Contours[0].Position, 0.0005);
+            Assert.AreEqual(1, structureSetRoiData.Contours[0].Paths.Length);
+            Assert.AreEqual(52, structureSetRoiData.Contours[0].Paths[0].Length);
+            Assert.AreEqual(46.8, structureSetRoiData.Contours[0].Paths[0][0].X, 0.0005);
+            Assert.AreEqual(15.9, structureSetRoiData.Contours[0].Paths[0][0].Z, 0.0005);
+        }
+
+        [TestMethod]
+        public async Task GetDataAsyncTest_Points()
+        {
+            var testNumber = 3;
+
+            // Create a test workspace
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with a structure set
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("StructureSet", "RS.Points.dcm"), 1);
+            var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
+            var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
+
+            // Get the data for an ROI
+            var structureSetRoiItem = structureSetItem.Rois.First(r => r.Name == "COUCH_SU");
+            var structureSetRoiData = await structureSetRoiItem.GetDataAsync();
+
+            // Verify the point data
+            Assert.AreEqual(1, structureSetRoiData.Points.Length);
+            Assert.AreEqual(-1.629, structureSetRoiData.Points[0].X, 0.0005);
+            Assert.AreEqual(-273.501, structureSetRoiData.Points[0].Y, 0.0005);
+            Assert.AreEqual(-199.457, structureSetRoiData.Points[0].Z, 0.0005);
+        }
+
+        [TestMethod]
+        public async Task IsEditableTest()
+        {
+            var testNumber = 4;
 
             // Create a test workspace
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -90,13 +140,16 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
 
                 // Verify that the PTV is editable
                 Assert.IsTrue(roiItem.IsEditable());
+
+                // Prevent optimizer from disposing draft prematurely
+                Assert.IsNotNull(draft);
             }
         }
 
         [TestMethod]
         public async Task SaveAsyncTest()
         {
-            var testNumber = 3;
+            var testNumber = 5;
 
             // Create a test workspace
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);

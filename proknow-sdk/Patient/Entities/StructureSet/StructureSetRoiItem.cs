@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ProKnow.Exceptions;
+using ProKnow.JsonConverters;
 
 namespace ProKnow.Patient.Entities.StructureSet
 {
@@ -113,7 +114,33 @@ namespace ProKnow.Patient.Entities.StructureSet
             _structureSetItem.Rois = _structureSetItem.Rois.Where(r => r.Id != Id).ToArray();
         }
 
-        //todo--Implement GetDataAsync method
+        /// <summary>
+        /// Gets the contour and point data for this ROI asynchronously
+        /// </summary>
+        /// <returns>The contour and point data for this ROI asynchronously</returns>
+        /// <example>This example shows how to get the contour and point data for an ROI:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
+        /// var workspaceItem = await _proKnow.Workspaces.FindAsync(w => w.Name == "Clinical");
+        /// var patientSummary = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Name == "Example");
+        /// var patientItem = await patientSummary.GetAsync();
+        /// var structureSetItem = patientItem.FindEntities(e => e.Type == "structure_set")[0];
+        /// var structureSetRoiItem = structureSetItem.Rois[0];
+        /// var structureSetRoiData = await structureSetRoiItem.GetDataAsync();
+        /// </code>
+        /// </example>
+        public async Task<StructureSetRoiData> GetDataAsync()
+        {
+            var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
+                new KeyValuePair<string, string>("ProKnow-Key", _structureSetItem.Key) };
+            var responseJson = await _proKnow.Requestor.GetAsync($"/structuresets/{_structureSetItem.Id}/rois/{Tag}", headerKeyValuePairs);
+            var structureSetRoiData = JsonSerializer.Deserialize<StructureSetRoiData>(responseJson);
+            structureSetRoiData.PostProcessDeserialization(_proKnow, _structureSetItem, this);
+            return structureSetRoiData;
+        }
 
         /// <summary>
         /// Indicates whether this ROI is editable
@@ -131,6 +158,7 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// refresh the structure set:
         /// <code>
         /// using ProKnow;
+        /// using System.Drawing;
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
@@ -141,7 +169,10 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// using (var draft = await structureSetItem.DraftAsync())
         /// {
         ///     var roiItem = draft.Rois.First(r => r.Name == "PTV");
-        ///     await roiItem.DeleteAsync();
+        ///     roiItem.Name = "GTV";
+        ///     roiItem.Color = Color.Orange;
+        ///     roiItem.Type = "TREATED_VOLUME";
+        ///     await roiItem.SaveAsync();
         ///     await draft.ApproveAsync();
         /// }
         /// await structureSetItem.RefreshAsync();

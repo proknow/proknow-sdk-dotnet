@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ProKnow.Exceptions;
+using ProKnow.JsonConverters;
 using ProKnow.Patient.Entities.StructureSet;
 
 namespace ProKnow.Patient.Entities
@@ -45,6 +46,12 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         [JsonIgnore]
         public StructureSetRoiItem[] Rois { get; internal set; }
+
+        /// <summary>
+        /// The key use to retrieve contour and point data for the ROIs
+        /// </summary>
+        [JsonPropertyName("key")]
+        public string Key { get; set; }
 
         /// <summary>
         /// The object for interacting with versions of the structure set
@@ -203,7 +210,7 @@ namespace ProKnow.Patient.Entities
             {
                 if (ex.StatusCode != "Conflict")
                 {
-                    throw ex;
+                    throw;
                 }
 
                 // Get the structure set draft lock
