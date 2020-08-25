@@ -1,5 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using ProKnow.Exceptions;
 
 namespace ProKnow.Patient.Entities
 {
@@ -8,6 +12,18 @@ namespace ProKnow.Patient.Entities
     /// </summary>
     public class DoseItem : EntityItem
     {
+        /// <summary>
+        /// Type-specific entity data
+        /// </summary>
+        [JsonPropertyName("data")]
+        public DoseData Data { get; set; }
+
+        /// <summary>
+        /// JSON web token (JWT) for dose data
+        /// </summary>
+        [JsonPropertyName("key")]
+        public string Key { get; set; }
+
         /// <summary>
         /// Downloads this dose asynchronously as a DICOM object to the specified folder or file
         /// </summary>
@@ -47,6 +63,29 @@ namespace ProKnow.Patient.Entities
             return _proKnow.Requestor.StreamAsync($"/workspaces/{WorkspaceId}/doses/{Id}/dicom", file);
         }
 
-        //todo--Implement GetSliceData
+        /// <summary>
+        /// Gets the data for a specified slice asynchronously
+        /// </summary>
+        /// <param name="index">The slice index</param>
+        /// <returns>The voxel data for the specified slice</returns>
+        public async Task<UInt16[]> GetSliceDataAsync(int index)
+        {
+            var slice = Data.Slices[index];
+            var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
+                new KeyValuePair<string, string>("ProKnow-Key", Key) };
+            var bytes = await _proKnow.Requestor.GetBinaryAsync($"/doses/{Id}/slices/{slice.Tag}", headerKeyValuePairs);
+            if (bytes.Length % 2 != 0)
+            {
+                throw new ProKnowException("Dose slices should contain an even number of bytes.");
+            }
+            var sliceData = new UInt16[bytes.Length / 2];
+            var i = 0;
+            var j = 0;
+            while (i < bytes.Length)
+            {
+                sliceData[j++] = (UInt16)((bytes[i++] << 8) | bytes[i++]);
+            }
+            return sliceData;
+        }
     }
 }
