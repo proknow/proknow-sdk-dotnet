@@ -68,6 +68,7 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         /// <param name="index">The slice index</param>
         /// <returns>The voxel data for the specified slice</returns>
+        //todo--add example
         public async Task<UInt16[]> GetSliceDataAsync(int index)
         {
             var slice = Data.Slices[index];
@@ -83,7 +84,7 @@ namespace ProKnow.Patient.Entities
             var j = 0;
             while (i < bytes.Length)
             {
-                sliceData[j++] = (UInt16)((bytes[i++] << 8) | bytes[i++]);
+                sliceData[j++] = (UInt16)((bytes[i++] << 8) | bytes[i++]); // Convert from network byte order (big endian)
             }
             return sliceData;
         }

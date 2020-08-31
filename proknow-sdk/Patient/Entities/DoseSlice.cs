@@ -10,6 +10,7 @@ namespace ProKnow.Patient.Entities
         /// <summary>
         /// The slice position in 1/1000 mm
         /// </summary>
+        //todo--[JsonConverter(typeof(CoordinateJsonConverter))]
         [JsonPropertyName("pos")]
         public int Position { get; set; }
 

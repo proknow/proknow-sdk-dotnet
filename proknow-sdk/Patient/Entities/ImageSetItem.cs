@@ -65,6 +65,7 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         /// <param name="index">The index of the image</param>
         /// <returns>The pixel data for the specified image</returns>
+        //todo--add example
         public async Task<UInt16[]> GetImageDataAsync(int index)
         {
             var image = Data.Images[index];
@@ -76,7 +77,7 @@ namespace ProKnow.Patient.Entities
             var j = 0;
             while (i < bytes.Length)
             {
-                imageData[j++] = (UInt16)((bytes[i++] << 8) | bytes[i++]);
+                imageData[j++] = (UInt16)((bytes[i++] << 8) | bytes[i++]); // Convert from network byte order (big endian)
             }
             return imageData;
         }
