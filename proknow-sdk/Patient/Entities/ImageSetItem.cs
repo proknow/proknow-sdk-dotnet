@@ -64,13 +64,22 @@ namespace ProKnow.Patient.Entities
         /// Gets the pixel data for a specified image asynchronously
         /// </summary>
         /// <param name="index">The index of the image</param>
-        /// <returns>The pixel data as a byte array</returns>
-        public Task<byte[]> GetImageDataAsync(int index)
+        /// <returns>The pixel data for the specified image</returns>
+        //todo--add example
+        public async Task<UInt16[]> GetImageDataAsync(int index)
         {
             var image = Data.Images[index];
             var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
                 new KeyValuePair<string, string>("ProKnow-Key", Key) };
-            return _proKnow.Requestor.GetBinaryAsync($"/imagesets/{Id}/images/{image.Tag}", headerKeyValuePairs);
+            var bytes = await _proKnow.Requestor.GetBinaryAsync($"/imagesets/{Id}/images/{image.Tag}", headerKeyValuePairs);
+            var imageData = new UInt16[bytes.Length / 2];
+            var i = 0;
+            var j = 0;
+            while (i < bytes.Length)
+            {
+                imageData[j++] = (UInt16)((bytes[i++] << 8) | bytes[i++]); // Convert from network byte order (big endian)
+            }
+            return imageData;
         }
     }
 }
