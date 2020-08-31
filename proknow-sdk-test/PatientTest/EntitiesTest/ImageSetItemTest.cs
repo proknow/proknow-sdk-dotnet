@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Test;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -72,21 +73,19 @@ namespace ProKnow.Patient.Entities.Test
             var entitySummaries = patientItem.FindEntities(e => e.Type == "image_set");
             var imageSetItem = await entitySummaries[0].GetAsync() as ImageSetItem;
 
-            // Get the data for the first image
-            var bytes = await imageSetItem.GetImageDataAsync(0);
+            // Get the data for the first image (CT.5.dcm)
+            var imageData = await imageSetItem.GetImageDataAsync(0);
 
             // Verify the data
-            Assert.AreEqual(512 * 512 * 2, bytes.Length);
-            Assert.AreEqual(32, bytes[401]);
-            Assert.AreEqual(0, bytes[402]);
-            Assert.AreEqual(41, bytes[403]);
-            Assert.AreEqual(0, bytes[404]);
-            Assert.AreEqual(46, bytes[405]);
-            Assert.AreEqual(0, bytes[406]);
-            Assert.AreEqual(47, bytes[407]);
-            Assert.AreEqual(00, bytes[408]);
-            Assert.AreEqual(48, bytes[409]);
-            Assert.AreEqual(0, bytes[410]);
+            Assert.AreEqual(imageSetItem.Data.NumberOfRows * imageSetItem.Data.NumberOfColumns, imageData.Length);
+            var intercept = imageSetItem.Data.Images[0].RescaleIntercept;
+            var slope = imageSetItem.Data.Images[0].RescaleSlope;
+            var tolerance = 0.5 * slope; // half of a pixel
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0029", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData[201], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("002e", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData[202], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("002f", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData[203], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0030", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData[204], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0026", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData[205], tolerance);
         }
     }
 }

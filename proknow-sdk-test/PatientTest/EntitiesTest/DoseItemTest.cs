@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Test;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -141,6 +142,34 @@ namespace ProKnow.Patient.Entities.Test
             // Compare it to the uploaded one
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RD.dcm");
             Assert.IsTrue(TestHelper.FileEquals(uploadPath, actualDownloadPath));
+        }
+
+        [TestMethod]
+        public async Task GetSliceDataAsyncTest()
+        {
+            var testNumber = 5;
+
+            // Create a test workspace
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient with a dose
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var entitySummaries = patientItem.FindEntities(e => e.Type == "dose");
+            var doseItem = await entitySummaries[0].GetAsync() as DoseItem;
+
+            // Get the data for this first dose slice
+            var voxelData = await doseItem.GetSliceDataAsync(0);
+
+            // Verify the data
+            Assert.AreEqual(doseItem.Data.ResolutionX * doseItem.Data.ResolutionZ, voxelData.Length);
+            var intercept = doseItem.Data.PixelIntercept;
+            var slope = doseItem.Data.PixelSlope;
+            var tolerance = 0.5 * slope; // half of a pixel
+            Assert.AreEqual(5.0873445503321e-06 * uint.Parse("00009901", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * voxelData[83], tolerance);
+            Assert.AreEqual(5.0873445503321e-06 * uint.Parse("00009901", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * voxelData[84], tolerance);
+            Assert.AreEqual(5.0873445503321e-06 * uint.Parse("00008801", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * voxelData[85], tolerance);
+            Assert.AreEqual(5.0873445503321e-06 * uint.Parse("00007b00", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * voxelData[86], tolerance);
+            Assert.AreEqual(5.0873445503321e-06 * uint.Parse("0000b601", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * voxelData[87], tolerance);
         }
     }
 }

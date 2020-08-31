@@ -4,6 +4,14 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.0.24
+
+*New Features and Enhancements*
+- Add GetSliceDataAsync method to DoseItem class to retrieve voxel data (DoseSlice)
+- Add DoseData property to DoseItem class to provide dose properties
+- Modify GetImageDataAsync method of ImageSetItem class to return UInt16[] instead of byte[]
+- Modify Position property of ImageSetItem to be mm instead of 1/1000 mm
+
 ## v0.0.23
 
 *New Features and Enhancements*
