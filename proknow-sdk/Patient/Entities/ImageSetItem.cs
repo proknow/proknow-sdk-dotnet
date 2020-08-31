@@ -65,7 +65,19 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         /// <param name="index">The index of the image</param>
         /// <returns>The pixel data for the specified image</returns>
-        //todo--add example
+        /// <example>This example shows how to get the pixel data for an image:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
+        /// var workspaceItem = await _proKnow.Workspaces.FindAsync(w => w.Name == "Clinical");
+        /// var patientSummary = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Name == "Example");
+        /// var patientItem = await patientSummary.GetAsync();
+        /// var imageSetItem = patientItem.FindEntities(e => e.Type == "image_set")[0];
+        /// var imageData = await imageSetItem.GetImageDataAsync(0);
+        /// </code>
+        /// </example>
         public async Task<UInt16[]> GetImageDataAsync(int index)
         {
             var image = Data.Images[index];

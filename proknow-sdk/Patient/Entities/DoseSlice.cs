@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using ProKnow.JsonConverters;
+using System.Text.Json.Serialization;
 
 namespace ProKnow.Patient.Entities
 {
@@ -8,11 +9,11 @@ namespace ProKnow.Patient.Entities
     public class DoseSlice
     {
         /// <summary>
-        /// The slice position in 1/1000 mm
+        /// The slice position in mm
         /// </summary>
-        //todo--[JsonConverter(typeof(CoordinateJsonConverter))]
+        [JsonConverter(typeof(CoordinateJsonConverter))]
         [JsonPropertyName("pos")]
-        public int Position { get; set; }
+        public double Position { get; set; }
 
         /// <summary>
         /// The tag for the slice data in blob storage

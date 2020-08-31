@@ -64,11 +64,23 @@ namespace ProKnow.Patient.Entities
         }
 
         /// <summary>
-        /// Gets the data for a specified slice asynchronously
+        /// Gets the voxel data for a specified slice asynchronously
         /// </summary>
         /// <param name="index">The slice index</param>
         /// <returns>The voxel data for the specified slice</returns>
-        //todo--add example
+        /// <example>This example shows how to get the voxel data for an image:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
+        /// var workspaceItem = await _proKnow.Workspaces.FindAsync(w => w.Name == "Clinical");
+        /// var patientSummary = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Name == "Example");
+        /// var patientItem = await patientSummary.GetAsync();
+        /// var doseItem = patientItem.FindEntities(e => e.Type == "dose")[0];
+        /// var voxelData = await doseItem.GetSliceDataAsync(0);
+        /// </code>
+        /// </example>
         public async Task<UInt16[]> GetSliceDataAsync(int index)
         {
             var slice = Data.Slices[index];

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ProKnow.JsonConverters;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace ProKnow.Patient.Entities
@@ -27,10 +28,11 @@ namespace ProKnow.Patient.Entities
         public double RescaleSlope { get; set; }
 
         /// <summary>
-        /// The image position in 1/1000 mm
+        /// The image position in mm
         /// </summary>
+        [JsonConverter(typeof(CoordinateJsonConverter))]
         [JsonPropertyName("pos")]
-        public int Position { get; set; }
+        public double Position { get; set; }
 
         /// <summary>
         /// The IEC X image position in mm
@@ -74,7 +76,7 @@ namespace ProKnow.Patient.Entities
         /// <returns>A string representation of this object</returns>
         public override string ToString()
         {
-            return PositionY.ToString();
+            return Position.ToString();
         }
     }
 }
