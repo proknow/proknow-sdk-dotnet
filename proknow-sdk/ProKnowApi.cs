@@ -1,6 +1,7 @@
 ﻿using ProKnow.Collection;
 using ProKnow.Exceptions;
 using ProKnow.Patient;
+using ProKnow.Role;
 using ProKnow.Scorecard;
 using ProKnow.Upload;
 using System;
@@ -36,7 +37,10 @@ namespace ProKnow
         /// </summary>
         public Workspaces Workspaces { get; private set; }
 
-        //todo--Add Roles property
+        /// <summary>
+        /// Interacts with roles in the ProKnow organization
+        /// </summary>
+        public Roles Roles { get; private set; }
 
         //todo--Add Users property
 
@@ -153,7 +157,7 @@ namespace ProKnow
             CustomMetrics = new CustomMetrics(this);
             ScorecardTemplates = new ScorecardTemplates(this);
             Workspaces = new Workspaces(this);
-            //todo--Initialize Roles property
+            Roles = new Roles(this);
             //todo--Initialize Users property
             Uploads = new Uploads(this);
             Patients = new Patients(this);
