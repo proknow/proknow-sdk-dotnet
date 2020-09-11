@@ -45,9 +45,11 @@ namespace ProKnow.Role
         /// </example>
         public async Task<RoleItem> CreateAsync(string name, OrganizationPermissions permissions)
         {
-            var requestContent = new StringContent(RoleItem.Serialize(null, name, permissions), Encoding.UTF8, "application/json");
+            var requestContent = new StringContent(RoleItem.Serialize(name, permissions), Encoding.UTF8, "application/json");
             var responseJson = await _proKnow.Requestor.PostAsync("/roles", null, requestContent);
-            return  RoleItem.Deserialize(responseJson);
+            var roleItem =  RoleItem.Deserialize(responseJson);
+            roleItem.PostProcessDeserialization(_proKnow);
+            return roleItem;
         }
 
         /// <summary>
@@ -113,7 +115,9 @@ namespace ProKnow.Role
         public async Task<RoleItem> GetAsync(string id)
         {
             var json = await _proKnow.Requestor.GetAsync($"/roles/{id}");
-            return RoleItem.Deserialize(json);
+            var roleItem = RoleItem.Deserialize(json);
+            roleItem.PostProcessDeserialization(_proKnow);
+            return roleItem;
         }
 
         /// <summary>
@@ -147,7 +151,7 @@ namespace ProKnow.Role
             {
                 if (RoleSummary != null)
                 {
-                    RoleSummary.PostProcessDeserialization(this);
+                    RoleSummary.PostProcessDeserialization(_proKnow);
                 }
             }
             return roleSummaries;

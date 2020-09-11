@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace ProKnow.Role
 {
@@ -9,6 +12,8 @@ namespace ProKnow.Role
     /// </summary>
     public class RoleItem
     {
+        private ProKnowApi _proKnow;
+
         /// <summary>
         /// The ProKnow ID of the role
         /// </summary>
@@ -32,6 +37,34 @@ namespace ProKnow.Role
         /// </summary>
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; }
+
+        /// <summary>
+        /// Deletes this role asynchronously
+        /// </summary>
+        /// <example>This example shows how to delete a role named "Researcher":
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
+        /// var roleSummary = await _proKnow.Roles.FindAsync(x => x.Name == "Researcher");
+        /// var roleItem = await roleSummary.GetAsync(roleSummary.Id);
+        /// await roleItem.DeleteAsync();
+        /// </code>
+        /// </example>
+        public Task DeleteAsync()
+        {
+            return _proKnow.Roles.DeleteAsync(Id);
+        }
+
+        /// <summary>
+        /// Saves changes to a role asynchronously
+        /// </summary>
+        public async Task SaveAsync()
+        {
+            var content = new StringContent(RoleItem.Serialize(Name, Permissions), Encoding.UTF8, "application/json");
+            await _proKnow.Requestor.PutAsync($"/roles/{Id}", null, content);
+        }
 
         /// <summary>
         /// Provides a string representation of this object
@@ -59,22 +92,24 @@ namespace ProKnow.Role
         }
 
         /// <summary>
+        /// Finishes initialization of object after deserialization from JSON
+        /// </summary>
+        /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
+        internal void PostProcessDeserialization(ProKnowApi proKnow)
+        {
+            _proKnow = proKnow;
+        }
+
+        /// <summary>
         /// Serializes a role to a JSON string with the permissions at the root level as required by the API
         /// </summary>
-        /// <param name="id">The role ID or null if creating a role</param>
         /// <param name="name">The role name</param>
         /// <param name="permissions">The role permissions</param>
         /// <returns>A JSON string representation of this object</returns>
-        internal static string Serialize(string id, string name, OrganizationPermissions permissions)
+        internal static string Serialize(string name, OrganizationPermissions permissions)
         {
             // Convert permissions to Dictionary<string, object>
             var properties = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(permissions));
-
-            // Add role ID to dictionary, if specified
-            if (id != null)
-            {
-                properties["id"] = id;
-            }
 
             // Add role name to dictionary
             properties["name"] = name;

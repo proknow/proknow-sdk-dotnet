@@ -116,6 +116,7 @@ namespace ProKnow.Role
         /// </summary>
         public OrganizationPermissions()
         {
+            Workspaces = new List<WorkspacePermissions>();
         }
 
         /// <summary>
@@ -165,6 +166,10 @@ namespace ProKnow.Role
             if (workspaces != null)
             {
                 Workspaces = new List<WorkspacePermissions>(workspaces);
+            }
+            else
+            {
+                Workspaces = new List<WorkspacePermissions>();
             }
         }
     }

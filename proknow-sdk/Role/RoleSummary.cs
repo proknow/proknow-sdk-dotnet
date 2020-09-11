@@ -9,7 +9,7 @@ namespace ProKnow.Role
     /// </summary>
     public class RoleSummary
     {
-        private Roles _roles;
+        private ProKnowApi _proKnow;
 
         /// <summary>
         /// The ProKnow ID of the role
@@ -45,7 +45,7 @@ namespace ProKnow.Role
         /// </example>
         public Task<RoleItem> GetAsync()
         {
-            return _roles.GetAsync(Id);
+            return _proKnow.Roles.GetAsync(Id);
         }
 
         /// <summary>
@@ -60,10 +60,10 @@ namespace ProKnow.Role
         /// <summary>
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
-        /// <param name="roles">Root object for interfacing with the roles for a ProKnow organization</param>
-        internal void PostProcessDeserialization(Roles roles)
+        /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
+        internal void PostProcessDeserialization(ProKnowApi proKnow)
         {
-            _roles = roles;
+            _proKnow = proKnow;
         }
     }
 }
