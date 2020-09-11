@@ -45,20 +45,9 @@ namespace ProKnow.Role
         /// </example>
         public async Task<RoleItem> CreateAsync(string name, OrganizationPermissions permissions)
         {
-            // Convert OrganizationPermissions to Dictionary<string, object>
-            var properties = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(permissions));
-
-            // Add role name to dictionary
-            properties["name"] = name;
-
-            // Serialize dictionary and create request content
-            var requestContent = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
-
-            // Submit request
+            var requestContent = new StringContent(RoleItem.Serialize(null, name, permissions), Encoding.UTF8, "application/json");
             var responseJson = await _proKnow.Requestor.PostAsync("/roles", null, requestContent);
-
-            // De-serialize response content as RoleItem and return
-            return JsonSerializer.Deserialize<RoleItem>(responseJson);
+            return  RoleItem.Deserialize(responseJson);
         }
 
         /// <summary>
@@ -124,7 +113,7 @@ namespace ProKnow.Role
         public async Task<RoleItem> GetAsync(string id)
         {
             var json = await _proKnow.Requestor.GetAsync($"/roles/{id}");
-            return JsonSerializer.Deserialize<RoleItem>(json);
+            return RoleItem.Deserialize(json);
         }
 
         /// <summary>
@@ -143,7 +132,7 @@ namespace ProKnow.Role
         public async Task<IList<RoleSummary>> QueryAsync()
         {
             var json = await _proKnow.Requestor.GetAsync("/roles");
-            return DeserializePatients(json);
+            return DeserializeRoleSummaries(json);
         }
 
         /// <summary>
@@ -151,7 +140,7 @@ namespace ProKnow.Role
         /// </summary>
         /// <param name="json">JSON representation of a collection of role summaries</param>
         /// <returns>A collection of role summaries</returns>
-        private IList<RoleSummary> DeserializePatients(string json)
+        private IList<RoleSummary> DeserializeRoleSummaries(string json)
         {
             var roleSummaries = JsonSerializer.Deserialize<IList<RoleSummary>>(json);
             foreach (var RoleSummary in roleSummaries)

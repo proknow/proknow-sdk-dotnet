@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace ProKnow.Role
@@ -6,7 +7,7 @@ namespace ProKnow.Role
     /// <summary>
     /// Represents a role for a ProKnow organization
     /// </summary>
-    public class RoleItem : OrganizationPermissions
+    public class RoleItem
     {
         /// <summary>
         /// The ProKnow ID of the role
@@ -20,108 +21,11 @@ namespace ProKnow.Role
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        ///// <summary>
-        ///// Flag indicating whether role allows creation of API keys
-        ///// </summary>
-        //[JsonPropertyName("create_api_keys")]
-        //public bool CanCreateApiKeys { get; set; }
-
-        ///// <summary>
-        ///// Flag indicating whether role allows managing users, roles, and workspaces
-        ///// </summary>
-        //[JsonPropertyName("manage_access")]
-        //public bool CanManageAccess { get; set; }
-
-        ///// <summary>
-        ///// Flag indicating whether role allows creation, modification, and deletion of custom metrics
-        ///// </summary>
-        //[JsonPropertyName("manage_custom_metrics")]
-        //public bool CanManageCustomMetrics { get; set; }
-
-        ///// <summary>
-        ///// Flag indicating whether role allows creation, modification, and deletion of scorecard templates
-        ///// </summary>
-        //[JsonPropertyName("manage_template_metric_sets")]
-        //public bool CanManageScorecardTemplates { get; set; }
-
-        ///// <summary>
-        ///// Flag indicating whether role allows creation, modification, deletion, and execution of renaming rules
-        ///// </summary>
-        //[JsonPropertyName("manage_renaming_rules")]
-        //public bool CanManageRenamingRules { get; set; }
-
-        ///// <summary>
-        ///// Flag indicating whether role allows managing of checklist templates
-        ///// </summary>
-        //[JsonPropertyName("manage_template_checklists")]
-        //public bool CanManageChecklistTemplates { get; set; }
-
-        ///// <summary>
-        ///// Flag indicating whether this is a collaborator role, i.e., that the other permissions only apply to
-        ///// patients across the organization for which a user has been explicitly granted access
-        ///// </summary>
-        //[JsonPropertyName("organization_collaborator")]
-        //public bool IsCollaborator { get; set; }
-
-        ///// <summary>
-        ///// Flag indicating whether role allows reading of patient data across the organization
-        ///// </summary>
-        //[JsonPropertyName("organization_read_patients")]
-        //public bool CanReadPatients { get; set; }
-
-        ///// <summary>
-        ///// Flag indicating whether role allows reading of collection data across the organization
-        ///// </summary>
-        //[JsonPropertyName("organization_read_collections")]
-        //public bool CanReadCollections { get; set; }
-
-        ///// <summary>
-        ///// Flag indicating whether role allows viewing of protected health information (PHI) across the organization
-        ///// </summary>
-        //[JsonPropertyName("organization_view_phi")]
-        //public bool CanViewPhi { get; set; }
-
-        ///// <summary>
-        ///// Flag indicating whether role allows downloading of DICOM files across the organization
-        ///// </summary>
-        //[JsonPropertyName("organization_download_dicom")]
-        //public bool CanDownloadDicom { get; set; }
-
-        ///// <summary>
-        ///// Flag indicating whether role allows creation and modification of collection data across the organization
-        ///// </summary>
-        //[JsonPropertyName("organization_write_collections")]
-        //public bool CanWriteCollections { get; set; }
-
-        ///// <summary>
-        ///// Flag indicating whether role allows creation and modification of patient data across the organization
-        ///// </summary>
-        //[JsonPropertyName("organization_write_patients")]
-        //public bool CanWritePatients { get; set; }
-
-        ///// <summary>
-        ///// Flag indicating whether role allows creation and modification of patient contour data across the organization
-        ///// </summary>
-        //[JsonPropertyName("organization_contour_patients")]
-        //public bool CanContourPatients { get; set; }
-
-        ///// <summary>
-        ///// Flag indicating whether role allows deletion of workspace collections across the organization
-        ///// </summary>
-        //[JsonPropertyName("organization_delete_collections")]
-        //public bool CanDeleteCollections { get; set; }
-
-        ///// <summary>
-        ///// Flag indicating whether role allows deletion of patients and patient entities across the organization
-        ///// </summary>
-        //[JsonPropertyName("organization_delete_patients")]
-        //public bool CanDeletePatients { get; set; }
-
-        ///// <summary>
-        ///// The collection of workspace permissions for the role
-        ///// </summary>
-        //[JsonPropertyName("workspaces")]
-        //public IList<WorkspacePermissions> Workspaces { get; set; }
+        /// <summary>
+        /// The permissions of the role
+        /// </summary>
+        [JsonIgnore]
+        public OrganizationPermissions Permissions { get; set; }
 
         /// <summary>
         /// Properties encountered during deserialization without matching members
@@ -136,6 +40,76 @@ namespace ProKnow.Role
         public override string ToString()
         {
             return Name;
+        }
+
+        /// <summary>
+        /// Deserializes a role from a JSON string with the permissions at the root level as provided by the API
+        /// </summary>
+        /// <param name="json">The JSON string to deserialize</param>
+        /// <returns>A role</returns>
+        internal static RoleItem Deserialize(string json)
+        {
+            // Deserialize
+            var role = JsonSerializer.Deserialize<RoleItem>(json);
+
+            // Extract permissions from extension data
+            ExtractPermissionsFromExtensionData(role);
+
+            return role;
+        }
+
+        /// <summary>
+        /// Serializes a role to a JSON string with the permissions at the root level as required by the API
+        /// </summary>
+        /// <param name="id">The role ID or null if creating a role</param>
+        /// <param name="name">The role name</param>
+        /// <param name="permissions">The role permissions</param>
+        /// <returns>A JSON string representation of this object</returns>
+        internal static string Serialize(string id, string name, OrganizationPermissions permissions)
+        {
+            // Convert permissions to Dictionary<string, object>
+            var properties = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(permissions));
+
+            // Add role ID to dictionary, if specified
+            if (id != null)
+            {
+                properties["id"] = id;
+            }
+
+            // Add role name to dictionary
+            properties["name"] = name;
+
+            return JsonSerializer.Serialize(properties);
+        }
+
+        /// <summary>
+        /// Extracts the permissions from the ExtensionData
+        /// </summary>
+        /// <param name="role">The role to fix</param>
+        private static void ExtractPermissionsFromExtensionData(RoleItem role)
+        {
+            // Serialize the ExtensionData back to a dictionary and then deserialize it into permissions
+            role.Permissions = JsonSerializer.Deserialize<OrganizationPermissions>(JsonSerializer.Serialize(role.ExtensionData));
+
+            // Remove the permissions from the ExtensionData so they won't overwrite the property values when this object is
+            // serialized
+            role.ExtensionData.Remove("create_api_keys");
+            role.ExtensionData.Remove("manage_access");
+            role.ExtensionData.Remove("manage_custom_metrics");
+            role.ExtensionData.Remove("manage_template_metric_sets");
+            role.ExtensionData.Remove("manage_renaming_rules");
+            role.ExtensionData.Remove("manage_template_checklists");
+            role.ExtensionData.Remove("organization_collaborator");
+            role.ExtensionData.Remove("organization_read_patients");
+            role.ExtensionData.Remove("organization_read_collections");
+            role.ExtensionData.Remove("organization_view_phi");
+            role.ExtensionData.Remove("organization_download_dicom");
+            role.ExtensionData.Remove("organization_write_collections");
+            role.ExtensionData.Remove("organization_write_patients");
+            role.ExtensionData.Remove("organization_contour_patients");
+            role.ExtensionData.Remove("organization_delete_collections");
+            role.ExtensionData.Remove("organization_delete_patients");
+            role.ExtensionData.Remove("workspaces");
         }
     }
 }

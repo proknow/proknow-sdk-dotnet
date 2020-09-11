@@ -60,34 +60,53 @@ namespace ProKnow.Role.Test
 
             // Verify the returned role
             Assert.AreEqual(name, gottenRoleItem.Name);
-            Assert.IsFalse(gottenRoleItem.CanCreateApiKeys);
-            Assert.IsFalse(gottenRoleItem.CanManageAccess);
-            Assert.IsFalse(gottenRoleItem.CanManageCustomMetrics);
-            Assert.IsFalse(gottenRoleItem.CanManageScorecardTemplates);
-            Assert.IsFalse(gottenRoleItem.CanManageRenamingRules);
-            Assert.IsFalse(gottenRoleItem.CanManageChecklistTemplates);
-            Assert.IsFalse(gottenRoleItem.IsCollaborator);
-            Assert.IsFalse(gottenRoleItem.CanReadPatients);
-            Assert.IsFalse(gottenRoleItem.CanReadCollections);
-            Assert.IsFalse(gottenRoleItem.CanViewPhi);
-            Assert.IsFalse(gottenRoleItem.CanDownloadDicom);
-            Assert.IsFalse(gottenRoleItem.CanWriteCollections);
-            Assert.IsFalse(gottenRoleItem.CanWritePatients);
-            Assert.IsFalse(gottenRoleItem.CanContourPatients);
-            Assert.IsFalse(gottenRoleItem.CanDeleteCollections);
-            Assert.IsFalse(gottenRoleItem.CanDeletePatients);
-            Assert.AreEqual(1, gottenRoleItem.Workspaces.Count);
-            Assert.AreEqual(workspaceItem.Id, gottenRoleItem.Workspaces[0].WorkspaceId);
-            Assert.IsFalse(gottenRoleItem.Workspaces[0].IsCollaborator);
-            Assert.IsTrue(gottenRoleItem.Workspaces[0].CanReadPatients);
-            Assert.IsTrue(gottenRoleItem.Workspaces[0].CanReadCollections);
-            Assert.IsTrue(gottenRoleItem.Workspaces[0].CanViewPhi);
-            Assert.IsFalse(gottenRoleItem.Workspaces[0].CanDownloadDicom);
-            Assert.IsFalse(gottenRoleItem.Workspaces[0].CanWriteCollections);
-            Assert.IsFalse(gottenRoleItem.Workspaces[0].CanWritePatients);
-            Assert.IsFalse(gottenRoleItem.Workspaces[0].CanContourPatients);
-            Assert.IsFalse(gottenRoleItem.Workspaces[0].CanDeleteCollections);
-            Assert.IsFalse(gottenRoleItem.Workspaces[0].CanDeletePatients);
+            Assert.IsFalse(gottenRoleItem.Permissions.CanCreateApiKeys);
+            Assert.IsFalse(gottenRoleItem.Permissions.CanManageAccess);
+            Assert.IsFalse(gottenRoleItem.Permissions.CanManageCustomMetrics);
+            Assert.IsFalse(gottenRoleItem.Permissions.CanManageScorecardTemplates);
+            Assert.IsFalse(gottenRoleItem.Permissions.CanManageRenamingRules);
+            Assert.IsFalse(gottenRoleItem.Permissions.CanManageChecklistTemplates);
+            Assert.IsFalse(gottenRoleItem.Permissions.IsCollaborator);
+            Assert.IsFalse(gottenRoleItem.Permissions.CanReadPatients);
+            Assert.IsFalse(gottenRoleItem.Permissions.CanReadCollections);
+            Assert.IsFalse(gottenRoleItem.Permissions.CanViewPhi);
+            Assert.IsFalse(gottenRoleItem.Permissions.CanDownloadDicom);
+            Assert.IsFalse(gottenRoleItem.Permissions.CanWriteCollections);
+            Assert.IsFalse(gottenRoleItem.Permissions.CanWritePatients);
+            Assert.IsFalse(gottenRoleItem.Permissions.CanContourPatients);
+            Assert.IsFalse(gottenRoleItem.Permissions.CanDeleteCollections);
+            Assert.IsFalse(gottenRoleItem.Permissions.CanDeletePatients);
+            Assert.AreEqual(1, gottenRoleItem.Permissions.Workspaces.Count);
+            Assert.AreEqual(workspaceItem.Id, gottenRoleItem.Permissions.Workspaces[0].WorkspaceId);
+            Assert.IsFalse(gottenRoleItem.Permissions.Workspaces[0].IsCollaborator);
+            Assert.IsTrue(gottenRoleItem.Permissions.Workspaces[0].CanReadPatients);
+            Assert.IsTrue(gottenRoleItem.Permissions.Workspaces[0].CanReadCollections);
+            Assert.IsTrue(gottenRoleItem.Permissions.Workspaces[0].CanViewPhi);
+            Assert.IsFalse(gottenRoleItem.Permissions.Workspaces[0].CanDownloadDicom);
+            Assert.IsFalse(gottenRoleItem.Permissions.Workspaces[0].CanWriteCollections);
+            Assert.IsFalse(gottenRoleItem.Permissions.Workspaces[0].CanWritePatients);
+            Assert.IsFalse(gottenRoleItem.Permissions.Workspaces[0].CanContourPatients);
+            Assert.IsFalse(gottenRoleItem.Permissions.Workspaces[0].CanDeleteCollections);
+            Assert.IsFalse(gottenRoleItem.Permissions.Workspaces[0].CanDeletePatients);
+
+            // Verify that the ExtensionData does not contain the permissions
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("create_api_keys"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("manage_access"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("manage_custom_metrics"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("manage_template_metric_sets"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("manage_renaming_rules"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("manage_template_checklists"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_collaborator"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_read_patients"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_read_collections"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_view_phi"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_download_dicom"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_write_collections"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_write_patients"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_contour_patients"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_delete_collections"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_delete_patients"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("workspaces"));
         }
     }
 }

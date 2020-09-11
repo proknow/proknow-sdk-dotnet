@@ -112,6 +112,13 @@ namespace ProKnow.Role
         public IList<WorkspacePermissions> Workspaces { get; set; }
 
         /// <summary>
+        /// Used by deserialization to create an OrganizationPermissions object
+        /// </summary>
+        public OrganizationPermissions()
+        {
+        }
+
+        /// <summary>
         /// Constructs an OrganizationPermissions object
         /// </summary>
         /// <param name="canCreateApiKeys">Flag indicating whether role allows creation of API keys</param>
