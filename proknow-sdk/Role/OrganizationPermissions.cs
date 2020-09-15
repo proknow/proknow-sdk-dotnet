@@ -112,6 +112,12 @@ namespace ProKnow.Role
         public IList<WorkspacePermissions> Workspaces { get; set; }
 
         /// <summary>
+        /// Properties encountered during deserialization without matching members
+        /// </summary>
+        [JsonExtensionData]
+        public Dictionary<string, object> ExtensionData { get; set; }
+
+        /// <summary>
         /// Used by deserialization to create an OrganizationPermissions object
         /// </summary>
         public OrganizationPermissions()

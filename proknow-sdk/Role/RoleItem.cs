@@ -10,6 +10,7 @@ namespace ProKnow.Role
     /// <summary>
     /// Represents a role for a ProKnow organization
     /// </summary>
+    [JsonConverter(typeof(RoleItemJsonConverter))]
     public class RoleItem
     {
         private ProKnowApi _proKnow;
@@ -27,6 +28,12 @@ namespace ProKnow.Role
         public string Name { get; set; }
 
         /// <summary>
+        /// Read-only flag indicating whether role is private
+        /// </summary>
+        [JsonPropertyName("private")]
+        public bool IsPrivate { get; set; }
+
+        /// <summary>
         /// The permissions of the role
         /// </summary>
         [JsonIgnore]
@@ -37,6 +44,34 @@ namespace ProKnow.Role
         /// </summary>
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; }
+
+        /// <summary>
+        /// Used by deserialization to create a role
+        /// </summary>
+        public RoleItem()
+        {
+            Permissions = new OrganizationPermissions();
+        }
+
+        /// <summary>
+        /// Constructs a RoleItem.  Used internally to create a public role
+        /// </summary>
+        /// <param name="name">The name</param>
+        /// <param name="permissions">The permissions</param>
+        internal RoleItem(string name, OrganizationPermissions permissions)
+        {
+            Name = name;
+            Permissions = permissions;
+        }
+
+        /// <summary>
+        /// Constructs a RoleItem.  Used to create a private role for a user
+        /// </summary>
+        /// <param name="permissions">The permissions</param>
+        public RoleItem(OrganizationPermissions permissions)
+        {
+            Permissions = permissions;
+        }
 
         /// <summary>
         /// Deletes this role asynchronously
@@ -60,10 +95,22 @@ namespace ProKnow.Role
         /// <summary>
         /// Saves changes to a role asynchronously
         /// </summary>
-        public async Task SaveAsync()
+        /// <example>This example shows how to save changes to a role named "Researcher":
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
+        /// var roleSummary = await _proKnow.Roles.FindAsync(x => x.Name == "Researcher");
+        /// var roleItem = await roleSummary.GetAsync(roleSummary.Id);
+        /// roleItem.Permissions.CanManageCustomMetrics = true;
+        /// await roleItem.SaveAsync();
+        /// </code>
+        /// </example>
+        public Task SaveAsync()
         {
-            var content = new StringContent(RoleItem.Serialize(Name, Permissions), Encoding.UTF8, "application/json");
-            await _proKnow.Requestor.PutAsync($"/roles/{Id}", null, content);
+            var content = new StringContent(JsonSerializer.Serialize(this), Encoding.UTF8, "application/json");
+            return _proKnow.Requestor.PutAsync($"/roles/{Id}", null, content);
         }
 
         /// <summary>
@@ -76,75 +123,12 @@ namespace ProKnow.Role
         }
 
         /// <summary>
-        /// Deserializes a role from a JSON string with the permissions at the root level as provided by the API
-        /// </summary>
-        /// <param name="json">The JSON string to deserialize</param>
-        /// <returns>A role</returns>
-        internal static RoleItem Deserialize(string json)
-        {
-            // Deserialize
-            var role = JsonSerializer.Deserialize<RoleItem>(json);
-
-            // Extract permissions from extension data
-            ExtractPermissionsFromExtensionData(role);
-
-            return role;
-        }
-
-        /// <summary>
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         internal void PostProcessDeserialization(ProKnowApi proKnow)
         {
             _proKnow = proKnow;
-        }
-
-        /// <summary>
-        /// Serializes a role to a JSON string with the permissions at the root level as required by the API
-        /// </summary>
-        /// <param name="name">The role name</param>
-        /// <param name="permissions">The role permissions</param>
-        /// <returns>A JSON string representation of this object</returns>
-        internal static string Serialize(string name, OrganizationPermissions permissions)
-        {
-            // Convert permissions to Dictionary<string, object>
-            var properties = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(permissions));
-
-            // Add role name to dictionary
-            properties["name"] = name;
-
-            return JsonSerializer.Serialize(properties);
-        }
-
-        /// <summary>
-        /// Extracts the permissions from the ExtensionData
-        /// </summary>
-        /// <param name="role">The role to fix</param>
-        private static void ExtractPermissionsFromExtensionData(RoleItem role)
-        {
-            // Serialize the ExtensionData back to a dictionary and then deserialize it into permissions
-            role.Permissions = JsonSerializer.Deserialize<OrganizationPermissions>(JsonSerializer.Serialize(role.ExtensionData));
-
-            // Remove the permissions from the ExtensionData so they won't overwrite the property values when this object is
-            // serialized
-            role.ExtensionData.Remove("create_api_keys");
-            role.ExtensionData.Remove("manage_access");
-            role.ExtensionData.Remove("manage_custom_metrics");
-            role.ExtensionData.Remove("manage_template_metric_sets");
-            role.ExtensionData.Remove("manage_renaming_rules");
-            role.ExtensionData.Remove("manage_template_checklists");
-            role.ExtensionData.Remove("organization_collaborator");
-            role.ExtensionData.Remove("organization_read_patients");
-            role.ExtensionData.Remove("organization_read_collections");
-            role.ExtensionData.Remove("organization_view_phi");
-            role.ExtensionData.Remove("organization_download_dicom");
-            role.ExtensionData.Remove("organization_write_collections");
-            role.ExtensionData.Remove("organization_write_patients");
-            role.ExtensionData.Remove("organization_contour_patients");
-            role.ExtensionData.Remove("organization_delete_collections");
-            role.ExtensionData.Remove("organization_delete_patients");
-            role.ExtensionData.Remove("workspaces");
         }
     }
 }

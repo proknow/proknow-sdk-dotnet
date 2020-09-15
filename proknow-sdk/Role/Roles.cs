@@ -45,11 +45,12 @@ namespace ProKnow.Role
         /// </example>
         public async Task<RoleItem> CreateAsync(string name, OrganizationPermissions permissions)
         {
-            var requestContent = new StringContent(RoleItem.Serialize(name, permissions), Encoding.UTF8, "application/json");
+            var roleItemToCreate = new RoleItem(name, permissions);
+            var requestContent = new StringContent(JsonSerializer.Serialize(roleItemToCreate), Encoding.UTF8, "application/json");
             var responseJson = await _proKnow.Requestor.PostAsync("/roles", null, requestContent);
-            var roleItem =  RoleItem.Deserialize(responseJson);
-            roleItem.PostProcessDeserialization(_proKnow);
-            return roleItem;
+            var createdRoleItem =  JsonSerializer.Deserialize<RoleItem>(responseJson);
+            createdRoleItem.PostProcessDeserialization(_proKnow);
+            return createdRoleItem;
         }
 
         /// <summary>
@@ -115,7 +116,7 @@ namespace ProKnow.Role
         public async Task<RoleItem> GetAsync(string id)
         {
             var json = await _proKnow.Requestor.GetAsync($"/roles/{id}");
-            var roleItem = RoleItem.Deserialize(json);
+            var roleItem = JsonSerializer.Deserialize<RoleItem>(json);
             roleItem.PostProcessDeserialization(_proKnow);
             return roleItem;
         }
@@ -147,11 +148,11 @@ namespace ProKnow.Role
         private IList<RoleSummary> DeserializeRoleSummaries(string json)
         {
             var roleSummaries = JsonSerializer.Deserialize<IList<RoleSummary>>(json);
-            foreach (var RoleSummary in roleSummaries)
+            foreach (var roleSummary in roleSummaries)
             {
-                if (RoleSummary != null)
+                if (roleSummary != null)
                 {
-                    RoleSummary.PostProcessDeserialization(_proKnow);
+                    roleSummary.PostProcessDeserialization(_proKnow);
                 }
             }
             return roleSummaries;

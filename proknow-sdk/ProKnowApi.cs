@@ -4,6 +4,7 @@ using ProKnow.Patient;
 using ProKnow.Role;
 using ProKnow.Scorecard;
 using ProKnow.Upload;
+using ProKnow.User;
 using System;
 using System.IO;
 using System.Text.Json;
@@ -42,7 +43,10 @@ namespace ProKnow
         /// </summary>
         public Roles Roles { get; private set; }
 
-        //todo--Add Users property
+        /// <summary>
+        /// Interacts with users in the ProKnow organization
+        /// </summary>
+        public Users Users { get; private set; }
 
         /// <summary>
         /// Interacts with uploads in the ProKnow organization
@@ -158,7 +162,7 @@ namespace ProKnow
             ScorecardTemplates = new ScorecardTemplates(this);
             Workspaces = new Workspaces(this);
             Roles = new Roles(this);
-            //todo--Initialize Users property
+            Users = new Users(this);
             Uploads = new Uploads(this);
             Patients = new Patients(this);
             Collections = new Collections(this);
