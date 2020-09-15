@@ -1,8 +1,10 @@
 ﻿using ProKnow.Collection;
 using ProKnow.Exceptions;
 using ProKnow.Patient;
+using ProKnow.Role;
 using ProKnow.Scorecard;
 using ProKnow.Upload;
+using ProKnow.User;
 using System;
 using System.IO;
 using System.Text.Json;
@@ -36,9 +38,15 @@ namespace ProKnow
         /// </summary>
         public Workspaces Workspaces { get; private set; }
 
-        //todo--Add Roles property
+        /// <summary>
+        /// Interacts with roles in the ProKnow organization
+        /// </summary>
+        public Roles Roles { get; private set; }
 
-        //todo--Add Users property
+        /// <summary>
+        /// Interacts with users in the ProKnow organization
+        /// </summary>
+        public Users Users { get; private set; }
 
         /// <summary>
         /// Interacts with uploads in the ProKnow organization
@@ -153,8 +161,8 @@ namespace ProKnow
             CustomMetrics = new CustomMetrics(this);
             ScorecardTemplates = new ScorecardTemplates(this);
             Workspaces = new Workspaces(this);
-            //todo--Initialize Roles property
-            //todo--Initialize Users property
+            Roles = new Roles(this);
+            Users = new Users(this);
             Uploads = new Uploads(this);
             Patients = new Patients(this);
             Collections = new Collections(this);
