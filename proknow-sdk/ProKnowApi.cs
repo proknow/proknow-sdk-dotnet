@@ -18,56 +18,34 @@ namespace ProKnow
     /// </summary>
     public class ProKnowApi : IProKnowApi
     {
-        /// <summary>
-        /// Issues requests to the ProKnow API
-        /// </summary>
+        /// <inheritdoc/>
         public Requestor Requestor { get; private set; }
 
-        /// <summary>
-        /// Interacts with custom metrics in the ProKnow organization
-        /// </summary>
+        /// <inheritdoc/>
         public CustomMetrics CustomMetrics { get; private set; }
 
-        /// <summary>
-        /// Interacts with scorecard templates in the ProKnow organization
-        /// </summary>
+        /// <inheritdoc/>
         public ScorecardTemplates ScorecardTemplates { get; private set; }
 
-        /// <summary>
-        /// Interacts with workspaces in the ProKnow organization
-        /// </summary>
+        /// <inheritdoc/>
         public Workspaces Workspaces { get; private set; }
 
-        /// <summary>
-        /// Interacts with roles in the ProKnow organization
-        /// </summary>
+        /// <inheritdoc/>
         public Roles Roles { get; private set; }
 
-        /// <summary>
-        /// Interacts with users in the ProKnow organization
-        /// </summary>
+        /// <inheritdoc/>
         public Users Users { get; private set; }
 
-        /// <summary>
-        /// Interacts with uploads in the ProKnow organization
-        /// </summary>
+        /// <inheritdoc/>
         public Uploads Uploads { get; private set; }
 
-        /// <summary>
-        /// Interacts with patients in the ProKnow organization
-        /// </summary>
+        /// <inheritdoc/>
         public Patients Patients { get; private set; }
 
-        /// <summary>
-        /// Interacts with collections in the ProKnow organization
-        /// </summary>
+        /// <inheritdoc/>
         public Collections Collections { get; private set; }
 
-        /// <summary>
-        /// The number of seconds to use as a buffer when renewing a lock for a draft structure set. As an example, the
-        /// default value of 30 means that the renewer will attempt to renew the lock 30 seconds before it actually
-        /// expires
-        /// </summary>
+        /// <inheritdoc/>
         public int LockRenewalBuffer { get; set; }
 
         /// <summary>
@@ -116,23 +94,7 @@ namespace ProKnow
             ConstructorHelper(baseUrl, credentialsId, credentialsSecret, lockRenewalBuffer);
         }
 
-        /// <summary>
-        /// Gets the status of the API connection asynchronously
-        /// </summary>
-        /// <returns>The connection status</returns>
-        /// <example>
-        /// <code>
-        /// using ProKnow;
-        /// using System.Threading.Tasks;
-        /// 
-        /// var pk = new ProKnowApi('https://example.proknow.com', './credentials.json');
-        /// var status = await pk.GetConnectionStatusAsync();
-        /// if (!connectionStatus.IsValid)
-        /// {
-        ///     throw new Exception($"Error connecting to ProKnow API: {connectionStatus.ErrorMessage}.");
-        /// }
-        /// </code>
-        /// </example>
+        /// <inheritdoc/>
         public async Task<ProKnowConnectionStatus> GetConnectionStatusAsync()
         {
             try
