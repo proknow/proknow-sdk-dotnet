@@ -14,9 +14,9 @@ namespace ProKnow
 {
     /// <summary>
     /// This is the main class that should be instantiated during application startup with your base URL (which should
-    /// include your account subdomain) and your API token credentials.
+    /// include your account subdomain) and your API token credentials
     /// </summary>
-    public class ProKnowApi
+    public class ProKnowApi : IProKnowApi
     {
         /// <summary>
         /// Issues requests to the ProKnow API
@@ -137,7 +137,7 @@ namespace ProKnow
         {
             try
             {
-                var status = await Requestor.GetAsync("/status");
+                await Requestor.GetAsync("/status");
                 return new ProKnowConnectionStatus(true);
             }
             catch (Exception ex)
