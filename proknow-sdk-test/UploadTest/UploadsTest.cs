@@ -31,7 +31,7 @@ namespace ProKnow.Upload.Test
         }
 
         [TestMethod]
-        public async Task UploadAsyncTest_FilePath()
+        public async Task UploadAsyncTest_WorkspaceName_FilePath()
         {
             int testNumber = 1;
 
@@ -47,7 +47,7 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
+            await _proKnow.Uploads.UploadAsync(workspaceItem.Name, uploadPath, overrides);
 
             // Verify file was uploaded
             await patientItem.RefreshAsync();
@@ -57,7 +57,7 @@ namespace ProKnow.Upload.Test
         }
 
         [TestMethod]
-        public async Task UploadAsyncTest_FolderPath()
+        public async Task UploadAsyncTest_WorkspaceId_FolderPath()
         {
             int testNumber = 2;
 
@@ -84,9 +84,36 @@ namespace ProKnow.Upload.Test
         }
 
         [TestMethod]
-        public async Task UploadAsyncTest_MultiplePaths()
+        public async Task UploadAsyncTest_WorkspaceItem()
         {
             int testNumber = 3;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
+
+            // Upload test folder
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
+            var overrides = new UploadFileOverrides
+            {
+                Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
+            };
+            await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
+
+            // Verify files were uploaded
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => true);
+            Assert.AreEqual(1, entitySummaries.Count);
+            var entityItem = await entitySummaries[0].GetAsync() as ImageSetItem;
+            Assert.AreEqual(5, entityItem.Data.Images.Count);
+        }
+
+        [TestMethod]
+        public async Task UploadAsyncTest_WorkspaceId_MultiplePaths()
+        {
+            int testNumber = 4;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -103,6 +130,36 @@ namespace ProKnow.Upload.Test
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
             await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPaths, overrides);
+
+            // Verify test folder and test file were uploaded
+            await patientItem.RefreshAsync();
+            var entitySummaries = patientItem.FindEntities(t => true);
+            Assert.AreEqual(2, entitySummaries.Count);
+            var imageSetSummary = patientItem.FindEntities(t => t.Type == "image_set")[0];
+            var entityItem = await imageSetSummary.GetAsync() as ImageSetItem;
+            Assert.AreEqual(5, entityItem.Data.Images.Count);
+        }
+
+        [TestMethod]
+        public async Task UploadAsyncTest_WorkspaceItem_MultiplePaths()
+        {
+            int testNumber = 5;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a patient without data
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
+
+            // Upload test folder and test file
+            var uploadPath1 = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
+            var uploadPath2 = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RS.dcm");
+            var uploadPaths = new List<string>() { uploadPath1, uploadPath2 };
+            var overrides = new UploadFileOverrides
+            {
+                Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
+            };
+            await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPaths, overrides);
 
             // Verify test folder and test file were uploaded
             await patientItem.RefreshAsync();
