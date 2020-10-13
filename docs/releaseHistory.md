@@ -4,6 +4,12 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.0.26
+
+*Enhancements*
+- Add UploadAsync overloads to Uploads class that are more performant by taking a WorkspaceItem rather than a string for the workspace parameter
+- Add interfaces IProKnowApi, IWorkspaces, and IUploads so that users of this library can mock the ProKnowApi, Workspaces, and Uploads classes for testing purposes
+
 ## v0.0.25
 
 *New Features and Enhancements*
