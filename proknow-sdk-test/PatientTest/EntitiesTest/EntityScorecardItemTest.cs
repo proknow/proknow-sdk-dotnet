@@ -145,6 +145,7 @@ namespace ProKnow.Patient.Entities.Test
                 new MetricBin("FAIL", new byte[] { 255, 0, 0 })
             };
             entityScorecardItem.CustomMetrics = new List<CustomMetricItem>() { customMetricItem2 };
+            //TODO--Modify custom metric value and verify that it is saved
 
             // Save changes
             await entityScorecardItem.SaveAsync();
