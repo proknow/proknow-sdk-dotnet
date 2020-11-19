@@ -197,20 +197,6 @@ namespace ProKnow.Upload.Test
             Assert.AreEqual("1.2.246.352.221.470938394496317011513892701464452657827", mr.Uid);
             Assert.AreEqual(1, uploadBatch2.Patients[0].Sros.Count);
             Assert.AreEqual("1.2.246.352.221.52738008096457865345287404867971417272", uploadBatch2.Patients[0].Sros[0].Uid);
-            var ctPath = Path.Combine(uploadPath1, "Sro", "ct.dcm");
-//            var ctUploadStatusResult = uploadBatch2.Patients(ctPath);
-        }
-
-        [TestMethod]
-        public async Task UploadAsyncTest_UploadBatch_AlreadyUploaded()
-        {
-
-        }
-
-        [TestMethod]
-        public async Task UploadAsyncTest_UploadBatch_UploadFails()
-        {
-
         }
     }
 }
