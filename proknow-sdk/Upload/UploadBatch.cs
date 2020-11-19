@@ -154,7 +154,7 @@ namespace ProKnow.Upload
         /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
         /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
         /// var path = Path.GetFullPath(Path.Join("DICOM", "reg.dcm"));
-        /// var uploadSroSummary = uploadBatch.Find(path);
+        /// var uploadSroSummary = uploadBatch.FindSro(path);
         /// </code>
         /// </example>
         public UploadSroSummary FindSro(string path)
@@ -171,6 +171,34 @@ namespace ProKnow.Upload
                     throw new InvalidOperationError($"The uploaded file '{path}' is not a spatial registration object.");
                 }
                 throw new InvalidOperationError($"The upload for '{path}' is not complete.");
+            }
+            throw new InvalidOperationError($"The upload for '{path}' was not found in the batch.");
+        }
+
+        /// <summary>
+        /// Get the status for a provided path
+        /// </summary>
+        /// <param name="path">The full path to the file</param>
+        /// <returns>"completed" if the upload and processing was successful, "pending" if the upload was successful
+        /// but conflicts occurred, or "failed" if the upload was not successful. </returns>
+        /// <example>This example shows how to find the status of a given file upload:
+        /// <code>
+        /// using ProKnow;
+        /// using System.IO;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
+        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
+        /// var path = Path.GetFullPath(Path.Join("DICOM", "reg.dcm"));
+        /// var status = uploadBatch.GetStatus(path);
+        /// </code>
+        /// </example>
+        public string GetStatus(string path)
+        {
+            if (_fileLookup.ContainsKey(path))
+            {
+                var uploadStatusResult = _fileLookup[path];
+                return uploadStatusResult.Status;
             }
             throw new InvalidOperationError($"The upload for '{path}' was not found in the batch.");
         }

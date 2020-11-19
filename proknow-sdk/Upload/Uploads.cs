@@ -256,28 +256,32 @@ namespace ProKnow.Upload
             var uploadIdToStatusResultsMap = new Dictionary<string, UploadStatusResult>();
 
             // Create the collection of unresolved upload IDs
-            var unresolvedUploads = new List<string>(initiateUploadFileResponses.Select(r => r.Id));
+            var unresolvedUploadIds = new List<string>(initiateUploadFileResponses.Select(r => r.Id));
 
             Dictionary<string, object> queryParameters = null;
             long lastUpdatedAt = 0;
             var numberOfRetries = 0;
-            while (unresolvedUploads.Count > 0 && numberOfRetries < MAX_RETRIES)
+            while (unresolvedUploadIds.Count > 0 && numberOfRetries < MAX_RETRIES)
             {
                 // Query the current status of the uploads, filtering those whose status has changed since the previous query
                 var uploadStatusResultsJson = await _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/uploads/", null, queryParameters);
                 var uploadStatusResults = JsonSerializer.Deserialize<IList<UploadStatusResult>>(uploadStatusResultsJson);
 
-                // Remove any uploads that reached terminal status from the collection of unresolved uploads, keeping track of last updated
-                foreach (var uploadStatusResult in uploadStatusResults)
+                // Loop for each unresolved upload
+                var resolvedUploadsIds = new List<string>();
+                foreach (var unresolvedUploadId in unresolvedUploadIds)
                 {
-                    // Update the mapping of upload ID to status result
-                    uploadIdToStatusResultsMap[uploadStatusResult.Id] = uploadStatusResult;
+                    // Find corresponding upload status results
+                    var uploadStatusResult = uploadStatusResults.FirstOrDefault(x => x.Id == unresolvedUploadId);
 
-                    // If this upload was not previously resolved and has reached terminal status
-                    if (unresolvedUploads.Contains(uploadStatusResult.Id) && _terminalStatuses.Contains(uploadStatusResult.Status))
+                    // If this upload has reached terminal status
+                    if (uploadStatusResult != null && _terminalStatuses.Contains(uploadStatusResult.Status))
                     {
-                        // Indicate this upload is resolved
-                        unresolvedUploads.Remove(uploadStatusResult.Id);
+                        // Save the upload result
+                        uploadIdToStatusResultsMap[uploadStatusResult.Id] = uploadStatusResult;
+
+                        // Add it to the list of resolved uploads
+                        resolvedUploadsIds.Add(uploadStatusResult.Id);
 
                         // Update the query parameters to the latest upload to reach terminal status
                         if (uploadStatusResult.UpdatedAt > lastUpdatedAt)
@@ -291,6 +295,12 @@ namespace ProKnow.Upload
                             queryParameters["after"] = uploadStatusResult.Id;
                         }
                     }
+                }
+
+                // Remove any uploads that reached terminal status from the collection of unresolved uploads
+                foreach (var resolvedUploadId in resolvedUploadsIds)
+                {
+                    unresolvedUploadIds.Remove(resolvedUploadId);
                 }
 
                 // Give the updates some time to process, if requested

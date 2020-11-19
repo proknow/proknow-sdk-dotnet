@@ -135,5 +135,92 @@ namespace ProKnow.Upload.Test
             Assert.IsNotNull(uploadSroSummary.Id);
             Assert.AreEqual("1.2.246.352.221.52738008096457865345287404867971417272", uploadSroSummary.Uid);
         }
+
+        [TestMethod]
+        public async Task GetStatusTest_Completed()
+        {
+            var testNumber = 4;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Upload test data
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm");
+            var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath);
+
+            // Verify the status
+            Assert.AreEqual("completed", uploadBatch.GetStatus(uploadPath));
+        }
+
+        [TestMethod]
+        public async Task GetStatusTest_Pending_SingleUpload()
+        {
+            var testNumber = 5;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // In one upload, upload test data that has the same Patient ID, but different Patient's Name
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "PatientNameConflict");
+            var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath);
+
+            // Verify that one of the two files shows a status of "pending" (conflict)
+            var uploadPath1 = Path.Combine(TestSettings.TestDataRootDirectory, "PatientNameConflict", "CT.1.dcm");
+            var uploadPath2 = Path.Combine(TestSettings.TestDataRootDirectory, "PatientNameConflict", "CT.2.dcm");
+            Assert.IsTrue(uploadBatch.GetStatus(uploadPath1) == "pending" || uploadBatch.GetStatus(uploadPath2) == "pending");
+        }
+
+        [TestMethod]
+        public async Task GetStatusTest_Pending_MultipleUploads()
+        {
+            var testNumber = 6;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // In two uploads, upload test data that has the same Patient ID, but different Patient's Name
+            var uploadPath1 = Path.Combine(TestSettings.TestDataRootDirectory, "PatientNameConflict", "CT.1.dcm");
+            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath1);
+            var uploadPath2 = Path.Combine(TestSettings.TestDataRootDirectory, "PatientNameConflict", "CT.2.dcm");
+            var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath2);
+
+            // Verify that the second file shows a status of "pending" (conflict)
+            Assert.IsTrue(uploadBatch.GetStatus(uploadPath2) == "pending");
+        }
+
+        [TestMethod]
+        public async Task GetStatusTest_Failed()
+        {
+            var testNumber = 7;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Upload test data
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "RtImage", "RTIMAGE.dcm");
+            var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath);
+
+            // Verify the status
+            Assert.AreEqual("failed", uploadBatch.GetStatus(uploadPath));
+        }
+
+        [TestMethod]
+        public async Task GetStatusTest_Duplicate()
+        {
+            var testNumber = 8;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Upload test data
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm");
+            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath);
+
+            // Upload the same data again
+            var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath);
+
+            // Verify the status is still "completed"
+            Assert.AreEqual("completed", uploadBatch.GetStatus(uploadPath));
+        }
     }
 }
