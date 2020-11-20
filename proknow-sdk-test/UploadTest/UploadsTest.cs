@@ -4,6 +4,7 @@ using ProKnow.Patient.Entities;
 using ProKnow.Test;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProKnow.Upload.Test
@@ -168,6 +169,34 @@ namespace ProKnow.Upload.Test
             var imageSetSummary = patientItem.FindEntities(t => t.Type == "image_set")[0];
             var entityItem = await imageSetSummary.GetAsync() as ImageSetItem;
             Assert.AreEqual(5, entityItem.Data.Images.Count);
+        }
+
+        [TestMethod]
+        public async Task UploadAsyncTest_UploadBatch()
+        {
+            int testNumber = 6;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Upload first test folder
+            var uploadPath1 = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew");
+            await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath1);
+
+            // Upload second test folder
+            var uploadPath2 = Path.Combine(TestSettings.TestDataRootDirectory, "Sro");
+            var uploadBatch2 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath2);
+
+            // Verify the returned upload batch for the second test folder
+            Assert.AreEqual(1, uploadBatch2.Patients.Count);
+            Assert.AreEqual("0stCQd22vqX3RkoxNM0s332kJ", uploadBatch2.Patients[0].Id);
+            Assert.AreEqual(2, uploadBatch2.Patients[0].Entities.Count);
+            var ct = uploadBatch2.Patients[0].Entities.First(x => x.Modality == "CT");
+            Assert.AreEqual("1.2.246.352.221.563569281719761951014104635106765053066", ct.Uid);
+            var mr = uploadBatch2.Patients[0].Entities.First(x => x.Modality == "MR");
+            Assert.AreEqual("1.2.246.352.221.470938394496317011513892701464452657827", mr.Uid);
+            Assert.AreEqual(1, uploadBatch2.Patients[0].Sros.Count);
+            Assert.AreEqual("1.2.246.352.221.52738008096457865345287404867971417272", uploadBatch2.Patients[0].Sros[0].Uid);
         }
     }
 }

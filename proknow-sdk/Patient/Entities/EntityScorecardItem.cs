@@ -71,6 +71,7 @@ namespace ProKnow.Patient.Entities
         /// <summary>
         /// Saves changes to an entity scorecard asynchronously
         /// </summary>
+        //TODO--Add example to update a custom metric value for a scorecard
         public override async Task SaveAsync()
         {
             var route = $"/workspaces/{_workspaceId}/entities/{_entityId}/metrics/sets/{Id}";

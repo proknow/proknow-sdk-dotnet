@@ -4,6 +4,12 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.0.27
+
+*Bug Fixes and Enhancements*
+- Fix construction of UploadBatch to only include data from the upload from which it was created
+- Add GetStatus method to UploadBatch to get the status for a specified file
+
 ## v0.0.26
 
 *Enhancements*
