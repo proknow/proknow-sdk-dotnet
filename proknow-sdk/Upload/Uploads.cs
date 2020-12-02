@@ -128,7 +128,7 @@ namespace ProKnow.Upload
         /// <param name="paths">The full paths to the files to be uploaded</param>
         /// <param name="overrides">Optional overrides to be applied after the file is uploaded</param>
         /// <param name="doWait">Indicates whether to wait until all uploads reach a terminal state</param>
-        /// <returns>The result of the batch upload</returns>
+        /// <returns>The result of the batch upload or null if not waiting for all uploads to reach a terminal state</returns>
         private async Task<UploadBatch> UploadFilesAsync(string workspaceId, IList<string> paths, UploadFileOverrides overrides, bool doWait)
         {
             var tasks = new List<Task>();
@@ -150,7 +150,12 @@ namespace ProKnow.Upload
                 }));
             }
             await Task.WhenAll(tasks);
-            return await ProcessUploadResults(workspaceId, initiateFileUploadResponses.ToArray(), doWait);
+            UploadBatch uploadBatch = null;
+            if (doWait)
+            {
+                uploadBatch = await ProcessUploadResults(workspaceId, initiateFileUploadResponses.ToArray());
+            }
+            return uploadBatch;
         }
 
         /// <summary>
@@ -247,10 +252,9 @@ namespace ProKnow.Upload
         /// </summary>
         /// <param name="workspaceId">The ProKnow ID for the workspace</param>
         /// <param name="initiateUploadFileResponses">The results for each file upload</param>
-        /// <param name="doWait">Indicates whether to wait until all uploads reach a terminal state</param>
         /// <returns>The batch results</returns>
         private async Task<UploadBatch> ProcessUploadResults(string workspaceId,
-            InitiateFileUploadResponse[] initiateUploadFileResponses, bool doWait)
+            InitiateFileUploadResponse[] initiateUploadFileResponses)
         {
             // Create the mapping of upload ID to status results
             var uploadIdToStatusResultsMap = new Dictionary<string, UploadStatusResult>();
@@ -259,7 +263,6 @@ namespace ProKnow.Upload
             var unresolvedUploadIds = new List<string>(initiateUploadFileResponses.Select(r => r.Id));
 
             Dictionary<string, object> queryParameters = null;
-            long lastUpdatedAt = 0;
             var numberOfRetries = 0;
             while (unresolvedUploadIds.Count > 0 && numberOfRetries < MAX_RETRIES)
             {
@@ -282,18 +285,6 @@ namespace ProKnow.Upload
 
                         // Add it to the list of resolved uploads
                         resolvedUploadsIds.Add(uploadStatusResult.Id);
-
-                        // Update the query parameters to the latest upload to reach terminal status
-                        if (uploadStatusResult.UpdatedAt > lastUpdatedAt)
-                        {
-                            if (queryParameters == null)
-                            {
-                                queryParameters = new Dictionary<string, object>();
-                            }
-                            lastUpdatedAt = uploadStatusResult.UpdatedAt;
-                            queryParameters["updated"] = lastUpdatedAt;
-                            queryParameters["after"] = uploadStatusResult.Id;
-                        }
                     }
                 }
 
@@ -303,16 +294,21 @@ namespace ProKnow.Upload
                     unresolvedUploadIds.Remove(resolvedUploadId);
                 }
 
-                // Give the updates some time to process, if requested
-                if (doWait)
+                // Update the query parameters to the latest upload to reach terminal status
+                if (uploadStatusResults.Count > 0)
                 {
-                    await Task.Delay(RETRY_DELAY);
-                    numberOfRetries++;
+                    if (queryParameters == null)
+                    {
+                        queryParameters = new Dictionary<string, object>();
+                    }
+                    var lastUploadStatusResult = uploadStatusResults.Last();
+                    queryParameters["updated"] = lastUploadStatusResult.UpdatedAt;
+                    queryParameters["after"] = lastUploadStatusResult.Id;
                 }
-                else
-                {
-                    numberOfRetries = MAX_RETRIES;
-                }
+
+                // Give the updates some time to process
+                await Task.Delay(RETRY_DELAY);
+                numberOfRetries++;
             }
 
             return new UploadBatch(_proKnow, workspaceId, uploadIdToStatusResultsMap.Values.ToList());

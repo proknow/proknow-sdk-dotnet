@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Dicom;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Patient;
 using ProKnow.Patient.Entities;
 using ProKnow.Test;
@@ -189,7 +190,7 @@ namespace ProKnow.Upload.Test
 
             // Verify the returned upload batch for the second test folder
             Assert.AreEqual(1, uploadBatch2.Patients.Count);
-            Assert.AreEqual("0stCQd22vqX3RkoxNM0s332kJ", uploadBatch2.Patients[0].Id);
+            Assert.AreEqual("0stCQd22vqX3RkoxNM0s332kJ", uploadBatch2.Patients[0].Mrn);
             Assert.AreEqual(2, uploadBatch2.Patients[0].Entities.Count);
             var ct = uploadBatch2.Patients[0].Entities.First(x => x.Modality == "CT");
             Assert.AreEqual("1.2.246.352.221.563569281719761951014104635106765053066", ct.Uid);
@@ -197,6 +198,43 @@ namespace ProKnow.Upload.Test
             Assert.AreEqual("1.2.246.352.221.470938394496317011513892701464452657827", mr.Uid);
             Assert.AreEqual(1, uploadBatch2.Patients[0].Sros.Count);
             Assert.AreEqual("1.2.246.352.221.52738008096457865345287404867971417272", uploadBatch2.Patients[0].Sros[0].Uid);
+        }
+
+        [Ignore] // Skip since this takes a couple of minutes to run
+        [TestMethod]
+        public async Task UploadAsyncTest_MultipleCalls()
+        {
+            int testNumber = 7;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Read a DICOM file to use as a template
+            var templatePath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RD.dcm");
+            var dicomFile = DicomFile.Open(templatePath, FileReadOption.ReadAll);
+            var dicomDataset = dicomFile.Dataset;
+
+            // Create a temporary file to hold data for each upload
+            var tempPath = Path.GetTempFileName();
+
+            // Upload more than 200 unique DICOM objects (maximum batch size of upload results returned by ProKnow)
+            for (var i = 0; i < 205; i++)
+            {
+                dicomDataset.AddOrUpdate<string>(DicomTag.SOPInstanceUID, DicomUID.Generate().UID);
+                dicomFile.Save(tempPath);
+                await _proKnow.Uploads.UploadAsync(workspaceItem.Id, tempPath);
+            }
+
+            // Verify that all files were uploaded and processed, i.e., that query parameters were properly applied to page 
+            // through upload results returned by ProKnow
+            var patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id);
+            Assert.AreEqual(1, patientSummaries.Count);
+            var patientItem = await patientSummaries[0].GetAsync();
+            var entitySummaries = patientItem.FindEntities(t => true);
+            Assert.AreEqual(205, entitySummaries.Count);
+
+            // Delete temporary file
+            File.Delete(tempPath);
         }
     }
 }
