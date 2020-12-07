@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProKnow.Exceptions;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -150,12 +151,11 @@ namespace ProKnow.Upload
                 }));
             }
             await Task.WhenAll(tasks);
-            UploadBatch uploadBatch = null;
             if (doWait)
             {
-                uploadBatch = await ProcessUploadResults(workspaceId, initiateFileUploadResponses.ToArray());
+                return await ProcessUploadResults(workspaceId, initiateFileUploadResponses.ToArray());
             }
-            return uploadBatch;
+            return null;
         }
 
         /// <summary>
@@ -175,6 +175,11 @@ namespace ProKnow.Upload
             {
                 // Upload the file content
                 await UploadChunkAsync(initiateFileUploadResponse);
+            }
+            else
+            {
+                // Overwrite the filename in case of duplicate content (ProKnow returns the original filename rather than the one just uploaded)
+                initiateFileUploadResponse.Path = path;
             }
 
             return initiateFileUploadResponse;
@@ -256,62 +261,81 @@ namespace ProKnow.Upload
         private async Task<UploadBatch> ProcessUploadResults(string workspaceId,
             InitiateFileUploadResponse[] initiateUploadFileResponses)
         {
-            // Create the mapping of upload ID to status results
-            var uploadIdToStatusResultsMap = new Dictionary<string, UploadStatusResult>();
+            // Create the collection of status results that will be used to create returned upload batch
+            var batchUploadStatusResults = new List<UploadStatusResult>();
 
-            // Create the collection of unresolved upload IDs
-            var unresolvedUploadIds = new List<string>(initiateUploadFileResponses.Select(r => r.Id));
+            // Create the collection of unresolved uploads
+            var unresolvedUploads = initiateUploadFileResponses.ToList();
 
             Dictionary<string, object> queryParameters = null;
             var numberOfRetries = 0;
-            while (unresolvedUploadIds.Count > 0 && numberOfRetries < MAX_RETRIES)
+            while (unresolvedUploads.Count > 0 && numberOfRetries < MAX_RETRIES)
             {
                 // Query the current status of the uploads, filtering those whose status has changed since the previous query
                 var uploadStatusResultsJson = await _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/uploads/", null, queryParameters);
                 var uploadStatusResults = JsonSerializer.Deserialize<IList<UploadStatusResult>>(uploadStatusResultsJson);
 
+                // Create collection to hold resolved upload IDs
+                var resolvedUploadIds = new List<string>();
+
                 // Loop for each unresolved upload
-                var resolvedUploadsIds = new List<string>();
-                foreach (var unresolvedUploadId in unresolvedUploadIds)
+                foreach (var unresolvedUpload in unresolvedUploads)
                 {
-                    // Find corresponding upload status results
-                    var uploadStatusResult = uploadStatusResults.FirstOrDefault(x => x.Id == unresolvedUploadId);
+                    // Find corresponding upload status result
+                    var uploadStatusResult = uploadStatusResults.FirstOrDefault(x => x.Id == unresolvedUpload.Id);
 
                     // If this upload has reached terminal status
                     if (uploadStatusResult != null && _terminalStatuses.Contains(uploadStatusResult.Status))
                     {
-                        // Save the upload result
-                        uploadIdToStatusResultsMap[uploadStatusResult.Id] = uploadStatusResult;
+                        // Overwrite the filename in case of duplicate content (ProKnow returns the original filename rather than the one just uploaded)
+                        uploadStatusResult.Path = unresolvedUpload.Path;
 
-                        // Add it to the list of resolved uploads
-                        resolvedUploadsIds.Add(uploadStatusResult.Id);
+                        // Save the upload result
+                        batchUploadStatusResults.Add(uploadStatusResult);
+
+                        // Add the ID to the list of resolved upload IDs
+                        resolvedUploadIds.Add(uploadStatusResult.Id);
                     }
                 }
 
                 // Remove any uploads that reached terminal status from the collection of unresolved uploads
-                foreach (var resolvedUploadId in resolvedUploadsIds)
+                foreach (var resolvedUploadId in resolvedUploadIds)
                 {
-                    unresolvedUploadIds.Remove(resolvedUploadId);
+                    var index = unresolvedUploads.FindIndex(t => t.Id == resolvedUploadId);
+                    unresolvedUploads.RemoveAt(index);
                 }
 
-                // Update the query parameters to the latest upload to reach terminal status
-                if (uploadStatusResults.Count > 0)
+                // If there are still unresolved uploads
+                if (unresolvedUploads.Count > 0)
                 {
-                    if (queryParameters == null)
+                    // Get the last upload result to reach terminal status
+                    var lastTerminalUploadResult = uploadStatusResults.LastOrDefault(t => _terminalStatuses.Contains(t.Status));
+
+                    // If one was found
+                    if (lastTerminalUploadResult != null)
                     {
-                        queryParameters = new Dictionary<string, object>();
+                        // Update the query parameters to search for upload results after this one
+                        if (queryParameters == null)
+                        {
+                            queryParameters = new Dictionary<string, object>();
+                        }
+                        queryParameters["updated"] = lastTerminalUploadResult.UpdatedAt;
+                        queryParameters["after"] = lastTerminalUploadResult.Id;
                     }
-                    var lastUploadStatusResult = uploadStatusResults.Last();
-                    queryParameters["updated"] = lastUploadStatusResult.UpdatedAt;
-                    queryParameters["after"] = lastUploadStatusResult.Id;
-                }
 
-                // Give the updates some time to process
-                await Task.Delay(RETRY_DELAY);
-                numberOfRetries++;
+                    // Give the updates some time to process
+                    await Task.Delay(RETRY_DELAY);
+                    numberOfRetries++;
+                }
             }
 
-            return new UploadBatch(_proKnow, workspaceId, uploadIdToStatusResultsMap.Values.ToList());
+            // Verify there are no unresolved uploads
+            if (unresolvedUploads.Count > 0)
+            {
+                throw new ProKnowException($"Unable to resolve uploads for ${unresolvedUploads.Count} DICOM object.  Timed out after ${MAX_RETRIES} retries over ${MAX_TOTAL_RETRY_DELAY / 1000} sec.");
+            }
+
+            return new UploadBatch(_proKnow, workspaceId, batchUploadStatusResults);
         }
     }
 }

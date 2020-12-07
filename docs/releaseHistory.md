@@ -4,6 +4,15 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.0.29
+
+*Bug Fixes and Enhancements*
+
+- Fix error uploading duplicate objects
+- Improve upload performance
+- When uploading, don't return an UploadBatch unless waiting for processing to complete
+- Throw an exception if, even after retrying, there are still unresolved uploads
+
 ## v0.0.28
 
 *Bug Fixes*

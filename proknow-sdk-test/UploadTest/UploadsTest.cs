@@ -200,7 +200,7 @@ namespace ProKnow.Upload.Test
             Assert.AreEqual("1.2.246.352.221.52738008096457865345287404867971417272", uploadBatch2.Patients[0].Sros[0].Uid);
         }
 
-        [Ignore] // Skip since this takes a couple of minutes to run
+        [Ignore] // Skip since this takes a minute to run
         [TestMethod]
         public async Task UploadAsyncTest_MultipleCalls()
         {
@@ -235,6 +235,59 @@ namespace ProKnow.Upload.Test
 
             // Delete temporary file
             File.Delete(tempPath);
+        }
+
+        [TestMethod]
+        public async Task UploadAsyncTest_UploadBatch_DuplicateFiles()
+        {
+            int testNumber = 8;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Upload a file
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "DuplicateObjects", "RD.dcm");
+            var uploadBatch1 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
+
+            // Verify "completed" status
+            Assert.AreEqual(1, uploadBatch1.Patients.Count);
+            Assert.AreEqual(1, uploadBatch1.Patients[0].Entities.Count);
+            Assert.AreEqual("completed", uploadBatch1.GetStatus(uploadPath));
+
+            // Upload the first file again (same path)
+            var uploadBatch2 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
+
+            // Verify "completed" status, since the content wasn't uploaded again and the upload status of the previous upload (ID) was returned
+            Assert.AreEqual(1, uploadBatch2.Patients.Count);
+            Assert.AreEqual(1, uploadBatch2.Patients[0].Entities.Count);
+            Assert.AreEqual("completed", uploadBatch2.GetStatus(uploadPath));
+        }
+
+        [TestMethod]
+        public async Task UploadAsyncTest_UploadBatch_DuplicateObjects()
+        {
+            int testNumber = 9;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Upload a file
+            var uploadPath1 = Path.Combine(TestSettings.TestDataRootDirectory, "DuplicateObjects", "RD.dcm");
+            var uploadBatch1 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath1);
+
+            // Verify "completed" status
+            Assert.AreEqual(1, uploadBatch1.Patients.Count);
+            Assert.AreEqual(1, uploadBatch1.Patients[0].Entities.Count);
+            Assert.AreEqual("completed", uploadBatch1.GetStatus(uploadPath1));
+
+            // Upload another file (with a different path) that contains the same object
+            var uploadPath2 = Path.Combine(TestSettings.TestDataRootDirectory, "DuplicateObjects", "RD - Copy.dcm");
+            var uploadBatch2 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath2);
+
+            // Verify "completed" status, since the content wasn't uploaded again and the upload status of the previous upload (ID) was returned
+            Assert.AreEqual(1, uploadBatch2.Patients.Count);
+            Assert.AreEqual(1, uploadBatch2.Patients[0].Entities.Count);
+            Assert.AreEqual("completed", uploadBatch2.GetStatus(uploadPath2));
         }
     }
 }
