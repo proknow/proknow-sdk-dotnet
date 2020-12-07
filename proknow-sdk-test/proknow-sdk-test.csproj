@@ -53,6 +53,12 @@
     <None Update="TestData\dummy.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestData\DuplicateObjects\RD - Copy.dcm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DuplicateObjects\RD.dcm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestData\not_credentials.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
