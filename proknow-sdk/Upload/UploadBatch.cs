@@ -10,7 +10,7 @@ namespace ProKnow.Upload
     {
         private readonly ProKnowApi _proKnow;
         private readonly string _workspaceId;
-        private readonly Dictionary<string, UploadStatusResult> _fileLookup;
+        private readonly Dictionary<string, UploadProcessingResult> _fileLookup;
         private readonly Dictionary<string, UploadPatientSummary> _patientLookup;
         private readonly Dictionary<string, UploadEntitySummary> _entityLookup;
         private readonly Dictionary<string, UploadSroSummary> _sroLookup;
@@ -23,49 +23,49 @@ namespace ProKnow.Upload
         /// <summary>
         /// Creates a batch of resolved uploads
         /// </summary>
-        /// <param name="proKnow"></param>
-        /// <param name="workspaceId"></param>
-        /// <param name="uploadStatusResults"></param>
-        public UploadBatch(ProKnowApi proKnow, string workspaceId, IList<UploadStatusResult> uploadStatusResults)
+        /// <param name="proKnow">The root object for interfacing with the ProKnow API</param>
+        /// <param name="workspaceId">The ProKnow ID of the workspace</param>
+        /// <param name="uploadProcessingResults">The upload processing results</param>
+        public UploadBatch(ProKnowApi proKnow, string workspaceId, IList<UploadProcessingResult> uploadProcessingResults)
         {
             _proKnow = proKnow;
             _workspaceId = workspaceId;
-            _fileLookup = new Dictionary<string, UploadStatusResult>();
+            _fileLookup = new Dictionary<string, UploadProcessingResult>();
             _patientLookup = new Dictionary<string, UploadPatientSummary>();
             _entityLookup = new Dictionary<string, UploadEntitySummary>();
             _sroLookup = new Dictionary<string, UploadSroSummary>();
             Patients = new List<UploadPatientSummary>();
-            foreach (var uploadStatusResult in uploadStatusResults)
+            foreach (var uploadProcessingResult in uploadProcessingResults)
             {
-                _fileLookup[uploadStatusResult.Path] = uploadStatusResult;
-                if (uploadStatusResult.Status == "completed")
+                _fileLookup[uploadProcessingResult.Path] = uploadProcessingResult;
+                if (uploadProcessingResult.Status == "completed")
                 {
-                    var patientId = uploadStatusResult.Patient.Id;
+                    var patientId = uploadProcessingResult.Patient.Id;
                     if (!_patientLookup.ContainsKey(patientId))
                     {
-                        var uploadPatientSummary = new UploadPatientSummary(_proKnow.Patients, _workspaceId, uploadStatusResult.Patient);
+                        var uploadPatientSummary = new UploadPatientSummary(_proKnow.Patients, _workspaceId, uploadProcessingResult.Patient);
                         _patientLookup[patientId] = uploadPatientSummary;
                         Patients.Add(uploadPatientSummary);
                     }
 
-                    if (uploadStatusResult.Entity != null)
+                    if (uploadProcessingResult.Entity != null)
                     {
-                        var entityId = uploadStatusResult.Entity.Id;
+                        var entityId = uploadProcessingResult.Entity.Id;
                         if (!_entityLookup.ContainsKey(entityId))
                         {
-                            var uploadEntitySummary = new UploadEntitySummary(_proKnow.Patients, _workspaceId, patientId, uploadStatusResult.Entity);
+                            var uploadEntitySummary = new UploadEntitySummary(_proKnow.Patients, _workspaceId, patientId, uploadProcessingResult.Entity);
                             _entityLookup[entityId] = uploadEntitySummary;
                             _patientLookup[patientId].Entities.Add(uploadEntitySummary);
                         }
                     }
 
-                    if (uploadStatusResult.Sro != null)
+                    if (uploadProcessingResult.Sro != null)
                     {
-                        var sroId = uploadStatusResult.Sro.Id;
+                        var sroId = uploadProcessingResult.Sro.Id;
                         if (!_sroLookup.ContainsKey(sroId))
                         {
-                            var studyId = uploadStatusResult.Study.Id;
-                            var uploadSroSummary = new UploadSroSummary(_proKnow, _workspaceId, patientId, studyId, uploadStatusResult.Sro);
+                            var studyId = uploadProcessingResult.Study.Id;
+                            var uploadSroSummary = new UploadSroSummary(_proKnow, _workspaceId, patientId, studyId, uploadProcessingResult.Sro);
                             _sroLookup[sroId] = uploadSroSummary;
                             _patientLookup[patientId].Sros.Add(uploadSroSummary);
                         }

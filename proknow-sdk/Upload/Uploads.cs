@@ -261,8 +261,8 @@ namespace ProKnow.Upload
         private async Task<UploadBatch> ProcessUploadResults(string workspaceId,
             InitiateFileUploadResponse[] initiateUploadFileResponses)
         {
-            // Create the collection of status results that will be used to create returned upload batch
-            var batchUploadStatusResults = new List<UploadStatusResult>();
+            // Create the collection of upload processing results that will be used to create the returned upload batch
+            var batchUploadProcessingResults = new List<UploadProcessingResult>();
 
             // Create the collection of unresolved uploads
             var unresolvedUploads = initiateUploadFileResponses.ToList();
@@ -271,9 +271,9 @@ namespace ProKnow.Upload
             var numberOfRetries = 0;
             while (unresolvedUploads.Count > 0 && numberOfRetries < MAX_RETRIES)
             {
-                // Query the current status of the uploads, filtering those whose status has changed since the previous query
-                var uploadStatusResultsJson = await _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/uploads/", null, queryParameters);
-                var uploadStatusResults = JsonSerializer.Deserialize<IList<UploadStatusResult>>(uploadStatusResultsJson);
+                // Query the current processed uploads, filtering those whose status has changed since the previous query
+                var uploadProcessingResultsJson = await _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/uploads/", null, queryParameters);
+                var uploadProcessingResults = JsonSerializer.Deserialize<IList<UploadProcessingResult>>(uploadProcessingResultsJson);
 
                 // Create collection to hold resolved upload IDs
                 var resolvedUploadIds = new List<string>();
@@ -281,20 +281,20 @@ namespace ProKnow.Upload
                 // Loop for each unresolved upload
                 foreach (var unresolvedUpload in unresolvedUploads)
                 {
-                    // Find corresponding upload status result
-                    var uploadStatusResult = uploadStatusResults.FirstOrDefault(x => x.Id == unresolvedUpload.Id);
+                    // Find corresponding upload processing result
+                    var uploadProcessingResult = uploadProcessingResults.FirstOrDefault(x => x.Id == unresolvedUpload.Id);
 
                     // If this upload has reached terminal status
-                    if (uploadStatusResult != null && _terminalStatuses.Contains(uploadStatusResult.Status))
+                    if (uploadProcessingResult != null && _terminalStatuses.Contains(uploadProcessingResult.Status))
                     {
                         // Overwrite the filename in case of duplicate content (ProKnow returns the original filename rather than the one just uploaded)
-                        uploadStatusResult.Path = unresolvedUpload.Path;
+                        uploadProcessingResult.Path = unresolvedUpload.Path;
 
-                        // Save the upload result
-                        batchUploadStatusResults.Add(uploadStatusResult);
+                        // Save the upload processing result
+                        batchUploadProcessingResults.Add(uploadProcessingResult);
 
                         // Add the ID to the list of resolved upload IDs
-                        resolvedUploadIds.Add(uploadStatusResult.Id);
+                        resolvedUploadIds.Add(uploadProcessingResult.Id);
                     }
                 }
 
@@ -308,22 +308,22 @@ namespace ProKnow.Upload
                 // If there are still unresolved uploads
                 if (unresolvedUploads.Count > 0)
                 {
-                    // Get the last upload result to reach terminal status
-                    var lastTerminalUploadResult = uploadStatusResults.LastOrDefault(t => _terminalStatuses.Contains(t.Status));
+                    // Get the last upload processing result to reach terminal status
+                    var lastTerminalUploadProcessingResult = uploadProcessingResults.LastOrDefault(t => _terminalStatuses.Contains(t.Status));
 
                     // If one was found
-                    if (lastTerminalUploadResult != null)
+                    if (lastTerminalUploadProcessingResult != null)
                     {
-                        // Update the query parameters to search for upload results after this one
+                        // Update the query parameters to search for upload processing results after this one
                         if (queryParameters == null)
                         {
                             queryParameters = new Dictionary<string, object>();
                         }
-                        queryParameters["updated"] = lastTerminalUploadResult.UpdatedAt;
-                        queryParameters["after"] = lastTerminalUploadResult.Id;
+                        queryParameters["updated"] = lastTerminalUploadProcessingResult.UpdatedAt;
+                        queryParameters["after"] = lastTerminalUploadProcessingResult.Id;
                     }
 
-                    // Give the updates some time to process
+                    // Give the uploads some time to process
                     await Task.Delay(RETRY_DELAY);
                     numberOfRetries++;
                 }
@@ -332,10 +332,10 @@ namespace ProKnow.Upload
             // Verify there are no unresolved uploads
             if (unresolvedUploads.Count > 0)
             {
-                throw new ProKnowException($"Unable to resolve uploads for ${unresolvedUploads.Count} DICOM object.  Timed out after ${MAX_RETRIES} retries over ${MAX_TOTAL_RETRY_DELAY / 1000} sec.");
+                throw new ProKnowException($"ProKnow processing of ${unresolvedUploads.Count} DICOM objects has not completed.  Timed out after ${MAX_RETRIES} retries over ${MAX_TOTAL_RETRY_DELAY / 1000} sec.");
             }
 
-            return new UploadBatch(_proKnow, workspaceId, batchUploadStatusResults);
+            return new UploadBatch(_proKnow, workspaceId, batchUploadProcessingResults);
         }
     }
 }

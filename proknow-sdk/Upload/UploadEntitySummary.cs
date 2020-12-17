@@ -59,17 +59,17 @@ namespace ProKnow.Upload
         /// <param name="patients">Interacts with patients in a ProKnow organization</param>
         /// <param name="workspaceId">The workspace ID</param>
         /// <param name="patientId">The patient ID</param>
-        /// <param name="uploadStatusResult">The upload status result</param>
-        internal UploadEntitySummary(Patients patients, string workspaceId, string patientId, UploadStatusResultEntity uploadStatusResult)
+        /// <param name="uploadProcessingResultEntity">The entity data of an upload processing result</param>
+        internal UploadEntitySummary(Patients patients, string workspaceId, string patientId, UploadProcessingResultEntity uploadProcessingResultEntity)
         {
             _patients = patients;
             WorkspaceId = workspaceId;
             PatientId = patientId;
-            Id = uploadStatusResult.Id;
-            Uid = uploadStatusResult.Uid;
-            Type = uploadStatusResult.Type;
-            Modality = uploadStatusResult.Modality;
-            Description = uploadStatusResult.Description;
+            Id = uploadProcessingResultEntity.Id;
+            Uid = uploadProcessingResultEntity.Uid;
+            Type = uploadProcessingResultEntity.Type;
+            Modality = uploadProcessingResultEntity.Modality;
+            Description = uploadProcessingResultEntity.Description;
         }
 
         /// <summary>

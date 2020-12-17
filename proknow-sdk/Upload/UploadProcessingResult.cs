@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 namespace ProKnow.Upload
 {
     /// <summary>
-    /// An element in the response from an upload status query
+    /// An element in the response from an upload processing query
     /// </summary>
-    public class UploadStatusResult
+    public class UploadProcessingResult
     {
         /// <summary>
         /// The ProKnow ID for the upload
@@ -27,7 +27,7 @@ namespace ProKnow.Upload
         public long Filesize { get; set; }
 
         /// <summary>
-        /// The upload status
+        /// The processing status ("completed", "pending", "failed")
         /// </summary>
         [JsonPropertyName("status")]
         public string Status { get; set; }
@@ -42,25 +42,25 @@ namespace ProKnow.Upload
         /// The patient information
         /// </summary>
         [JsonPropertyName("patient")]
-        public UploadStatusResultPatient Patient { get; set; }
+        public UploadProcessingResultPatient Patient { get; set; }
 
         /// <summary>
         /// The study information
         /// </summary>
         [JsonPropertyName("study")]
-        public UploadStatusResultStudy Study { get; set; }
+        public UploadProcessingResultStudy Study { get; set; }
 
         /// <summary>
         /// The entity information
         /// </summary>
         [JsonPropertyName("entity")]
-        public UploadStatusResultEntity Entity { get; set; }
+        public UploadProcessingResultEntity Entity { get; set; }
 
         /// <summary>
         /// The SRO information
         /// </summary>
         [JsonPropertyName("sro")]
-        public UploadStatusResultSro Sro { get; set; }
+        public UploadProcessingResultSro Sro { get; set; }
 
         /// <summary>
         /// Properties encountered during deserialization without matching members

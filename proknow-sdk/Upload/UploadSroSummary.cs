@@ -55,7 +55,7 @@ namespace ProKnow.Upload
         /// <param name="studyId">The study ProKnow ID</param>
         /// <param name="uploadStatusResult">The upload status result</param>
         internal UploadSroSummary(ProKnowApi proKnow, string workspaceId, string patientId, string studyId,
-            UploadStatusResultSro uploadStatusResult)
+            UploadProcessingResultSro uploadStatusResult)
         {
             _proKnow = proKnow;
             WorkspaceId = workspaceId;
