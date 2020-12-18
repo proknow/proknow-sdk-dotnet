@@ -199,7 +199,8 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             {
                 Patient = new PatientCreateSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
             };
-            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, actualDownloadPath, overrides);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, actualDownloadPath, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Get the uploaded structure set
             var patientSummary2 = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Mrn == $"{patientItem.Mrn}2");
@@ -250,7 +251,8 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             {
                 Patient = new PatientCreateSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
             };
-            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, actualDownloadPath, overrides);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, actualDownloadPath, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Get the uploaded structure set
             var patientSummary2 = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Mrn == $"{patientItem.Mrn}2");
@@ -299,7 +301,8 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             {
                 Patient = new PatientCreateSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
             };
-            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, actualDownloadPath, overrides);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, actualDownloadPath, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Get the uploaded structure set
             var patientSummary2 = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Mrn == $"{patientItem.Mrn}2");
@@ -348,7 +351,8 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             {
                 Patient = new PatientCreateSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
             };
-            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, actualDownloadPath, overrides);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, actualDownloadPath, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Get the uploaded structure set
             var patientSummary2 = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Mrn == $"{patientItem.Mrn}2");

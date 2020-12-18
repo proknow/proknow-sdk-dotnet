@@ -71,7 +71,9 @@ namespace ProKnow.Test
                 {
                     Patient = new PatientCreateSchema { Mrn = mrn, Name = name }
                 };
-                var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
+                var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
+                var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+                var uploadBatch = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults);
                 var uploadedEntityIds = uploadBatch.Patients.SelectMany(p => p.Entities.Select(e => e.Id));
                 var uploadedSroIds = uploadBatch.Patients.SelectMany(p => p.Sros.Select(s => s.Id));
 

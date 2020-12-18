@@ -42,7 +42,9 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Mrn = $"{testNumber}-Mrn", Name = $"{testNumber}-Name" }
             };
-            var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
+            var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+            var uploadBatch = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults);
 
             // Get the summary views of the patient, entities, and SRO in the upload response
             var uploadPatientSummary = uploadBatch.FindPatient(Path.Combine(uploadPath, "reg.dcm"));

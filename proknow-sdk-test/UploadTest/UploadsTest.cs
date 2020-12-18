@@ -49,7 +49,8 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            await _proKnow.Uploads.UploadAsync(workspaceItem.Name, uploadPath, overrides);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify file was uploaded
             await patientItem.RefreshAsync();
@@ -75,7 +76,8 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify files were uploaded
             await patientItem.RefreshAsync();
@@ -102,7 +104,8 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify files were uploaded
             await patientItem.RefreshAsync();
@@ -131,7 +134,8 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPaths, overrides);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPaths, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify test folder and test file were uploaded
             await patientItem.RefreshAsync();
@@ -161,7 +165,8 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPaths, overrides);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPaths, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify test folder and test file were uploaded
             await patientItem.RefreshAsync();
@@ -182,11 +187,14 @@ namespace ProKnow.Upload.Test
 
             // Upload first test folder
             var uploadPath1 = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew");
-            await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath1);
+            var uploadResults1 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath1);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults1);
 
             // Upload second test folder
             var uploadPath2 = Path.Combine(TestSettings.TestDataRootDirectory, "Sro");
-            var uploadBatch2 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath2);
+            var uploadResults2 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath2);
+            var uploadProcessingResults2 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults2);
+            var uploadBatch2 = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults2);
 
             // Verify the returned upload batch for the second test folder
             Assert.AreEqual(1, uploadBatch2.Patients.Count);
@@ -214,15 +222,15 @@ namespace ProKnow.Upload.Test
             var dicomFile = DicomFile.Open(templatePath, FileReadOption.ReadAll);
             var dicomDataset = dicomFile.Dataset;
 
-            // Create a temporary file to hold data for each upload
-            var tempPath = Path.GetTempFileName();
-
             // Upload more than 200 unique DICOM objects (maximum batch size of upload results returned by ProKnow)
             for (var i = 0; i < 205; i++)
             {
                 dicomDataset.AddOrUpdate<string>(DicomTag.SOPInstanceUID, DicomUID.Generate().UID);
+                var tempPath = Path.GetTempFileName();
                 dicomFile.Save(tempPath);
-                await _proKnow.Uploads.UploadAsync(workspaceItem.Id, tempPath);
+                var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, tempPath);
+                await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+                File.Delete(tempPath);
             }
 
             // Verify that all files were uploaded and processed, i.e., that query parameters were properly applied to page 
@@ -232,9 +240,6 @@ namespace ProKnow.Upload.Test
             var patientItem = await patientSummaries[0].GetAsync();
             var entitySummaries = patientItem.FindEntities(t => true);
             Assert.AreEqual(205, entitySummaries.Count);
-
-            // Delete temporary file
-            File.Delete(tempPath);
         }
 
         [TestMethod]
@@ -247,7 +252,9 @@ namespace ProKnow.Upload.Test
 
             // Upload a file
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "DuplicateObjects", "RD.dcm");
-            var uploadBatch1 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
+            var uploadResults1 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
+            var uploadProcessingResults1 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults1);
+            var uploadBatch1 = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults1);
 
             // Verify "completed" status
             Assert.AreEqual(1, uploadBatch1.Patients.Count);
@@ -255,7 +262,9 @@ namespace ProKnow.Upload.Test
             Assert.AreEqual("completed", uploadBatch1.GetStatus(uploadPath));
 
             // Upload the first file again (same path)
-            var uploadBatch2 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
+            var uploadResults2 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
+            var uploadProcessingResults2 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults2);
+            var uploadBatch2 = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults2);
 
             // Verify "completed" status, since the content wasn't uploaded again and the upload status of the previous upload (ID) was returned
             Assert.AreEqual(1, uploadBatch2.Patients.Count);
@@ -273,7 +282,9 @@ namespace ProKnow.Upload.Test
 
             // Upload a file
             var uploadPath1 = Path.Combine(TestSettings.TestDataRootDirectory, "DuplicateObjects", "RD.dcm");
-            var uploadBatch1 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath1);
+            var uploadResults1 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath1);
+            var uploadProcessingResults1 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults1);
+            var uploadBatch1 = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults1);
 
             // Verify "completed" status
             Assert.AreEqual(1, uploadBatch1.Patients.Count);
@@ -282,7 +293,9 @@ namespace ProKnow.Upload.Test
 
             // Upload another file (with a different path) that contains the same object
             var uploadPath2 = Path.Combine(TestSettings.TestDataRootDirectory, "DuplicateObjects", "RD - Copy.dcm");
-            var uploadBatch2 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath2);
+            var uploadResults2 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath2);
+            var uploadProcessingResults2 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults2);
+            var uploadBatch2 = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults2);
 
             // Verify "completed" status, since the content wasn't uploaded again and the upload status of the previous upload (ID) was returned
             Assert.AreEqual(1, uploadBatch2.Patients.Count);

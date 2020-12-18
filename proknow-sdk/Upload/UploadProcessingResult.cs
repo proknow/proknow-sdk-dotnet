@@ -27,7 +27,10 @@ namespace ProKnow.Upload
         public long Filesize { get; set; }
 
         /// <summary>
-        /// The processing status ("completed", "pending", "failed")
+        /// The processing status:
+        /// "completed":  This object successfully completed processing
+        /// "pending":  This object needs attention due to a conflict
+        /// "failed":  This object failed to process
         /// </summary>
         [JsonPropertyName("status")]
         public string Status { get; set; }

@@ -163,7 +163,8 @@ namespace ProKnow.Patient.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Refresh the patient and verify that it now includes the structure set
             await patientItem.RefreshAsync();
@@ -264,7 +265,7 @@ namespace ProKnow.Patient.Test
             int testNumber = 9;
 
             // Create a workspace
-            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient without data
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
@@ -275,7 +276,8 @@ namespace ProKnow.Patient.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            await patientItem.UploadAsync(uploadPath, overrides);
+            var uploadResults = await patientItem.UploadAsync(uploadPath, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify test file was uploaded
             await patientItem.RefreshAsync();
@@ -289,7 +291,7 @@ namespace ProKnow.Patient.Test
             int testNumber = 10;
 
             // Create a workspace
-            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient without data
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
@@ -300,7 +302,8 @@ namespace ProKnow.Patient.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            await patientItem.UploadAsync(uploadPath, overrides);
+            var uploadResults = await patientItem.UploadAsync(uploadPath, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify test folder was uploaded
             await patientItem.RefreshAsync();
@@ -316,7 +319,7 @@ namespace ProKnow.Patient.Test
             int testNumber = 11;
 
             // Create a workspace
-            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient without data
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
@@ -329,7 +332,8 @@ namespace ProKnow.Patient.Test
             {
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
-            await patientItem.UploadAsync(uploadPaths, overrides);
+            var uploadResults = await patientItem.UploadAsync(uploadPaths, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify test folder and test file were uploaded
             await patientItem.RefreshAsync();

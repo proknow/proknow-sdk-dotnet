@@ -26,6 +26,19 @@ namespace ProKnow.Upload
         /// <param name="proKnow">The root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The ProKnow ID of the workspace</param>
         /// <param name="uploadProcessingResults">The upload processing results</param>
+        /// <example>This example shows how to create an upload batch:
+        /// <code>
+        /// using ProKnow;
+        /// using System.IO;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
+        /// var workspaceItem = await pk.Workspaces.ResolveByNameAsync("Upload Test");
+        /// var uploadResults = await pk.Uploads.UploadAsync(workspaceItem, "./DICOM");
+        /// var uploadProcessingResults = await pk.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+        /// var uploadBatch = new UploadBatch(pk, workspaceItem.Id, uploadProcessingResults);
+        /// </code>
+        /// </example>
         public UploadBatch(ProKnowApi proKnow, string workspaceId, IList<UploadProcessingResult> uploadProcessingResults)
         {
             _proKnow = proKnow;
@@ -86,7 +99,10 @@ namespace ProKnow.Upload
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
-        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
+        /// var workspaceItem = await pk.Workspaces.ResolveByNameAsync("Upload Test");
+        /// var uploadResults = await pk.Uploads.UploadAsync(workspaceItem, "./DICOM");
+        /// var uploadProcessingResults = await pk.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+        /// var uploadBatch = new UploadBatch(pk, workspaceItem.Id, uploadProcessingResults);
         /// var path = Path.GetFullPath(Path.Join("./DICOM", "plan.dcm"));
         /// var uploadPatientSummary = uploadBatch.FindPatient(path);
         /// </code>
@@ -117,7 +133,10 @@ namespace ProKnow.Upload
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
-        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
+        /// var workspaceItem = await pk.Workspaces.ResolveByNameAsync("Upload Test");
+        /// var uploadResults = await pk.Uploads.UploadAsync(workspaceItem, "./DICOM");
+        /// var uploadProcessingResults = await pk.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+        /// var uploadBatch = new UploadBatch(pk, workspaceItem.Id, uploadProcessingResults);
         /// var path = Path.GetFullPath(Path.Join("./DICOM", "plan.dcm"));
         /// var uploadEntitySummary = uploadBatch.FindEntity(path);
         /// </code>
@@ -151,9 +170,12 @@ namespace ProKnow.Upload
         /// using System.IO;
         /// using System.Threading.Tasks;
         ///
-        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
-        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
-        /// var path = Path.GetFullPath(Path.Join("DICOM", "reg.dcm"));
+        /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
+        /// var workspaceItem = await pk.Workspaces.ResolveByNameAsync("Upload Test");
+        /// var uploadResults = await pk.Uploads.UploadAsync(workspaceItem, "./DICOM");
+        /// var uploadProcessingResults = await pk.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+        /// var uploadBatch = new UploadBatch(pk, workspaceItem.Id, uploadProcessingResults);
+        /// var path = Path.GetFullPath(Path.Join("./DICOM", "reg.dcm"));
         /// var uploadSroSummary = uploadBatch.FindSro(path);
         /// </code>
         /// </example>
@@ -176,20 +198,23 @@ namespace ProKnow.Upload
         }
 
         /// <summary>
-        /// Get the status for a provided path
+        /// Get the processing status for a provided path
         /// </summary>
         /// <param name="path">The full path to the file</param>
-        /// <returns>"completed" if the upload and processing was successful, "pending" if the upload was successful
-        /// but conflicts occurred, or "failed" if the upload was not successful. </returns>
-        /// <example>This example shows how to find the status of a given file upload:
+        /// <returns>"completed" if the upload processing was successful, "pending" if the upload was successful
+        /// but conflicts occurred during processing and it needs attention, or "failed" if the upload could not be processed. </returns>
+        /// <example>This example shows how to get the processing status for a given file upload:
         /// <code>
         /// using ProKnow;
         /// using System.IO;
         /// using System.Threading.Tasks;
         ///
-        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
-        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
-        /// var path = Path.GetFullPath(Path.Join("DICOM", "reg.dcm"));
+        /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
+        /// var workspaceItem = await pk.Workspaces.ResolveByNameAsync("Upload Test");
+        /// var uploadResults = await pk.Uploads.UploadAsync(workspaceItem, "./DICOM");
+        /// var uploadProcessingResults = await pk.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+        /// var uploadBatch = new UploadBatch(pk, workspaceItem.Id, uploadProcessingResults);
+        /// var path = Path.GetFullPath(Path.Join("./DICOM", "reg.dcm"));
         /// var status = uploadBatch.GetStatus(path);
         /// </code>
         /// </example>

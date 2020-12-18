@@ -46,7 +46,9 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Mrn = $"{testNumber}-Mrn", Name = $"{testNumber}-Name" }
             };
-            var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPaths, overrides);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPaths, overrides);
+            var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+            var uploadBatch = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults);
 
             // Get the summary view of the patient in the upload response
             var uploadPatientSummary = uploadBatch.FindPatient(mrUploadPath);
@@ -92,7 +94,9 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Mrn = $"{testNumber}-Mrn", Name = $"{testNumber}-Name" }
             };
-            var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
+            var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+            var uploadBatch = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults);
 
             // Get the summary views of the patient and an entity in the upload response
             var uploadPatientSummary = uploadBatch.FindPatient(uploadPath);
@@ -122,7 +126,9 @@ namespace ProKnow.Upload.Test
             {
                 Patient = new PatientCreateSchema { Mrn = $"{testNumber}-Mrn", Name = $"{testNumber}-Name" }
             };
-            var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
+            var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+            var uploadBatch = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults);
 
             // Get the summary views of the patient and the SRO in the upload response
             var uploadPatientSummary = uploadBatch.FindPatient(uploadPath);
@@ -146,7 +152,9 @@ namespace ProKnow.Upload.Test
 
             // Upload test data
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm");
-            var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
+            var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+            var uploadBatch = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults);
 
             // Verify the status
             Assert.AreEqual("completed", uploadBatch.GetStatus(uploadPath));
@@ -162,7 +170,9 @@ namespace ProKnow.Upload.Test
 
             // In one upload, upload test data that has the same Patient ID, but different Patient's Name
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "PatientNameConflict");
-            var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
+            var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+            var uploadBatch = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults);
 
             // Verify that one of the two files shows a status of "pending" (conflict)
             var uploadPath1 = Path.Combine(TestSettings.TestDataRootDirectory, "PatientNameConflict", "CT.1.dcm");
@@ -180,12 +190,15 @@ namespace ProKnow.Upload.Test
 
             // In two uploads, upload test data that has the same Patient ID, but different Patient's Name
             var uploadPath1 = Path.Combine(TestSettings.TestDataRootDirectory, "PatientNameConflict", "CT.1.dcm");
-            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath1);
+            var uploadResults1 = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath1);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults1);
             var uploadPath2 = Path.Combine(TestSettings.TestDataRootDirectory, "PatientNameConflict", "CT.2.dcm");
-            var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath2);
+            var uploadResults2 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath2);
+            var uploadProcessingResults2 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults2);
+            var uploadBatch2 = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults2);
 
             // Verify that the second file shows a status of "pending" (conflict)
-            Assert.IsTrue(uploadBatch.GetStatus(uploadPath2) == "pending");
+            Assert.IsTrue(uploadBatch2.GetStatus(uploadPath2) == "pending");
         }
 
         [TestMethod]
@@ -198,7 +211,9 @@ namespace ProKnow.Upload.Test
 
             // Upload test data
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "RtImage", "RTIMAGE.dcm");
-            var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath);
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
+            var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+            var uploadBatch = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults);
 
             // Verify the status
             Assert.AreEqual("failed", uploadBatch.GetStatus(uploadPath));
@@ -214,13 +229,16 @@ namespace ProKnow.Upload.Test
 
             // Upload test data
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm");
-            await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath);
+            var uploadResults1 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults1);
 
             // Upload the same data again
-            var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath);
+            var uploadResults2 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
+            var uploadProcessingResults2 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults2);
+            var uploadBatch2 = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults2);
 
             // Verify the status is still "completed"
-            Assert.AreEqual("completed", uploadBatch.GetStatus(uploadPath));
+            Assert.AreEqual("completed", uploadBatch2.GetStatus(uploadPath));
         }
     }
 }

@@ -69,7 +69,7 @@ namespace ProKnow.Patient
         /// <param name="path">The folder or file path</param>
         /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
         /// <returns>The upload results</returns>
-        public Task<UploadBatch> UploadAsync(string path, UploadFileOverrides overrides = null)
+        public Task<IList<UploadResult>> UploadAsync(string path, UploadFileOverrides overrides = null)
         {
             return _proKnow.Uploads.UploadAsync(WorkspaceId, path, overrides);
         }
@@ -80,7 +80,7 @@ namespace ProKnow.Patient
         /// <param name="paths">The folder and/or file paths</param>
         /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
         /// <returns>The upload results</returns>
-        public Task<UploadBatch> UploadAsync(IList<string> paths, UploadFileOverrides overrides = null)
+        public Task<IList<UploadResult>> UploadAsync(IList<string> paths, UploadFileOverrides overrides = null)
         {
             return _proKnow.Uploads.UploadAsync(WorkspaceId, paths, overrides);
         }
