@@ -20,9 +20,9 @@ namespace ProKnow.Upload
     {
         private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(4);
 
-        private const int RETRY_DELAY = 200;
-        private const int MAX_TOTAL_RETRY_DELAY = 30000;
-        private const int MAX_RETRIES = MAX_TOTAL_RETRY_DELAY / RETRY_DELAY;
+        // 10 retry delays of 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200, 102400 msec
+        private const int INITIAL_RETRY_DELAY = 200;
+        private const int MAX_TOTAL_RETRY_DELAY = 102400;
 
         private readonly ProKnowApi _proKnow;
         private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
@@ -92,8 +92,9 @@ namespace ProKnow.Upload
             var unresolvedUploadIds = uploadResults.Select(t => t.Id);
 
             Dictionary<string, object> queryParameters = null;
-            var numberOfRetries = 0;
-            while (unresolvedUploadResults.Count > 0 && numberOfRetries < MAX_RETRIES)
+            var totalRetryDelay = 0;
+            var nextRetryDelay = INITIAL_RETRY_DELAY;
+            while (unresolvedUploadResults.Count > 0 && totalRetryDelay < MAX_TOTAL_RETRY_DELAY)
             {
                 // Query the processed uploads, filtering those whose status has changed since the previous query
                 var responseJson = await _proKnow.Requestor.GetAsync($"/workspaces/{workspace.Id}/uploads/", null, queryParameters);
@@ -147,16 +148,17 @@ namespace ProKnow.Upload
                         queryParameters["after"] = lastTerminalUploadProcessingResult.Id;
                     }
 
-                    // Give the uploads some time to process
-                    await Task.Delay(RETRY_DELAY);
-                    numberOfRetries++;
+                    // Give the uploads some time to process with each retry waiting twice as long as the previous retry
+                    await Task.Delay(nextRetryDelay);
+                    totalRetryDelay += nextRetryDelay;
+                    nextRetryDelay *= 2;
                 }
             }
 
             // Verify there are no unresolved uploads
             if (unresolvedUploadResults.Count > 0)
             {
-                throw new ProKnowException($"ProKnow processing of ${unresolvedUploadResults.Count} DICOM objects has not completed.  Timed out after ${MAX_RETRIES} retries over ${MAX_TOTAL_RETRY_DELAY / 1000} sec.");
+                throw new ProKnowException($"ProKnow processing of ${unresolvedUploadResults.Count} DICOM objects has not completed.  Timed out after {totalRetryDelay / 1000} sec.");
             }
 
             return thisUploadProcessingResults;

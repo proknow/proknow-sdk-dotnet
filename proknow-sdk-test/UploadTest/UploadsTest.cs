@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Patient;
 using ProKnow.Patient.Entities;
 using ProKnow.Test;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -50,6 +51,8 @@ namespace ProKnow.Upload.Test
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
+
+            // Wait for processing
             await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify file was uploaded
@@ -77,6 +80,8 @@ namespace ProKnow.Upload.Test
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
+
+            // Wait for processing
             await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify files were uploaded
@@ -105,6 +110,8 @@ namespace ProKnow.Upload.Test
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
+
+            // Wait for processing
             await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify files were uploaded
@@ -135,6 +142,8 @@ namespace ProKnow.Upload.Test
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPaths, overrides);
+
+            // Wait for processing
             await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify test folder and test file were uploaded
@@ -166,6 +175,8 @@ namespace ProKnow.Upload.Test
                 Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPaths, overrides);
+
+            // Wait for processing
             await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify test folder and test file were uploaded
@@ -178,9 +189,86 @@ namespace ProKnow.Upload.Test
         }
 
         [TestMethod]
-        public async Task UploadAsyncTest_UploadBatch()
+        public async Task UploadAsyncTest_ReturnedResults()
         {
             int testNumber = 6;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Upload test folder
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro");
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
+
+            // Verify the returned upload results
+            Assert.AreEqual(3, uploadResults.Count);
+            var reg = uploadResults.First(t => t.Path == Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm"));
+            var ct = uploadResults.First(t => t.Path == Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "ct.dcm"));
+            var mr = uploadResults.First(t => t.Path == Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "mr.dcm"));
+            Assert.AreEqual("uploading", reg.Status);
+            Assert.AreEqual("uploading", ct.Status);
+            Assert.AreEqual("uploading", mr.Status);
+        }
+
+        [TestMethod]
+        public async Task GetUploadProcessingResultsAsyncTest()
+        {
+            int testNumber = 7;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Upload test folder and get upload results
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro");
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
+            var regUploadResult = uploadResults.First(t => t.Path == Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm"));
+            var ctUploadResult = uploadResults.First(t => t.Path == Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "ct.dcm"));
+            var mrUploadResult = uploadResults.First(t => t.Path == Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "mr.dcm"));
+
+            // Wait for processing and get upload processing results
+            var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+
+            // Verify the returned upload processing results
+            Assert.AreEqual(3, uploadProcessingResults.Count);
+
+            var regProcessingResult = uploadProcessingResults.First(t => t.Id == regUploadResult.Id);
+            Assert.AreEqual(regUploadResult.Path, regProcessingResult.Path);
+            Assert.AreEqual("completed", regProcessingResult.Status);
+            Assert.AreEqual("0stCQd22vqX3RkoxNM0s332kJ", regProcessingResult.Patient.Mrn);
+            Assert.AreEqual("CTMRregforPROknow", regProcessingResult.Patient.Name);
+            Assert.AreEqual("1.2.246.352.221.533224884342370113612258208604561177759", regProcessingResult.Study.Uid);
+            Assert.IsTrue(String.IsNullOrEmpty(regProcessingResult.Study.Name));
+            Assert.AreEqual("1.2.246.352.221.52738008096457865345287404867971417272", regProcessingResult.Sro.Uid);
+
+            var ctProcessingResult = uploadProcessingResults.First(t => t.Id == ctUploadResult.Id);
+            Assert.AreEqual(ctUploadResult.Path, ctProcessingResult.Path);
+            Assert.AreEqual("completed", ctProcessingResult.Status);
+            Assert.AreEqual("0stCQd22vqX3RkoxNM0s332kJ", ctProcessingResult.Patient.Mrn);
+            Assert.AreEqual("CTMRregforPROknow", ctProcessingResult.Patient.Name);
+            Assert.AreEqual("1.2.246.352.221.533224884342370113612258208604561177759", ctProcessingResult.Study.Uid);
+            Assert.IsTrue(String.IsNullOrEmpty(ctProcessingResult.Study.Name));
+            Assert.AreEqual("1.2.246.352.221.563569281719761951014104635106765053066", ctProcessingResult.Entity.Uid);
+            Assert.AreEqual("image_set", ctProcessingResult.Entity.Type);
+            Assert.AreEqual("CT", ctProcessingResult.Entity.Modality);
+            Assert.IsTrue(String.IsNullOrEmpty(ctProcessingResult.Entity.Description));
+
+            var mrProcessingResult = uploadProcessingResults.First(t => t.Id == mrUploadResult.Id);
+            Assert.AreEqual(mrUploadResult.Path, mrProcessingResult.Path);
+            Assert.AreEqual("completed", mrProcessingResult.Status);
+            Assert.AreEqual("0stCQd22vqX3RkoxNM0s332kJ", mrProcessingResult.Patient.Mrn);
+            Assert.AreEqual("CTMRregforPROknow", mrProcessingResult.Patient.Name);
+            Assert.AreEqual("1.2.246.352.221.4769506379372726428577641853787688121", mrProcessingResult.Study.Uid);
+            Assert.IsTrue(String.IsNullOrEmpty(mrProcessingResult.Study.Name));
+            Assert.AreEqual("1.2.246.352.221.470938394496317011513892701464452657827", mrProcessingResult.Entity.Uid);
+            Assert.AreEqual("image_set", mrProcessingResult.Entity.Type);
+            Assert.AreEqual("MR", mrProcessingResult.Entity.Modality);
+            Assert.IsTrue(String.IsNullOrEmpty(mrProcessingResult.Entity.Description));
+        }
+
+        [TestMethod]
+        public async Task GetUploadProcessingResultsAsyncTest_MultipleUploads()
+        {
+            int testNumber = 8;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -188,31 +276,25 @@ namespace ProKnow.Upload.Test
             // Upload first test folder
             var uploadPath1 = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew");
             var uploadResults1 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath1);
-            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults1);
 
             // Upload second test folder
             var uploadPath2 = Path.Combine(TestSettings.TestDataRootDirectory, "Sro");
             var uploadResults2 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath2);
-            var uploadProcessingResults2 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults2);
-            var uploadBatch2 = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults2);
 
-            // Verify the returned upload batch for the second test folder
-            Assert.AreEqual(1, uploadBatch2.Patients.Count);
-            Assert.AreEqual("0stCQd22vqX3RkoxNM0s332kJ", uploadBatch2.Patients[0].Mrn);
-            Assert.AreEqual(2, uploadBatch2.Patients[0].Entities.Count);
-            var ct = uploadBatch2.Patients[0].Entities.First(x => x.Modality == "CT");
-            Assert.AreEqual("1.2.246.352.221.563569281719761951014104635106765053066", ct.Uid);
-            var mr = uploadBatch2.Patients[0].Entities.First(x => x.Modality == "MR");
-            Assert.AreEqual("1.2.246.352.221.470938394496317011513892701464452657827", mr.Uid);
-            Assert.AreEqual(1, uploadBatch2.Patients[0].Sros.Count);
-            Assert.AreEqual("1.2.246.352.221.52738008096457865345287404867971417272", uploadBatch2.Patients[0].Sros[0].Uid);
+            // Get upload processing results for second folder
+            var uploadProcessingResults2 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults2);
+
+            // Verify that upload processing results were returned for the second test folder
+            Assert.AreEqual(3, uploadProcessingResults2.Count);
+            Assert.IsTrue(uploadProcessingResults2.Any(t => t.Path == Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm")));
+            Assert.IsTrue(uploadProcessingResults2.Any(t => t.Path == Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "ct.dcm")));
+            Assert.IsTrue(uploadProcessingResults2.Any(t => t.Path == Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "mr.dcm")));
         }
 
-        [Ignore] // Skip since this takes a minute to run
         [TestMethod]
-        public async Task UploadAsyncTest_MultipleCalls()
+        public async Task GetUploadProcessingResultsAsyncTest_Paging()
         {
-            int testNumber = 7;
+            int testNumber = 9;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -223,84 +305,101 @@ namespace ProKnow.Upload.Test
             var dicomDataset = dicomFile.Dataset;
 
             // Upload more than 200 unique DICOM objects (maximum batch size of upload results returned by ProKnow)
+            var allUploadResults = new List<UploadResult>();
             for (var i = 0; i < 205; i++)
             {
                 dicomDataset.AddOrUpdate<string>(DicomTag.SOPInstanceUID, DicomUID.Generate().UID);
                 var tempPath = Path.GetTempFileName();
                 dicomFile.Save(tempPath);
-                var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, tempPath);
-                await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+                var thisUploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, tempPath);
+                allUploadResults.AddRange(thisUploadResults);
                 File.Delete(tempPath);
             }
 
-            // Verify that all files were uploaded and processed, i.e., that query parameters were properly applied to page 
-            // through upload results returned by ProKnow
-            var patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id);
-            Assert.AreEqual(1, patientSummaries.Count);
-            var patientItem = await patientSummaries[0].GetAsync();
-            var entitySummaries = patientItem.FindEntities(t => true);
-            Assert.AreEqual(205, entitySummaries.Count);
+            // Wait for processing and get processing results
+            var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, allUploadResults);
+
+            // Verify processing results were successfully retrieved for all uploaded files, i.e., that query parameters were
+            // properly applied to page through upload results returned by ProKnow
+            Assert.AreEqual(205, uploadProcessingResults.Count);
+            Assert.AreEqual(0, uploadProcessingResults.Count(t => t.Status != "completed"));
         }
 
         [TestMethod]
-        public async Task UploadAsyncTest_UploadBatch_DuplicateFiles()
+        public async Task UploadAsyncTest_DuplicateFiles()
         {
-            int testNumber = 8;
+            int testNumber = 10;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
-            // Upload a file
+            // Upload a file and wait for it to be processed
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "DuplicateObjects", "RD.dcm");
             var uploadResults1 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
-            var uploadProcessingResults1 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults1);
-            var uploadBatch1 = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults1);
-
-            // Verify "completed" status
-            Assert.AreEqual(1, uploadBatch1.Patients.Count);
-            Assert.AreEqual(1, uploadBatch1.Patients[0].Entities.Count);
-            Assert.AreEqual("completed", uploadBatch1.GetStatus(uploadPath));
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults1);
 
             // Upload the first file again (same path)
             var uploadResults2 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
-            var uploadProcessingResults2 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults2);
-            var uploadBatch2 = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults2);
 
-            // Verify "completed" status, since the content wasn't uploaded again and the upload status of the previous upload (ID) was returned
-            Assert.AreEqual(1, uploadBatch2.Patients.Count);
-            Assert.AreEqual(1, uploadBatch2.Patients[0].Entities.Count);
-            Assert.AreEqual("completed", uploadBatch2.GetStatus(uploadPath));
+            // Verify that the upload result shows that it has already been uploaded
+            Assert.AreEqual(1, uploadResults2.Count);
+            Assert.AreEqual("completed", uploadResults2[0].Status);
+
+            // Wait for processing anyway and get the upload processing results
+            var uploadProcessingResults2 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults2);
+
+            // Verify the returned upload processing results
+            Assert.AreEqual(1, uploadProcessingResults2.Count);
+            Assert.AreEqual(uploadResults2[0].Id, uploadProcessingResults2[0].Id);
+            Assert.AreEqual(uploadResults2[0].Path, uploadProcessingResults2[0].Path);
+            Assert.AreEqual("completed", uploadProcessingResults2[0].Status);
+            Assert.AreEqual("HNC-0522c0009", uploadProcessingResults2[0].Patient.Mrn);
+            Assert.AreEqual("Becker^Matthew", uploadProcessingResults2[0].Patient.Name);
+            Assert.AreEqual("1.3.6.1.4.1.22213.2.26558", uploadProcessingResults2[0].Study.Uid);
+            Assert.AreEqual("522", uploadProcessingResults2[0].Study.Name);
+            Assert.AreEqual("2.16.840.1.114337.1.1.1535997926.2", uploadProcessingResults2[0].Entity.Uid);
+            Assert.AreEqual("dose", uploadProcessingResults2[0].Entity.Type);
+            Assert.AreEqual("RTDOSE", uploadProcessingResults2[0].Entity.Modality);
+            Assert.IsTrue(String.IsNullOrEmpty(uploadProcessingResults2[0].Entity.Description));
         }
 
         [TestMethod]
-        public async Task UploadAsyncTest_UploadBatch_DuplicateObjects()
+        public async Task UploadAsyncTest_DuplicateObjects()
         {
-            int testNumber = 9;
+            int testNumber = 11;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
-            // Upload a file
+            // Upload a file and wait for it to be processed
             var uploadPath1 = Path.Combine(TestSettings.TestDataRootDirectory, "DuplicateObjects", "RD.dcm");
             var uploadResults1 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath1);
-            var uploadProcessingResults1 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults1);
-            var uploadBatch1 = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults1);
-
-            // Verify "completed" status
-            Assert.AreEqual(1, uploadBatch1.Patients.Count);
-            Assert.AreEqual(1, uploadBatch1.Patients[0].Entities.Count);
-            Assert.AreEqual("completed", uploadBatch1.GetStatus(uploadPath1));
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults1);
 
             // Upload another file (with a different path) that contains the same object
             var uploadPath2 = Path.Combine(TestSettings.TestDataRootDirectory, "DuplicateObjects", "RD - Copy.dcm");
             var uploadResults2 = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath2);
-            var uploadProcessingResults2 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults2);
-            var uploadBatch2 = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults2);
 
-            // Verify "completed" status, since the content wasn't uploaded again and the upload status of the previous upload (ID) was returned
-            Assert.AreEqual(1, uploadBatch2.Patients.Count);
-            Assert.AreEqual(1, uploadBatch2.Patients[0].Entities.Count);
-            Assert.AreEqual("completed", uploadBatch2.GetStatus(uploadPath2));
+            // Verify that the upload result shows that it has already been uploaded
+            Assert.AreEqual(1, uploadResults2.Count);
+            Assert.AreEqual("completed", uploadResults2[0].Status);
+
+            // Wait for processing anyway and get the upload processing results
+            var uploadProcessingResults2 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults2);
+
+            // Verify the returned upload processing results, including that the new rather than original file name is returned
+            Assert.AreEqual(1, uploadProcessingResults2.Count);
+            Assert.AreEqual(uploadResults2[0].Id, uploadProcessingResults2[0].Id);
+            Assert.AreEqual(uploadPath2, uploadProcessingResults2[0].Path);
+            Assert.AreEqual("completed", uploadProcessingResults2[0].Status);
+            Assert.AreEqual("HNC-0522c0009", uploadProcessingResults2[0].Patient.Mrn);
+            Assert.AreEqual("Becker^Matthew", uploadProcessingResults2[0].Patient.Name);
+            Assert.AreEqual("1.3.6.1.4.1.22213.2.26558", uploadProcessingResults2[0].Study.Uid);
+            Assert.AreEqual("522", uploadProcessingResults2[0].Study.Name);
+            Assert.AreEqual("2.16.840.1.114337.1.1.1535997926.2", uploadProcessingResults2[0].Entity.Uid);
+            Assert.AreEqual("dose", uploadProcessingResults2[0].Entity.Type);
+            Assert.AreEqual("RTDOSE", uploadProcessingResults2[0].Entity.Modality);
+            Assert.IsTrue(String.IsNullOrEmpty(uploadProcessingResults2[0].Entity.Description));
         }
     }
 }
