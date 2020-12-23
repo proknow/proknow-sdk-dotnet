@@ -115,7 +115,7 @@ namespace ProKnow.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient with an image set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "image_set");
             var imageSetItem = await entitySummaries[0].GetAsync() as ImageSetItem;
 

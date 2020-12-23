@@ -40,7 +40,7 @@ namespace ProKnow.Collection.Test
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
 
             // Create a test collection
             var collectionItem = await _proKnow.Collections.CreateAsync($"{_testClassName}-{testNumber}-Name", $"{_testClassName}-{testNumber}-Description",

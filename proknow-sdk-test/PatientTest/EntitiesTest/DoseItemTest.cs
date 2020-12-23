@@ -45,7 +45,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "dose");
             var doseItem = await entitySummaries[0].GetAsync() as DoseItem;
 
@@ -72,7 +72,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "dose");
             var doseItem = await entitySummaries[0].GetAsync() as DoseItem;
 
@@ -100,7 +100,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "dose");
             var doseItem = await entitySummaries[0].GetAsync() as DoseItem;
 
@@ -126,7 +126,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "dose");
             var doseItem = await entitySummaries[0].GetAsync() as DoseItem;
 
@@ -152,7 +152,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with a dose
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "dose");
             var doseItem = await entitySummaries[0].GetAsync() as DoseItem;
 

@@ -43,7 +43,7 @@ namespace ProKnow.Patient.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient with only images
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"));
 
             // Get the image set ID
             var imageSetSummary = patientItem.FindEntities(e => e.Type == "image_set")[0];
@@ -85,7 +85,7 @@ namespace ProKnow.Patient.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew");
 
             // Verify that entities are found at each of the four levels
             Assert.AreEqual(1, patientItem.FindEntities(e => e.Type == "image_set").Count);
@@ -103,7 +103,7 @@ namespace ProKnow.Patient.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Sro", 3);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Sro");
 
             // Verify that the SRO is found
             Assert.AreEqual(1, patientItem.FindSros(s => true).Count);
@@ -130,7 +130,7 @@ namespace ProKnow.Patient.Test
                 { numberCustomMetricItem.Name, 1 },
                 { stringCustomMetricItem.Name, "I" }
             };
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, null, 0, null, null, metadata);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, null, null, null, metadata);
 
             // Get the resolved metadata
             var resolvedMetadata = await patientItem.GetMetadataAsync();
@@ -154,7 +154,7 @@ namespace ProKnow.Patient.Test
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a patient with only images
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"));
             Assert.AreEqual(1, patientItem.FindEntities(e => true).Count);
 
             // Upload a structure set for the same patient

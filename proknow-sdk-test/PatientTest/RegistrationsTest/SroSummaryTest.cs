@@ -45,7 +45,7 @@ namespace ProKnow.Patient.Registrations.Test
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Sro", 3);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Sro");
 
             // Get the full representation of the image sets and SRO
             var ctImageSetItem = await patientItem.FindEntities(e => e.Modality == "CT")[0].GetAsync();

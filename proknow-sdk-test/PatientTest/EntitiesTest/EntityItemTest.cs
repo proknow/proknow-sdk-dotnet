@@ -40,7 +40,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with a plan
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "plan");
             var planItem = await entitySummaries[0].GetAsync() as PlanItem;
 
@@ -62,7 +62,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with a dose
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "dose");
             var doseItem = await entitySummaries[0].GetAsync() as DoseItem;
 
@@ -89,7 +89,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with a structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -121,7 +121,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an image set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "image_set");
             var imageSetItem = await entitySummaries[0].GetAsync() as ImageSetItem;
 
