@@ -20,9 +20,9 @@ namespace ProKnow.Upload
     {
         private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(4);
 
-        // 10 retry delays of 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200, 102400 msec
+        // 10 retry delays of 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200 msec for a total retry delay of 102.2 sec
         private const int INITIAL_RETRY_DELAY = 200;
-        private const int MAX_TOTAL_RETRY_DELAY = 102400;
+        private const int MAX_TOTAL_RETRY_DELAY = 102200;
 
         private readonly ProKnowApi _proKnow;
         private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
