@@ -12,6 +12,7 @@ All releases in the v0.x.x series are subject to breaking changes from one versi
     - UploadAsync only uploads to ProKnow, does not wait for processing, and now returns an IList<UploadResult>
     - Uploads class has new GetUploadProcessingResults method to wait for processing of provided IList<UploadResult> and return an IList<UploadProcessingResult>
     - UploadBatch can now be constructed from an IList<UploadProcessingResult>
+    - Add properties to UploadBatch that summarize the upload processing results
 
 ## v0.0.29
 

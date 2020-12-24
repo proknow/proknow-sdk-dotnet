@@ -1,5 +1,8 @@
 ﻿using ProKnow.Exceptions;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace ProKnow.Upload
 {
@@ -10,15 +13,55 @@ namespace ProKnow.Upload
     {
         private readonly ProKnowApi _proKnow;
         private readonly string _workspaceId;
-        private readonly Dictionary<string, UploadProcessingResult> _fileLookup;
-        private readonly Dictionary<string, UploadPatientSummary> _patientLookup;
-        private readonly Dictionary<string, UploadEntitySummary> _entityLookup;
-        private readonly Dictionary<string, UploadSroSummary> _sroLookup;
+        private readonly Dictionary<string, UploadProcessingResult> _fileLookup; // by file path
+        private readonly Dictionary<string, UploadPatientSummary> _patientLookup; // by patient ProKnow ID
+        private readonly Dictionary<string, UploadEntitySummary> _entityLookup; // by entity ProKnow ID
+        private readonly Dictionary<string, UploadSroSummary> _sroLookup; // by SRO ProKnow ID
 
         /// <summary>
         /// The collection of patient summaries
         /// </summary>
         public IList<UploadPatientSummary> Patients { get; protected set; }
+
+        /// <summary>
+        /// The modality and image count for each image set successfully processed
+        /// </summary>
+        public IList<Tuple<string, int>> ImageSetsModalityCount { get; protected set; }
+
+        /// <summary>
+        /// The number of structure sets successfully processed
+        /// </summary>
+        public int StructureSetCount { get; protected set; }
+
+        /// <summary>
+        /// The number of plans successfully processed
+        /// </summary>
+        public int PlanCount { get; protected set; }
+
+        /// <summary>
+        /// The number of doses successfully processed
+        /// </summary>
+        public int DoseCount { get; protected set; }
+
+        /// <summary>
+        /// The number of spatial registration objects successfully processed
+        /// </summary>
+        public int SroCount { get; protected set; }
+
+        /// <summary>
+        /// The number of files successfully processed
+        /// </summary>
+        public int CompletedCount { get; protected set; }
+
+        /// <summary>
+        ///  The number of files that are pending processing and need attention
+        /// </summary>
+        public int PendingCount { get; protected set; }
+
+        /// <summary>
+        /// The number of files that failed processing
+        /// </summary>
+        public int FailedCount { get; protected set; }
 
         /// <summary>
         /// Creates a batch of resolved uploads
@@ -85,6 +128,7 @@ namespace ProKnow.Upload
                     }
                 }
             }
+            Summarize();
         }
 
         /// <summary>
@@ -226,6 +270,32 @@ namespace ProKnow.Upload
                 return uploadStatusResult.Status;
             }
             throw new InvalidOperationError($"The upload for '{path}' was not found in the batch.");
+        }
+
+        /// <summary>
+        /// Summarize the upload batch
+        /// </summary>
+        private void Summarize()
+        {
+            // Map file paths to upload processing result entity/SRO
+            var fileToUploadProcessingResultEntity = _fileLookup.Where(x => x.Value.Entity != null).ToDictionary(x => x.Key, x => x.Value.Entity);
+            var fileToUploadProcessingResultSro = _fileLookup.Where(x => x.Value.Sro != null).ToDictionary(x => x.Key, x => x.Value.Sro);
+
+            // Map ProKnow entity to number of files
+            var entityToFileCount = fileToUploadProcessingResultEntity.GroupBy(x => x.Value.Id).ToDictionary(x => x.First().Value, x => x.Count());
+
+            // Filter image set entities
+            var imageSetsToFileCount = entityToFileCount.Where(x => x.Key.Type == "image_set").ToDictionary(x => x.Key, x => x.Value);
+
+            // Initialize the properties that provide the summary
+            ImageSetsModalityCount = imageSetsToFileCount.Select(x => new Tuple<string, int>(x.Key.Modality, x.Value)).ToList();
+            StructureSetCount = entityToFileCount.Where(x => x.Key.Type == "structure_set").Count();
+            PlanCount = entityToFileCount.Where(x => x.Key.Type == "plan").Count();
+            DoseCount = entityToFileCount.Where(x => x.Key.Type == "dose").Count();
+            SroCount = _sroLookup.Keys.Count;
+            CompletedCount = _fileLookup.Where(x => x.Value.Status == "completed").Count();
+            PendingCount = _fileLookup.Where(x => x.Value.Status == "pending").Count();
+            FailedCount = _fileLookup.Where(x => x.Value.Status == "failed").Count();
         }
     }
 }
