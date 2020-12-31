@@ -240,41 +240,5 @@ namespace ProKnow.Upload.Test
             // Verify the status is still "completed"
             Assert.AreEqual("completed", uploadBatch2.GetStatus(uploadPath));
         }
-
-        [TestMethod]
-        public async Task SummaryPropertiesTest()
-        {
-            var testNumber = 9;
-
-            // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
-
-            // Upload test data
-            var uploadPath1 = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew");
-            var uploadPath2 = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm");
-            var uploadPath3 = Path.Combine(TestSettings.TestDataRootDirectory, "Mr");
-            var uploadPath4 = Path.Combine(TestSettings.TestDataRootDirectory, "Pet");
-            var uploadPath5 = Path.Combine(TestSettings.TestDataRootDirectory, "PatientNameConflict");
-            var uploadPath6 = Path.Combine(TestSettings.TestDataRootDirectory, "RtImage");
-            var uploadPaths = new List<String>() { uploadPath1, uploadPath2, uploadPath3, uploadPath4, uploadPath5, uploadPath6 };
-            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPaths);
-            var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
-            var uploadBatch = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults);
-
-            // Verify the properties that provide a summary of the upload
-            Assert.AreEqual(5, uploadBatch.Patients.Count);
-            Assert.AreEqual(4, uploadBatch.ImageSetsModalityCount.Count);
-            Assert.IsTrue(uploadBatch.ImageSetsModalityCount.Contains(new Tuple<string, int>("CT", 5)));
-            Assert.IsTrue(uploadBatch.ImageSetsModalityCount.Contains(new Tuple<string, int>("CT", 1)));
-            Assert.IsTrue(uploadBatch.ImageSetsModalityCount.Contains(new Tuple<string, int>("MR", 4)));
-            Assert.IsTrue(uploadBatch.ImageSetsModalityCount.Contains(new Tuple<string, int>("PT", 3)));
-            Assert.AreEqual(1, uploadBatch.StructureSetCount);
-            Assert.AreEqual(1, uploadBatch.PlanCount);
-            Assert.AreEqual(1, uploadBatch.DoseCount);
-            Assert.AreEqual(1, uploadBatch.SroCount);
-            Assert.AreEqual(17, uploadBatch.CompletedCount);
-            Assert.AreEqual(1, uploadBatch.PendingCount);
-            Assert.AreEqual(1, uploadBatch.FailedCount);
-        }
     }
 }
