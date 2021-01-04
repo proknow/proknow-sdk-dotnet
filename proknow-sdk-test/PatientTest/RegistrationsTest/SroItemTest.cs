@@ -45,7 +45,7 @@ namespace ProKnow.Patient.Registrations.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Sro", "reg.dcm"));
             var sroSummary = patientItem.Studies[0].Sros[0];
             var sroItem = await sroSummary.GetAsync();
 
@@ -72,7 +72,7 @@ namespace ProKnow.Patient.Registrations.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Sro", "reg.dcm"));
             var sroSummary = patientItem.Studies[0].Sros[0];
             var sroItem = await sroSummary.GetAsync();
 
@@ -100,7 +100,7 @@ namespace ProKnow.Patient.Registrations.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Sro", "reg.dcm"));
             var sroSummary = patientItem.Studies[0].Sros[0];
             var sroItem = await sroSummary.GetAsync();
 
@@ -126,7 +126,7 @@ namespace ProKnow.Patient.Registrations.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Sro", "reg.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Sro", "reg.dcm"));
             var sroSummary = patientItem.Studies[0].Sros[0];
             var sroItem = await sroSummary.GetAsync();
 

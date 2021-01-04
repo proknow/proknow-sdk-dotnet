@@ -46,7 +46,7 @@ namespace ProKnow.Patient.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Sro", 3);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Sro");
             var studySummary = patientItem.Studies.Where(s => s.Sros.Count() > 0).First();
             var ctImageSetItem = await patientItem.FindEntities(e => e.Modality == "CT")[0].GetAsync();
             var mrImageSetItem = await patientItem.FindEntities(e => e.Modality == "MR")[0].GetAsync();

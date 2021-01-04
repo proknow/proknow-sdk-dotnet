@@ -55,7 +55,7 @@ namespace ProKnow.Upload
         /// <param name="studyId">The study ProKnow ID</param>
         /// <param name="uploadStatusResult">The upload status result</param>
         internal UploadSroSummary(ProKnowApi proKnow, string workspaceId, string patientId, string studyId,
-            UploadStatusResultSro uploadStatusResult)
+            UploadProcessingResultSro uploadStatusResult)
         {
             _proKnow = proKnow;
             WorkspaceId = workspaceId;
@@ -77,7 +77,10 @@ namespace ProKnow.Upload
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
-        /// var uploadBatch = await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
+        /// var workspaceItem = await pk.Workspaces.ResolveByNameAsync("Upload Test");
+        /// var uploadResults = await pk.Uploads.UploadAsync(workspaceItem, "./DICOM");
+        /// var uploadProcessingResults = await pk.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+        /// var uploadBatch = new UploadBatch(pk, workspaceItem.Id, uploadProcessingResults);
         /// var sroItems = new List&lt;SroItem&gt;();
         /// foreach (var patient in uploadBatch.Patients)
         /// {

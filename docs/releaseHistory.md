@@ -4,6 +4,15 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.1.0
+
+*Enhancements*
+
+- Separate uploading from waiting for ProKnow processing to complete:
+    - UploadAsync only uploads to ProKnow, does not wait for processing, and now returns an IList<UploadResult>
+    - Uploads class has new GetUploadProcessingResults method to wait for processing of provided IList<UploadResult> and return an IList<UploadProcessingResult>
+    - UploadBatch can now be constructed from an IList<UploadProcessingResult>
+
 ## v0.0.29
 
 *Bug Fixes and Enhancements*

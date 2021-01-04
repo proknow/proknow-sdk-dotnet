@@ -55,7 +55,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an image set and structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew");
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -80,7 +80,7 @@ namespace ProKnow.Patient.Entities.Test
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an image set and structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew");
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
             var originalRoiCount = structureSetItem.Rois.Length;
@@ -127,7 +127,7 @@ namespace ProKnow.Patient.Entities.Test
 
 
             // Create a test patient with only an image set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"));
 
             // Create a new structure set
             var imageSetSummary = patientItem.FindEntities(e => e.Type == "image_set")[0];
@@ -155,7 +155,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with only an image set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"));
 
             // Create a new structure set
             var imageSetSummary = patientItem.FindEntities(e => e.Type == "image_set")[0];
@@ -199,7 +199,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an image set and structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew");
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -224,7 +224,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an image set and structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew");
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -260,7 +260,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an image set and structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew");
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -291,7 +291,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -318,7 +318,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -346,7 +346,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -372,7 +372,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -398,7 +398,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with a structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -447,7 +447,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with a structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -490,7 +490,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an image set and structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew");
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -521,7 +521,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an image set and structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew");
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
             var originalRoiCount = structureSetItem.Rois.Length;
@@ -553,7 +553,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an image set and structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew");
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -570,7 +570,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an image set and structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew");
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -606,7 +606,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an image set and structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew");
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -623,7 +623,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an image set and structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew");
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -675,7 +675,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an image set and structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew");
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -692,7 +692,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with an image set and structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew", 4);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Becker^Matthew");
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 
@@ -726,7 +726,7 @@ namespace ProKnow.Patient.Entities.Test
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with a structure set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"));
             var entitySummaries = patientItem.FindEntities(e => e.Type == "structure_set");
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
 

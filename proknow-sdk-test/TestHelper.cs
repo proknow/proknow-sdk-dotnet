@@ -45,14 +45,12 @@ namespace ProKnow.Test
         /// <param name="testClassName">The test class name</param>
         /// <param name="testNumber">The test number</param>
         /// <param name="testData">The optional test data subdirectory or file to upload</param>
-        /// <param name="numberOfEntitiesAndSros">The expected number of entities and SROs uploaded if test data was specified</param>
         /// <param name="birthDate">The optional birthdate in the format "YYYY-MM-DD"</param>
         /// <param name="sex">The optional sex, one of "M", "F", or "O"</param>
         /// <param name="metadata">The optional metadata (custom metrics) names and values</param>
         /// <returns></returns>
-        public static async Task<PatientItem> CreatePatientAsync(string testClassName, int testNumber, 
-            string testData = null, int numberOfEntitiesAndSros = 0, string birthDate = null, string sex = null,
-            IDictionary<string, object> metadata = null)
+        public static async Task<PatientItem> CreatePatientAsync(string testClassName, int testNumber, string testData = null,
+            string birthDate = null, string sex = null, IDictionary<string, object> metadata = null)
         {
             // Find the workspace for this test
             var workspaceName = $"SDK-{testClassName}-{testNumber}";
@@ -71,15 +69,8 @@ namespace ProKnow.Test
                 {
                     Patient = new PatientCreateSchema { Mrn = mrn, Name = name }
                 };
-                var uploadBatch = await _proKnow.Uploads.UploadAsync(workspaceItem.Id, uploadPath, overrides);
-                var uploadedEntityIds = uploadBatch.Patients.SelectMany(p => p.Entities.Select(e => e.Id));
-                var uploadedSroIds = uploadBatch.Patients.SelectMany(p => p.Sros.Select(s => s.Id));
-
-                // Make sure returned upload batch matches user-specified number of entities
-                if (uploadedEntityIds.Count() + uploadedSroIds.Count() != numberOfEntitiesAndSros)
-                {
-                    throw new ProKnowException($"Upload batch count of {uploadedEntityIds.Count() + uploadedSroIds.Count()} does not equal user-specified count of {numberOfEntitiesAndSros}.");
-                }
+                var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
+                await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
                 // Refresh patient
                 await patientItem.RefreshAsync();

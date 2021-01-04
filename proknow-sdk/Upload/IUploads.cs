@@ -15,9 +15,14 @@ namespace ProKnow.Upload
         /// <param name="workspaceItem">The workspace</param>
         /// <param name="path">The folder or file path</param>
         /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
-        /// <param name="doWait">Indicates whether to wait until all uploads reach a terminal state</param>
         /// <returns>The upload results</returns>
-        /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
+        /// <remarks>
+        /// <para>NOTE that this task completes when the upload itself has finished.  ProKnow still needs to process each object
+        /// uploaded before it becomes available for use.  <see cref="GetUploadProcessingResultsAsync(WorkspaceItem, IList{UploadResult})"/> 
+        /// to obtain the processing results.</para>
+        /// <para>This overload is more performant than the one that takes a string workspace ProKnow ID or name because the
+        /// workspace does not need to be resolved.</para>
+        /// </remarks>
         /// <example>This example shows how to upload a directory of files:
         /// <code>
         /// using ProKnow;
@@ -25,12 +30,10 @@ namespace ProKnow.Upload
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
         /// var workspaceItem = await pk.Workspaces.ResolveByNameAsync("Upload Test");
-        /// await pk.Uploads.UploadAsync(workspaceItem, "./DICOM");
+        /// var uploadResults = await pk.Uploads.UploadAsync(workspaceItem, "./DICOM");
         /// </code>
         /// </example>
-        /// <remarks>This overload is more performant than the one that takes a string workspace ProKnow ID or name because the
-        /// workspace does not need to be resolved.</remarks>
-        Task<UploadBatch> UploadAsync(WorkspaceItem workspaceItem, string path, UploadFileOverrides overrides = null, bool doWait = true);
+        Task<IList<UploadResult>> UploadAsync(WorkspaceItem workspaceItem, string path, UploadFileOverrides overrides = null);
 
         /// <summary>
         /// Upload file(s) asynchronously
@@ -38,21 +41,25 @@ namespace ProKnow.Upload
         /// <param name="workspace">The ProKnow ID or name of the workspace</param>
         /// <param name="path">The folder or file path</param>
         /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
-        /// <param name="doWait">Indicates whether to wait until all uploads reach a terminal state</param>
         /// <returns>The upload results</returns>
         /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
+        /// <remarks>
+        /// <para>NOTE that this task completes when the upload itself has finished.  ProKnow still needs to process each object
+        /// uploaded before it becomes available for use.  <see cref="GetUploadProcessingResultsAsync(string, IList{UploadResult})"/> 
+        /// to obtain the processing results.</para>
+        /// <para>This overload is less performant than the one that takes a workspace item because the workspace needs to be
+        /// resolved.</para>
+        /// </remarks>
         /// <example>This example shows how to upload a directory of files:
         /// <code>
         /// using ProKnow;
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
-        /// await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
+        /// var uploadResults = await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
         /// </code>
         /// </example>
-        /// <remarks>This overload is less performant than the one that takes a workspace item because the workspace needs to be
-        /// resolved.</remarks>
-        Task<UploadBatch> UploadAsync(string workspace, string path, UploadFileOverrides overrides = null, bool doWait = true);
+        Task<IList<UploadResult>> UploadAsync(string workspace, string path, UploadFileOverrides overrides = null);
 
         /// <summary>
         /// Upload files asynchronously
@@ -60,9 +67,14 @@ namespace ProKnow.Upload
         /// <param name="workspaceItem">The workspace</param>
         /// <param name="paths">The folder and/or file paths</param>
         /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
-        /// <param name="doWait">Indicates whether to wait until all uploads reach a terminal state</param>
         /// <returns>The upload results</returns>
-        /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
+        /// <remarks>
+        /// <para>NOTE that this task completes when the upload itself has finished.  ProKnow still needs to process each object
+        /// uploaded before it becomes available for use.  <see cref="GetUploadProcessingResultsAsync(WorkspaceItem, IList{UploadResult})"/> 
+        /// to obtain the processing results.</para>
+        /// <para>This overload is more performant than the one that takes a string workspace ProKnow ID or name because the
+        /// workspace does not need to be resolved.</para>
+        /// </remarks>
         /// <example>This example shows how to upload a directory of files:
         /// <code>
         /// using ProKnow;
@@ -79,7 +91,7 @@ namespace ProKnow.Upload
         ///     Path.Join("DICOM", "img000005.dcm")
         /// }
         /// var workspaceItem = await pk.Workspaces.ResolvedByNameAsync("Upload Test");
-        /// await pk.Uploads.UploadAsync(workspaceItem, paths);
+        /// var uploadResults = await pk.Uploads.UploadAsync(workspaceItem, paths);
         /// </code>
         /// </example>
         /// <example>Lists containing both directories and file paths are also permitted:
@@ -96,12 +108,11 @@ namespace ProKnow.Upload
         ///     Path.Join("DICOM", "plan.dcm"),
         ///     Path.Join("DICOM", "dose.dcm")
         /// }
-        /// await pk.Uploads.UploadAsync("Upload Test", paths);
+        /// var workspaceItem = await pk.Workspaces.ResolvedByNameAsync("Upload Test");
+        /// var uploadResults = await pk.Uploads.UploadAsync(workspaceItem, paths);
         /// </code>
         /// </example>
-        /// <remarks>This overload is more performant than the one that takes a string workspace ProKnow ID or name because the
-        /// workspace does not need to be resolved.</remarks>
-        Task<UploadBatch> UploadAsync(WorkspaceItem workspaceItem, IList<string> paths, UploadFileOverrides overrides = null, bool doWait = true);
+        Task<IList<UploadResult>> UploadAsync(WorkspaceItem workspaceItem, IList<string> paths, UploadFileOverrides overrides = null);
 
         /// <summary>
         /// Upload files asynchronously
@@ -109,9 +120,15 @@ namespace ProKnow.Upload
         /// <param name="workspace">The ProKnow ID or name of the workspace</param>
         /// <param name="paths">The folder and/or file paths</param>
         /// <param name="overrides">Optional overrides to be applied after the files are uploaded</param>
-        /// <param name="doWait">Indicates whether to wait until all uploads reach a terminal state</param>
         /// <returns>The upload results</returns>
         /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
+        /// <remarks>
+        /// <para>NOTE that this task completes when the upload itself has finished.  ProKnow still needs to process each object
+        /// uploaded before it becomes available for use.  <see cref="GetUploadProcessingResultsAsync(string, IList{UploadResult})"/> 
+        /// to obtain the processing results.</para>
+        /// <para>This overload is less performant than the one that takes a workspace item because the workspace needs to be
+        /// resolved.</para>
+        /// </remarks>
         /// <example>This example shows how to upload a directory of files:
         /// <code>
         /// using ProKnow;
@@ -127,7 +144,7 @@ namespace ProKnow.Upload
         ///     Path.Join("DICOM", "img000004.dcm"),
         ///     Path.Join("DICOM", "img000005.dcm")
         /// }
-        /// await pk.Uploads.UploadAsync("Upload Test", paths);
+        /// var uploadResults = await pk.Uploads.UploadAsync("Upload Test", paths);
         /// </code>
         /// </example>
         /// <example>Lists containing both directories and file paths are also permitted:
@@ -144,11 +161,59 @@ namespace ProKnow.Upload
         ///     Path.Join("DICOM", "plan.dcm"),
         ///     Path.Join("DICOM", "dose.dcm")
         /// }
-        /// await pk.Uploads.UploadAsync("Upload Test", paths);
+        /// var uploadResults = await pk.Uploads.UploadAsync("Upload Test", paths);
         /// </code>
         /// </example>
-        /// <remarks>This overload is less performant than the one that takes a workspace item because the workspace needs to be
-        /// resolved.</remarks>
-        Task<UploadBatch> UploadAsync(string workspace, IList<string> paths, UploadFileOverrides overrides = null, bool doWait = true);
+        Task<IList<UploadResult>> UploadAsync(string workspace, IList<string> paths, UploadFileOverrides overrides = null);
+
+        /// <summary>
+        /// Gets the processing results for a provided set of uploads
+        /// </summary>
+        /// <param name="workspace">The ProKnow ID for the workspace</param>
+        /// <param name="uploadResults">The upload results for each file</param>
+        /// <returns>The processing results for each file</returns>
+        /// <remarks>
+        /// <para>The return value of this method can be used to construct an <see cref="UploadBatch"/> which can be used to
+        /// look up patients, entities, spatial registration objects, and file statuses within the processing results.</para>
+        /// <para>This overload is more performant than the one that takes a string workspace ProKnow ID or name because the
+        /// workspace does not need to be resolved.</para>
+        /// </remarks>
+        /// <example>This example shows how to get the processing results for an uploaded directory of files:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
+        /// var workspaceItem = await pk.Workspaces.ResolveByNameAsync("Upload Test");
+        /// var uploadResults = await pk.Uploads.UploadAsync(workspaceItem, "./DICOM");
+        /// var uploadProcessingResults = await pk.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+        /// </code>
+        /// </example>
+        Task<IList<UploadProcessingResult>> GetUploadProcessingResultsAsync(WorkspaceItem workspace, IList<UploadResult> uploadResults);
+
+        /// <summary>
+        /// Gets the processing results for a provided set of uploads
+        /// </summary>
+        /// <param name="workspaceId">The ProKnow ID for the workspace</param>
+        /// <param name="uploadResults">The upload results for each file</param>
+        /// <returns>The processing results for each file</returns>
+        /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
+        /// <remarks>
+        /// <para>The return value of this method can be used to construct an <see cref="UploadBatch"/> which can be used to
+        /// look up patients, entities, spatial registration objects, and file statuses within the processing results.</para>
+        /// <para>This overload is less performant than the one that takes a workspace item because the workspace needs to be
+        /// resolved.</para>
+        /// </remarks>
+        /// <example>This example shows how to get the processing results for an uploaded directory of files:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "credentials.json");
+        /// var uploadResults = await pk.Uploads.UploadAsync("Upload Test", "./DICOM");
+        /// var uploadProcessingResults = await pk.Uploads.GetUploadProcessingResultsAsync("Upload Test", uploadResults);
+        /// </code>
+        /// </example>
+        Task<IList<UploadProcessingResult>> GetUploadProcessingResultsAsync(string workspaceId, IList<UploadResult> uploadResults);
     }
 }

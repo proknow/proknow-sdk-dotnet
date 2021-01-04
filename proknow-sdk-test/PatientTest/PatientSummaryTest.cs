@@ -71,7 +71,8 @@ namespace ProKnow.Patient.Test
             {
                 Patient = new PatientCreateSchema { Name = patientItem.Name, Mrn = patientItem.Mrn }
             };
-            await patientSummary.UploadAsync(uploadPath, overrides);
+            var uploadResults = await patientSummary.UploadAsync(uploadPath, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify file was uploaded
             await patientItem.RefreshAsync();
@@ -98,7 +99,8 @@ namespace ProKnow.Patient.Test
             {
                 Patient = new PatientCreateSchema { Name = patientItem.Name, Mrn = patientItem.Mrn }
             };
-            await patientSummary.UploadAsync(uploadPath, overrides);
+            var uploadResults = await patientSummary.UploadAsync(uploadPath, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Very all files were uploaded
             var uploadedFiles = Directory.GetFiles(uploadPath);
@@ -129,7 +131,8 @@ namespace ProKnow.Patient.Test
             {
                 Patient = new PatientCreateSchema { Name = patientItem.Name, Mrn = patientItem.Mrn }
             };
-            await patientSummary.UploadAsync(uploadPaths, overrides);
+            var uploadResults = await patientSummary.UploadAsync(uploadPaths, overrides);
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify all CT files were uploaded
             var uploadedCtFiles = Directory.GetFiles(uploadPath1);

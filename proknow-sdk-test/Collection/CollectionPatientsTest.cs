@@ -41,7 +41,7 @@ namespace ProKnow.Collection.Test
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient with a structure set
-            var patientSummary = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientSummary = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"));
             var entitySummary = patientSummary.FindEntities(e => e.Type == "structure_set")[0];
 
             // Create a test collection
@@ -77,9 +77,9 @@ namespace ProKnow.Collection.Test
             var workspaceItem2 = await TestHelper.CreateWorkspaceAsync(_testClassName, 1000 + testNumber);
 
             // To each workspace, add a patient with a structure set
-            var patientSummary1 = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientSummary1 = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"));
             var entitySummary1 = patientSummary1.FindEntities(e => e.Type == "structure_set")[0];
-            var patientSummary2 = await TestHelper.CreatePatientAsync(_testClassName, 1000 + testNumber, Path.Combine("Becker^Matthew", "RS.dcm"), 1);
+            var patientSummary2 = await TestHelper.CreatePatientAsync(_testClassName, 1000 + testNumber, Path.Combine("Becker^Matthew", "RS.dcm"));
             var entitySummary2 = patientSummary2.FindEntities(e => e.Type == "structure_set")[0];
 
             // Create a test collection

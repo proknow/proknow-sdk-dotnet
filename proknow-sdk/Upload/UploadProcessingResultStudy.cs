@@ -4,39 +4,27 @@ using System.Text.Json.Serialization;
 namespace ProKnow.Upload
 {
     /// <summary>
-    /// The entity data for an element in the response from an upload status query
+    /// The study data for an element in the response from an upload processing query
     /// </summary>
-    public class UploadStatusResultEntity
+    public class UploadProcessingResultStudy
     {
         /// <summary>
-        /// The entity ProKnow ID
+        /// The study ProKnow ID
         /// </summary>
         [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
-        /// The entity UID
+        /// The study UID
         /// </summary>
         [JsonPropertyName("uid")]
         public string Uid { get; set; }
 
         /// <summary>
-        /// The entity type
+        /// The study name
         /// </summary>
-        [JsonPropertyName("type")]
-        public string Type { get; set; }
-
-        /// <summary>
-        /// The entity modality
-        /// </summary>
-        [JsonPropertyName("modality")]
-        public string Modality { get; set; }
-
-        /// <summary>
-        /// The entity description
-        /// </summary>
-        [JsonPropertyName("description")]
-        public string Description { get; set; }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
 
         /// <summary>
         /// Properties encountered during deserialization without matching members

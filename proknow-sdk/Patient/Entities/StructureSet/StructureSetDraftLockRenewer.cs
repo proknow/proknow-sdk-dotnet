@@ -77,19 +77,16 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// </summary>
         private async void Run(Object notUsed)
         {
-            if (_timer != null)
+            try
             {
-                try
-                {
-                    var json = await _proKnow.Requestor.PutAsync($"/workspaces/{_structureSet.WorkspaceId}/structuresets/{_structureSet.Id}/draft/lock/{_structureSet.DraftLock.Id}");
-                    _structureSet.DraftLock = JsonSerializer.Deserialize<StructureSetDraftLock>(json);
-                }
-                catch (ProKnowException ex)
-                {
-                    var workspace = await _proKnow.Workspaces.ResolveByIdAsync(_structureSet.WorkspaceId);
-                    var patientSummary = await _proKnow.Patients.FindAsync(_structureSet.WorkspaceId, p => p.Id == _structureSet.PatientId);
-                    throw new ProKnowException($"Error renewing draft lock for workspace '{workspace.Name}' patient '{patientSummary.Mrn}'.  Inner exception:  {ex.Message}.");
-                }
+                var json = await _proKnow.Requestor.PutAsync($"/workspaces/{_structureSet.WorkspaceId}/structuresets/{_structureSet.Id}/draft/lock/{_structureSet.DraftLock.Id}");
+                _structureSet.DraftLock = JsonSerializer.Deserialize<StructureSetDraftLock>(json);
+            }
+            catch (Exception)
+            {
+                // Never throw since this is running in a separate thread
+                // The only reason this callback could fail is if the timer fires after the draft lock has been released, which can easily occur during unit testing
+                //todo--Refactor the timer to resolve issue when it fires after the draft lock has been released
             }
         }
     }

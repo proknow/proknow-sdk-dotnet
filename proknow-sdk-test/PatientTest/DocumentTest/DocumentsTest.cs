@@ -45,7 +45,7 @@ namespace ProKnow.Patient.Document.Test
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
 
             // Create the document
             await _proKnow.Patients.Documents.CreateAsync(workspaceItem.Id, patientItem.Id, _testDocumentPath, $"{_testClassName}-{testNumber}.pdf");
@@ -79,7 +79,7 @@ namespace ProKnow.Patient.Document.Test
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
 
             // Create the document
             await _proKnow.Patients.Documents.CreateAsync(workspaceItem.Id, patientItem.Id, _testDocumentPath, $"{_testClassName}-{testNumber}.pdf");
@@ -118,7 +118,7 @@ namespace ProKnow.Patient.Document.Test
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
 
             // Create the document
             await _proKnow.Patients.Documents.CreateAsync(workspaceItem.Id, patientItem.Id, _testDocumentPath, $"{_testClassName}-{testNumber}.pdf");
@@ -145,7 +145,7 @@ namespace ProKnow.Patient.Document.Test
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
 
             // Create the document
             await _proKnow.Patients.Documents.CreateAsync(workspaceItem.Id, patientItem.Id, _testDocumentPath, $"{_testClassName}-{testNumber}.pdf");
@@ -179,7 +179,7 @@ namespace ProKnow.Patient.Document.Test
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"), 1);
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
 
             // Create the document
             await _proKnow.Patients.Documents.CreateAsync(workspaceItem.Id, patientItem.Id, _testDocumentPath, $"{_testClassName}-{testNumber}.pdf");

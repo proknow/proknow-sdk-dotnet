@@ -4,21 +4,27 @@ using System.Text.Json.Serialization;
 namespace ProKnow.Upload
 {
     /// <summary>
-    /// The SRO data for an element in the response from an upload status query
+    /// The patient data for an element in the response from an upload processing query
     /// </summary>
-    public class UploadStatusResultSro
+    public class UploadProcessingResultPatient
     {
         /// <summary>
-        /// The SRO ProKnow ID
+        /// The patient ProKnow ID
         /// </summary>
         [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
-        /// The SRO UID
+        /// The patient medical record number (MRN) or ID
         /// </summary>
-        [JsonPropertyName("uid")]
-        public string Uid { get; set; }
+        [JsonPropertyName("mrn")]
+        public string Mrn { get; set; }
+
+        /// <summary>
+        /// The patient name
+        /// </summary>
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
 
         /// <summary>
         /// Properties encountered during deserialization without matching members
