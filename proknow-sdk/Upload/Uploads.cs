@@ -19,14 +19,14 @@ namespace ProKnow.Upload
     public class Uploads : IUploads
     {
         private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(4);
+        private static readonly List<int> DEFAULT_RETRY_DELAYS = Enumerable.Repeat(200, 5).Concat(Enumerable.Repeat(1000, 29)).ToList();
 
-        // 9 retry delays of 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200 msec for a total retry delay of 102.2 sec
-        private const int INITIAL_RETRY_DELAY = 200;
-        private const int MAX_TOTAL_RETRY_DELAY = 102200;
+        /// <inheritdoc/>
+        public IList<int> RetryDelays { get; set; }
 
         private readonly ProKnowApi _proKnow;
-        private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
-        private readonly IList<string> _terminalStatuses = new List<string>() { "completed", "pending", "failed" };
+        private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+        private static readonly IList<string> _terminalStatuses = new List<string>() { "completed", "pending", "failed" };
 
         /// <summary>
         /// Constructs an Uploads object
@@ -35,6 +35,7 @@ namespace ProKnow.Upload
         internal Uploads(ProKnowApi proKnow)
         {
             _proKnow = proKnow;
+            RetryDelays = DEFAULT_RETRY_DELAYS;
         }
 
         /// <inheritdoc/>
@@ -85,83 +86,95 @@ namespace ProKnow.Upload
         public async Task<IList<UploadProcessingResult>> GetUploadProcessingResultsAsync(WorkspaceItem workspace, IList<UploadResult> uploadResults)
         {
             // Create the collection of processing results for the provided set of uploads
-            var thisUploadProcessingResults = new List<UploadProcessingResult>();
+            var idToUploadProcessingResult = new Dictionary<string, UploadProcessingResult>();
 
             // Create the collection of unresolved uploads
             var unresolvedUploadResults = uploadResults.ToList();
             var unresolvedUploadIds = uploadResults.Select(t => t.Id);
 
-            Dictionary<string, object> queryParameters = null;
-            var totalRetryDelay = 0;
-            var nextRetryDelay = INITIAL_RETRY_DELAY;
-            while (unresolvedUploadResults.Count > 0 && totalRetryDelay < MAX_TOTAL_RETRY_DELAY)
+            // Loop until retries are exhausted
+            var retryDelayIndex = 0;
+            while (true)
             {
-                // Query the processed uploads, filtering those whose status has changed since the previous query
-                var responseJson = await _proKnow.Requestor.GetAsync($"/workspaces/{workspace.Id}/uploads/", null, queryParameters);
-                var allUploadProcessingResults = JsonSerializer.Deserialize<IList<UploadProcessingResult>>(responseJson);
-
-                // Create collection to hold resolved upload IDs from this query
-                var resolvedUploadIds = new List<string>();
-
-                // Loop for each unresolved upload
-                foreach (var unresolvedUpload in unresolvedUploadResults)
+                // Loop until ProKnow has no more pages of upload processing results
+                Dictionary<string, object> queryParameters = null;
+                while (true)
                 {
-                    // Search for corresponding upload in the query response
-                    var uploadProcessingResult = allUploadProcessingResults.FirstOrDefault(x => x.Id == unresolvedUpload.Id);
+                    // Get the next page of upload processing results by filtering those updated after the last one to reach terminal status on the previous page
+                    var responseJson = await _proKnow.Requestor.GetAsync($"/workspaces/{workspace.Id}/uploads/", null, queryParameters);
+                    var thisPageUploadProcessingResults = JsonSerializer.Deserialize<IList<UploadProcessingResult>>(responseJson);
 
-                    // If the upload was found and its processing has reached a terminal status
-                    if (uploadProcessingResult != null && _terminalStatuses.Contains(uploadProcessingResult.Status))
+                    // Create collection to hold resolved upload IDs from this query
+                    var resolvedUploadIds = new List<string>();
+
+                    // Loop for each unresolved upload
+                    foreach (var unresolvedUpload in unresolvedUploadResults)
                     {
-                        // Overwrite the filename in case of duplicate content (ProKnow returns the original filename rather than the one just uploaded)
-                        uploadProcessingResult.Path = unresolvedUpload.Path;
+                        // Search for corresponding upload in the query response
+                        var uploadProcessingResult = thisPageUploadProcessingResults.FirstOrDefault(x => x.Id == unresolvedUpload.Id);
 
-                        // Save the upload processing result
-                        thisUploadProcessingResults.Add(uploadProcessingResult);
-
-                        // Add the ID to the list of resolved upload IDs for this query
-                        resolvedUploadIds.Add(uploadProcessingResult.Id);
-                    }
-                }
-
-                // Remove any uploads that reached terminal status from the collection of unresolved uploads
-                foreach (var resolvedUploadId in resolvedUploadIds)
-                {
-                    var index = unresolvedUploadResults.FindIndex(t => t.Id == resolvedUploadId);
-                    unresolvedUploadResults.RemoveAt(index);
-                }
-
-                // If there are still unresolved uploads
-                if (unresolvedUploadResults.Count > 0)
-                {
-                    // Get the last upload in the provided set of uploads whose processing has reached a terminal status
-                    var lastTerminalUploadProcessingResult = thisUploadProcessingResults.LastOrDefault(t => _terminalStatuses.Contains(t.Status));
-
-                    // If one was found
-                    if (lastTerminalUploadProcessingResult != null)
-                    {
-                        // Update the query parameters to search for processed uploads updated after this one
-                        if (queryParameters == null)
+                        // If the upload was found
+                        if (uploadProcessingResult != null)
                         {
-                            queryParameters = new Dictionary<string, object>();
+                            // Overwrite the filename in case of duplicate content (ProKnow returns the original filename rather than the one just uploaded)
+                            uploadProcessingResult.Path = unresolvedUpload.Path;
+
+                            // Save the upload processing result
+                            idToUploadProcessingResult[uploadProcessingResult.Id] = uploadProcessingResult;
+
+                            // If its processing has reached a terminal status
+                            if (_terminalStatuses.Contains(uploadProcessingResult.Status))
+                            {
+                                // Add the ID to the list of resolved upload IDs for this query
+                                resolvedUploadIds.Add(uploadProcessingResult.Id);
+                            }
                         }
-                        queryParameters["updated"] = lastTerminalUploadProcessingResult.UpdatedAt;
-                        queryParameters["after"] = lastTerminalUploadProcessingResult.Id;
                     }
 
-                    // Give the uploads some time to process with each retry waiting twice as long as the previous retry
-                    await Task.Delay(nextRetryDelay);
-                    totalRetryDelay += nextRetryDelay;
-                    nextRetryDelay *= 2;
+                    // Remove any uploads that reached terminal status from the collection of unresolved uploads
+                    foreach (var resolvedUploadId in resolvedUploadIds)
+                    {
+                        var index = unresolvedUploadResults.FindIndex(t => t.Id == resolvedUploadId);
+                        unresolvedUploadResults.RemoveAt(index);
+                    }
+
+                    // If there are still unresolved uploads and possibly another page of results
+                    if (unresolvedUploadResults.Count > 0 && thisPageUploadProcessingResults.Count > 0)
+                    {
+                        // Get the last upload on the current page whose processing has reached a terminal status
+                        var lastTerminalUploadProcessingResult = thisPageUploadProcessingResults.LastOrDefault(t => _terminalStatuses.Contains(t.Status));
+
+                        // If one was found
+                        if (lastTerminalUploadProcessingResult != null)
+                        {
+                            // Update the query parameters to search for processed uploads updated after this one
+                            if (queryParameters == null)
+                            {
+                                queryParameters = new Dictionary<string, object>();
+                            }
+                            queryParameters["updated"] = lastTerminalUploadProcessingResult.UpdatedAt;
+                            queryParameters["after"] = lastTerminalUploadProcessingResult.Id;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                } // End loop through pages of processing results
+
+                // If there are still unresolved uploads and retries have not been exhausted
+                if (unresolvedUploadResults.Count > 0 && retryDelayIndex < RetryDelays.Count)
+                {
+                    // Give the uploads some time to process
+                    await Task.Delay(RetryDelays[retryDelayIndex++]);
                 }
-            }
+                else
+                {
+                    break;
+                }
+            } // End loop retries
 
-            // Verify there are no unresolved uploads
-            if (unresolvedUploadResults.Count > 0)
-            {
-                throw new ProKnowException($"ProKnow processing of ${unresolvedUploadResults.Count} DICOM objects has not completed.  Timed out after {totalRetryDelay / 1000} sec.");
-            }
-
-            return thisUploadProcessingResults;
+            return idToUploadProcessingResult.Values.ToList();
         }
 
         /// <inheritdoc/>

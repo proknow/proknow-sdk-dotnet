@@ -326,9 +326,48 @@ namespace ProKnow.Upload.Test
         }
 
         [TestMethod]
-        public async Task UploadAsyncTest_DuplicateFiles()
+        public async Task GetUploadProcessingResultsAsyncTest_ExhaustRetries()
         {
             int testNumber = 10;
+
+            // Create a ProKnowApi with one small retry delay
+            var proKnow = new ProKnowApi(TestSettings.BaseUrl, TestSettings.CredentialsFile);
+            proKnow.Uploads.RetryDelays = new int[] { 1 }.ToList();
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Read a DICOM file to use as a template
+            var templatePath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RD.dcm");
+            var dicomFile = DicomFile.Open(templatePath, FileReadOption.ReadAll);
+            var dicomDataset = dicomFile.Dataset;
+
+            // Upload enough DICOM objects so that some reach terminal status and others don't
+            var allUploadResults = new List<UploadResult>();
+            for (var i = 0; i < 20; i++)
+            {
+                dicomDataset.AddOrUpdate<string>(DicomTag.SOPInstanceUID, DicomUID.Generate().UID);
+                var tempPath = Path.GetTempFileName();
+                dicomFile.Save(tempPath);
+                var thisUploadResults = await proKnow.Uploads.UploadAsync(workspaceItem, tempPath);
+                allUploadResults.AddRange(thisUploadResults);
+                File.Delete(tempPath);
+            }
+
+            // Wait for processing and get processing results
+            var uploadProcessingResults = await proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, allUploadResults);
+
+            // Verify processing results were successfully retrieved for all uploaded files, i.e., that query parameters were
+            // properly applied to page through upload results returned by ProKnow
+            Assert.AreEqual(20, uploadProcessingResults.Count);
+            Assert.IsTrue(uploadProcessingResults.Any(t => t.Status == "completed"));
+            Assert.IsTrue(uploadProcessingResults.Any(t => t.Status == "processing"));
+        }
+
+        [TestMethod]
+        public async Task UploadAsyncTest_DuplicateFiles()
+        {
+            int testNumber = 11;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -366,7 +405,7 @@ namespace ProKnow.Upload.Test
         [TestMethod]
         public async Task UploadAsyncTest_DuplicateObjects()
         {
-            int testNumber = 11;
+            int testNumber = 12;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -400,6 +439,75 @@ namespace ProKnow.Upload.Test
             Assert.AreEqual("dose", uploadProcessingResults2[0].Entity.Type);
             Assert.AreEqual("RTDOSE", uploadProcessingResults2[0].Entity.Modality);
             Assert.IsTrue(String.IsNullOrEmpty(uploadProcessingResults2[0].Entity.Description));
+        }
+
+        [TestMethod]
+        public async Task UploadAsyncTest_LongProcessingTimes()
+        {
+            int testNumber = 13;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Read a DICOM file to use as a template
+            var templatePath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RD.dcm");
+            var dicomFile = DicomFile.Open(templatePath, FileReadOption.ReadAll);
+            var dicomDataset = dicomFile.Dataset;
+
+            // Upload more than 200 unique DICOM objects (maximum batch size of upload results returned by ProKnow)
+            var allUploadResults = new List<UploadResult>();
+            for (var i = 0; i < 205; i++)
+            {
+                dicomDataset.AddOrUpdate<string>(DicomTag.SOPInstanceUID, DicomUID.Generate().UID);
+                var tempPath = Path.GetTempFileName();
+                dicomFile.Save(tempPath);
+                allUploadResults.AddRange(await _proKnow.Uploads.UploadAsync(workspaceItem, tempPath));
+                File.Delete(tempPath);
+            }
+
+            // Upload another DICOM object that will take a long time to process
+            var path = Path.Combine(TestSettings.TestDataRootDirectory, "StructureSet", "RS.Big.dcm");
+            allUploadResults.AddRange(await _proKnow.Uploads.UploadAsync(workspaceItem, path));
+
+            // Upload one more DICOM object that won't take a long time to process
+            path = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RD.dcm");
+            allUploadResults.AddRange(await _proKnow.Uploads.UploadAsync(workspaceItem, path));
+
+            // Wait for processing and get processing results
+            var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, allUploadResults);
+
+            // Verify processing results were successfully retrieved for all uploaded files, i.e., that query parameters were
+            // properly applied to page through upload results returned by ProKnow
+            Assert.AreEqual(207, uploadProcessingResults.Count);
+            Assert.AreEqual(0, uploadProcessingResults.Count(t => t.Status != "completed"));
+        }
+
+        [TestMethod]
+        public async Task UploadAsyncTest_LargeFile()
+        {
+            int testNumber = 14;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Upload a large file and wait for it to be processed
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Dose", "RD.Large.dcm");
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath);
+            var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+
+            // Verify the returned upload processing results
+            Assert.AreEqual(1, uploadProcessingResults.Count);
+            Assert.AreEqual(uploadResults[0].Id, uploadProcessingResults[0].Id);
+            Assert.AreEqual(uploadResults[0].Path, uploadProcessingResults[0].Path);
+            Assert.AreEqual("completed", uploadProcessingResults[0].Status);
+            Assert.AreEqual("OFHMKeeLRs58TLb5MxR3CvqVq", uploadProcessingResults[0].Patient.Mrn);
+            Assert.AreEqual("pZNqUhhwdfVnxjXu", uploadProcessingResults[0].Patient.Name);
+            Assert.AreEqual("1.2.246.352.221.48272622262322454668259763899214074244", uploadProcessingResults[0].Study.Uid);
+            Assert.IsTrue(String.IsNullOrEmpty(uploadProcessingResults[0].Study.Name));
+            Assert.AreEqual("1.2.246.352.221.50664457847203972258548924729170517675", uploadProcessingResults[0].Entity.Uid);
+            Assert.AreEqual("dose", uploadProcessingResults[0].Entity.Type);
+            Assert.AreEqual("RTDOSE", uploadProcessingResults[0].Entity.Modality);
+            Assert.IsTrue(String.IsNullOrEmpty(uploadProcessingResults[0].Entity.Description));
         }
     }
 }

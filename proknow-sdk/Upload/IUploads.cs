@@ -10,6 +10,11 @@ namespace ProKnow.Upload
     public interface IUploads
     {
         /// <summary>
+        /// The retry delays in milliseconds for obtaining ProKnow upload processing results
+        /// </summary>
+        IList<int> RetryDelays { get; set; }
+
+        /// <summary>
         /// Upload file(s) asynchronously
         /// </summary>
         /// <param name="workspaceItem">The workspace</param>

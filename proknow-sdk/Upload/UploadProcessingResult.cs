@@ -70,5 +70,14 @@ namespace ProKnow.Upload
         /// </summary>
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; }
+
+        /// <summary>
+        /// Provides a string representation of this object
+        /// </summary>
+        /// <returns>A string representation of this object</returns>
+        public override string ToString()
+        {
+            return $"{Id} {Path} {Status} {UpdatedAt}";
+        }
     }
 }
