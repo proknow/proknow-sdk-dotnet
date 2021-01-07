@@ -178,8 +178,9 @@ namespace ProKnow.Upload
         /// <param name="uploadResults">The upload results for each file</param>
         /// <returns>The processing results for each file</returns>
         /// <remarks>
-        /// <para>The return value of this method can be used to construct an <see cref="UploadBatch"/> which can be used to
-        /// look up patients, entities, spatial registration objects, and file statuses within the processing results.</para>
+        /// <para>The Results property of the return value of this method can be used to construct an <see cref="UploadBatch"/>
+        /// which can be used to look up patients, entities, spatial registration objects, and file statuses within the processing
+        /// results.</para>
         /// <para>This overload is more performant than the one that takes a string workspace ProKnow ID or name because the
         /// workspace does not need to be resolved.</para>
         /// </remarks>
@@ -194,7 +195,7 @@ namespace ProKnow.Upload
         /// var uploadProcessingResults = await pk.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
         /// </code>
         /// </example>
-        Task<IList<UploadProcessingResult>> GetUploadProcessingResultsAsync(WorkspaceItem workspace, IList<UploadResult> uploadResults);
+        Task<UploadProcessingResults> GetUploadProcessingResultsAsync(WorkspaceItem workspace, IList<UploadResult> uploadResults);
 
         /// <summary>
         /// Gets the processing results for a provided set of uploads
@@ -204,8 +205,9 @@ namespace ProKnow.Upload
         /// <returns>The processing results for each file</returns>
         /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
         /// <remarks>
-        /// <para>The return value of this method can be used to construct an <see cref="UploadBatch"/> which can be used to
-        /// look up patients, entities, spatial registration objects, and file statuses within the processing results.</para>
+        /// <para>The Results property of the return value of this method can be used to construct an <see cref="UploadBatch"/>
+        /// which can be used to look up patients, entities, spatial registration objects, and file statuses within the processing
+        /// results.</para>
         /// <para>This overload is less performant than the one that takes a workspace item because the workspace needs to be
         /// resolved.</para>
         /// </remarks>
@@ -219,6 +221,6 @@ namespace ProKnow.Upload
         /// var uploadProcessingResults = await pk.Uploads.GetUploadProcessingResultsAsync("Upload Test", uploadResults);
         /// </code>
         /// </example>
-        Task<IList<UploadProcessingResult>> GetUploadProcessingResultsAsync(string workspaceId, IList<UploadResult> uploadResults);
+        Task<UploadProcessingResults> GetUploadProcessingResultsAsync(string workspaceId, IList<UploadResult> uploadResults);
     }
 }

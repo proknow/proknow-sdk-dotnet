@@ -45,7 +45,7 @@ namespace ProKnow.Upload.Test
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
             var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
-            var uploadBatch = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults);
+            var uploadBatch = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults.Results);
 
             // Get the summary views of the patient and entity in the upload response
             var uploadPatientSummary = uploadBatch.FindPatient(uploadPath);

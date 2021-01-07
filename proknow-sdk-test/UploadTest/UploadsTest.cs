@@ -229,9 +229,9 @@ namespace ProKnow.Upload.Test
             var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify the returned upload processing results
-            Assert.AreEqual(3, uploadProcessingResults.Count);
+            Assert.AreEqual(3, uploadProcessingResults.Results.Count);
 
-            var regProcessingResult = uploadProcessingResults.First(t => t.Id == regUploadResult.Id);
+            var regProcessingResult = uploadProcessingResults.Results.First(t => t.Id == regUploadResult.Id);
             Assert.AreEqual(regUploadResult.Path, regProcessingResult.Path);
             Assert.AreEqual("completed", regProcessingResult.Status);
             Assert.AreEqual("0stCQd22vqX3RkoxNM0s332kJ", regProcessingResult.Patient.Mrn);
@@ -240,7 +240,7 @@ namespace ProKnow.Upload.Test
             Assert.IsTrue(String.IsNullOrEmpty(regProcessingResult.Study.Name));
             Assert.AreEqual("1.2.246.352.221.52738008096457865345287404867971417272", regProcessingResult.Sro.Uid);
 
-            var ctProcessingResult = uploadProcessingResults.First(t => t.Id == ctUploadResult.Id);
+            var ctProcessingResult = uploadProcessingResults.Results.First(t => t.Id == ctUploadResult.Id);
             Assert.AreEqual(ctUploadResult.Path, ctProcessingResult.Path);
             Assert.AreEqual("completed", ctProcessingResult.Status);
             Assert.AreEqual("0stCQd22vqX3RkoxNM0s332kJ", ctProcessingResult.Patient.Mrn);
@@ -252,7 +252,7 @@ namespace ProKnow.Upload.Test
             Assert.AreEqual("CT", ctProcessingResult.Entity.Modality);
             Assert.IsTrue(String.IsNullOrEmpty(ctProcessingResult.Entity.Description));
 
-            var mrProcessingResult = uploadProcessingResults.First(t => t.Id == mrUploadResult.Id);
+            var mrProcessingResult = uploadProcessingResults.Results.First(t => t.Id == mrUploadResult.Id);
             Assert.AreEqual(mrUploadResult.Path, mrProcessingResult.Path);
             Assert.AreEqual("completed", mrProcessingResult.Status);
             Assert.AreEqual("0stCQd22vqX3RkoxNM0s332kJ", mrProcessingResult.Patient.Mrn);
@@ -263,6 +263,9 @@ namespace ProKnow.Upload.Test
             Assert.AreEqual("image_set", mrProcessingResult.Entity.Type);
             Assert.AreEqual("MR", mrProcessingResult.Entity.Modality);
             Assert.IsTrue(String.IsNullOrEmpty(mrProcessingResult.Entity.Description));
+
+            Assert.IsFalse(uploadProcessingResults.WereRetryDelaysExhausted);
+            Assert.AreEqual(30000, uploadProcessingResults.TotalRetryDelayInMsec);
         }
 
         [TestMethod]
@@ -285,10 +288,13 @@ namespace ProKnow.Upload.Test
             var uploadProcessingResults2 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults2);
 
             // Verify that upload processing results were returned for the second test folder
-            Assert.AreEqual(3, uploadProcessingResults2.Count);
-            Assert.IsTrue(uploadProcessingResults2.Any(t => t.Path == Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm")));
-            Assert.IsTrue(uploadProcessingResults2.Any(t => t.Path == Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "ct.dcm")));
-            Assert.IsTrue(uploadProcessingResults2.Any(t => t.Path == Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "mr.dcm")));
+            Assert.AreEqual(3, uploadProcessingResults2.Results.Count);
+            Assert.IsTrue(uploadProcessingResults2.Results.Any(t => t.Path == Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm")));
+            Assert.IsTrue(uploadProcessingResults2.Results.Any(t => t.Path == Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "ct.dcm")));
+            Assert.IsTrue(uploadProcessingResults2.Results.Any(t => t.Path == Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "mr.dcm")));
+
+            Assert.IsFalse(uploadProcessingResults2.WereRetryDelaysExhausted);
+            Assert.AreEqual(30000, uploadProcessingResults2.TotalRetryDelayInMsec);
         }
 
         [TestMethod]
@@ -321,8 +327,11 @@ namespace ProKnow.Upload.Test
 
             // Verify processing results were successfully retrieved for all uploaded files, i.e., that query parameters were
             // properly applied to page through upload results returned by ProKnow
-            Assert.AreEqual(205, uploadProcessingResults.Count);
-            Assert.AreEqual(0, uploadProcessingResults.Count(t => t.Status != "completed"));
+            Assert.AreEqual(205, uploadProcessingResults.Results.Count);
+            Assert.AreEqual(0, uploadProcessingResults.Results.Count(t => t.Status != "completed"));
+
+            Assert.IsFalse(uploadProcessingResults.WereRetryDelaysExhausted);
+            Assert.AreEqual(30000, uploadProcessingResults.TotalRetryDelayInMsec);
         }
 
         [TestMethod]
@@ -359,9 +368,12 @@ namespace ProKnow.Upload.Test
 
             // Verify processing results were successfully retrieved for all uploaded files, i.e., that query parameters were
             // properly applied to page through upload results returned by ProKnow
-            Assert.AreEqual(20, uploadProcessingResults.Count);
-            Assert.IsTrue(uploadProcessingResults.Any(t => t.Status == "completed"));
-            Assert.IsTrue(uploadProcessingResults.Any(t => t.Status == "processing"));
+            Assert.AreEqual(20, uploadProcessingResults.Results.Count);
+            Assert.IsTrue(uploadProcessingResults.Results.Any(t => t.Status == "completed"));
+            Assert.IsTrue(uploadProcessingResults.Results.Any(t => t.Status == "processing"));
+
+            Assert.IsTrue(uploadProcessingResults.WereRetryDelaysExhausted);
+            Assert.AreEqual(1, uploadProcessingResults.TotalRetryDelayInMsec);
         }
 
         [TestMethod]
@@ -388,18 +400,21 @@ namespace ProKnow.Upload.Test
             var uploadProcessingResults2 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults2);
 
             // Verify the returned upload processing results
-            Assert.AreEqual(1, uploadProcessingResults2.Count);
-            Assert.AreEqual(uploadResults2[0].Id, uploadProcessingResults2[0].Id);
-            Assert.AreEqual(uploadResults2[0].Path, uploadProcessingResults2[0].Path);
-            Assert.AreEqual("completed", uploadProcessingResults2[0].Status);
-            Assert.AreEqual("HNC-0522c0009", uploadProcessingResults2[0].Patient.Mrn);
-            Assert.AreEqual("Becker^Matthew", uploadProcessingResults2[0].Patient.Name);
-            Assert.AreEqual("1.3.6.1.4.1.22213.2.26558", uploadProcessingResults2[0].Study.Uid);
-            Assert.AreEqual("522", uploadProcessingResults2[0].Study.Name);
-            Assert.AreEqual("2.16.840.1.114337.1.1.1535997926.2", uploadProcessingResults2[0].Entity.Uid);
-            Assert.AreEqual("dose", uploadProcessingResults2[0].Entity.Type);
-            Assert.AreEqual("RTDOSE", uploadProcessingResults2[0].Entity.Modality);
-            Assert.IsTrue(String.IsNullOrEmpty(uploadProcessingResults2[0].Entity.Description));
+            Assert.AreEqual(1, uploadProcessingResults2.Results.Count);
+            Assert.AreEqual(uploadResults2[0].Id, uploadProcessingResults2.Results[0].Id);
+            Assert.AreEqual(uploadResults2[0].Path, uploadProcessingResults2.Results[0].Path);
+            Assert.AreEqual("completed", uploadProcessingResults2.Results[0].Status);
+            Assert.AreEqual("HNC-0522c0009", uploadProcessingResults2.Results[0].Patient.Mrn);
+            Assert.AreEqual("Becker^Matthew", uploadProcessingResults2.Results[0].Patient.Name);
+            Assert.AreEqual("1.3.6.1.4.1.22213.2.26558", uploadProcessingResults2.Results[0].Study.Uid);
+            Assert.AreEqual("522", uploadProcessingResults2.Results[0].Study.Name);
+            Assert.AreEqual("2.16.840.1.114337.1.1.1535997926.2", uploadProcessingResults2.Results[0].Entity.Uid);
+            Assert.AreEqual("dose", uploadProcessingResults2.Results[0].Entity.Type);
+            Assert.AreEqual("RTDOSE", uploadProcessingResults2.Results[0].Entity.Modality);
+            Assert.IsTrue(String.IsNullOrEmpty(uploadProcessingResults2.Results[0].Entity.Description));
+
+            Assert.IsFalse(uploadProcessingResults2.WereRetryDelaysExhausted);
+            Assert.AreEqual(30000, uploadProcessingResults2.TotalRetryDelayInMsec);
         }
 
         [TestMethod]
@@ -427,18 +442,21 @@ namespace ProKnow.Upload.Test
             var uploadProcessingResults2 = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults2);
 
             // Verify the returned upload processing results, including that the new rather than original file name is returned
-            Assert.AreEqual(1, uploadProcessingResults2.Count);
-            Assert.AreEqual(uploadResults2[0].Id, uploadProcessingResults2[0].Id);
-            Assert.AreEqual(uploadPath2, uploadProcessingResults2[0].Path);
-            Assert.AreEqual("completed", uploadProcessingResults2[0].Status);
-            Assert.AreEqual("HNC-0522c0009", uploadProcessingResults2[0].Patient.Mrn);
-            Assert.AreEqual("Becker^Matthew", uploadProcessingResults2[0].Patient.Name);
-            Assert.AreEqual("1.3.6.1.4.1.22213.2.26558", uploadProcessingResults2[0].Study.Uid);
-            Assert.AreEqual("522", uploadProcessingResults2[0].Study.Name);
-            Assert.AreEqual("2.16.840.1.114337.1.1.1535997926.2", uploadProcessingResults2[0].Entity.Uid);
-            Assert.AreEqual("dose", uploadProcessingResults2[0].Entity.Type);
-            Assert.AreEqual("RTDOSE", uploadProcessingResults2[0].Entity.Modality);
-            Assert.IsTrue(String.IsNullOrEmpty(uploadProcessingResults2[0].Entity.Description));
+            Assert.AreEqual(1, uploadProcessingResults2.Results.Count);
+            Assert.AreEqual(uploadResults2[0].Id, uploadProcessingResults2.Results[0].Id);
+            Assert.AreEqual(uploadPath2, uploadProcessingResults2.Results[0].Path);
+            Assert.AreEqual("completed", uploadProcessingResults2.Results[0].Status);
+            Assert.AreEqual("HNC-0522c0009", uploadProcessingResults2.Results[0].Patient.Mrn);
+            Assert.AreEqual("Becker^Matthew", uploadProcessingResults2.Results[0].Patient.Name);
+            Assert.AreEqual("1.3.6.1.4.1.22213.2.26558", uploadProcessingResults2.Results[0].Study.Uid);
+            Assert.AreEqual("522", uploadProcessingResults2.Results[0].Study.Name);
+            Assert.AreEqual("2.16.840.1.114337.1.1.1535997926.2", uploadProcessingResults2.Results[0].Entity.Uid);
+            Assert.AreEqual("dose", uploadProcessingResults2.Results[0].Entity.Type);
+            Assert.AreEqual("RTDOSE", uploadProcessingResults2.Results[0].Entity.Modality);
+            Assert.IsTrue(String.IsNullOrEmpty(uploadProcessingResults2.Results[0].Entity.Description));
+
+            Assert.IsFalse(uploadProcessingResults2.WereRetryDelaysExhausted);
+            Assert.AreEqual(30000, uploadProcessingResults2.TotalRetryDelayInMsec);
         }
 
         [TestMethod]
@@ -466,7 +484,7 @@ namespace ProKnow.Upload.Test
             }
 
             // Upload another DICOM object that will take a long time to process
-            var path = Path.Combine(TestSettings.TestDataRootDirectory, "StructureSet", "RS.Big.dcm");
+            var path = Path.Combine(TestSettings.TestDataRootDirectory, "StructureSet", "RS.Large.dcm");
             allUploadResults.AddRange(await _proKnow.Uploads.UploadAsync(workspaceItem, path));
 
             // Upload one more DICOM object that won't take a long time to process
@@ -478,8 +496,11 @@ namespace ProKnow.Upload.Test
 
             // Verify processing results were successfully retrieved for all uploaded files, i.e., that query parameters were
             // properly applied to page through upload results returned by ProKnow
-            Assert.AreEqual(207, uploadProcessingResults.Count);
-            Assert.AreEqual(0, uploadProcessingResults.Count(t => t.Status != "completed"));
+            Assert.AreEqual(207, uploadProcessingResults.Results.Count);
+            Assert.AreEqual(0, uploadProcessingResults.Results.Count(t => t.Status != "completed"));
+
+            Assert.IsFalse(uploadProcessingResults.WereRetryDelaysExhausted);
+            Assert.AreEqual(30000, uploadProcessingResults.TotalRetryDelayInMsec);
         }
 
         [TestMethod]
@@ -496,18 +517,21 @@ namespace ProKnow.Upload.Test
             var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
 
             // Verify the returned upload processing results
-            Assert.AreEqual(1, uploadProcessingResults.Count);
-            Assert.AreEqual(uploadResults[0].Id, uploadProcessingResults[0].Id);
-            Assert.AreEqual(uploadResults[0].Path, uploadProcessingResults[0].Path);
-            Assert.AreEqual("completed", uploadProcessingResults[0].Status);
-            Assert.AreEqual("OFHMKeeLRs58TLb5MxR3CvqVq", uploadProcessingResults[0].Patient.Mrn);
-            Assert.AreEqual("pZNqUhhwdfVnxjXu", uploadProcessingResults[0].Patient.Name);
-            Assert.AreEqual("1.2.246.352.221.48272622262322454668259763899214074244", uploadProcessingResults[0].Study.Uid);
-            Assert.IsTrue(String.IsNullOrEmpty(uploadProcessingResults[0].Study.Name));
-            Assert.AreEqual("1.2.246.352.221.50664457847203972258548924729170517675", uploadProcessingResults[0].Entity.Uid);
-            Assert.AreEqual("dose", uploadProcessingResults[0].Entity.Type);
-            Assert.AreEqual("RTDOSE", uploadProcessingResults[0].Entity.Modality);
-            Assert.IsTrue(String.IsNullOrEmpty(uploadProcessingResults[0].Entity.Description));
+            Assert.AreEqual(1, uploadProcessingResults.Results.Count);
+            Assert.AreEqual(uploadResults[0].Id, uploadProcessingResults.Results[0].Id);
+            Assert.AreEqual(uploadResults[0].Path, uploadProcessingResults.Results[0].Path);
+            Assert.AreEqual("completed", uploadProcessingResults.Results[0].Status);
+            Assert.AreEqual("OFHMKeeLRs58TLb5MxR3CvqVq", uploadProcessingResults.Results[0].Patient.Mrn);
+            Assert.AreEqual("pZNqUhhwdfVnxjXu", uploadProcessingResults.Results[0].Patient.Name);
+            Assert.AreEqual("1.2.246.352.221.48272622262322454668259763899214074244", uploadProcessingResults.Results[0].Study.Uid);
+            Assert.IsTrue(String.IsNullOrEmpty(uploadProcessingResults.Results[0].Study.Name));
+            Assert.AreEqual("1.2.246.352.221.50664457847203972258548924729170517675", uploadProcessingResults.Results[0].Entity.Uid);
+            Assert.AreEqual("dose", uploadProcessingResults.Results[0].Entity.Type);
+            Assert.AreEqual("RTDOSE", uploadProcessingResults.Results[0].Entity.Modality);
+            Assert.IsTrue(String.IsNullOrEmpty(uploadProcessingResults.Results[0].Entity.Description));
+
+            Assert.IsFalse(uploadProcessingResults.WereRetryDelaysExhausted);
+            Assert.AreEqual(30000, uploadProcessingResults.TotalRetryDelayInMsec);
         }
     }
 }

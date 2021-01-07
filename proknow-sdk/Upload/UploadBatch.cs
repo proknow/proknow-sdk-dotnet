@@ -39,7 +39,7 @@ namespace ProKnow.Upload
         /// var workspaceItem = await pk.Workspaces.ResolveByNameAsync("Upload Test");
         /// var uploadResults = await pk.Uploads.UploadAsync(workspaceItem, "./DICOM");
         /// var uploadProcessingResults = await pk.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
-        /// var uploadBatch = new UploadBatch(pk, workspaceItem.Id, uploadProcessingResults);
+        /// var uploadBatch = new UploadBatch(pk, workspaceItem.Id, uploadProcessingResults.Results);
         /// </code>
         /// </example>
         public UploadBatch(ProKnowApi proKnow, string workspaceId, IList<UploadProcessingResult> uploadProcessingResults)

@@ -1,5 +1,4 @@
-﻿using ProKnow.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -83,22 +82,23 @@ namespace ProKnow.Upload
         }
 
         /// <inheritdoc/>
-        public async Task<IList<UploadProcessingResult>> GetUploadProcessingResultsAsync(WorkspaceItem workspace, IList<UploadResult> uploadResults)
+        public async Task<UploadProcessingResults> GetUploadProcessingResultsAsync(WorkspaceItem workspace, IList<UploadResult> uploadResults)
         {
             // Create the collection of processing results for the provided set of uploads
             var idToUploadProcessingResult = new Dictionary<string, UploadProcessingResult>();
 
             // Create the collection of unresolved uploads
             var unresolvedUploadResults = uploadResults.ToList();
-            var unresolvedUploadIds = uploadResults.Select(t => t.Id);
 
-            // Loop until retries are exhausted
+            // Loop until all uploads are resolved or retries have been exhausted
+            bool wereRetryDelaysExhausted = false;
             var retryDelayIndex = 0;
-            while (true)
+            do
             {
-                // Loop until ProKnow has no more pages of upload processing results
+                // Loop until all uploads are resolved or there are no more pages of upload processing results
+                bool isPossiblyAnotherPageOfResults = true;
                 Dictionary<string, object> queryParameters = null;
-                while (true)
+                do
                 {
                     // Get the next page of upload processing results by filtering those updated after the last one to reach terminal status on the previous page
                     var responseJson = await _proKnow.Requestor.GetAsync($"/workspaces/{workspace.Id}/uploads/", null, queryParameters);
@@ -127,6 +127,9 @@ namespace ProKnow.Upload
                             {
                                 // Add the ID to the list of resolved upload IDs for this query
                                 resolvedUploadIds.Add(uploadProcessingResult.Id);
+
+                                // Reset the retry delay index since progress is being made on the upload processing
+                                retryDelayIndex = 0;
                             }
                         }
                     }
@@ -138,8 +141,8 @@ namespace ProKnow.Upload
                         unresolvedUploadResults.RemoveAt(index);
                     }
 
-                    // If there are still unresolved uploads and possibly another page of results
-                    if (unresolvedUploadResults.Count > 0 && thisPageUploadProcessingResults.Count > 0)
+                    // If there is possibly another page of results
+                    if (isPossiblyAnotherPageOfResults = thisPageUploadProcessingResults.Count > 0)
                     {
                         // Get the last upload on the current page whose processing has reached a terminal status
                         var lastTerminalUploadProcessingResult = thisPageUploadProcessingResults.LastOrDefault(t => _terminalStatuses.Contains(t.Status));
@@ -156,29 +159,31 @@ namespace ProKnow.Upload
                             queryParameters["after"] = lastTerminalUploadProcessingResult.Id;
                         }
                     }
-                    else
-                    {
-                        break;
-                    }
-                } // End loop through pages of processing results
+                }
+                while (unresolvedUploadResults.Count() > 0 && isPossiblyAnotherPageOfResults);
 
-                // If there are still unresolved uploads and retries have not been exhausted
-                if (unresolvedUploadResults.Count > 0 && retryDelayIndex < RetryDelays.Count)
+                // If retries have not been exhausted
+                if (retryDelayIndex < RetryDelays.Count)
                 {
-                    // Give the uploads some time to process
+                    // Give the uploads some time to process and retry
                     await Task.Delay(RetryDelays[retryDelayIndex++]);
                 }
                 else
                 {
-                    break;
+                    wereRetryDelaysExhausted = true;
                 }
-            } // End loop retries
+            }
+            while (unresolvedUploadResults.Count() > 0 && !wereRetryDelaysExhausted);
 
-            return idToUploadProcessingResult.Values.ToList();
+            return new UploadProcessingResults() {
+                Results = idToUploadProcessingResult.Values.ToList(),
+                WereRetryDelaysExhausted = wereRetryDelaysExhausted,
+                TotalRetryDelayInMsec = RetryDelays.Sum()
+            };
         }
 
         /// <inheritdoc/>
-        public async Task<IList<UploadProcessingResult>> GetUploadProcessingResultsAsync(string workspace, IList<UploadResult> uploadResults)
+        public async Task<UploadProcessingResults> GetUploadProcessingResultsAsync(string workspace, IList<UploadResult> uploadResults)
         {
             // Resolve the workspace
             var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
