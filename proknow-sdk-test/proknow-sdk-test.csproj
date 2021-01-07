@@ -50,6 +50,9 @@
     <None Update="TestData\bogus_credentials.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestData\Dose\RD.Large.dcm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestData\dummy.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -80,13 +83,16 @@
     <None Update="TestData\Sro\reg.dcm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestData\StructureSet\RS.Large.dcm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestData\StructureSet\RS.Points.dcm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="TestData\StructureSet\" />
+    <Folder Include="TestData\Dose\" />
     <Folder Include="TestData\Sro\" />
   </ItemGroup>
 

@@ -38,5 +38,14 @@ namespace ProKnow.Upload
             Path = path;
             Status = status;
         }
+
+        /// <summary>
+        /// Provides a string representation of this object
+        /// </summary>
+        /// <returns>A string representation of this object</returns>
+        public override string ToString()
+        {
+            return $"{Id} {Path} {Status}";
+        }
     }
 }

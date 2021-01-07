@@ -31,6 +31,7 @@ namespace ProKnow.Upload
         /// "completed":  This object successfully completed processing
         /// "pending":  This object needs attention due to a conflict
         /// "failed":  This object failed to process
+        /// "processing":  This object did not complete processing before retry delays were exhausted
         /// </summary>
         [JsonPropertyName("status")]
         public string Status { get; set; }
@@ -70,5 +71,14 @@ namespace ProKnow.Upload
         /// </summary>
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; }
+
+        /// <summary>
+        /// Provides a string representation of this object
+        /// </summary>
+        /// <returns>A string representation of this object</returns>
+        public override string ToString()
+        {
+            return $"{Id} {Path} {Status} {UpdatedAt}";
+        }
     }
 }

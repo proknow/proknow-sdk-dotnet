@@ -4,6 +4,20 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.1.1
+
+*Bug Fixes and Enhancements*
+
+- Enable user configuration of retry delays for waiting for ProKnow upload processing through the Uploads RetryDelays property
+- Set default retry delays to five 200 msec delays followed by 29 1000 msec delays for a total retry delay of 30 sec
+- Fix bug where an upload processing result is occasionally missed
+- For GetUploadProcessingResultsAsync:
+    - Modify the return to be an UploadProcessingResults class object that includes:
+        - The list of UploadProcessingResult for each upload
+        - A flag indicating whether the retry delays were exhausted
+        - The total retry delay
+    - Don't throw an exception if any uploads don't reach a terminal state, just include those uploads in the list with the status of "processing"
+
 ## v0.1.0
 
 *Enhancements*
