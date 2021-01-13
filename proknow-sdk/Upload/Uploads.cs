@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProKnow.Exceptions;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +18,9 @@ namespace ProKnow.Upload
     /// </summary>
     public class Uploads : IUploads
     {
+        // Note that ProKnow requires a minimum chunk size of 5 MB
+        private static readonly int UPLOAD_CHUNK_SIZE_IN_BYTES = 5 * 1024 * 1024;
+        private static readonly int CHUNK_COPY_BUFFER_SIZE_IN_BYTES = 4 * 1024;
         private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(4);
         private static readonly List<int> DEFAULT_RETRY_DELAYS = Enumerable.Repeat(200, 5).Concat(Enumerable.Repeat(1000, 29)).ToList();
 
@@ -238,16 +242,8 @@ namespace ProKnow.Upload
             {
                 tasks.Add(Task.Run(async () =>
                 {
-                    await _semaphore.WaitAsync();
-                    try
-                    {
-                        var uploadResult = await UploadFileAsync(workspaceId, path, overrides);
-                        uploadResults.Add(uploadResult);
-                    }
-                    finally
-                    {
-                        _semaphore.Release();
-                    }
+                    var uploadResult = await UploadFileAsync(workspaceId, path, overrides);
+                    uploadResults.Add(uploadResult);
                 }));
             }
             await Task.WhenAll(tasks);
@@ -255,7 +251,7 @@ namespace ProKnow.Upload
         }
 
         /// <summary>
-        /// Uploads a file asychronously
+        /// Uploads a file asynchronously
         /// </summary>
         /// <param name="workspaceId">The ProKnow ID for the workspace</param>
         /// <param name="path">The full path to the file to be uploaded</param>
@@ -263,14 +259,28 @@ namespace ProKnow.Upload
         /// <returns>The upload result</returns>
         private async Task<UploadResult> UploadFileAsync(string workspaceId, string path, UploadFileOverrides overrides = null)
         {
+            // Gather information for the upload
+            var initiateFileUploadInfo = BuildInitiateFileUploadInfo(workspaceId, path, overrides);
+
             // Initiate the file upload
-            var initiateFileUploadResponse = await InitiateFileUploadAsync(workspaceId, path, overrides);
+            var initiateFileUploadResponse = await InitiateFileUploadAsync(initiateFileUploadInfo);
 
             // If the file has not already been uploaded
             if (initiateFileUploadResponse.Status == "uploading")
             {
-                // Upload the file content
-                await UploadChunkAsync(initiateFileUploadResponse);
+                // Upload the file contents in chunks
+                var uploadChunkInfos = ChunkFile(initiateFileUploadInfo, initiateFileUploadResponse);
+                var tasks = new List<Task>();
+                foreach (var uploadChunkInfo in uploadChunkInfos)
+                {
+                    tasks.Add(Task.Run(async () =>
+                    {
+                        await UploadChunkAsync(uploadChunkInfo);
+                    }
+                    ));
+                    
+                }
+                await Task.WhenAll(tasks);
             }
             else
             {
@@ -282,69 +292,175 @@ namespace ProKnow.Upload
         }
 
         /// <summary>
+        /// Collects the information needed to build an initiate file upload request
+        /// </summary>
+        /// <param name="workspaceId">The ProKnow ID of the workspace to which the file will be uploaded</param>
+        /// <param name="path"></param>
+        /// <param name="overrides"></param>
+        /// <returns>The information needed to build an initiate file upload request</returns>
+        private InitiateFileUploadInfo BuildInitiateFileUploadInfo(string workspaceId, string path, UploadFileOverrides overrides = null)
+        {
+            using (var md5 = MD5.Create())
+            {
+                using (var stream = File.OpenRead(path))
+                {
+                    return new InitiateFileUploadInfo
+                    {
+                        WorkspaceId = workspaceId,
+                        Path = path,
+                        FileSize = stream.Length,
+                        Checksum = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower(),
+                        ChunkSize = UPLOAD_CHUNK_SIZE_IN_BYTES,
+                        NumberOfChunks = Math.Max(1, Convert.ToInt32(Math.Floor(Convert.ToDouble(stream.Length) / UPLOAD_CHUNK_SIZE_IN_BYTES))),
+                        Overrides = overrides
+                    };
+                }
+            }
+        }
+
+        /// <summary>
         /// Initiates a file upload asynchronously
         /// </summary>
-        /// <param name="workspaceId">The ProKnow ID of the destination workspace</param>
-        /// <param name="path">The full path to the file</param>
-        /// <param name="overrides">Optional overrides to be applied to the data</param>
+        /// <param name="initiateFileUploadInfo">The information needed to build an initiate file upload request</param>
         /// <returns>The response from the file upload initiation</returns>
-        private async Task<InitiateFileUploadResponse> InitiateFileUploadAsync(string workspaceId, string path, UploadFileOverrides overrides = null)
+        private async Task<InitiateFileUploadResponse> InitiateFileUploadAsync(InitiateFileUploadInfo initiateFileUploadInfo)
         {
-            var requestBody = BuildInitiateFileUploadRequestBody(path, overrides);
-            var json = await _proKnow.Requestor.PostAsync($"/workspaces/{workspaceId}/uploads/", null, requestBody);
+            var requestBody = BuildInitiateFileUploadRequestBody(initiateFileUploadInfo);
+            var json = await _proKnow.Requestor.PostAsync($"/workspaces/{initiateFileUploadInfo.WorkspaceId}/uploads/", null, requestBody);
             return JsonSerializer.Deserialize<InitiateFileUploadResponse>(json);
         }
 
         /// <summary>
         /// Builds the body for an initiate file upload request
         /// </summary>
-        /// <param name="path">The full path to the file</param>
-        /// <param name="overrides">Optional overrides to be applied to the data</param>
+        /// <param name="initiateFileUploadInfo">The information to initiate the file upload</param>
         /// <returns>The content for the body</returns>
-        private HttpContent BuildInitiateFileUploadRequestBody(string path, UploadFileOverrides overrides = null)
+        private HttpContent BuildInitiateFileUploadRequestBody(InitiateFileUploadInfo initiateFileUploadInfo)
         {
-            using (var md5 = MD5.Create())
+            var uploadFileRequest = new InitiateFileUploadRequestBody
             {
-                using (var stream = File.OpenRead(path))
-                {
-                    var uploadFileRequest = new InitiateFileUploadRequestBody
-                    {
-                        Checksum = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower(),
-                        Path = path,
-                        Filesize = stream.Length,
-                        IsMultipart = false,
-                        Overrides = overrides
-                    };
-                    var json = JsonSerializer.Serialize(uploadFileRequest, _jsonSerializerOptions);
-                    return new StringContent(json, Encoding.UTF8, "application/json");
-                }
-            }
+                Checksum = initiateFileUploadInfo.Checksum,
+                Path = initiateFileUploadInfo.Path,
+                Filesize = initiateFileUploadInfo.FileSize,
+                IsMultipart = initiateFileUploadInfo.NumberOfChunks > 1,
+                Overrides = initiateFileUploadInfo.Overrides
+            };
+            var json = JsonSerializer.Serialize(uploadFileRequest, _jsonSerializerOptions);
+            return new StringContent(json, Encoding.UTF8, "application/json");
         }
 
         /// <summary>
-        /// Uploads file contents as a single chunk
+        /// Split a file into chunks
         /// </summary>
-        /// <param name="initiateFileUploadResponse">The response from the request to initiate the file upload</param>
-        private async Task UploadChunkAsync(InitiateFileUploadResponse initiateFileUploadResponse)
+        /// <param name="initiateFileUploadInfo">The information used to initiate a file upload</param>
+        /// <param name="initiateFileUploadResponse">The response to the request to initiate a file upload</param>
+        /// <returns>Information to upload each chunk</returns>
+        private IList<UploadChunkInfo> ChunkFile(InitiateFileUploadInfo initiateFileUploadInfo,
+            InitiateFileUploadResponse initiateFileUploadResponse)
         {
-            var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
-                new KeyValuePair<string, string>("Proknow-Key", initiateFileUploadResponse.Key) };
-            var filesize = initiateFileUploadResponse.Filesize.ToString();
-            using (var content = new MultipartFormDataContent())
+            var chunks = new List<UploadChunkInfo>();
+            using (var inputFileStream = File.OpenRead(initiateFileUploadInfo.Path))
             {
-                content.Add(new StringContent("1"), "flowChunkNumber");
-                content.Add(new StringContent(filesize), "flowChunkSize");
-                content.Add(new StringContent(filesize), "flowCurrentChunkSize");
-                content.Add(new StringContent("1"), "flowTotalChunks");
-                content.Add(new StringContent(filesize), "flowTotalSize");
-                content.Add(new StringContent(initiateFileUploadResponse.Identifier), "flowIdentifier");
-                content.Add(new StringContent(initiateFileUploadResponse.Path), "flowFilename");
-                content.Add(new StringContent(initiateFileUploadResponse.IsMultipart.ToString()), "flowMultipart");
-                using (var fs = File.OpenRead(initiateFileUploadResponse.Path))
+                for (int chunkIndex = 0; chunkIndex < initiateFileUploadInfo.NumberOfChunks; chunkIndex++)
                 {
-                    content.Add(new StreamContent(fs), "file", initiateFileUploadResponse.Path);
-                    await _proKnow.Requestor.PostAsync("/uploads/chunks", headerKeyValuePairs, content);
+                    string chunkPath;
+                    long chunkSize;
+                    if (initiateFileUploadInfo.NumberOfChunks > 1)
+                    {
+                        chunkPath = Path.GetTempFileName();
+
+                        // When chunking, chunk size can NOT be smaller than UPLOAD_CHUNK_SIZE_IN_BYTES, i.e., the last chunk will
+                        // be between UPLOAD_CHUNK_SIZE_IN_BYTES and 2 * UPLOAD_CHUNK_SIZE_IN_BYTES
+                        chunkSize = chunkIndex < initiateFileUploadInfo.NumberOfChunks - 1 ? UPLOAD_CHUNK_SIZE_IN_BYTES :
+                            initiateFileUploadInfo.FileSize - chunkIndex * UPLOAD_CHUNK_SIZE_IN_BYTES;
+
+                        using (var outputFileStream = File.OpenWrite(chunkPath))
+                        {
+                            var totalNumberOfBytesCopied = CopyStream(inputFileStream, outputFileStream, chunkSize);
+                            if (totalNumberOfBytesCopied != chunkSize)
+                            {
+                                throw new ProKnowException($"Error creating chunk for upload.  Only {totalNumberOfBytesCopied} of {chunkSize} bytes were copied.");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        chunkPath = initiateFileUploadInfo.Path;
+                        chunkSize = initiateFileUploadInfo.FileSize;
+                    }
+                    var chunk = new UploadChunkInfo
+                    {
+                        InitiateFileUploadInfo = initiateFileUploadInfo,
+                        InitiateFileUploadResponse = initiateFileUploadResponse,
+                        ChunkIndex = chunkIndex,
+                        ChunkPath = chunkPath,
+                        ChunkSize = chunkSize
+                    };
+                    chunks.Add(chunk);
                 }
+            }
+
+            return chunks;
+        }
+
+        /// <summary>
+        /// Copies bytes from the current position in an input stream to the beginning of an output stream, advancing the
+        /// position of the input stream
+        /// </summary>
+        /// <param name="input">The input stream</param>
+        /// <param name="output">The output stream</param>
+        /// <param name="numberOfBytesToCopy">The number of bytes to copy</param>
+        /// <returns>The total number of bytes copied</returns>
+        private long CopyStream(Stream input, Stream output, long numberOfBytesToCopy)
+        {
+            long totalNumberOfBytesCopied = 0L;
+            byte[] buffer = new byte[CHUNK_COPY_BUFFER_SIZE_IN_BYTES];
+            do
+            {
+                var thisNumberOfBytesToCopy = Math.Min(numberOfBytesToCopy - totalNumberOfBytesCopied, buffer.Length);
+                var thisNumberOfBytesCopied = input.Read(buffer, 0, (int)thisNumberOfBytesToCopy);
+                if (thisNumberOfBytesCopied == 0)
+                {
+                    break; // end of input stream
+                }
+                output.Write(buffer, 0, thisNumberOfBytesCopied);
+                totalNumberOfBytesCopied += thisNumberOfBytesCopied;
+            } while (totalNumberOfBytesCopied < numberOfBytesToCopy);
+            return totalNumberOfBytesCopied;
+        }
+
+        /// <summary>
+        /// Uploads a chunk of a file
+        /// </summary>
+        /// <param name="uploadChunkInfo">The information to upload a chunk</param>
+        private async Task UploadChunkAsync(UploadChunkInfo uploadChunkInfo)
+        {
+            await _semaphore.WaitAsync();
+
+            try
+            {
+                var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
+                    new KeyValuePair<string, string>("Proknow-Key", uploadChunkInfo.InitiateFileUploadResponse.Key) };
+                using (var content = new MultipartFormDataContent())
+                {
+                    content.Add(new StringContent((uploadChunkInfo.ChunkIndex + 1).ToString()), "flowChunkNumber");
+                    content.Add(new StringContent(UPLOAD_CHUNK_SIZE_IN_BYTES.ToString()), "flowChunkSize");
+                    content.Add(new StringContent(uploadChunkInfo.ChunkSize.ToString()), "flowCurrentChunkSize");
+                    content.Add(new StringContent(uploadChunkInfo.InitiateFileUploadInfo.NumberOfChunks.ToString()), "flowTotalChunks");
+                    content.Add(new StringContent(uploadChunkInfo.InitiateFileUploadInfo.FileSize.ToString()), "flowTotalSize");
+                    content.Add(new StringContent(uploadChunkInfo.InitiateFileUploadResponse.Identifier), "flowIdentifier");
+                    content.Add(new StringContent(uploadChunkInfo.InitiateFileUploadInfo.Path), "flowFilename");
+                    content.Add(new StringContent((uploadChunkInfo.InitiateFileUploadInfo.NumberOfChunks > 1).ToString().ToLower()), "flowMultipart");
+                    using (var fs = File.OpenRead(uploadChunkInfo.ChunkPath))
+                    {
+                        content.Add(new StreamContent(fs), "file", uploadChunkInfo.InitiateFileUploadInfo.Path);
+                        await _proKnow.Requestor.PostAsync("/uploads/chunks", headerKeyValuePairs, content);
+                    }
+                }
+            }
+            finally
+            {
+                _semaphore.Release();
             }
         }
     }
