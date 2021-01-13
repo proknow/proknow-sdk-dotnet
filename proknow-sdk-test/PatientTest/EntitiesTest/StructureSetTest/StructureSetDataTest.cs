@@ -41,9 +41,11 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             var structureSetItem = await entitySummaries[0].GetAsync() as StructureSetItem;
             var structureSetData = structureSetItem.Data;
 
-            var expectedNames = new string[] { "BODY", "PAROTID_LT", "PTV" }.ToHashSet();
-            var actualNames = structureSetData.Rois.Select(r => r.Name).ToHashSet();
-            Assert.IsTrue(expectedNames.SetEquals(actualNames));
+            Assert.AreEqual(3, structureSetData.Rois.Count());
+            // Check Number rather than Name because the latter could be impacted by structure set renaming rules
+            var expectedNumbers = new int[] { 1, 2, 3 }.ToHashSet();
+            var actualNumbers = structureSetData.Rois.Select(r => r.Number).ToHashSet();
+            Assert.IsTrue(expectedNumbers.SetEquals(actualNumbers));
         }
     }
 }
