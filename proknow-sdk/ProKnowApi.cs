@@ -66,6 +66,10 @@ namespace ProKnow
                     proKnowCredentials = JsonSerializer.Deserialize<ProKnowCredentials>(sr.ReadToEnd());
                 }
             }
+            catch (DirectoryNotFoundException)
+            {
+                throw new ProKnowException($"The credentials file '{credentialsFile}' was not found.");
+            }
             catch (FileNotFoundException)
             {
                 throw new ProKnowException($"The credentials file '{credentialsFile}' was not found.");

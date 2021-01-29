@@ -4,6 +4,13 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.1.3
+
+*Bug Fixes*
+
+- Improve HTTP request error handling in Requestor
+- Correct exception error message thrown by ProKnowApi constructor when directory containing credentials file is not found 
+
 ## v0.1.2
 
 *Bug Fixes*
