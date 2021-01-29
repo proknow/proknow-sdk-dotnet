@@ -208,7 +208,7 @@ namespace ProKnow.Patient.Entities
             }
             catch (ProKnowHttpException ex)
             {
-                if (ex.StatusCode != "Conflict")
+                if (ex.ResponseStatusCode != "Conflict")
                 {
                     throw;
                 }
@@ -268,8 +268,8 @@ namespace ProKnow.Patient.Entities
                     foreach (var ex in ae.InnerExceptions)
                     {
                         // Handle the situation where the lock expired before we could delete it (e.g., when unit testing)
-                        if (!(ex is ProKnowHttpException) ||
-                            ex.Message != "HttpError(Forbidden, Structure set is not currently locked for editing)")
+                        if (!(ex is ProKnowHttpException) || (ex as ProKnowHttpException).ResponseStatusCode != "Forbidden" ||
+                            !ex.Message.Contains("Structure set is not currently locked for editing"))
                         {
                             throw ex;
                         }

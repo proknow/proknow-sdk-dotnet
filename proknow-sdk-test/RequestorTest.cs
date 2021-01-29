@@ -63,7 +63,7 @@ namespace ProKnow.Test
         }
 
         [TestMethod]
-        public async Task DeleteAsyncTest_HttpError()
+        public async Task DeleteAsyncTest_InvalidRoute()
         {
             try
             {
@@ -72,7 +72,10 @@ namespace ProKnow.Test
             }
             catch (ProKnowHttpException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("HttpError"));
+                Assert.AreEqual("DELETE", ex.RequestMethod);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/api//invalid/route", ex.RequestUri);
+                Assert.AreEqual("NotFound", ex.ResponseStatusCode);
+                Assert.IsTrue(ex.Message.Contains("Cannot DELETE /api//invalid/route"));
             }
         }
 
@@ -93,23 +96,72 @@ namespace ProKnow.Test
         }
 
         [TestMethod]
-        public async Task GetAsyncTest_HttpError()
+        public async Task GetAsyncTest_NotOk()
         {
+            // Verify that the expected exception is thrown
             try
             {
-                await _proKnow.Requestor.GetAsync($"/invalid/route");
+                await _proKnow.Requestor.GetAsync($"/workspaces/12345");
                 Assert.Fail();
             }
             catch (ProKnowHttpException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("HttpError"));
+                Assert.AreEqual("GET", ex.RequestMethod);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/api//workspaces/12345", ex.RequestUri);
+                Assert.AreEqual("NotFound", ex.ResponseStatusCode);
+                Assert.IsTrue(ex.Message.Contains("Cannot GET /api//workspaces/12345"));
+            }
+        }
+
+        [TestMethod]
+        public async Task GetAsyncTest_OkWithIndexHtmlResponse()
+        {
+            // Modify the base URL suffix so that the path won't match any routes, causing ProKnow to return the index.html
+            var baseUrl = $"{TestSettings.BaseUrl}/88";
+            var proKnow = new ProKnowApi(baseUrl, TestSettings.CredentialsFile);
+
+            // Verify that the expected exception is thrown
+            try
+            {
+                await proKnow.Requestor.GetAsync($"/workspaces");
+                Assert.Fail();
+            }
+            catch (ProKnowHttpException ex)
+            {
+                Assert.AreEqual("GET", ex.RequestMethod);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/88/api//workspaces", ex.RequestUri);
+                Assert.AreEqual("NotFound", ex.ResponseStatusCode);
+                Assert.AreEqual($"Please verify the base URL '{baseUrl}'.", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public async Task GetAsyncTest_HttpRequestException()
+        {
+            // Modify the base URL prefix (subdomain) so that the request causes an exception
+            var baseUrl = $"https://invalid.elekta-training.proknow.com";
+            var proKnow = new ProKnowApi(baseUrl, TestSettings.CredentialsFile);
+
+            // Verify that the expected exception is thrown
+            try
+            {
+                await proKnow.Requestor.GetAsync($"/workspaces");
+                Assert.Fail();
+            }
+            catch (ProKnowHttpException ex)
+            {
+                Assert.AreEqual("GET", ex.RequestMethod);
+                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api//workspaces", ex.RequestUri);
+                Assert.AreEqual("BadRequest", ex.ResponseStatusCode);
+                Assert.AreEqual("Exception occurred making HTTP request.", ex.Message);
+                Assert.AreEqual("The SSL connection could not be established, see inner exception.", ex.InnerException.Message);
             }
         }
 
         [TestMethod]
         public async Task GetBinaryAsyncTest()
         {
-            int testNumber = 5;
+            int testNumber = 7;
 
             // Create a workspace
             await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -140,23 +192,53 @@ namespace ProKnow.Test
         }
 
         [TestMethod]
-        public async Task GetBinaryAsyncTest_HttpError()
+        public async Task GetBinaryAsyncTest_NotOk()
         {
+            // Use invalid credentials for request
+            var proKnow = new ProKnowApi(TestSettings.BaseUrl, Path.Combine(TestSettings.TestDataRootDirectory, "bogus_credentials.json"));
+
+            // Verify that the expected exception is thrown
             try
             {
-                await _proKnow.Requestor.GetBinaryAsync($"/invalid/route");
+                await proKnow.Requestor.GetBinaryAsync($"/imagesets/12345/images/abcde");
                 Assert.Fail();
             }
             catch (ProKnowHttpException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("HttpError"));
+                Assert.AreEqual("GET", ex.RequestMethod);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/api//imagesets/12345/images/abcde", ex.RequestUri);
+                Assert.AreEqual("Unauthorized", ex.ResponseStatusCode);
+                Assert.AreEqual("Invalid or missing credentials", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public async Task GetBinaryAsyncTest_HttpRequestException()
+        {
+            // Modify the base URL prefix (subdomain) so that the request causes an exception
+            var baseUrl = $"https://invalid.elekta-training.proknow.com";
+            var proKnow = new ProKnowApi(baseUrl, TestSettings.CredentialsFile);
+
+            // Verify that the expected exception is thrown
+            try
+            {
+                await proKnow.Requestor.GetBinaryAsync($"/imagesets/12345/images/abcde");
+                Assert.Fail();
+            }
+            catch (ProKnowHttpException ex)
+            {
+                Assert.AreEqual("GET", ex.RequestMethod);
+                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api//imagesets/12345/images/abcde", ex.RequestUri);
+                Assert.AreEqual("BadRequest", ex.ResponseStatusCode);
+                Assert.AreEqual("Exception occurred making HTTP request.", ex.Message);
+                Assert.AreEqual("The SSL connection could not be established, see inner exception.", ex.InnerException.Message);
             }
         }
 
         [TestMethod]
         public async Task PostAsyncTest()
         {
-            int testNumber = 7;
+            int testNumber = 10;
 
             // Create a workspace using the Requestor
             var workspaceName = $"SDK-{_testClassName}-{testNumber}";
@@ -172,23 +254,53 @@ namespace ProKnow.Test
         }
 
         [TestMethod]
-        public async Task PostAsyncTest_HttpError()
+        public async Task PostAsyncTest_NotOk()
         {
+            // Use invalid credentials for request
+            var proKnow = new ProKnowApi(TestSettings.BaseUrl, Path.Combine(TestSettings.TestDataRootDirectory, "bogus_credentials.json"));
+
+            // Verify that the expected exception is thrown
             try
             {
-                await _proKnow.Requestor.PostAsync($"/invalid/route");
+                await proKnow.Requestor.PostAsync($"/workspaces");
                 Assert.Fail();
             }
             catch (ProKnowHttpException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("HttpError"));
+                Assert.AreEqual("POST", ex.RequestMethod);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/api//workspaces", ex.RequestUri);
+                Assert.AreEqual("Unauthorized", ex.ResponseStatusCode);
+                Assert.AreEqual("Invalid or missing credentials", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public async Task PostAsyncTest_HttpRequestException()
+        {
+            // Modify the base URL prefix (subdomain) so that the request causes an exception
+            var baseUrl = $"https://invalid.elekta-training.proknow.com";
+            var proKnow = new ProKnowApi(baseUrl, TestSettings.CredentialsFile);
+
+            // Verify that the expected exception is thrown
+            try
+            {
+                await proKnow.Requestor.PostAsync($"/workspaces");
+                Assert.Fail();
+            }
+            catch (ProKnowHttpException ex)
+            {
+                Assert.AreEqual("POST", ex.RequestMethod);
+                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api//workspaces", ex.RequestUri);
+                Assert.AreEqual("BadRequest", ex.ResponseStatusCode);
+                Assert.AreEqual("Exception occurred making HTTP request.", ex.Message);
+                Assert.AreEqual("The SSL connection could not be established, see inner exception.", ex.InnerException.Message);
             }
         }
 
         [TestMethod]
         public async Task PutAsyncTest()
         {
-            int testNumber = 9;
+            int testNumber = 13;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -214,23 +326,53 @@ namespace ProKnow.Test
         }
 
         [TestMethod]
-        public async Task PutAsyncTest_HttpError()
+        public async Task PutAsyncTest_NotOk()
         {
+            // Use invalid credentials for request
+            var proKnow = new ProKnowApi(TestSettings.BaseUrl, Path.Combine(TestSettings.TestDataRootDirectory, "bogus_credentials.json"));
+
+            // Verify that the expected exception is thrown
             try
             {
-                await _proKnow.Requestor.PutAsync($"/invalid/route");
+                await proKnow.Requestor.PutAsync($"/workspaces");
                 Assert.Fail();
             }
             catch (ProKnowHttpException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("HttpError"));
+                Assert.AreEqual("PUT", ex.RequestMethod);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/api//workspaces", ex.RequestUri);
+                Assert.AreEqual("Unauthorized", ex.ResponseStatusCode);
+                Assert.AreEqual("Invalid or missing credentials", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public async Task PutAsyncTest_HttpRequestException()
+        {
+            // Modify the base URL prefix (subdomain) so that the request causes an exception
+            var baseUrl = $"https://invalid.elekta-training.proknow.com";
+            var proKnow = new ProKnowApi(baseUrl, TestSettings.CredentialsFile);
+
+            // Verify that the expected exception is thrown
+            try
+            {
+                await proKnow.Requestor.PutAsync($"/workspaces");
+                Assert.Fail();
+            }
+            catch (ProKnowHttpException ex)
+            {
+                Assert.AreEqual("PUT", ex.RequestMethod);
+                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api//workspaces", ex.RequestUri);
+                Assert.AreEqual("BadRequest", ex.ResponseStatusCode);
+                Assert.AreEqual("Exception occurred making HTTP request.", ex.Message);
+                Assert.AreEqual("The SSL connection could not be established, see inner exception.", ex.InnerException.Message);
             }
         }
 
         [TestMethod]
         public async Task StreamAsyncTest()
         {
-            int testNumber = 11;
+            int testNumber = 16;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -304,16 +446,46 @@ namespace ProKnow.Test
         }
 
         [TestMethod]
-        public async Task StreamAsyncTest_HttpError()
+        public async Task StreamAsyncTest_NotOk()
         {
+            // Use invalid credentials for request
+            var proKnow = new ProKnowApi(TestSettings.BaseUrl, Path.Combine(TestSettings.TestDataRootDirectory, "bogus_credentials.json"));
+
+            // Verify that the expected exception is thrown
             try
             {
-                await _proKnow.Requestor.StreamAsync("/invalid/route", "./path.dcm");
+                await proKnow.Requestor.StreamAsync($"/workspaces", "dummyPath");
                 Assert.Fail();
             }
             catch (ProKnowHttpException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("HttpError"));
+                Assert.AreEqual("GET", ex.RequestMethod);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/api//workspaces", ex.RequestUri);
+                Assert.AreEqual("Unauthorized", ex.ResponseStatusCode);
+                Assert.AreEqual("Invalid or missing credentials", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public async Task StreamAsyncTest_HttpRequestException()
+        {
+            // Modify the base URL prefix (subdomain) so that the request causes an exception
+            var baseUrl = $"https://invalid.elekta-training.proknow.com";
+            var proKnow = new ProKnowApi(baseUrl, TestSettings.CredentialsFile);
+
+            // Verify that the expected exception is thrown
+            try
+            {
+                await proKnow.Requestor.StreamAsync($"/workspaces", "dummyPath");
+                Assert.Fail();
+            }
+            catch (ProKnowHttpException ex)
+            {
+                Assert.AreEqual("GET", ex.RequestMethod);
+                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api//workspaces", ex.RequestUri);
+                Assert.AreEqual("BadRequest", ex.ResponseStatusCode);
+                Assert.AreEqual("Exception occurred making HTTP request.", ex.Message);
+                Assert.AreEqual("The SSL connection could not be established, see inner exception.", ex.InnerException.Message);
             }
         }
     }

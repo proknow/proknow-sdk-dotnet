@@ -9,6 +9,21 @@ namespace ProKnow.Test
     public class ProKnowApiTest
     {
         [TestMethod]
+        public void Constructor_MissingCredentialsFolder()
+        {
+            var credentialsFile = Path.Combine(TestSettings.TestDataRootDirectory, "not a subfolder", "./credentials.json");
+            try
+            {
+                new ProKnowApi(TestSettings.BaseUrl, credentialsFile);
+                Assert.Fail();
+            }
+            catch (ProKnowException ex)
+            {
+                Assert.AreEqual($"The credentials file '{credentialsFile}' was not found.", ex.Message);
+            }
+        }
+
+        [TestMethod]
         public void Constructor_MissingCredentialsFile()
         {
             var credentialsFile = Path.Combine(TestSettings.TestDataRootDirectory, "./nothing_here");
@@ -67,7 +82,7 @@ namespace ProKnow.Test
             var proKnowApi = new ProKnowApi("https://example.proknow.com", TestSettings.CredentialsFile);
             var connectionStatus = await proKnowApi.GetConnectionStatusAsync();
             Assert.IsFalse(connectionStatus.IsValid);
-            Assert.AreEqual("HttpError(Unauthorized, Invalid or missing credentials)", connectionStatus.ErrorMessage);
+            Assert.AreEqual("Invalid or missing credentials", connectionStatus.ErrorMessage);
         }
 
         [TestMethod]
@@ -77,7 +92,7 @@ namespace ProKnow.Test
             var proKnowApi = new ProKnowApi(TestSettings.BaseUrl, credentialsFile);
             var connectionStatus = await proKnowApi.GetConnectionStatusAsync();
             Assert.IsFalse(connectionStatus.IsValid);
-            Assert.AreEqual("HttpError(Unauthorized, Invalid or missing credentials)", connectionStatus.ErrorMessage);
+            Assert.AreEqual("Invalid or missing credentials", connectionStatus.ErrorMessage);
         }
     }
 }
