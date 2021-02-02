@@ -1,4 +1,5 @@
-﻿using ProKnow.Exceptions;
+﻿using Microsoft.Extensions.Logging;
+using ProKnow.Exceptions;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace ProKnow.Upload
         public IList<int> RetryDelays { get; set; }
 
         private readonly ProKnowApi _proKnow;
+        private readonly ILogger _logger;
         private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
         private static readonly IList<string> _terminalStatuses = new List<string>() { "completed", "pending", "failed" };
 
@@ -37,6 +39,7 @@ namespace ProKnow.Upload
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         internal Uploads(ProKnowApi proKnow)
         {
+            _logger = ProKnowLogging.CreateLogger(typeof(Uploads).FullName);
             _proKnow = proKnow;
             RetryDelays = DEFAULT_RETRY_DELAYS;
         }
@@ -263,6 +266,7 @@ namespace ProKnow.Upload
             var initiateFileUploadInfo = BuildInitiateFileUploadInfo(workspaceId, path, overrides);
 
             // Initiate the file upload
+            _logger.LogDebug($"Initiating upload of file {path} with size {initiateFileUploadInfo.FileSize / 1024.0:0.##} KB.");
             var initiateFileUploadResponse = await InitiateFileUploadAsync(initiateFileUploadInfo);
 
             // If the file has not already been uploaded
@@ -270,12 +274,14 @@ namespace ProKnow.Upload
             {
                 // Upload the file contents in chunks
                 var uploadChunkInfos = ChunkFile(initiateFileUploadInfo, initiateFileUploadResponse);
+                _logger.LogDebug($"Uploading file {path} in {uploadChunkInfos.Count} chunk(s).");
                 var tasks = new List<Task>();
                 foreach (var uploadChunkInfo in uploadChunkInfos)
                 {
                     tasks.Add(Task.Run(async () =>
                     {
                         await UploadChunkAsync(uploadChunkInfo);
+                        _logger.LogDebug($"Uploaded file {path} chunk {uploadChunkInfo.ChunkIndex + 1} of {uploadChunkInfos.Count}.");
                     }
                     ));
                     
@@ -286,6 +292,7 @@ namespace ProKnow.Upload
             {
                 // Overwrite the filename in case of duplicate content (ProKnow returns the original filename rather than the one just uploaded)
                 initiateFileUploadResponse.Path = path;
+                _logger.LogDebug($"Skipped uploading of file {path} (duplicate content).");
             }
 
             return new UploadResult(initiateFileUploadResponse.Id, initiateFileUploadResponse.Path, initiateFileUploadResponse.Status);
@@ -379,7 +386,9 @@ namespace ProKnow.Upload
                             var totalNumberOfBytesCopied = CopyStream(inputFileStream, outputFileStream, chunkSize);
                             if (totalNumberOfBytesCopied != chunkSize)
                             {
-                                throw new ProKnowException($"Error creating chunk for upload.  Only {totalNumberOfBytesCopied} of {chunkSize} bytes were copied.");
+                                var message = $"Error creating chunk {chunkIndex + 1} of {initiateFileUploadInfo.NumberOfChunks} for file {initiateFileUploadInfo.Path}.  Only {totalNumberOfBytesCopied} of {chunkSize} bytes were copied.";
+                                _logger.LogError(message);
+                                throw new ProKnowException(message);
                             }
                         }
                     }
