@@ -107,7 +107,7 @@ namespace ProKnow
         /// structure set</param>
         public ProKnowApi(string baseUrl, string credentialsId, string credentialsSecret, int lockRenewalBuffer = 30)
         {
-            _logger = ProKnowLogging.CreateLogger(nameof(ProKnowApi));
+            _logger = ProKnowLogging.CreateLogger(typeof(ProKnowApi).FullName);
             ConstructorHelper(baseUrl, credentialsId, credentialsSecret, lockRenewalBuffer);
         }
 
