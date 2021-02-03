@@ -4,6 +4,13 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.1.4
+
+*Enhancements*
+
+- Add logging for ProKnowApi and Uploads classes
+- Create symbol package (.snupkg) for debugging 
+
 ## v0.1.3
 
 *Bug Fixes*

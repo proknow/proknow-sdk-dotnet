@@ -1,4 +1,5 @@
-﻿using ProKnow.Collection;
+﻿using Microsoft.Extensions.Logging;
+using ProKnow.Collection;
 using ProKnow.Exceptions;
 using ProKnow.Patient;
 using ProKnow.Role;
@@ -18,6 +19,8 @@ namespace ProKnow
     /// </summary>
     public class ProKnowApi : IProKnowApi
     {
+        private readonly ILogger _logger;
+
         /// <inheritdoc/>
         public Requestor Requestor { get; private set; }
 
@@ -58,6 +61,7 @@ namespace ProKnow
         /// <exception cref="ProKnow.Exceptions.ProKnowException">If the credentials file could not be read or is invalid</exception>
         public ProKnowApi(string baseUrl, string credentialsFile, int lockRenewalBuffer = 30)
         {
+            _logger = ProKnowLogging.CreateLogger(typeof(ProKnowApi).FullName);
             ProKnowCredentials proKnowCredentials = null;
             try
             {
@@ -68,19 +72,27 @@ namespace ProKnow
             }
             catch (DirectoryNotFoundException)
             {
-                throw new ProKnowException($"The credentials file '{credentialsFile}' was not found.");
+                var message = $"The credentials file '{credentialsFile}' was not found.";
+                _logger.LogError(message);
+                throw new ProKnowException(message);
             }
             catch (FileNotFoundException)
             {
-                throw new ProKnowException($"The credentials file '{credentialsFile}' was not found.");
+                var message = $"The credentials file '{credentialsFile}' was not found.";
+                _logger.LogError(message);
+                throw new ProKnowException(message);
             }
             catch (Exception)
             {
-                throw new ProKnowException($"The credentials file '{credentialsFile}' is not valid JSON.");
+                var message = $"The credentials file '{credentialsFile}' is not valid JSON.";
+                _logger.LogError(message);
+                throw new ProKnowException(message);
             }
             if (proKnowCredentials.Id == null || proKnowCredentials.Secret == null)
             {
-                throw new ProKnowException($"The 'id' and/or 'secret' in the credentials file '{credentialsFile}' are missing.");
+                var message = $"The 'id' and/or 'secret' in the credentials file '{credentialsFile}' are missing.";
+                _logger.LogError(message);
+                throw new ProKnowException(message);
             }
             ConstructorHelper(baseUrl, proKnowCredentials.Id, proKnowCredentials.Secret, lockRenewalBuffer);
         }
@@ -95,6 +107,7 @@ namespace ProKnow
         /// structure set</param>
         public ProKnowApi(string baseUrl, string credentialsId, string credentialsSecret, int lockRenewalBuffer = 30)
         {
+            _logger = ProKnowLogging.CreateLogger(typeof(ProKnowApi).FullName);
             ConstructorHelper(baseUrl, credentialsId, credentialsSecret, lockRenewalBuffer);
         }
 

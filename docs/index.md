@@ -16,14 +16,29 @@ you see when you are signed into your ProKnow account.  The form of this URL is 
 in the ProKnow user interface. Always keep your API token secret.  Once you have your `credentials.json`, make note of
 the file path.
 
-The code snippet below can be used to test your installation and configuration of the `proknow-sdk` package.  Please be
-sure to replace `https://example.proknow.com` with your organization's base URL described above, and replace
+The code snippet below can be used to test your installation and configuration of the `proknow-sdk` package.
+
+The LoggerFactory property of the ProKnow.ProKnowLogging class needs to be initialized prior to using the SDK, if
+logging is desired.  See the Microsoft article [Logging in .NET](https://docs.microsoft.com/en-us/dotnet/core/extensions/logging)
+for more information.  The example below requires the Microsoft.Extensions.Logging and Microsoft.Extension.Logging.Debug
+NuGet packages.  When run in debug mode, it will output debug-level messages from the ProKnow.Upload.Uploads class.
+
+Please be sure to replace `https://example.proknow.com` with your organization's base URL described above, and replace
 `./credentials.json` with the path to your credentials file:
 
 ```
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Debug;
 using ProKnow;
 using System.Threading.Tasks;
 
+using var loggerFactory = LoggerFactory.Create(builder =>
+{
+    builder
+        .AddFilter(typeof(Uploads).FullName, LogLevel.Debug)
+        .AddProvider(new DebugLoggerProvider());
+});
+ProKnowLogging.LoggerFactory = loggerFactory;
 var pk = new ProKnowApi('https://example.proknow.com', './credentials.json');
 var connectionStatus = await pk.GetConnectionStatusAsync();
 if (!connectionStatus.IsValid)
