@@ -37,14 +37,14 @@ jobs:
         name: docfx-artifact
         path: docs/_site
 
-    - name: Pack NuGet package
-      run: dotnet pack --configuration Release
+    - name: Pack NuGet packages
+      run: dotnet pack --configuration Release -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
       
-    - name: Upload NuGet package artifact
+    - name: Upload NuGet package artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: nuget-artifact
-        path: "**/*.nupkg"
+        name: nuget-artifacts
+        path: "**/*.*nupkg"
 
   deploy:
     if: github.ref == 'refs/heads/master'
@@ -64,14 +64,13 @@ jobs:
         BUILD_DIR: docs/_site
         GH_PAT: ${{ secrets.GH_PAT }}
       
-    - name: Download NuGet package artifact
+    - name: Download NuGet package artifacts
       uses: actions/download-artifact@v2
       with:
-        name: nuget-artifact
-        path: "**/*.nupkg"
+        name: nuget-artifacts
+        path: "**/*.*nupkg"
 
-    - name: Push package to NuGet
+    - name: Push packages to NuGet
       run: dotnet nuget push **/*.nupkg
             --api-key ${{ secrets.NUGET_DEPLOY_KEY }}
             --source https://api.nuget.org/v3/index.json
-            --no-symbols true
