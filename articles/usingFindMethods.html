@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Using Find Methods </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Using Find Methods ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="using-find-methods">Using Find Methods</h1>
+
+<h2 id="basics">Basics</h2>
+<p>Within the SDK, there are many classes that support a <code>FindAsync</code> method for performing a search over a collection of
+items to find an item matching some criteria. This is can be useful when you know something like the name of an item
+but not its ID. These methods typically have the following signature:</p>
+<pre><code>public async Task&lt;T&gt; FindAsync(Func&lt;T, bool&gt; predicate)
+</code></pre>
+<h2 id="predicate">Predicate</h2>
+<p>The <code>predicate</code> is a function that is passed an item as input and which should return a bool indicating whether the
+item is a match.</p>
+<p>For example, to find a patient names &quot;Terence Arnold&quot; in the &quot;Clinical&quot; workspace:</p>
+<pre><code>using ProKnow;
+using System.Linq;
+using System.Threading.Tasks;
+
+var pk = new ProKnowApi(&quot;https://example.proknow.com&quot;, &quot;./credentials.json&quot;);
+var workspace = await pk.Workspaces.ResolveAsync(&quot;Clinical&quot;);
+var patientSummary = await pk.Patients.FindAsync(workspace.Id, p =&gt; p.Name == &quot;Terence Arnold&quot;);
+</code></pre>
+<p>Note that, in this case, the predicate is a <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/statements-expressions-operators/lambda-expressions">lambda expression</a>.</p>
+<h2 id="other-important-points">Other Important Points</h2>
+<p><strong>The method ProKnow.Patient.PatientItem.FindEntities behaves in a similar fashion.</strong></p>
+<p>The method <a class="xref" href="../api/ProKnow.Patient.PatientItem.html#ProKnow_Patient_PatientItem_FindEntities_System_Func_ProKnow_Patient_Entities_EntitySummary_System_Boolean__">ProKnow.Patient.PatientItem.FindEntities</a>
+behaves similarly to the <code>FindAsync</code> method described above except that the <code>FindEntities</code> method traverses through
+each entity in the entity hierarchy within a PatientItem to find find matching entities. It returns a list of all
+matching entities whereas the <code>FindAsync</code> method returns the first matching item it finds.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

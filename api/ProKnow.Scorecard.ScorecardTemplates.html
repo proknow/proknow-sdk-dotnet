@@ -1,0 +1,484 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ScorecardTemplates
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ScorecardTemplates
+   ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="ProKnow.Scorecard.ScorecardTemplates">
+  
+  
+  <h1 id="ProKnow_Scorecard_ScorecardTemplates" data-uid="ProKnow.Scorecard.ScorecardTemplates" class="text-break">Class ScorecardTemplates
+  </h1>
+  <div class="markdown level0 summary"><p>Interacts with scorecard templates in a ProKnow organization</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">ScorecardTemplates</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="ProKnow.Scorecard.html">ProKnow.Scorecard</a></h6>
+  <h6><strong>Assembly</strong>: proknow-sdk.dll</h6>
+  <h5 id="ProKnow_Scorecard_ScorecardTemplates_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class ScorecardTemplates : object</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  
+  
+  <a id="ProKnow_Scorecard_ScorecardTemplates_CreateAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.CreateAsync*"></a>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplates_CreateAsync_System_String_IList_ProKnow_Scorecard_ComputedMetric__IList_ProKnow_Scorecard_CustomMetric__" data-uid="ProKnow.Scorecard.ScorecardTemplates.CreateAsync(System.String,IList{ProKnow.Scorecard.ComputedMetric},IList{ProKnow.Scorecard.CustomMetric})">CreateAsync(String, IList&lt;ComputedMetric&gt;, IList&lt;CustomMetric&gt;)</h4>
+  <div class="markdown level1 summary"><p>Creates a scorecard template asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateItem&gt; CreateAsync(string name, IList&lt;ComputedMetric&gt; computedMetrics, IList&lt;CustomMetric&gt; customMetrics)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">IList</span>&lt;<a class="xref" href="ProKnow.Scorecard.ComputedMetric.html">ComputedMetric</a>&gt;</td>
+        <td><span class="parametername">computedMetrics</span></td>
+        <td><p>The computed metrics</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">IList</span>&lt;<a class="xref" href="ProKnow.Scorecard.CustomMetric.html">CustomMetric</a>&gt;</td>
+        <td><span class="parametername">customMetrics</span></td>
+        <td><p>The custom metrics</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="ProKnow.Scorecard.ScorecardTemplateItem.html">ScorecardTemplateItem</a>&gt;</td>
+        <td><p>The created scorecard template</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Scorecard_ScorecardTemplates_DeleteAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.DeleteAsync*"></a>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplates_DeleteAsync_System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.DeleteAsync(System.String)">DeleteAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Deletes a scorecard template asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task DeleteAsync(string scorecardTemplateId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">scorecardTemplateId</span></td>
+        <td><p>The ProKnow ID for the scorecard template</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Scorecard_ScorecardTemplates_FindAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.FindAsync*"></a>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplates_FindAsync_Func_ProKnow_Scorecard_ScorecardTemplateSummary_System_Boolean__" data-uid="ProKnow.Scorecard.ScorecardTemplates.FindAsync(Func{ProKnow.Scorecard.ScorecardTemplateSummary,System.Boolean})">FindAsync(Func&lt;ScorecardTemplateSummary, Boolean&gt;)</h4>
+  <div class="markdown level1 summary"><p>Finds a scorecard template asynchronously based on a predicate</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateSummary&gt; FindAsync(Func&lt;ScorecardTemplateSummary, bool&gt; predicate)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Func</span>&lt;<a class="xref" href="ProKnow.Scorecard.ScorecardTemplateSummary.html">ScorecardTemplateSummary</a>, <span class="xref">System.Boolean</span>&gt;</td>
+        <td><span class="parametername">predicate</span></td>
+        <td><p>The predicate for the search</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="ProKnow.Scorecard.ScorecardTemplateSummary.html">ScorecardTemplateSummary</a>&gt;</td>
+        <td><p>The first scorecard template that satisfies the predicate or null if the predicate was null or no
+scorecard template satisfies the predicate</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Scorecard_ScorecardTemplates_GetAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.GetAsync*"></a>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplates_GetAsync_System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.GetAsync(System.String)">GetAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Gets a scorecard template item asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateItem&gt; GetAsync(string scorecardTemplateId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">scorecardTemplateId</span></td>
+        <td><p>The ProKnow ID for the scorecard template</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="ProKnow.Scorecard.ScorecardTemplateItem.html">ScorecardTemplateItem</a>&gt;</td>
+        <td><p>The scorecard template item</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Scorecard_ScorecardTemplates_QueryAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.QueryAsync*"></a>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplates_QueryAsync" data-uid="ProKnow.Scorecard.ScorecardTemplates.QueryAsync">QueryAsync()</h4>
+  <div class="markdown level1 summary"><p>Queries for scorecard templates asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;IList&lt;ScorecardTemplateSummary&gt;&gt; QueryAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">IList</span>&lt;<a class="xref" href="ProKnow.Scorecard.ScorecardTemplateSummary.html">ScorecardTemplateSummary</a>&gt;&gt;</td>
+        <td><p>The scorecard templates</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Scorecard_ScorecardTemplates_ResolveAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.ResolveAsync*"></a>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplates_ResolveAsync_System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.ResolveAsync(System.String)">ResolveAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Resolves a scorecard template asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateSummary&gt; ResolveAsync(string scorecardTemplate)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">scorecardTemplate</span></td>
+        <td><p>The ProKnow ID or name of the scorecard template</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="ProKnow.Scorecard.ScorecardTemplateSummary.html">ScorecardTemplateSummary</a>&gt;</td>
+        <td><p>The scorecard template corresponding to the specified ID or name or null if no matching
+scorecard template was found</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Scorecard_ScorecardTemplates_ResolveByIdAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.ResolveByIdAsync*"></a>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplates_ResolveByIdAsync_System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.ResolveByIdAsync(System.String)">ResolveByIdAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Resolves a scorecard template by its ProKnow ID asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateSummary&gt; ResolveByIdAsync(string scorecardTemplateId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">scorecardTemplateId</span></td>
+        <td><p>The ProKnow ID of the scorecard template</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="ProKnow.Scorecard.ScorecardTemplateSummary.html">ScorecardTemplateSummary</a>&gt;</td>
+        <td><p>The scorecard template corresponding to the specified ID or null if no matching scorecard template
+was found</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Scorecard_ScorecardTemplates_ResolveByNameAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.ResolveByNameAsync*"></a>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplates_ResolveByNameAsync_System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.ResolveByNameAsync(System.String)">ResolveByNameAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Resolves a scorecard template by its name asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateSummary&gt; ResolveByNameAsync(string scorecardTemplateName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">scorecardTemplateName</span></td>
+        <td><p>The name of the scorecard template</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="ProKnow.Scorecard.ScorecardTemplateSummary.html">ScorecardTemplateSummary</a>&gt;</td>
+        <td><p>The scorecard template corresponding to the specified name or null if no matching scorecard template
+was found</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

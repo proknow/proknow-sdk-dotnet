@@ -1,0 +1,735 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class OrganizationPermissions
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class OrganizationPermissions
+   ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="ProKnow.Role.OrganizationPermissions">
+  
+  
+  <h1 id="ProKnow_Role_OrganizationPermissions" data-uid="ProKnow.Role.OrganizationPermissions" class="text-break">Class OrganizationPermissions
+  </h1>
+  <div class="markdown level0 summary"><p>A container for the organization permissions for a role</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">OrganizationPermissions</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="ProKnow.Role.html">ProKnow.Role</a></h6>
+  <h6><strong>Assembly</strong>: proknow-sdk.dll</h6>
+  <h5 id="ProKnow_Role_OrganizationPermissions_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class OrganizationPermissions : object</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions__ctor_" data-uid="ProKnow.Role.OrganizationPermissions.#ctor*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions__ctor" data-uid="ProKnow.Role.OrganizationPermissions.#ctor">OrganizationPermissions()</h4>
+  <div class="markdown level1 summary"><p>Used by deserialization to create an OrganizationPermissions object</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public OrganizationPermissions()</code></pre>
+  </div>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions__ctor_" data-uid="ProKnow.Role.OrganizationPermissions.#ctor*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions__ctor_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_IList_ProKnow_Role_WorkspacePermissions__" data-uid="ProKnow.Role.OrganizationPermissions.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,IList{ProKnow.Role.WorkspacePermissions})">OrganizationPermissions(Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, IList&lt;WorkspacePermissions&gt;)</h4>
+  <div class="markdown level1 summary"><p>Constructs an OrganizationPermissions object</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public OrganizationPermissions(bool canCreateApiKeys = false, bool canManageAccess = false, bool canManageCustomMetrics = false, bool canManageScorecardTemplates = false, bool canManageRenamingRules = false, bool canManageChecklistTemplates = false, bool isCollaborator = false, bool canReadPatients = false, bool canReadCollections = false, bool canViewPhi = false, bool canDownloadDicom = false, bool canWriteCollections = false, bool canWritePatients = false, bool canContourPatients = false, bool canDeleteCollections = false, bool canDeletePatients = false, IList&lt;WorkspacePermissions&gt; workspaces = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canCreateApiKeys</span></td>
+        <td><p>Flag indicating whether role allows creation of API keys</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canManageAccess</span></td>
+        <td><p>Flag indicating whether role allows managing users, roles, and workspaces</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canManageCustomMetrics</span></td>
+        <td><p>Flag indicating whether role allows creation, modification, and deletion of custom metrics</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canManageScorecardTemplates</span></td>
+        <td><p>Flag indicating whether role allows creation, modification, and deletion of scorecard templates</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canManageRenamingRules</span></td>
+        <td><p>Flag indicating whether role allows creation, modification, deletion, and execution of renaming rules</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canManageChecklistTemplates</span></td>
+        <td><p>Flag indicating whether role allows managing of checklist templates</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">isCollaborator</span></td>
+        <td><p>Flag indicating whether this is a collaborator role, i.e., that the other permissions only apply to
+patients across the organization for which a user has been explicitly granted access</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canReadPatients</span></td>
+        <td><p>Flag indicating whether role allows reading of patient data across the organization</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canReadCollections</span></td>
+        <td><p>Flag indicating whether role allows reading of collection data across the organization</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canViewPhi</span></td>
+        <td><p>Flag indicating whether role allows viewing of protected health information (PHI) across the organization</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canDownloadDicom</span></td>
+        <td><p>Flag indicating whether role allows downloading of DICOM files across the organization</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canWriteCollections</span></td>
+        <td><p>Flag indicating whether role allows creation and modification of collection data across the organization</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canWritePatients</span></td>
+        <td><p>Flag indicating whether role allows creation and modification of patient data across the organization</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canContourPatients</span></td>
+        <td><p>Flag indicating whether role allows creation and modification of patient contour data across the organization</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canDeleteCollections</span></td>
+        <td><p>Flag indicating whether role allows deletion of workspace collections across the organization</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canDeletePatients</span></td>
+        <td><p>Flag indicating whether role allows deletion of patients and patient entities across the organization</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">IList</span>&lt;<a class="xref" href="ProKnow.Role.WorkspacePermissions.html">WorkspacePermissions</a>&gt;</td>
+        <td><span class="parametername">workspaces</span></td>
+        <td><p>The collection of workspace permissions for the role</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_CanContourPatients_" data-uid="ProKnow.Role.OrganizationPermissions.CanContourPatients*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_CanContourPatients" data-uid="ProKnow.Role.OrganizationPermissions.CanContourPatients">CanContourPatients</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows creation and modification of patient contour data across the organization</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanContourPatients { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_CanCreateApiKeys_" data-uid="ProKnow.Role.OrganizationPermissions.CanCreateApiKeys*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_CanCreateApiKeys" data-uid="ProKnow.Role.OrganizationPermissions.CanCreateApiKeys">CanCreateApiKeys</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows creation of API keys</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanCreateApiKeys { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_CanDeleteCollections_" data-uid="ProKnow.Role.OrganizationPermissions.CanDeleteCollections*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_CanDeleteCollections" data-uid="ProKnow.Role.OrganizationPermissions.CanDeleteCollections">CanDeleteCollections</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows deletion of workspace collections across the organization</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanDeleteCollections { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_CanDeletePatients_" data-uid="ProKnow.Role.OrganizationPermissions.CanDeletePatients*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_CanDeletePatients" data-uid="ProKnow.Role.OrganizationPermissions.CanDeletePatients">CanDeletePatients</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows deletion of patients and patient entities across the organization</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanDeletePatients { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_CanDownloadDicom_" data-uid="ProKnow.Role.OrganizationPermissions.CanDownloadDicom*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_CanDownloadDicom" data-uid="ProKnow.Role.OrganizationPermissions.CanDownloadDicom">CanDownloadDicom</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows downloading of DICOM files across the organization</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanDownloadDicom { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_CanManageAccess_" data-uid="ProKnow.Role.OrganizationPermissions.CanManageAccess*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_CanManageAccess" data-uid="ProKnow.Role.OrganizationPermissions.CanManageAccess">CanManageAccess</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows managing users, roles, and workspaces</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanManageAccess { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_CanManageChecklistTemplates_" data-uid="ProKnow.Role.OrganizationPermissions.CanManageChecklistTemplates*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_CanManageChecklistTemplates" data-uid="ProKnow.Role.OrganizationPermissions.CanManageChecklistTemplates">CanManageChecklistTemplates</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows managing of checklist templates</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanManageChecklistTemplates { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_CanManageCustomMetrics_" data-uid="ProKnow.Role.OrganizationPermissions.CanManageCustomMetrics*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_CanManageCustomMetrics" data-uid="ProKnow.Role.OrganizationPermissions.CanManageCustomMetrics">CanManageCustomMetrics</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows creation, modification, and deletion of custom metrics</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanManageCustomMetrics { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_CanManageRenamingRules_" data-uid="ProKnow.Role.OrganizationPermissions.CanManageRenamingRules*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_CanManageRenamingRules" data-uid="ProKnow.Role.OrganizationPermissions.CanManageRenamingRules">CanManageRenamingRules</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows creation, modification, deletion, and execution of renaming rules</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanManageRenamingRules { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_CanManageScorecardTemplates_" data-uid="ProKnow.Role.OrganizationPermissions.CanManageScorecardTemplates*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_CanManageScorecardTemplates" data-uid="ProKnow.Role.OrganizationPermissions.CanManageScorecardTemplates">CanManageScorecardTemplates</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows creation, modification, and deletion of scorecard templates</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanManageScorecardTemplates { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_CanReadCollections_" data-uid="ProKnow.Role.OrganizationPermissions.CanReadCollections*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_CanReadCollections" data-uid="ProKnow.Role.OrganizationPermissions.CanReadCollections">CanReadCollections</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows reading of collection data across the organization</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanReadCollections { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_CanReadPatients_" data-uid="ProKnow.Role.OrganizationPermissions.CanReadPatients*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_CanReadPatients" data-uid="ProKnow.Role.OrganizationPermissions.CanReadPatients">CanReadPatients</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows reading of patient data across the organization</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanReadPatients { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_CanViewPhi_" data-uid="ProKnow.Role.OrganizationPermissions.CanViewPhi*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_CanViewPhi" data-uid="ProKnow.Role.OrganizationPermissions.CanViewPhi">CanViewPhi</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows viewing of protected health information (PHI) across the organization</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanViewPhi { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_CanWriteCollections_" data-uid="ProKnow.Role.OrganizationPermissions.CanWriteCollections*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_CanWriteCollections" data-uid="ProKnow.Role.OrganizationPermissions.CanWriteCollections">CanWriteCollections</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows creation and modification of collection data across the organization</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanWriteCollections { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_CanWritePatients_" data-uid="ProKnow.Role.OrganizationPermissions.CanWritePatients*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_CanWritePatients" data-uid="ProKnow.Role.OrganizationPermissions.CanWritePatients">CanWritePatients</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows creation and modification of patient data across the organization</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanWritePatients { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_ExtensionData_" data-uid="ProKnow.Role.OrganizationPermissions.ExtensionData*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_ExtensionData" data-uid="ProKnow.Role.OrganizationPermissions.ExtensionData">ExtensionData</h4>
+  <div class="markdown level1 summary"><p>Properties encountered during deserialization without matching members</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Dictionary&lt;string, object&gt; ExtensionData { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Dictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.Object</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_IsCollaborator_" data-uid="ProKnow.Role.OrganizationPermissions.IsCollaborator*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_IsCollaborator" data-uid="ProKnow.Role.OrganizationPermissions.IsCollaborator">IsCollaborator</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether this is a collaborator role, i.e., that the other permissions only apply to
+patients across the organization for which a user has been explicitly granted access</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsCollaborator { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_OrganizationPermissions_Workspaces_" data-uid="ProKnow.Role.OrganizationPermissions.Workspaces*"></a>
+  <h4 id="ProKnow_Role_OrganizationPermissions_Workspaces" data-uid="ProKnow.Role.OrganizationPermissions.Workspaces">Workspaces</h4>
+  <div class="markdown level1 summary"><p>The collection of workspace permissions for the role</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IList&lt;WorkspacePermissions&gt; Workspaces { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IList</span>&lt;<a class="xref" href="ProKnow.Role.WorkspacePermissions.html">WorkspacePermissions</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

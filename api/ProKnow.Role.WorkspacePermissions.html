@@ -1,0 +1,572 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class WorkspacePermissions
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class WorkspacePermissions
+   ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="ProKnow.Role.WorkspacePermissions">
+  
+  
+  <h1 id="ProKnow_Role_WorkspacePermissions" data-uid="ProKnow.Role.WorkspacePermissions" class="text-break">Class WorkspacePermissions
+  </h1>
+  <div class="markdown level0 summary"><p>A container for workspace permissions for a role</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">WorkspacePermissions</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="ProKnow.Role.html">ProKnow.Role</a></h6>
+  <h6><strong>Assembly</strong>: proknow-sdk.dll</h6>
+  <h5 id="ProKnow_Role_WorkspacePermissions_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class WorkspacePermissions : object</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  
+  
+  <a id="ProKnow_Role_WorkspacePermissions__ctor_" data-uid="ProKnow.Role.WorkspacePermissions.#ctor*"></a>
+  <h4 id="ProKnow_Role_WorkspacePermissions__ctor" data-uid="ProKnow.Role.WorkspacePermissions.#ctor">WorkspacePermissions()</h4>
+  <div class="markdown level1 summary"><p>Used by deserialization to create a WorkspacePermissions object</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public WorkspacePermissions()</code></pre>
+  </div>
+  
+  
+  <a id="ProKnow_Role_WorkspacePermissions__ctor_" data-uid="ProKnow.Role.WorkspacePermissions.#ctor*"></a>
+  <h4 id="ProKnow_Role_WorkspacePermissions__ctor_System_String_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_" data-uid="ProKnow.Role.WorkspacePermissions.#ctor(System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">WorkspacePermissions(String, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Constructs a WorkspacePermissions object</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public WorkspacePermissions(string workspaceId, bool isCollaborator = false, bool canReadPatients = false, bool canReadCollections = false, bool canViewPhi = false, bool canDownloadDicom = false, bool canWriteCollections = false, bool canWritePatients = false, bool canContourPatients = false, bool canDeleteCollections = false, bool canDeletePatients = false)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">workspaceId</span></td>
+        <td><p>The ProKnow ID of the workspace</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">isCollaborator</span></td>
+        <td><p>Flag indicating whether this is a collaborator role, i.e., that the other permissions only apply to
+patients across the workspace for which a user has been explicitly granted access</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canReadPatients</span></td>
+        <td><p>Flag indicating whether role allows reading of patient data across the workspace</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canReadCollections</span></td>
+        <td><p>Flag indicating whether role allows reading of collection data across the workspace</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canViewPhi</span></td>
+        <td><p>Flag indicating whether role allows viewing of protected health information (PHI) across the workspace</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canDownloadDicom</span></td>
+        <td><p>Flag indicating whether role allows downloading of DICOM files across the workspace</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canWriteCollections</span></td>
+        <td><p>Flag indicating whether role allows creation and modification of collection data across the workspace</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canWritePatients</span></td>
+        <td><p>Flag indicating whether role allows creation and modification of patient data across the workspace</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canContourPatients</span></td>
+        <td><p>Flag indicating whether role allows creation and modification of patient contour data across the workspace</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canDeleteCollections</span></td>
+        <td><p>Flag indicating whether role allows deletion of workspace collections across the workspace</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">canDeletePatients</span></td>
+        <td><p>Flag indicating whether role allows deletion of patients and patient entities across the workspace</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  
+  
+  <a id="ProKnow_Role_WorkspacePermissions_CanContourPatients_" data-uid="ProKnow.Role.WorkspacePermissions.CanContourPatients*"></a>
+  <h4 id="ProKnow_Role_WorkspacePermissions_CanContourPatients" data-uid="ProKnow.Role.WorkspacePermissions.CanContourPatients">CanContourPatients</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows creation and modification of patient contour data across the workspace</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanContourPatients { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_WorkspacePermissions_CanDeleteCollections_" data-uid="ProKnow.Role.WorkspacePermissions.CanDeleteCollections*"></a>
+  <h4 id="ProKnow_Role_WorkspacePermissions_CanDeleteCollections" data-uid="ProKnow.Role.WorkspacePermissions.CanDeleteCollections">CanDeleteCollections</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows deletion of workspace collections across the workspace</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanDeleteCollections { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_WorkspacePermissions_CanDeletePatients_" data-uid="ProKnow.Role.WorkspacePermissions.CanDeletePatients*"></a>
+  <h4 id="ProKnow_Role_WorkspacePermissions_CanDeletePatients" data-uid="ProKnow.Role.WorkspacePermissions.CanDeletePatients">CanDeletePatients</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows deletion of patients and patient entities across the workspace</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanDeletePatients { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_WorkspacePermissions_CanDownloadDicom_" data-uid="ProKnow.Role.WorkspacePermissions.CanDownloadDicom*"></a>
+  <h4 id="ProKnow_Role_WorkspacePermissions_CanDownloadDicom" data-uid="ProKnow.Role.WorkspacePermissions.CanDownloadDicom">CanDownloadDicom</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows downloading of DICOM files across the workspace</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanDownloadDicom { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_WorkspacePermissions_CanReadCollections_" data-uid="ProKnow.Role.WorkspacePermissions.CanReadCollections*"></a>
+  <h4 id="ProKnow_Role_WorkspacePermissions_CanReadCollections" data-uid="ProKnow.Role.WorkspacePermissions.CanReadCollections">CanReadCollections</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows reading of collection data across the workspace</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanReadCollections { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_WorkspacePermissions_CanReadPatients_" data-uid="ProKnow.Role.WorkspacePermissions.CanReadPatients*"></a>
+  <h4 id="ProKnow_Role_WorkspacePermissions_CanReadPatients" data-uid="ProKnow.Role.WorkspacePermissions.CanReadPatients">CanReadPatients</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows reading of patient data across the workspace</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanReadPatients { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_WorkspacePermissions_CanViewPhi_" data-uid="ProKnow.Role.WorkspacePermissions.CanViewPhi*"></a>
+  <h4 id="ProKnow_Role_WorkspacePermissions_CanViewPhi" data-uid="ProKnow.Role.WorkspacePermissions.CanViewPhi">CanViewPhi</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows viewing of protected health information (PHI) across the workspace</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanViewPhi { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_WorkspacePermissions_CanWriteCollections_" data-uid="ProKnow.Role.WorkspacePermissions.CanWriteCollections*"></a>
+  <h4 id="ProKnow_Role_WorkspacePermissions_CanWriteCollections" data-uid="ProKnow.Role.WorkspacePermissions.CanWriteCollections">CanWriteCollections</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows creation and modification of collection data across the workspace</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanWriteCollections { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_WorkspacePermissions_CanWritePatients_" data-uid="ProKnow.Role.WorkspacePermissions.CanWritePatients*"></a>
+  <h4 id="ProKnow_Role_WorkspacePermissions_CanWritePatients" data-uid="ProKnow.Role.WorkspacePermissions.CanWritePatients">CanWritePatients</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether role allows creation and modification of patient data across the workspace</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CanWritePatients { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_WorkspacePermissions_ExtensionData_" data-uid="ProKnow.Role.WorkspacePermissions.ExtensionData*"></a>
+  <h4 id="ProKnow_Role_WorkspacePermissions_ExtensionData" data-uid="ProKnow.Role.WorkspacePermissions.ExtensionData">ExtensionData</h4>
+  <div class="markdown level1 summary"><p>Properties encountered during deserialization without matching members</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Dictionary&lt;string, object&gt; ExtensionData { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Dictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.Object</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_WorkspacePermissions_IsCollaborator_" data-uid="ProKnow.Role.WorkspacePermissions.IsCollaborator*"></a>
+  <h4 id="ProKnow_Role_WorkspacePermissions_IsCollaborator" data-uid="ProKnow.Role.WorkspacePermissions.IsCollaborator">IsCollaborator</h4>
+  <div class="markdown level1 summary"><p>Flag indicating whether this is a collaborator role, i.e., that the other permissions only apply to
+patients across the workspace for which a user has been explicitly granted access</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsCollaborator { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="ProKnow_Role_WorkspacePermissions_WorkspaceId_" data-uid="ProKnow.Role.WorkspacePermissions.WorkspaceId*"></a>
+  <h4 id="ProKnow_Role_WorkspacePermissions_WorkspaceId" data-uid="ProKnow.Role.WorkspacePermissions.WorkspaceId">WorkspaceId</h4>
+  <div class="markdown level1 summary"><p>The ProKnow ID of the workspace</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string WorkspaceId { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  
+  
+  <a id="ProKnow_Role_WorkspacePermissions_ToString_" data-uid="ProKnow.Role.WorkspacePermissions.ToString*"></a>
+  <h4 id="ProKnow_Role_WorkspacePermissions_ToString" data-uid="ProKnow.Role.WorkspacePermissions.ToString">ToString()</h4>
+  <div class="markdown level1 summary"><p>Provides a string representation of this object</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>A string representation of this object</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
