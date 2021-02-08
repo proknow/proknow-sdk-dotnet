@@ -97,6 +97,9 @@ namespace ProKnow.Upload
             // Create the collection of unresolved uploads
             var unresolvedUploadResults = uploadResults.ToList();
 
+            // Query parameters for upload processing results
+            Dictionary<string, object> queryParameters = null;
+
             // Loop until all uploads are resolved or retries have been exhausted
             bool wereRetryDelaysExhausted = false;
             var retryDelayIndex = 0;
@@ -104,7 +107,6 @@ namespace ProKnow.Upload
             {
                 // Loop until all uploads are resolved or there are no more pages of upload processing results
                 bool isPossiblyAnotherPageOfResults = true;
-                Dictionary<string, object> queryParameters = null;
                 do
                 {
                     // Get the next page of upload processing results by filtering those updated after the last one to reach terminal status on the previous page
@@ -151,20 +153,16 @@ namespace ProKnow.Upload
                     // If there is possibly another page of results
                     if (isPossiblyAnotherPageOfResults = thisPageUploadProcessingResults.Count > 0)
                     {
-                        // Get the last upload on the current page whose processing has reached a terminal status
-                        var lastTerminalUploadProcessingResult = thisPageUploadProcessingResults.LastOrDefault(t => _terminalStatuses.Contains(t.Status));
+                        // Get the last upload on the current page
+                        var lastUploadProcessingResult = thisPageUploadProcessingResults.Last();
 
-                        // If one was found
-                        if (lastTerminalUploadProcessingResult != null)
+                        // Update the query parameters to search for processed uploads updated after this one
+                        if (queryParameters == null)
                         {
-                            // Update the query parameters to search for processed uploads updated after this one
-                            if (queryParameters == null)
-                            {
-                                queryParameters = new Dictionary<string, object>();
-                            }
-                            queryParameters["updated"] = lastTerminalUploadProcessingResult.UpdatedAt;
-                            queryParameters["after"] = lastTerminalUploadProcessingResult.Id;
+                            queryParameters = new Dictionary<string, object>();
                         }
+                        queryParameters["updated"] = lastUploadProcessingResult.UpdatedAt;
+                        queryParameters["after"] = lastUploadProcessingResult.Id;
                     }
                 }
                 while (unresolvedUploadResults.Count() > 0 && isPossiblyAnotherPageOfResults);
@@ -281,7 +279,6 @@ namespace ProKnow.Upload
                     tasks.Add(Task.Run(async () =>
                     {
                         await UploadChunkAsync(uploadChunkInfo);
-                        _logger.LogDebug($"Uploaded file {path} chunk {uploadChunkInfo.ChunkIndex + 1} of {uploadChunkInfos.Count}.");
                     }
                     ));
                     
@@ -463,9 +460,15 @@ namespace ProKnow.Upload
                     using (var fs = File.OpenRead(uploadChunkInfo.ChunkPath))
                     {
                         content.Add(new StreamContent(fs), "file", uploadChunkInfo.InitiateFileUploadInfo.Path);
-                        await _proKnow.Requestor.PostAsync("/uploads/chunks", headerKeyValuePairs, content);
+                        var response = await _proKnow.Requestor.PostAsync("/uploads/chunks", headerKeyValuePairs, content);
+                        _logger.LogDebug($"Uploaded file {uploadChunkInfo.InitiateFileUploadInfo.Path} chunk {uploadChunkInfo.ChunkIndex + 1} of {uploadChunkInfo.InitiateFileUploadInfo.NumberOfChunks}.  Response: {response}");
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error uploading chunk {uploadChunkInfo.ChunkIndex + 1} of {uploadChunkInfo.InitiateFileUploadInfo.NumberOfChunks} for file {uploadChunkInfo.InitiateFileUploadInfo.Path}.  {ex}");
+                throw;
             }
             finally
             {

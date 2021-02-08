@@ -4,6 +4,13 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.1.5
+
+*Bug Fixes and Enhancements*
+
+- Fix bug retrieving upload processing results when there are always 200 or more with non-terminal processing results (i.e., uploads that were initiated whose content was never uploaded)
+- Add more logging details when uploading
+
 ## v0.1.4
 
 *Enhancements*
