@@ -8,19 +8,20 @@ namespace ProKnow.Upload
     public class PatientOverridesSchema
     {
         /// <summary>
-        /// The ProKnow ID for the patient
+        /// The ProKnow ID for the patient or null.  If present, this will be used for matching to an existing patient
         /// </summary>
         [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
-        /// The patient medical record number (MRN) or ID
+        /// The patient medical record number (MRN) or DICOM patient ID (required).  This will be used for matching
+        /// to an existing patient if Id is not present
         /// </summary>
         [JsonPropertyName("mrn")]
         public string Mrn { get; set; }
 
         /// <summary>
-        /// The patient name
+        /// The patient name (required)
         /// </summary>
         [JsonPropertyName("name")]
         public string Name { get; set; }

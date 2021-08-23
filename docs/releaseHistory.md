@@ -4,6 +4,13 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.1.6
+
+*Enhancements*
+
+- Include patient ID in UploadFileOverrides
+- Append ".dcm" to downloaded image files
+
 ## v0.1.5
 
 *Bug Fixes and Enhancements*
