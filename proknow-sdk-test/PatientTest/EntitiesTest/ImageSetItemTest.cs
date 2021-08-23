@@ -55,7 +55,7 @@ namespace ProKnow.Patient.Entities.Test
 
             // Check contents of one downloaded file (don't need to check them all!)
             var uploadedFile = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT", "CT.1.dcm");
-            var downloadedFile = Path.Combine(downloadPath, $"CT.1.3.6.1.4.1.22213.2.26558.2.57.dcm");
+            var downloadedFile = Path.Combine(downloadPath, $"CT.1.3.6.1.4.1.22213.2.26558.2.57");
             Assert.IsTrue(TestHelper.FileEquals(uploadedFile, downloadedFile));
         }
 

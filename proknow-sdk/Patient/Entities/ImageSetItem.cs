@@ -50,7 +50,7 @@ namespace ProKnow.Patient.Entities
             var tasks = new List<Task<string>>();
             foreach (var image in Data.Images)
             {
-                var file = Path.Combine(folder, $"{Modality}.{image.Uid}.dcm");
+                var file = Path.Combine(folder, $"{Modality}.{image.Uid}");
                 var route = $"/workspaces/{WorkspaceId}/imagesets/{Id}/images/{image.Id}/dicom";
                 tasks.Add(Task.Run(() => _proKnow.Requestor.StreamAsync(route, file)));
             }
