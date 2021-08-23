@@ -8,7 +8,7 @@ All releases in the v0.x.x series are subject to breaking changes from one versi
 
 *Enhancements*
 
-- Include patient ID in UploadFileOverrides
+- Include patient ProKnow ID in UploadFileOverrides
 - Append ".dcm" to downloaded image files
 
 ## v0.1.5
