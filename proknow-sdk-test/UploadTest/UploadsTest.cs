@@ -1,6 +1,5 @@
 ﻿using Dicom;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProKnow.Patient;
 using ProKnow.Patient.Entities;
 using ProKnow.Test;
 using System;
@@ -48,7 +47,7 @@ namespace ProKnow.Upload.Test
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RP.dcm");
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
+                Patient = new PatientOverridesSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
 
@@ -77,7 +76,7 @@ namespace ProKnow.Upload.Test
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
+                Patient = new PatientOverridesSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
 
@@ -107,7 +106,7 @@ namespace ProKnow.Upload.Test
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
+                Patient = new PatientOverridesSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
 
@@ -139,7 +138,7 @@ namespace ProKnow.Upload.Test
             var uploadPaths = new List<string>() { uploadPath1, uploadPath2 };
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
+                Patient = new PatientOverridesSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPaths, overrides);
 
@@ -172,7 +171,7 @@ namespace ProKnow.Upload.Test
             var uploadPaths = new List<string>() { uploadPath1, uploadPath2 };
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
+                Patient = new PatientOverridesSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPaths, overrides);
 
@@ -334,9 +333,7 @@ namespace ProKnow.Upload.Test
             Assert.AreEqual(30000, uploadProcessingResults.TotalRetryDelayInMsec);
         }
 
-        // Skip this test.  It fails on demo.proknow.com because paging through the upload results always takes longer than
-        // the time needed to process the upload results
-        [Ignore]
+        [Ignore("This test always fails on demo.proknow.com because paging through the upload results always takes longer than the time needed to process the upload results.")]
         [TestMethod]
         public async Task GetUploadProcessingResultsAsyncTest_ExhaustRetries()
         {
@@ -507,8 +504,7 @@ namespace ProKnow.Upload.Test
             Assert.AreEqual(30000, uploadProcessingResults.TotalRetryDelayInMsec);
         }
 
-        // This test takes 3+ min when using demo.proknow.com
-        [Ignore]
+        [Ignore("This test takes 3+ min when using demo.proknow.com.")]
         [TestMethod]
         public async Task UploadAsyncTest_LargeFile()
         {
@@ -538,6 +534,95 @@ namespace ProKnow.Upload.Test
 
             Assert.IsFalse(uploadProcessingResults.WereRetryDelaysExhausted);
             Assert.AreEqual(30000, uploadProcessingResults.TotalRetryDelayInMsec);
+        }
+
+        [TestMethod]
+        public async Task UploadAsyncTest_Overrides_ExistingMrn()
+        {
+            int testNumber = 15;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Add a test patient
+            var patientItem1 = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"));
+
+            // Upload a file from another patient, specifying the MRN and name of the first patient
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Jensen^Myrtle", "RP.dcm");
+            var overrides = new UploadFileOverrides
+            {
+                Patient = new PatientOverridesSchema { Mrn = patientItem1.Mrn, Name = patientItem1.Name }
+            };
+            var uploadResults = (await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides)).ToList();
+
+            // Wait for processing
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+
+            // Verify that the file was uploaded to the specified patient
+            var patientSummary2 = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Mrn == patientItem1.Mrn && p.Name == patientItem1.Name);
+            var patientItem2 = await patientSummary2.GetAsync();
+            var entitySummaries = patientItem2.FindEntities(t => true);
+            Assert.AreEqual(2, entitySummaries.Count);
+            Assert.AreEqual(1, entitySummaries.Count(e => e.Uid == "2.16.840.1.114337.1.1.1535997926.0")); // Becker^Matthew RP.dcm
+            Assert.AreEqual(1, entitySummaries.Count(e => e.Uid == "2.16.840.1.114337.1.1.1534771415.0")); // Jensen^Myrtle RP.dcm
+        }
+
+        [TestMethod]
+        public async Task UploadAsyncTest_Overrides_NewMrn()
+        {
+            int testNumber = 16;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Upload a test file, overriding its MRN and name
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RP.dcm");
+            var overrides = new UploadFileOverrides
+            {
+                Patient = new PatientOverridesSchema { Mrn = "a-new-mrn", Name = "A^New^Name" }
+            };
+            var uploadResults = (await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides)).ToList();
+
+            // Wait for processing
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+
+            // Verify that the file was uploaded to a patient with the specified MRN and name
+            var patientSummary = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Mrn == "a-new-mrn" && p.Name == "A^New^Name");
+            var patientItem = await patientSummary.GetAsync();
+            var entitySummaries = patientItem.FindEntities(t => true);
+            Assert.AreEqual(1, entitySummaries.Count);
+            Assert.AreEqual(1, entitySummaries.Count(e => e.Uid == "2.16.840.1.114337.1.1.1535997926.0")); // Becker^Matthew RP.dcm
+        }
+
+        [TestMethod]
+        public async Task UploadAsyncTest_Overrides_Id()
+        {
+            int testNumber = 17;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Add a test patient
+            var patientItem1 = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RP.dcm"));
+
+            // Upload a file from another patient, specifying the ID, MRN, and name of the first patient
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Jensen^Myrtle", "RP.dcm");
+            var overrides = new UploadFileOverrides
+            {
+                Patient = new PatientOverridesSchema { Id = patientItem1.Id, Mrn = patientItem1.Mrn, Name = patientItem1.Name }
+            };
+            var uploadResults = (await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides)).ToList();
+
+            // Wait for processing
+            await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+
+            // Verify that the file was uploaded to the specified patient
+            var patientSummary2 = await _proKnow.Patients.FindAsync(workspaceItem.Id, p => p.Id == patientItem1.Id);
+            var patientItem2 = await patientSummary2.GetAsync();
+            var entitySummaries = patientItem2.FindEntities(t => true);
+            Assert.AreEqual(2, entitySummaries.Count);
+            Assert.AreEqual(1, entitySummaries.Count(e => e.Uid == "2.16.840.1.114337.1.1.1535997926.0")); // Becker^Matthew RP.dcm
+            Assert.AreEqual(1, entitySummaries.Count(e => e.Uid == "2.16.840.1.114337.1.1.1534771415.0")); // Jensen^Myrtle RP.dcm
         }
     }
 }

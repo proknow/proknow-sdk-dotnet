@@ -161,7 +161,7 @@ namespace ProKnow.Patient.Test
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, Path.Combine("Becker^Matthew", "RS.dcm"));
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
+                Patient = new PatientOverridesSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
             await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
@@ -274,7 +274,7 @@ namespace ProKnow.Patient.Test
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "RP.dcm");
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
+                Patient = new PatientOverridesSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
             var uploadResults = await patientItem.UploadAsync(uploadPath, overrides);
             await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
@@ -300,7 +300,7 @@ namespace ProKnow.Patient.Test
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Becker^Matthew", "CT");
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
+                Patient = new PatientOverridesSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
             var uploadResults = await patientItem.UploadAsync(uploadPath, overrides);
             await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
@@ -330,7 +330,7 @@ namespace ProKnow.Patient.Test
             var uploadPaths = new List<string>() { uploadPath1, uploadPath2 };
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
+                Patient = new PatientOverridesSchema { Mrn = patientItem.Mrn, Name = patientItem.Name }
             };
             var uploadResults = await patientItem.UploadAsync(uploadPaths, overrides);
             await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
