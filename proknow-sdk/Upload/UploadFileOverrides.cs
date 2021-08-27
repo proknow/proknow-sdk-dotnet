@@ -1,5 +1,4 @@
-﻿using ProKnow.Patient;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace ProKnow.Upload
 {
@@ -12,6 +11,6 @@ namespace ProKnow.Upload
         /// Patient overrides to be applied to an uploaded file
         /// </summary>
         [JsonPropertyName("patient")]
-        public PatientCreateSchema Patient { get; set; }
+        public PatientOverridesSchema Patient { get; set; }
     }
 }

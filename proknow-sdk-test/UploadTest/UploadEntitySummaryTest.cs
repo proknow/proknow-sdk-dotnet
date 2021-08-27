@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProKnow.Patient;
 using ProKnow.Patient.Entities;
 using ProKnow.Test;
 using System.IO;
@@ -41,7 +40,7 @@ namespace ProKnow.Upload.Test
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "ct.dcm");
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = $"{testNumber}-Mrn", Name = $"{testNumber}-Name" }
+                Patient = new PatientOverridesSchema { Mrn = $"{testNumber}-Mrn", Name = $"{testNumber}-Name" }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
             var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);

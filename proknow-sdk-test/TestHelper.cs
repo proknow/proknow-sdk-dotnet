@@ -67,7 +67,7 @@ namespace ProKnow.Test
                 var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, testData);
                 var overrides = new UploadFileOverrides
                 {
-                    Patient = new PatientCreateSchema { Mrn = mrn, Name = name }
+                    Patient = new PatientOverridesSchema { Mrn = mrn, Name = name }
                 };
                 var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
                 await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
