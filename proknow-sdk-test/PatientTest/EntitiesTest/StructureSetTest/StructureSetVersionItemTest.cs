@@ -197,7 +197,7 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             // Upload it to a new patient and wait for it to be processed
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
+                Patient = new PatientOverridesSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, actualDownloadPath, overrides);
             await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
@@ -249,7 +249,7 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             // Upload it to a new patient and wait for it to be processed
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
+                Patient = new PatientOverridesSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, actualDownloadPath, overrides);
             await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
@@ -299,7 +299,7 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             // Upload it to a new patient and wait for it to be processed
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
+                Patient = new PatientOverridesSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, actualDownloadPath, overrides);
             await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
@@ -349,7 +349,7 @@ namespace ProKnow.Patient.Entities.StructureSet.Test
             // Upload it to a new patient and wait for it to be processed
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
+                Patient = new PatientOverridesSchema { Mrn = $"{patientItem.Mrn}2", Name = $"{patientItem.Name}2" }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, actualDownloadPath, overrides);
             await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using ProKnow.Patient;
 using ProKnow.Test;
 
 namespace ProKnow.Upload.Test
@@ -44,7 +43,7 @@ namespace ProKnow.Upload.Test
             var uploadPaths = new List<String>() { mrUploadPath, sroUploadPath };
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = $"{testNumber}-Mrn", Name = $"{testNumber}-Name" }
+                Patient = new PatientOverridesSchema { Mrn = $"{testNumber}-Mrn", Name = $"{testNumber}-Name" }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPaths, overrides);
             var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
@@ -92,7 +91,7 @@ namespace ProKnow.Upload.Test
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "mr.dcm");
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = $"{testNumber}-Mrn", Name = $"{testNumber}-Name" }
+                Patient = new PatientOverridesSchema { Mrn = $"{testNumber}-Mrn", Name = $"{testNumber}-Name" }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
             var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
@@ -124,7 +123,7 @@ namespace ProKnow.Upload.Test
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm");
             var overrides = new UploadFileOverrides
             {
-                Patient = new PatientCreateSchema { Mrn = $"{testNumber}-Mrn", Name = $"{testNumber}-Name" }
+                Patient = new PatientOverridesSchema { Mrn = $"{testNumber}-Mrn", Name = $"{testNumber}-Name" }
             };
             var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
             var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);

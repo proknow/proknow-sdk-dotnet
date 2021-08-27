@@ -95,6 +95,7 @@ namespace ProKnow.Test
             Assert.IsTrue(workspaceItems.Any(w => w.Name == workspaceItem.Name));
         }
 
+        [Ignore("There are no longer any GET routes that return anything other than the ProKnow index.html page when the status is not OK.")]
         [TestMethod]
         public async Task GetAsyncTest_NotOk()
         {
