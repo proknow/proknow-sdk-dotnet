@@ -84,7 +84,7 @@ namespace ProKnow.Patient.Document
         {
             var route = $"/workspaces/{workspaceId}/patients/{patientId}/documents/{documentId}/{documentName}";
             var queryParameters = new Dictionary<string, object>();
-            queryParameters.Add("attachment", true);
+            queryParameters.Add("attachment", "true");
             return await _proKnow.Requestor.StreamAsync(route, path, queryParameters);
         }
 

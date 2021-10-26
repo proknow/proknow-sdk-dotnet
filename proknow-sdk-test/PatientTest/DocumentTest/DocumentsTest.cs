@@ -12,7 +12,7 @@ namespace ProKnow.Patient.Document.Test
         private static readonly string _testClassName = nameof(DocumentsTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
         private static readonly string _testDocumentPath = Path.Combine(TestSettings.TestDataRootDirectory, "dummy.pdf");
-        //private static readonly string _testDocumentPath = "C:\\Users\\twolc02830\\Downloads\\sample-mp4-file-small.mp4";
+        private static readonly string _testDocumentPath2 = Path.Combine(TestSettings.TestDataRootDirectory, "sample.mp4");
         private static readonly string _outputFolderPath = Path.Combine(Path.GetTempPath(), _testClassName);
 
         [ClassInitialize]
@@ -158,26 +158,34 @@ namespace ProKnow.Patient.Document.Test
             // Create a test patient
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
 
-            // Create the document
+            // Create the documents
             var testDocumentName = $"{_testClassName}-{testNumber}-{Path.GetFileName(_testDocumentPath)}";
             await _proKnow.Patients.Documents.CreateAsync(workspaceItem.Id, patientItem.Id, _testDocumentPath,
                 testDocumentName);
+            var testDocumentName2 = $"{_testClassName}-{testNumber}-{Path.GetFileName(_testDocumentPath2)}";
+            await _proKnow.Patients.Documents.CreateAsync(workspaceItem.Id, patientItem.Id, _testDocumentPath2,
+                testDocumentName2);
 
             // Wait, if necessary, until document processing has completed
             while (true)
             {
-                // Query patient documents so we can get the document ID
+                // Query patient documents so we can get the document IDs
                 var documentSummaries = await _proKnow.Patients.Documents.QueryAsync(workspaceItem.Id, patientItem.Id);
                 var documentSummary = documentSummaries.FirstOrDefault(d => d.Name == testDocumentName);
-                if (documentSummary != null)
+                var documentSummary2 = documentSummaries.FirstOrDefault(d => d.Name == testDocumentName2);
+                if (documentSummary != null && documentSummary2 != null)
                 {
-                    // Stream document to a new file
+                    // Stream documents to new files
                     var outputDocumentPath = Path.Combine(_outputFolderPath, testDocumentName);
                     await _proKnow.Patients.Documents.StreamAsync(workspaceItem.Id, patientItem.Id, documentSummary.Id,
                         documentSummary.Name, outputDocumentPath);
+                    var outputDocumentPath2 = Path.Combine(_outputFolderPath, testDocumentName2);
+                    await _proKnow.Patients.Documents.StreamAsync(workspaceItem.Id, patientItem.Id, documentSummary2.Id,
+                        documentSummary2.Name, outputDocumentPath2);
 
-                    // Make sure created document and streamed document sizes are the same
+                    // Make sure created documentsand streamed document sizes are the same
                     Assert.AreEqual(documentSummary.Size, new FileInfo(outputDocumentPath).Length);
+                    Assert.AreEqual(documentSummary2.Size, new FileInfo(outputDocumentPath2).Length);
 
                     return;
                 }
