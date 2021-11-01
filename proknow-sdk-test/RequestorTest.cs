@@ -396,7 +396,9 @@ namespace ProKnow.Test
                     // Stream the document to a new file using the Requestor object
                     var outputDocumentPath = Path.Combine(_downloadFolderRoot, testNumber.ToString(), "test.pdf");
                     var route = $"/workspaces/{workspaceItem.Id}/patients/{patientItem.Id}/documents/{documentSummary.Id}/{documentSummary.Name}";
-                    await _proKnow.Requestor.StreamAsync(route, outputDocumentPath);
+                    var queryParameters = new Dictionary<string, object>();
+                    queryParameters.Add("attachment", "true");
+                    await _proKnow.Requestor.StreamAsync(route, outputDocumentPath, queryParameters);
 
                     // Make sure created document and streamed document sizes are the same
                     Assert.AreEqual(documentSummary.Size, new FileInfo(outputDocumentPath).Length);

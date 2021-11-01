@@ -4,6 +4,13 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.1.8
+
+*Bug Fixes*
+
+- Fix "Invalid document name" error when streaming documents by adding name parameter to Document StreamAsync()
+- Fix "Invalid request to stream non-openable document without attachment parameter" error when streaming non-PDF document" by adding attachment query parameter to API call
+
 ## v0.1.7
 
 *Enhancements*

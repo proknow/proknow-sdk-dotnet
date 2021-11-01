@@ -29,7 +29,8 @@ namespace ProKnow.Patient.Document
         /// <param name="workspaceId">The ProKnow ID for the workspace</param>
         /// <param name="patientId">The ProKnow ID for the patient</param>
         /// <param name="path">The full path to the document</param>
-        /// <param name="documentName">Optional name for document, including file extension</param>
+        /// <param name="documentName">Optional name for document, including file extension. Defaults to filename
+        /// of provided path</param>
         public async Task CreateAsync(string workspaceId, string patientId, string path, string documentName = null)
         {
             var documentLabel = documentName ?? Path.GetFileName(path);
@@ -75,13 +76,16 @@ namespace ProKnow.Patient.Document
         /// <param name="workspaceId">The ProKnow ID for the workspace</param>
         /// <param name="patientId">The ProKnow ID for the patient</param>
         /// <param name="documentId">The ProKnow ID for the document</param>
+        /// <param name="documentName">The ProKnow ID for the document</param>
         /// <param name="path">The full path to which to stream the document</param>
         /// <returns>The full path to the streamed document</returns>
-        public async Task<string> StreamAsync(string workspaceId, string patientId, string documentId, string path)
+        public async Task<string> StreamAsync(string workspaceId, string patientId, string documentId,
+            string documentName, string path)
         {
-            var documentName = Path.GetFileName(path);
             var route = $"/workspaces/{workspaceId}/patients/{patientId}/documents/{documentId}/{documentName}";
-            return await _proKnow.Requestor.StreamAsync(route, path);
+            var queryParameters = new Dictionary<string, object>();
+            queryParameters.Add("attachment", "true");
+            return await _proKnow.Requestor.StreamAsync(route, path, queryParameters);
         }
 
         /// <summary>

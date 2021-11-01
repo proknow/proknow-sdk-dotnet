@@ -98,6 +98,9 @@
     <None Update="TestData\RtImage\RTIMAGE.dcm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestData\sample.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestData\Sro\ct.dcm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -121,10 +121,12 @@ namespace ProKnow
         /// </summary>
         /// <param name="route">The API route to use in the request</param>
         /// <param name="path">The full path to the file to which to write the response</param>
+        /// <param name="queryParameters">Optional query parameters</param>
         /// <returns>The full path to the file containing the response</returns>
         /// <exception cref="ProKnowException">If path is to an existing directory rather than to a new or existing file</exception>
         /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
-        public async Task<string> StreamAsync(string route, string path)
+        public async Task<string> StreamAsync(string route, string path,
+            Dictionary<string, object> queryParameters = null)
         {
             if (Directory.Exists(path))
             {
@@ -135,7 +137,7 @@ namespace ProKnow
             {
                 Directory.CreateDirectory(parent);
             }
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{_baseUrl}/{route}");
+            var request = new HttpRequestMessage(HttpMethod.Get, BuildUriString($"{_baseUrl}/{route}", queryParameters));
             try
             {
                 request.Headers.Authorization = _authenticationHeaderValue;
