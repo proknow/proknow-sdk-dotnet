@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using ProKnow.Collection;
 using ProKnow.Exceptions;
+using ProKnow.Logs;
 using ProKnow.Patient;
 using ProKnow.Role;
 using ProKnow.Scorecard;
@@ -20,6 +21,9 @@ namespace ProKnow
     public class ProKnowApi : IProKnowApi
     {
         private readonly ILogger _logger;
+
+        /// <inheritdoc/>
+        public Audit Audit { get; private set; }
 
         /// <inheritdoc/>
         public Requestor Requestor { get; private set; }
@@ -145,6 +149,7 @@ namespace ProKnow
             Uploads = new Uploads(this);
             Patients = new Patients(this);
             Collections = new Collections(this);
+            Audit = new Audit(this);
         }
     }
 }
