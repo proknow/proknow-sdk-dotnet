@@ -99,5 +99,34 @@ namespace ProKnow.Test.LogTest
             Assert.AreEqual(nextPatientItem.WorkspaceName, $"{workspaceItem.Name}");
         }
 
+        [TestMethod]
+        public async Task FilterParametersTest()
+        {
+            FilterParameters filterParams = new FilterParameters();
+            filterParams.Types = new string[] { "patient_created" };
+            filterParams.PageSize = 1;
+            filterParams.StartTime = DateTime.Now;
+            filterParams.EndTime = DateTime.Now.AddDays(-1);
+            filterParams.UserName ="Admin";
+            filterParams.PatientName = "2-Name";
+            filterParams.Classification = "HTTP";
+            filterParams.Methods = new string[] { "POST" };
+            filterParams.URI = $"/workspaces/1234/patients";
+            filterParams.UserAgent = "1234";
+            filterParams.IpAddress = "127.0.0.1";
+            filterParams.StatusCodes = new string[] { "200" };
+            filterParams.WorkspaceId = "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+            filterParams.ResourceId = "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+
+            try
+            {
+                var receivedAuditLogItem = await _proKnow.Audit.Query(filterParams);
+                Assert.IsNotNull(receivedAuditLogItem);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail("Bad Audit.Query filter parameter");
+            }
+        }
     }
 }

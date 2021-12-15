@@ -147,8 +147,8 @@ namespace ProKnow.Logs
             /// <summary>
             /// HTTP Method: 'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', or 'PATCH'
             /// </summary>
-            [JsonPropertyName("method")]
-            public string Method { get; set; }
+            [JsonPropertyName("methods")]
+            public string[] Methods { get; set; }
 
             /// <summary>
             /// Filter by the uri that event took place (e.g. '/metrics/custom')
@@ -169,10 +169,10 @@ namespace ProKnow.Logs
             public string IpAddress { get; set; }
 
             /// <summary>
-            /// IP Address attributed to event
+            /// Status codes returned by API calls
             /// </summary>
-            [JsonPropertyName("status_code")]
-            public uint? StatusCode { get; set; }
+            [JsonPropertyName("status_codes")]
+            public string[] StatusCodes { get; set; }
 
             /// <summary>
             /// ID of workspace in which event took place
@@ -207,11 +207,11 @@ namespace ProKnow.Logs
                 this.UserName = data.UserName;
                 this.PatientName = data.PatientName;
                 this.Classification = data.Classification;
-                this.Method = data.Method;
+                this.Methods = data.Methods;
                 this.URI = data.URI;
                 this.UserAgent = data.UserAgent;
                 this.IpAddress = data.IpAddress;
-                this.StatusCode = data.StatusCode;
+                this.StatusCodes = data.StatusCodes;
                 this.WorkspaceId = data.WorkspaceId;
                 this.ResourceId = data.ResourceId;
             }

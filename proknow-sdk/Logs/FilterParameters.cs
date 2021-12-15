@@ -30,7 +30,7 @@ namespace ProKnow.Logs
         /// <summary>
         /// The type of event
         /// </summary>
-        [JsonPropertyName("type")]
+        [JsonPropertyName("types")]
         public string[] Types { get; set; }
 
         /// <summary>
@@ -54,8 +54,8 @@ namespace ProKnow.Logs
         /// <summary>
         /// HTTP Method: 'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', or 'PATCH'
         /// </summary>
-        [JsonPropertyName("method")]
-        public string Method { get; set; }
+        [JsonPropertyName("methods")]
+        public string[] Methods { get; set; }
 
         /// <summary>
         /// Filter by the uri that event took place (e.g. '/metrics/custom')
@@ -78,8 +78,8 @@ namespace ProKnow.Logs
         /// <summary>
         /// IP Address attributed to event
         /// </summary>
-        [JsonPropertyName("status_code")]
-        public uint? StatusCode { get; set; }
+        [JsonPropertyName("status_codes")]
+        public string[] StatusCodes { get; set; }
 
         /// <summary>
         /// ID of workspace in which event took place
@@ -92,6 +92,5 @@ namespace ProKnow.Logs
         /// </summary>
         [JsonPropertyName("resource_id")]
         public string ResourceId { get; set; }
-
     }
 }
