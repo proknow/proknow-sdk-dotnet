@@ -16,19 +16,19 @@ namespace ProKnow.Patient.Entities
     {
         private readonly ProKnowApi _proKnow;
         private readonly string _workspaceId;
-        private readonly string _entityId;
+        private readonly string _patientId;
 
         /// <summary>
         /// Constructs an EntityScorecards object
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The ProKnow ID for the workspace</param>
-        /// <param name="entityId">The ProKnow ID for the entity</param>
-        public EntityScorecards(ProKnowApi proKnow, string workspaceId, string entityId)
+        /// <param name="patientId">The ProKnow ID for the entity</param>
+        public EntityScorecards(ProKnowApi proKnow, string workspaceId, string patientId)
         {
             _proKnow = proKnow;
             _workspaceId = workspaceId;
-            _entityId = entityId;
+            _patientId = patientId;
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace ProKnow.Patient.Entities
             var customMetricIdsAndObjectives = resolvedCustomMetrics.Select(c => c.ConvertToScorecardSchema()).ToList();
 
             // Request the creation
-            var route = $"/workspaces/{_workspaceId}/patients/{_entityId}/metrics/sets";
+            var route = $"/workspaces/{_workspaceId}/patients/{_patientId}/metrics/sets";
             var requestSchema = new EntityScorecardItem(null, null, null, null, null, name, computedMetrics, customMetricIdsAndObjectives);
             var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
             var contentJson = JsonSerializer.Serialize(requestSchema, jsonSerializerOptions);
@@ -82,7 +82,7 @@ namespace ProKnow.Patient.Entities
 
             // Return the created entity scorecard, with complete custom metric representations
             var responseSchema = JsonSerializer.Deserialize<ScorecardTemplateItem>(responseJson);
-            return new EntityScorecardItem(_proKnow, _workspaceId, _entityId, this, responseSchema.Id, responseSchema.Name,
+            return new EntityScorecardItem(_proKnow, _workspaceId, _patientId, this, responseSchema.Id, responseSchema.Name,
                 responseSchema.ComputedMetrics, resolvedCustomMetrics);
         }
 
@@ -92,7 +92,7 @@ namespace ProKnow.Patient.Entities
         /// <param name="id">The ProKnow ID of the entity scorecard</param>
         public async Task DeleteAsync(string id)
         {
-            await _proKnow.Requestor.DeleteAsync($"/workspaces/{_workspaceId}/patients/{_entityId}/metrics/sets/{id}");
+            await _proKnow.Requestor.DeleteAsync($"/workspaces/{_workspaceId}/patients/{_patientId}/metrics/sets/{id}");
         }
 
         /// <summary>
@@ -114,8 +114,8 @@ namespace ProKnow.Patient.Entities
         /// <returns>The entity scorecard item</returns>
         public async Task<EntityScorecardItem> GetAsync(string id)
         {
-            var json = await _proKnow.Requestor.GetAsync($"/workspaces/{_workspaceId}/patients/{_entityId}/metrics/sets/{id}");
-            return new EntityScorecardItem(_proKnow, _workspaceId, _entityId, this, json);
+            var json = await _proKnow.Requestor.GetAsync($"/workspaces/{_workspaceId}/patients/{_patientId}/metrics/sets/{id}");
+            return new EntityScorecardItem(_proKnow, _workspaceId, _patientId, this, json);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace ProKnow.Patient.Entities
         /// <returns>The entity scorecards</returns>
         public async Task<IList<EntityScorecardSummary>> QueryAsync()
         {
-            string json = await _proKnow.Requestor.GetAsync($"/workspaces/{_workspaceId}/patients/{_entityId}/metrics/sets");
+            string json = await _proKnow.Requestor.GetAsync($"/workspaces/{_workspaceId}/patients/{_patientId}/metrics/sets");
             return DeserializeEntityScorecards(json);
         }
 
