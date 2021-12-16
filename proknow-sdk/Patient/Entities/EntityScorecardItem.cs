@@ -74,7 +74,7 @@ namespace ProKnow.Patient.Entities
         //TODO--Add example to update a custom metric value for a scorecard
         public override async Task SaveAsync()
         {
-            var route = $"/workspaces/{_workspaceId}/patient/{_entityId}/metrics/sets/{Id}";
+            var route = $"/workspaces/{_workspaceId}/patients/{_entityId}/metrics/sets/{Id}";
             var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
             var contentJson = JsonSerializer.Serialize(ConvertToSaveSchema(), jsonSerializerOptions);
             var content = new StringContent(contentJson, Encoding.UTF8, "application/json");

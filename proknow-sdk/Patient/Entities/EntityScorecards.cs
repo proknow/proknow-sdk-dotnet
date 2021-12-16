@@ -73,7 +73,7 @@ namespace ProKnow.Patient.Entities
             var customMetricIdsAndObjectives = resolvedCustomMetrics.Select(c => c.ConvertToScorecardSchema()).ToList();
 
             // Request the creation
-            var route = $"/workspaces/{_workspaceId}/patient/{_entityId}/metrics/sets";
+            var route = $"/workspaces/{_workspaceId}/patients/{_entityId}/metrics/sets";
             var requestSchema = new EntityScorecardItem(null, null, null, null, null, name, computedMetrics, customMetricIdsAndObjectives);
             var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
             var contentJson = JsonSerializer.Serialize(requestSchema, jsonSerializerOptions);
@@ -92,7 +92,7 @@ namespace ProKnow.Patient.Entities
         /// <param name="id">The ProKnow ID of the entity scorecard</param>
         public async Task DeleteAsync(string id)
         {
-            await _proKnow.Requestor.DeleteAsync($"/workspaces/{_workspaceId}/patient/{_entityId}/metrics/sets/{id}");
+            await _proKnow.Requestor.DeleteAsync($"/workspaces/{_workspaceId}/patients/{_entityId}/metrics/sets/{id}");
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace ProKnow.Patient.Entities
         /// <returns>The entity scorecard item</returns>
         public async Task<EntityScorecardItem> GetAsync(string id)
         {
-            var json = await _proKnow.Requestor.GetAsync($"/workspaces/{_workspaceId}/patient/{_entityId}/metrics/sets/{id}");
+            var json = await _proKnow.Requestor.GetAsync($"/workspaces/{_workspaceId}/patients/{_entityId}/metrics/sets/{id}");
             return new EntityScorecardItem(_proKnow, _workspaceId, _entityId, this, json);
         }
 
@@ -124,7 +124,7 @@ namespace ProKnow.Patient.Entities
         /// <returns>The entity scorecards</returns>
         public async Task<IList<EntityScorecardSummary>> QueryAsync()
         {
-            string json = await _proKnow.Requestor.GetAsync($"/workspaces/{_workspaceId}/patient/{_entityId}/metrics/sets");
+            string json = await _proKnow.Requestor.GetAsync($"/workspaces/{_workspaceId}/patients/{_entityId}/metrics/sets");
             return DeserializeEntityScorecards(json);
         }
 

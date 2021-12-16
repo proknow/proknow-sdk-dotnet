@@ -105,8 +105,8 @@ namespace ProKnow.Test.LogTest
             FilterParameters filterParams = new FilterParameters();
             filterParams.Types = new string[] { "patient_created" };
             filterParams.PageSize = 1;
-            filterParams.StartTime = DateTime.Now;
-            filterParams.EndTime = DateTime.Now.AddDays(-1);
+            filterParams.StartTime = DateTime.Now.AddDays(-1); 
+            filterParams.EndTime = DateTime.Now;
             filterParams.UserName ="Admin";
             filterParams.PatientName = "2-Name";
             filterParams.Classification = "HTTP";

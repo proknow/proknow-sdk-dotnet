@@ -45,7 +45,7 @@ namespace ProKnow.Patient.Entities.Test
             var entitySummary = patientItem.FindEntities(e => e.Type == "dose")[0];
 
             // Create entity scorecards object
-            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, entitySummary.Id);
+            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, patientItem.Id);
 
             // Create computed metric
             var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
@@ -121,7 +121,7 @@ namespace ProKnow.Patient.Entities.Test
             var entitySummary = patientItem.FindEntities(e => e.Type == "dose")[0];
 
             // Create entity scorecards object
-            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, entitySummary.Id);
+            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, patientItem.Id);
 
             // Create computed metric
             var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
@@ -172,7 +172,7 @@ namespace ProKnow.Patient.Entities.Test
             var entitySummary = patientItem.FindEntities(e => e.Type == "dose")[0];
 
             // Create entity scorecards object
-            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, entitySummary.Id);
+            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, patientItem.Id);
 
             // Create computed metric
             var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
@@ -220,7 +220,7 @@ namespace ProKnow.Patient.Entities.Test
             var entitySummary = patientItem.FindEntities(e => e.Type == "dose")[0];
 
             // Create entity scorecards object
-            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, entitySummary.Id);
+            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, patientItem.Id);
 
             // Create computed metric
             var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
@@ -297,7 +297,7 @@ namespace ProKnow.Patient.Entities.Test
             var entitySummary = patientItem.FindEntities(e => e.Type == "dose")[0];
 
             // Create entity scorecards object
-            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, entitySummary.Id);
+            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, patientItem.Id);
 
             // Create computed metric
             var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
