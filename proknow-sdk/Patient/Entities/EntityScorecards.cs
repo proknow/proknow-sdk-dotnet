@@ -32,12 +32,12 @@ namespace ProKnow.Patient.Entities
         }
 
         /// <summary>
-        /// Creates an entity scorecard asynchronously
+        /// Creates an patient scorecard asynchronously
         /// </summary>
         /// <param name="name">The name</param>
         /// <param name="computedMetrics">The computed metrics</param>
         /// <param name="customMetrics">The custom metrics</param>
-        /// <returns>The created entity scorecard</returns>
+        /// <returns>The created patient scorecard</returns>
         public async Task<EntityScorecardItem> CreateAsync(string name, IList<ComputedMetric> computedMetrics,
             IList<CustomMetric> customMetrics)
         {
@@ -80,27 +80,27 @@ namespace ProKnow.Patient.Entities
             var content = new StringContent(contentJson, Encoding.UTF8, "application/json");
             string responseJson = await _proKnow.Requestor.PostAsync(route, null, content);
 
-            // Return the created entity scorecard, with complete custom metric representations
+            // Return the created patient scorecard, with complete custom metric representations
             var responseSchema = JsonSerializer.Deserialize<ScorecardTemplateItem>(responseJson);
             return new EntityScorecardItem(_proKnow, _workspaceId, _patientId, this, responseSchema.Id, responseSchema.Name,
                 responseSchema.ComputedMetrics, resolvedCustomMetrics);
         }
 
         /// <summary>
-        /// Deletes an entity scorecard asynchronously
+        /// Deletes an patient scorecard asynchronously
         /// </summary>
-        /// <param name="id">The ProKnow ID of the entity scorecard</param>
+        /// <param name="id">The ProKnow ID of the patient scorecard</param>
         public async Task DeleteAsync(string id)
         {
             await _proKnow.Requestor.DeleteAsync($"/workspaces/{_workspaceId}/patients/{_patientId}/metrics/sets/{id}");
         }
 
         /// <summary>
-        /// Finds an entity scorecard asynchronously based on a predicate
+        /// Finds an patient scorecard asynchronously based on a predicate
         /// </summary>
         /// <param name="predicate">The predicate for the search</param>
-        /// <returns>The first entity scorecard that satisfies the predicate or null if the predicate was null or no
-        /// entity scorecard satisfies the predicate</returns>
+        /// <returns>The first patient scorecard that satisfies the predicate or null if the predicate was null or no
+        /// patient scorecard satisfies the predicate</returns>
         public async Task<EntityScorecardSummary> FindAsync(Func<EntityScorecardSummary, bool> predicate)
         {
             var entityScorecards = await QueryAsync();
@@ -108,10 +108,10 @@ namespace ProKnow.Patient.Entities
         }
 
         /// <summary>
-        /// Gets an entity scorecard item asynchronously
+        /// Gets an patient scorecard item asynchronously
         /// </summary>
-        /// <param name="id">The ProKnow ID for the entity scorecard</param>
-        /// <returns>The entity scorecard item</returns>
+        /// <param name="id">The ProKnow ID for the patient scorecard</param>
+        /// <returns>The patient scorecard item</returns>
         public async Task<EntityScorecardItem> GetAsync(string id)
         {
             var json = await _proKnow.Requestor.GetAsync($"/workspaces/{_workspaceId}/patients/{_patientId}/metrics/sets/{id}");
@@ -129,12 +129,12 @@ namespace ProKnow.Patient.Entities
         }
 
         /// <summary>
-        /// Finds an entity scorecard based on a predicate
+        /// Finds an patient scorecard based on a predicate
         /// </summary>
         /// <param name="entityScorecards">The entity scorecards to search</param>
         /// <param name="predicate">The predicate for the search</param>
-        /// <returns>The first entity scorecard that satisfies the predicate or null if the predicate was null or no
-        /// entity scorecard that satisfies the predicate was found</returns>
+        /// <returns>The first patient scorecard that satisfies the predicate or null if the predicate was null or no
+        /// patient scorecard that satisfies the predicate was found</returns>
         private EntityScorecardSummary Find(IList<EntityScorecardSummary> entityScorecards,
             Func<EntityScorecardSummary, bool> predicate)
         {
