@@ -6,6 +6,7 @@ using ProKnow.Role;
 using ProKnow.Scorecard;
 using ProKnow.Upload;
 using ProKnow.User;
+using ProKnow.Logs;
 using System;
 using System.IO;
 using System.Text.Json;
