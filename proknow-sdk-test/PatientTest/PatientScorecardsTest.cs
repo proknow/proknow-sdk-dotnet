@@ -7,13 +7,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProKnow.Patient.Entities.Test
+namespace ProKnow.Patient.Test
 {
     [TestClass]
-    public class EntityScorecardsTest
+    public class PatientScorecardsTest
     {
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static readonly string _testClassName = nameof(EntityScorecardsTest);
+        private static readonly string _testClassName = nameof(PatientScorecardsTest);
 
         [TestInitialize]
         public async Task ClassInitialize()

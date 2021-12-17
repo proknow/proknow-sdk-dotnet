@@ -6,7 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace ProKnow.Patient.Entities.Test
+namespace ProKnow.Patient.Test
 {
     [TestClass]
     public class PatientScorecardItemTest

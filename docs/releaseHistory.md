@@ -4,6 +4,12 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.1.9
+
+*Enhancements*
+
+- Added two new SDK methods for audit logging, Query() and Next()
+
 ## v0.1.8
 
 *Bug Fixes*
