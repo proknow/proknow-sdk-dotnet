@@ -36,7 +36,6 @@ namespace ProKnow.Test.LogTest
             ++testNumber;
             _workspaceItemTwo = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
             _patientTwo = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
-
         }
 
         [ClassCleanup]
@@ -44,7 +43,6 @@ namespace ProKnow.Test.LogTest
         {
             // Delete test workspaces
             await TestHelper.DeleteWorkspacesAsync(_testClassName);
-
         }
 
         [TestMethod]
@@ -58,7 +56,6 @@ namespace ProKnow.Test.LogTest
         public async Task QueryTest()
         {
             FilterParameters filterParams = new FilterParameters();
-           // filterParams.Types = new string[] { "patient_created" };
             filterParams.WorkspaceId = _workspaceItemTwo.Id;
             filterParams.PageSize = 1;
 
@@ -126,7 +123,7 @@ namespace ProKnow.Test.LogTest
                 var receivedAuditLogItem = await _proKnow.Audit.Query(filterParams);
                 Assert.IsNotNull(receivedAuditLogItem);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Assert.Fail("Bad Audit.Query filter parameter");
             }

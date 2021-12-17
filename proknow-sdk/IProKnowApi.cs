@@ -7,7 +7,6 @@ using ProKnow.Scorecard;
 using ProKnow.Upload;
 using ProKnow.User;
 
-
 namespace ProKnow
 {
     /// <summary>

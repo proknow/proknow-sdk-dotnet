@@ -23,7 +23,7 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The ProKnow ID for the workspace</param>
-        /// <param name="patientId">The ProKnow ID for the entity</param>
+        /// <param name="patientId">The ProKnow ID for the patient</param>
         public EntityScorecards(ProKnowApi proKnow, string workspaceId, string patientId)
         {
             _proKnow = proKnow;
