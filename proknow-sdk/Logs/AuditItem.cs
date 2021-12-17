@@ -57,7 +57,7 @@ namespace ProKnow.Logs
         public string ResourceId { get; set; }
 
         /// <summary>
-        /// The resource_name of the log entry
+        /// The resource name of the log entry
         /// </summary>
         [JsonPropertyName("resource_name")]
         public string ResourceName { get; set; }
@@ -111,7 +111,7 @@ namespace ProKnow.Logs
         public string UserAgent { get; set; }
 
         /// <summary>
-        /// The IP address of calling api
+        /// The IP address of calling API
         /// </summary>
         [JsonPropertyName("ip_address")]
         public string IpAddress { get; set; }

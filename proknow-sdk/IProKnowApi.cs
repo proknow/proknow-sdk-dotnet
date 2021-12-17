@@ -16,7 +16,7 @@ namespace ProKnow
     public interface IProKnowApi
     {
         /// <summary>
-        /// Interacts with roles in the ProKnow organization
+        /// Interacts with audit logs in the ProKnow organization
         /// </summary>
         Audit Audit { get; }
 

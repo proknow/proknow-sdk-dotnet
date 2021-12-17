@@ -79,6 +79,7 @@ namespace ProKnow.Logs
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
+        /// await _proKnow.Audit.Query(filterParams);
         /// var auditLogs = await _proKnow.Audit.Next();
         /// </code>
         /// </example>

@@ -8,7 +8,7 @@ namespace ProKnow.Patient.Entities
     /// </summary>
     public class EntityScorecardSummary : ScorecardTemplateSummary
     {
-        private EntityScorecards _entityScorecards;
+        private PatientScorecards _entityScorecards;
 
         /// <summary>
         /// Used by deserialization to create an entity scorecard summary
@@ -40,21 +40,21 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="entityScorecards">Interacts with scorecards for an entity in a ProKnow organization</param>
-        internal void PostProcessDeserialization(ProKnowApi proKnow, EntityScorecards entityScorecards)
+        internal void PostProcessDeserialization(ProKnowApi proKnow, PatientScorecards entityScorecards)
         {
             _proKnow = proKnow;
             _entityScorecards = entityScorecards;
         }
 
         /// <summary>
-        /// Helper to cast EntityScorecardItem task to ScorecardTemplateItem task
+        /// Helper to cast PatientScorecardItem task to ScorecardTemplateItem task
         /// </summary>
-        /// <param name="task">The EntityScorecardItem task</param>
+        /// <param name="task">The PatientScorecardItem task</param>
         /// <returns>A ScorecardTemplateItem task</returns>
-        private static async Task<ScorecardTemplateItem> ConvertToBaseTask(Task<EntityScorecardItem> task)
+        private static async Task<ScorecardTemplateItem> ConvertToBaseTask(Task<PatientScorecardItem> task)
         {
-            var entityScorecardItem = await task;
-            return entityScorecardItem as ScorecardTemplateItem;
+            var PatientScorecardItem = await task;
+            return PatientScorecardItem as ScorecardTemplateItem;
         }
     }
 }

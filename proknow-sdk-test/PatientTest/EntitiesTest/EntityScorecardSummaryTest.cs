@@ -44,7 +44,7 @@ namespace ProKnow.Patient.Entities.Test
             var entitySummary = patientItem.FindEntities(e => e.Type == "dose")[0];
 
             // Create entity scorecards object
-            var entityScorecards = new EntityScorecards(_proKnow, workspace.Id, patientItem.Id);
+            var entityScorecards = new PatientScorecards(_proKnow, workspace.Id, patientItem.Id);
 
             // Create computed metric
             var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
@@ -72,16 +72,16 @@ namespace ProKnow.Patient.Entities.Test
             // Create an entity scorecard summary
             var computedMetrics = new List<ComputedMetric>() { computedMetric };
             var customMetrics = new List<CustomMetric>() { customMetric };
-            var entityScorecardItem = await entityScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
-            var entityScorecardSummary = await entityScorecards.FindAsync(t => t.Id == entityScorecardItem.Id);
+            var PatientScorecardItem = await entityScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+            var entityScorecardSummary = await entityScorecards.FindAsync(t => t.Id == PatientScorecardItem.Id);
 
             // Get the associated entity scorecard
-            var createdEntityScorecardItem = await entityScorecardSummary.GetAsync();
+            var createdPatientScorecardItem = await entityScorecardSummary.GetAsync();
 
             // Verify the contents of the returned entity scorecard
-            Assert.AreEqual($"{_testClassName}-{testNumber}", createdEntityScorecardItem.Name);
-            Assert.AreEqual(1, createdEntityScorecardItem.ComputedMetrics.Count);
-            var createdComputedMetric = createdEntityScorecardItem.ComputedMetrics[0];
+            Assert.AreEqual($"{_testClassName}-{testNumber}", createdPatientScorecardItem.Name);
+            Assert.AreEqual(1, createdPatientScorecardItem.ComputedMetrics.Count);
+            var createdComputedMetric = createdPatientScorecardItem.ComputedMetrics[0];
             Assert.AreEqual(computedMetric.Type, createdComputedMetric.Type);
             Assert.AreEqual(computedMetric.RoiName, createdComputedMetric.RoiName);
             Assert.AreEqual(computedMetric.Arg1, createdComputedMetric.Arg1);
@@ -96,8 +96,8 @@ namespace ProKnow.Patient.Entities.Test
                 Assert.AreEqual(computedMetric.Objectives[i].Min, createdComputedMetric.Objectives[i].Min);
                 Assert.AreEqual(computedMetric.Objectives[i].Max, createdComputedMetric.Objectives[i].Max);
             }
-            Assert.AreEqual(1, createdEntityScorecardItem.CustomMetrics.Count);
-            var createdCustomMetricItem = createdEntityScorecardItem.CustomMetrics[0];
+            Assert.AreEqual(1, createdPatientScorecardItem.CustomMetrics.Count);
+            var createdCustomMetricItem = createdPatientScorecardItem.CustomMetrics[0];
             Assert.AreEqual(customMetricItem.Id, createdCustomMetricItem.Id);
             Assert.AreEqual(customMetricItem.Objectives.Count, createdCustomMetricItem.Objectives.Count);
             for (var i = 0; i < createdCustomMetricItem.Objectives.Count; i++)

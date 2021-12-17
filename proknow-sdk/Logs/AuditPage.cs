@@ -12,13 +12,13 @@ namespace ProKnow.Logs
         private ProKnowApi _proKnow;
 
         /// <summary>
-        /// The ID of the log entry
+        /// The total number of log entries
         /// </summary>
         [JsonPropertyName("total")]
         public uint Total { get; set; }
 
         /// <summary>
-        /// The user ID of the log entry
+        /// The audit log items returned
         /// </summary>
         [JsonPropertyName("items")]
         public List<AuditItem> Items { get; set; }

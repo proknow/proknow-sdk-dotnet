@@ -22,7 +22,7 @@ namespace ProKnow.Logs
         public DateTime? StartTime { get; set; }
 
         /// <summary>
-        /// Start date cut off for whole query
+        /// End date cut off for whole query
         /// </summary>
         [JsonPropertyName("end_time")]
         public DateTime? EndTime { get; set; }
@@ -58,25 +58,25 @@ namespace ProKnow.Logs
         public string[] Methods { get; set; }
 
         /// <summary>
-        /// Filter by the uri that event took place (e.g. '/metrics/custom')
+        /// Filter by the URI that event took place (e.g. '/metrics/custom')
         /// </summary>
         [JsonPropertyName("uri")]
         public string URI { get; set; }
 
         /// <summary>
-        /// User Agent attributed to event (e.g. Browser User Agent)
+        /// User agent attributed to event (e.g. Browser User Agent)
         /// </summary>
         [JsonPropertyName("user_agent")]
         public string UserAgent { get; set; }
 
         /// <summary>
-        /// IP Address attributed to event
+        /// IP address attributed to event
         /// </summary>
         [JsonPropertyName("ip_address")]
         public string IpAddress { get; set; }
 
         /// <summary>
-        /// IP Address attributed to event
+        /// Status code returned by the api call
         /// </summary>
         [JsonPropertyName("status_codes")]
         public string[] StatusCodes { get; set; }
