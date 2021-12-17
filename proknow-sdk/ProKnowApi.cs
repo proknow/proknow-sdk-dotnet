@@ -22,6 +22,9 @@ namespace ProKnow
         private readonly ILogger _logger;
 
         /// <inheritdoc/>
+        public Audit Audit { get; private set; }
+        
+        /// <inheritdoc/>
         public Requestor Requestor { get; private set; }
 
         /// <inheritdoc/>
@@ -145,6 +148,7 @@ namespace ProKnow
             Uploads = new Uploads(this);
             Patients = new Patients(this);
             Collections = new Collections(this);
+            Audit = new Audit(this);
         }
     }
 }
