@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.Net.Http;
+using System.Text;
+using ProKnow.Exceptions;
 
 namespace ProKnow.Logs
 {
@@ -10,6 +14,12 @@ namespace ProKnow.Logs
     public class AuditPage
     {
         private ProKnowApi _proKnow;
+        private FilterParametersExtended _filterParameters;
+
+        private JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        {
+            IgnoreNullValues = true,
+        };
 
         /// <summary>
         /// The total number of log entries
@@ -27,17 +37,48 @@ namespace ProKnow.Logs
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
-        internal void PostProcessDeserialization(ProKnowApi proKnow)
+        /// <param name="parameters">The filter paramters used in API call</param>
+        internal void PostProcessDeserialization(ProKnowApi proKnow, FilterParametersExtended parameters)
         {
             _proKnow = proKnow;
+            _filterParameters = parameters;
         }
 
         /// <summary>
-        /// Get next page of audit logs
+        /// Gets next page of audit logs asynchronously
         /// </summary>
-        public Task Next()
+        /// <returns>The next page of audit logs</returns>
+        /// <example>This example shows how to get the next page of audit logs:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        ///
+        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
+        /// var page = await _proKnow.Audit.Query(filterParams);
+        /// var auditLogs = await page.Next();
+        /// </code>
+        /// </example>
+        public async Task<AuditPage> Next()
         {
-            return this._proKnow.Audit.Next();
+            if (this._filterParameters == null)
+            {
+                throw new ProKnowException("Must call Query first");
+            }else if(this._filterParameters.FirstId == null)
+            {
+                throw new ProKnowException("Must call Query first");
+            }
+
+            ++this._filterParameters.PageNumber;
+
+            var bodyJson = JsonSerializer.Serialize(this._filterParameters, _serializerOptions);
+            var requestContent = new StringContent(bodyJson, Encoding.UTF8, "application/json");
+
+            var json = await _proKnow.Requestor.PostAsync("audit/events/search", null, requestContent);
+            var auditPage = JsonSerializer.Deserialize<AuditPage>(json);
+
+            auditPage.PostProcessDeserialization(this._proKnow, this._filterParameters);
+
+            return auditPage;
         }
     }
 }

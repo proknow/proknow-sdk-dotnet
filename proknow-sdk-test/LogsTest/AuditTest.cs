@@ -39,7 +39,8 @@ namespace ProKnow.Audit.Test
         [ExpectedException(typeof(ProKnowException), "Must call Query first")]
         public async Task NextBeforeQueryTest()
         {
-           await _proKnow.Audit.Next();           
+            AuditPage page = new AuditPage();
+            await page.Next();           
         }
 
         [TestMethod]
@@ -82,8 +83,8 @@ namespace ProKnow.Audit.Test
             Assert.AreEqual(patientItem.WorkspaceId, $"{_workspaceItemTwo.Id}");
             Assert.AreEqual(patientItem.WorkspaceName, $"{_workspaceItemTwo.Name}");
 
-            await _proKnow.Audit.Next();
-            receivedAuditLogItem = await _proKnow.Audit.Next();
+            await receivedAuditLogItem.Next();
+            receivedAuditLogItem = await receivedAuditLogItem.Next();
 
             Assert.AreEqual(receivedAuditLogItem.Total, (uint)4);
 
