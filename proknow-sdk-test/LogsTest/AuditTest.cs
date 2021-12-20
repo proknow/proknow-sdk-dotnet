@@ -5,17 +5,18 @@ using ProKnow.Logs;
 using System;
 using ProKnow.Patient;
 using ProKnow.Exceptions;
+using ProKnow.Test;
+using System.Text.Json;
+using ProKnow.User;
 
-namespace ProKnow.Test.LogTest
+namespace ProKnow.Audit.Test
 {
     [TestClass]
     public class AuditTest
     {
         private static readonly string _testClassName = nameof(AuditTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static WorkspaceItem _workspaceItemOne;
         private static WorkspaceItem _workspaceItemTwo;
-        private static PatientItem _patientOne;
         private static PatientItem _patientTwo;
 
         [ClassInitialize]
@@ -25,17 +26,6 @@ namespace ProKnow.Test.LogTest
         {
             // Cleanup from previous test stoppage or failure, if necessary
             await ClassCleanup();
-
-            var testNumber = 123456;
-            // Create a test workspace
-            _workspaceItemOne = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
-
-            // Create a test patient
-            _patientOne = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
-
-            ++testNumber;
-            _workspaceItemTwo = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
-            _patientTwo = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
         }
 
         [ClassCleanup]
@@ -49,12 +39,26 @@ namespace ProKnow.Test.LogTest
         [ExpectedException(typeof(ProKnowException), "Must call Query first")]
         public async Task NextBeforeQueryTest()
         {
-            var receivedAuditLogItem = await _proKnow.Audit.Next();           
+           await _proKnow.Audit.Next();           
         }
 
         [TestMethod]
         public async Task QueryTest()
         {
+            var testNumber = 123456;
+            // Create a test workspace
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient
+            await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
+
+            ++testNumber;
+            _workspaceItemTwo = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            _patientTwo = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
+
+            var json = await _proKnow.Requestor.GetAsync($"/user");
+            var userItem = JsonSerializer.Deserialize<UserItem>(json);
+
             FilterParameters filterParams = new FilterParameters();
             filterParams.WorkspaceId = _workspaceItemTwo.Id;
             filterParams.PageSize = 1;
@@ -74,7 +78,7 @@ namespace ProKnow.Test.LogTest
             Assert.AreEqual(patientItem.ResourceName, "123457-Name");
             Assert.AreEqual(patientItem.StatusCode, "200");
             Assert.AreEqual(patientItem.Uri, $"/workspaces/{_workspaceItemTwo.Id}/patients/{_patientTwo.Id}");
-            Assert.AreEqual(patientItem.UserName, "Admin");
+            Assert.AreEqual(patientItem.UserName, userItem.Name);
             Assert.AreEqual(patientItem.WorkspaceId, $"{_workspaceItemTwo.Id}");
             Assert.AreEqual(patientItem.WorkspaceName, $"{_workspaceItemTwo.Name}");
 
@@ -94,7 +98,7 @@ namespace ProKnow.Test.LogTest
             Assert.AreEqual(nextPatientItem.ResourceName, "123457-Name");
             Assert.AreEqual(nextPatientItem.StatusCode, "200");
             Assert.AreEqual(nextPatientItem.Uri, $"/workspaces/{_workspaceItemTwo.Id}/patients");
-            Assert.AreEqual(nextPatientItem.UserName, "Admin");
+            Assert.AreEqual(nextPatientItem.UserName, userItem.Name);
             Assert.AreEqual(nextPatientItem.WorkspaceId, $"{_workspaceItemTwo.Id}");
             Assert.AreEqual(nextPatientItem.WorkspaceName, $"{_workspaceItemTwo.Name}");
         }
