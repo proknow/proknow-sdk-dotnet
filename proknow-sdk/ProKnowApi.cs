@@ -6,7 +6,7 @@ using ProKnow.Role;
 using ProKnow.Scorecard;
 using ProKnow.Upload;
 using ProKnow.User;
-using ProKnow.Logs;
+using ProKnow.Audit;
 using System;
 using System.IO;
 using System.Text.Json;
@@ -23,7 +23,7 @@ namespace ProKnow
         private readonly ILogger _logger;
 
         /// <inheritdoc/>
-        public Audit Audit { get; private set; }
+        public Audits Audit { get; private set; }
         
         /// <inheritdoc/>
         public Requestor Requestor { get; private set; }
@@ -149,7 +149,7 @@ namespace ProKnow
             Uploads = new Uploads(this);
             Patients = new Patients(this);
             Collections = new Collections(this);
-            Audit = new Audit(this);
+            Audit = new Audits(this);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using ProKnow.Collection;
-using ProKnow.Logs;
+using ProKnow.Audit;
 using ProKnow.Patient;
 using ProKnow.Role;
 using ProKnow.Scorecard;
@@ -18,7 +18,7 @@ namespace ProKnow
         /// <summary>
         /// Interacts with audit logs in the ProKnow organization
         /// </summary>
-        Audit Audit { get; }
+        Audits Audit { get; }
 
         /// <summary>
         /// Interacts with collections in the ProKnow organization

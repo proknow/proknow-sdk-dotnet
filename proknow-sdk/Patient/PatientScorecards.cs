@@ -6,12 +6,11 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using ProKnow.Patient.Entities;
 
 namespace ProKnow.Patient
 {
     /// <summary>
-    /// Interacts with scorecards for an entity in a ProKnow organization
+    /// Interacts with scorecards for a patient in a ProKnow organization
     /// </summary>
     public class PatientScorecards
     {
@@ -20,7 +19,7 @@ namespace ProKnow.Patient
         private readonly string _patientId;
 
         /// <summary>
-        /// Constructs an EntityScorecards object
+        /// Constructs an PatientScorecards object
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The ProKnow ID for the workspace</param>
@@ -33,7 +32,7 @@ namespace ProKnow.Patient
         }
 
         /// <summary>
-        /// Creates an patient scorecard asynchronously
+        /// Creates a patient scorecard asynchronously
         /// </summary>
         /// <param name="name">The name</param>
         /// <param name="computedMetrics">The computed metrics</param>
@@ -88,7 +87,7 @@ namespace ProKnow.Patient
         }
 
         /// <summary>
-        /// Deletes an patient scorecard asynchronously
+        /// Deletes a patient scorecard asynchronously
         /// </summary>
         /// <param name="id">The ProKnow ID of the patient scorecard</param>
         public async Task DeleteAsync(string id)
@@ -97,19 +96,19 @@ namespace ProKnow.Patient
         }
 
         /// <summary>
-        /// Finds an patient scorecard asynchronously based on a predicate
+        /// Finds a patient scorecard asynchronously based on a predicate
         /// </summary>
         /// <param name="predicate">The predicate for the search</param>
         /// <returns>The first patient scorecard that satisfies the predicate or null if the predicate was null or no
         /// patient scorecard satisfies the predicate</returns>
-        public async Task<EntityScorecardSummary> FindAsync(Func<EntityScorecardSummary, bool> predicate)
+        public async Task<PatientScorecardSummary> FindAsync(Func<PatientScorecardSummary, bool> predicate)
         {
-            var entityScorecards = await QueryAsync();
-            return Find(entityScorecards, predicate);
+            var patientScorecards = await QueryAsync();
+            return Find(patientScorecards, predicate);
         }
 
         /// <summary>
-        /// Gets an patient scorecard item asynchronously
+        /// Gets a patient scorecard item asynchronously
         /// </summary>
         /// <param name="id">The ProKnow ID for the patient scorecard</param>
         /// <returns>The patient scorecard item</returns>
@@ -120,52 +119,52 @@ namespace ProKnow.Patient
         }
 
         /// <summary>
-        /// Queries for entity scorecards asynchronously
+        /// Queries for patient scorecards asynchronously
         /// </summary>
-        /// <returns>The entity scorecards</returns>
-        public async Task<IList<EntityScorecardSummary>> QueryAsync()
+        /// <returns>The patient scorecards</returns>
+        public async Task<IList<PatientScorecardSummary>> QueryAsync()
         {
             string json = await _proKnow.Requestor.GetAsync($"/workspaces/{_workspaceId}/patients/{_patientId}/metrics/sets");
-            return DeserializeEntityScorecards(json);
+            return DeserializePatientScorecards(json);
         }
 
         /// <summary>
         /// Finds an patient scorecard based on a predicate
         /// </summary>
-        /// <param name="entityScorecards">The entity scorecards to search</param>
+        /// <param name="patientScorecards">The patient scorecards to search</param>
         /// <param name="predicate">The predicate for the search</param>
         /// <returns>The first patient scorecard that satisfies the predicate or null if the predicate was null or no
         /// patient scorecard that satisfies the predicate was found</returns>
-        private EntityScorecardSummary Find(IList<EntityScorecardSummary> entityScorecards,
-            Func<EntityScorecardSummary, bool> predicate)
+        private PatientScorecardSummary Find(IList<PatientScorecardSummary> patientScorecards,
+            Func<PatientScorecardSummary, bool> predicate)
         {
             if (predicate == null)
             {
                 return null;
             }
-            foreach (var entityScorecard in entityScorecards)
+            foreach (var patientScorecard in patientScorecards)
             {
-                if (predicate(entityScorecard))
+                if (predicate(patientScorecard))
                 {
-                    return entityScorecard;
+                    return patientScorecard;
                 }
             }
             return null;
         }
 
         /// <summary>
-        /// Creates a collection of entity scorecards from their JSON representation
+        /// Creates a collection of patient scorecards from their JSON representation
         /// </summary>
-        /// <param name="json">The JSON representation of the entity scorecards</param>
-        /// <returns>A collection of entity scorecards</returns>
-        private IList<EntityScorecardSummary> DeserializeEntityScorecards(string json)
+        /// <param name="json">The JSON representation of the patient scorecards</param>
+        /// <returns>A collection of patient scorecards</returns>
+        private IList<PatientScorecardSummary> DeserializePatientScorecards(string json)
         {
-            var entityScorecards = JsonSerializer.Deserialize<IList<EntityScorecardSummary>>(json);
-            foreach (var entityScorecard in entityScorecards)
+            var patientScorecards = JsonSerializer.Deserialize<IList<PatientScorecardSummary>>(json);
+            foreach (var patientScorecard in patientScorecards)
             {
-                entityScorecard.PostProcessDeserialization(_proKnow, this);
+                patientScorecard.PostProcessDeserialization(_proKnow, this);
             }
-            return entityScorecards;
+            return patientScorecards;
         }
     }
 }

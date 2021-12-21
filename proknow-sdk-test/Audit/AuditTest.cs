@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using System.IO;
-using ProKnow.Logs;
+using ProKnow.Audit;
 using System;
 using ProKnow.Patient;
 using ProKnow.Exceptions;
@@ -64,11 +64,11 @@ namespace ProKnow.Audit.Test
             filterParams.WorkspaceId = _workspaceItemTwo.Id;
             filterParams.PageSize = 1;
 
-            var receivedAuditLogItem = await _proKnow.Audit.Query(filterParams);
+            var auditPage = await _proKnow.Audit.Query(filterParams);
 
-            Assert.AreEqual(receivedAuditLogItem.Total, (uint)4);
+            Assert.AreEqual(auditPage.Total, (uint)4);
 
-            var patientItem = receivedAuditLogItem.Items[0];
+            var patientItem = auditPage.Items[0];
 
             Assert.AreEqual(patientItem.Classification, "HTTP");
             Assert.AreEqual(patientItem.Method, "GET");
@@ -83,12 +83,12 @@ namespace ProKnow.Audit.Test
             Assert.AreEqual(patientItem.WorkspaceId, $"{_workspaceItemTwo.Id}");
             Assert.AreEqual(patientItem.WorkspaceName, $"{_workspaceItemTwo.Name}");
 
-            await receivedAuditLogItem.Next();
-            receivedAuditLogItem = await receivedAuditLogItem.Next();
+            await auditPage.Next();
+            auditPage = await auditPage.Next();
 
-            Assert.AreEqual(receivedAuditLogItem.Total, (uint)4);
+            Assert.AreEqual(auditPage.Total, (uint)4);
 
-            var nextPatientItem = receivedAuditLogItem.Items[0];
+            var nextPatientItem = auditPage.Items[0];
 
             Assert.AreEqual(nextPatientItem.Classification, "HTTP");
             Assert.AreEqual(nextPatientItem.Method, "POST");

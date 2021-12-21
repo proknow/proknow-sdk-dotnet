@@ -9,72 +9,72 @@ using System.Threading.Tasks;
 namespace ProKnow.Patient
 {
     /// <summary>
-    /// Represents an entity scorecard
+    /// Represents a patient scorecard
     /// </summary>
     public class PatientScorecardItem : ScorecardTemplateItem
     {
         private string _workspaceId;
-        private string _entityId;
-        private PatientScorecards _entityScorecards;
+        private string _patientId;
+        private PatientScorecards _patientScorecards;
 
         /// <summary>
-        /// Used by deserialization to create entity scorecard item
+        /// Used by deserialization to create patient scorecard item
         /// </summary>
         public PatientScorecardItem() : base()
         {
         }
 
         /// <summary>
-        /// Creates an entity scorecard item
+        /// Creates an patient scorecard item
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The workspace ProKnow ID</param>
-        /// <param name="entityId">The entity ProKnow ID</param>
-        /// <param name="entityScorecards">Interacts with scorecards for an entity in a ProKnow organization</param>
-        /// <param name="id">The entity scorecard ProKnow ID</param>
+        /// <param name="patientId">The patient ProKnow ID</param>
+        /// <param name="patientScorecards">Interacts with scorecards for an patient in a ProKnow organization</param>
+        /// <param name="id">The patient scorecard ProKnow ID</param>
         /// <param name="name">The name</param>
         /// <param name="computedMetrics">The computed metrics</param>
         /// <param name="customMetrics">The custom metrics</param>
-        internal PatientScorecardItem(ProKnowApi proKnow, string workspaceId, string entityId,
-            PatientScorecards entityScorecards, string id, string name, IList<ComputedMetric> computedMetrics,
+        internal PatientScorecardItem(ProKnowApi proKnow, string workspaceId, string patientId,
+            PatientScorecards patientScorecards, string id, string name, IList<ComputedMetric> computedMetrics,
             IList<CustomMetricItem> customMetrics) : base(proKnow, id, name, computedMetrics, customMetrics)
         {
             _workspaceId = workspaceId;
-            _entityId = entityId;
-            _entityScorecards = entityScorecards;
+            _patientId = patientId;
+            _patientScorecards = patientScorecards;
         }
 
         /// <summary>
-        /// Creates a entity scorecard item from its JSON representation
+        /// Creates a patient scorecard item from its JSON representation
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The workspace ProKnow ID</param>
-        /// <param name="entityId">The entity ProKnow ID</param>
-        /// <param name="entityScorecards">Interacts with scorecards for an entity in a ProKnow organization</param>
-        /// <param name="json">JSON representation of the entity scorecard item</param>
-        internal PatientScorecardItem(ProKnowApi proKnow, string workspaceId, string entityId,
-            PatientScorecards entityScorecards, string json) : base(proKnow, json)
+        /// <param name="patientId">The patient ProKnow ID</param>
+        /// <param name="patientScorecards">Interacts with scorecards for an patient in a ProKnow organization</param>
+        /// <param name="json">JSON representation of the patient scorecard item</param>
+        internal PatientScorecardItem(ProKnowApi proKnow, string workspaceId, string patientId,
+            PatientScorecards patientScorecards, string json) : base(proKnow, json)
         {
             _workspaceId = workspaceId;
-            _entityId = entityId;
-            _entityScorecards = entityScorecards;
+            _patientId = patientId;
+            _patientScorecards = patientScorecards;
         }
 
         /// <summary>
-        /// Deletes this entity scorecard item instance asynchronously
+        /// Deletes this patient scorecard item instance asynchronously
         /// </summary>
         public override async Task DeleteAsync()
         {
-            await _entityScorecards.DeleteAsync(Id);
+            await _patientScorecards.DeleteAsync(Id);
         }
 
         /// <summary>
-        /// Saves changes to an entity scorecard asynchronously
+        /// Saves changes to an patient scorecard asynchronously
         /// </summary>
         //TODO--Add example to update a custom metric value for a scorecard
         public override async Task SaveAsync()
         {
-            var route = $"/workspaces/{_workspaceId}/patients/{_entityId}/metrics/sets/{Id}";
+            var route = $"/workspaces/{_workspaceId}/patients/{_patientId}/metrics/sets/{Id}";
             var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
             var contentJson = JsonSerializer.Serialize(ConvertToSaveSchema(), jsonSerializerOptions);
             var content = new StringContent(contentJson, Encoding.UTF8, "application/json");
@@ -110,15 +110,15 @@ namespace ProKnow.Patient
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="workspaceId">The workspace ProKnow ID</param>
-        /// <param name="entityId">The entity ProKnow ID</param>
-        /// <param name="entityScorecards">Interacts with scorecards for an entity in a ProKnow organization</param>
-        internal void PostProcessDeserialization(ProKnowApi proKnow, string workspaceId, string entityId,
-            PatientScorecards entityScorecards)
+        /// <param name="patientId">The patient ProKnow ID</param>
+        /// <param name="patientScorecards">Interacts with scorecards for a patient in a ProKnow organization</param>
+        internal void PostProcessDeserialization(ProKnowApi proKnow, string workspaceId, string patientId,
+            PatientScorecards patientScorecards)
         {
             _proKnow = proKnow;
             _workspaceId = workspaceId;
-            _entityId = entityId;
-            _entityScorecards = entityScorecards;
+            _patientId = patientId;
+            _patientScorecards = patientScorecards;
         }
     }
 }

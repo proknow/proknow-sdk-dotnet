@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Text;
 using ProKnow.Exceptions;
 
-namespace ProKnow.Logs
+namespace ProKnow.Audit
 {
     /// <summary>
     /// Represents a collection of audit log items
@@ -55,7 +55,7 @@ namespace ProKnow.Logs
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
         /// var page = await _proKnow.Audit.Query(filterParams);
-        /// var auditLogs = await page.Next();
+        /// var nextPage = await page.Next();
         /// </code>
         /// </example>
         public async Task<AuditPage> Next()

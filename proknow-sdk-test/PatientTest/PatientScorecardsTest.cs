@@ -43,8 +43,8 @@ namespace ProKnow.Patient.Test
             // Create a test patient with a dose
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
 
-            // Create entity scorecards object
-            var entityScorecards = new PatientScorecards(_proKnow, workspace.Id, patientItem.Id);
+            // Create patient scorecards object
+            var patientScorecards = new PatientScorecards(_proKnow, workspace.Id, patientItem.Id);
 
             // Create computed metric
             var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
@@ -69,12 +69,12 @@ namespace ProKnow.Patient.Test
             // Convert custom metric to schema expected by CreateAsync (name and objectives only)
             var customMetric = new CustomMetric(customMetricItem.Name, customMetricItem.Objectives);
 
-            // Create entity scorecard
+            // Create patient scorecard
             var computedMetrics = new List<ComputedMetric>() { computedMetric };
             var customMetrics = new List<CustomMetric>() { customMetric };
-            var PatientScorecardItem = await entityScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+            var PatientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
 
-            // Verify created entity scorecard
+            // Verify created patient scorecard
             Assert.AreEqual($"{_testClassName}-{testNumber}", PatientScorecardItem.Name);
             Assert.AreEqual(1, PatientScorecardItem.ComputedMetrics.Count);
             var createdComputedMetric = PatientScorecardItem.ComputedMetrics[0];
@@ -118,8 +118,8 @@ namespace ProKnow.Patient.Test
             // Create a test patient with a dose
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
 
-            // Create entity scorecards object
-            var entityScorecards = new PatientScorecards(_proKnow, workspace.Id, patientItem.Id);
+            // Create patient scorecards object
+            var patientScorecards = new PatientScorecards(_proKnow, workspace.Id, patientItem.Id);
 
             // Create computed metric
             var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
@@ -144,17 +144,17 @@ namespace ProKnow.Patient.Test
             // Convert custom metric to schema expected by CreateAsync (name and objectives only)
             var customMetric = new CustomMetric(customMetricItem.Name, customMetricItem.Objectives);
 
-            // Create entity scorecard
+            // Create patient scorecard
             var computedMetrics = new List<ComputedMetric>() { computedMetric };
             var customMetrics = new List<CustomMetric>() { customMetric };
-            var PatientScorecardItem = await entityScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+            var PatientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
 
-            // Delete the entity scorecard created in initialization
-            await entityScorecards.DeleteAsync(PatientScorecardItem.Id);
+            // Delete the patient scorecard created in initialization
+            await patientScorecards.DeleteAsync(PatientScorecardItem.Id);
 
-            // Verify the entity scorecard was deleted
-            var entityScorecardSummary = await entityScorecards.FindAsync(t => t.Name == _testClassName);
-            Assert.IsNull(entityScorecardSummary);
+            // Verify the patient scorecard was deleted
+            var patientScorecardSummary = await patientScorecards.FindAsync(t => t.Name == _testClassName);
+            Assert.IsNull(patientScorecardSummary);
         }
 
         [TestMethod]
@@ -168,8 +168,8 @@ namespace ProKnow.Patient.Test
             // Create a test patient with a dose
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
 
-            // Create entity scorecards object
-            var entityScorecards = new PatientScorecards(_proKnow, workspace.Id, patientItem.Id);
+            // Create patient scorecards object
+            var patientScorecards = new PatientScorecards(_proKnow, workspace.Id, patientItem.Id);
 
             // Create computed metric
             var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
@@ -194,14 +194,14 @@ namespace ProKnow.Patient.Test
             // Convert custom metric to schema expected by CreateAsync (name and objectives only)
             var customMetric = new CustomMetric(customMetricItem.Name, customMetricItem.Objectives);
 
-            // Create entity scorecard
+            // Create patient scorecard
             var computedMetrics = new List<ComputedMetric>() { computedMetric };
             var customMetrics = new List<CustomMetric>() { customMetric };
-            var PatientScorecardItem = await entityScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+            var PatientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
 
-            var entityScorecardSummary = await entityScorecards.FindAsync(t => t.Name == $"{_testClassName}-{testNumber}");
-            Assert.AreEqual(PatientScorecardItem.Id, entityScorecardSummary.Id);
-            Assert.AreEqual(PatientScorecardItem.Name, entityScorecardSummary.Name);
+            var patientScorecardSummary = await patientScorecards.FindAsync(t => t.Name == $"{_testClassName}-{testNumber}");
+            Assert.AreEqual(PatientScorecardItem.Id, patientScorecardSummary.Id);
+            Assert.AreEqual(PatientScorecardItem.Name, patientScorecardSummary.Name);
         }
 
         [TestMethod]
@@ -215,8 +215,8 @@ namespace ProKnow.Patient.Test
             // Create a test patient with a dose
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
 
-            // Create entity scorecards object
-            var entityScorecards = new PatientScorecards(_proKnow, workspace.Id, patientItem.Id);
+            // Create patient scorecards object
+            var patientScorecards = new PatientScorecards(_proKnow, workspace.Id, patientItem.Id);
 
             // Create computed metric
             var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
@@ -241,13 +241,13 @@ namespace ProKnow.Patient.Test
             // Convert custom metric to schema expected by CreateAsync (name and objectives only)
             var customMetric = new CustomMetric(customMetricItem.Name, customMetricItem.Objectives);
 
-            // Create entity scorecard
+            // Create patient scorecard
             var computedMetrics = new List<ComputedMetric>() { computedMetric };
             var customMetrics = new List<CustomMetric>() { customMetric };
-            var PatientScorecardItem = await entityScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+            var PatientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
 
-            // Get the created entity scorecard
-            var createdPatientScorecardItem = await entityScorecards.GetAsync(PatientScorecardItem.Id);
+            // Get the created patient scorecard
+            var createdPatientScorecardItem = await patientScorecards.GetAsync(PatientScorecardItem.Id);
             Assert.AreEqual($"{_testClassName}-{testNumber}", createdPatientScorecardItem.Name);
             Assert.AreEqual(1, createdPatientScorecardItem.ComputedMetrics.Count);
             var createdComputedMetric = createdPatientScorecardItem.ComputedMetrics[0];
@@ -291,8 +291,8 @@ namespace ProKnow.Patient.Test
             // Create a test patient with a dose
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
 
-            // Create entity scorecards object
-            var entityScorecards = new PatientScorecards(_proKnow, workspace.Id, patientItem.Id);
+            // Create patient scorecards object
+            var patientScorecards = new PatientScorecards(_proKnow, workspace.Id, patientItem.Id);
 
             // Create computed metric
             var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
@@ -317,14 +317,14 @@ namespace ProKnow.Patient.Test
             // Convert custom metric to schema expected by CreateAsync (name and objectives only)
             var customMetric = new CustomMetric(customMetricItem.Name, customMetricItem.Objectives);
 
-            // Create entity scorecard
+            // Create patient scorecard
             var computedMetrics = new List<ComputedMetric>() { computedMetric };
             var customMetrics = new List<CustomMetric>() { customMetric };
-            var PatientScorecardItem = await entityScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+            var PatientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
 
-            var entityScorecardSummaries = await entityScorecards.QueryAsync();
-            var entityScorecardSummary = entityScorecardSummaries.First(t => t.Id == PatientScorecardItem.Id);
-            Assert.AreEqual(PatientScorecardItem.Name, entityScorecardSummary.Name);
+            var patientScorecardSummaries = await patientScorecards.QueryAsync();
+            var patientScorecardSummary = patientScorecardSummaries.First(t => t.Id == PatientScorecardItem.Id);
+            Assert.AreEqual(PatientScorecardItem.Name, patientScorecardSummary.Name);
         }
     }
 }

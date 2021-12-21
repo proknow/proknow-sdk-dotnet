@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace ProKnow.Logs
+namespace ProKnow.Audit
 {
     /// <summary>
     /// Represents a class of possible parameters that can be used to filter

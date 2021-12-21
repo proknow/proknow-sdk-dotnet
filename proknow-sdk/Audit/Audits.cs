@@ -3,13 +3,13 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace ProKnow.Logs
+namespace ProKnow.Audit
 {
     /// <summary>
     /// Interacts with audit logging for a ProKnow organization.  This class is instantiated as an attribute of the
     /// ProKnow.ProKnowApi class
     /// </summary>
-    public class Audit
+    public class Audits
     {
         private readonly ProKnowApi _proKnow;
         private JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
@@ -21,7 +21,7 @@ namespace ProKnow.Logs
         /// Constructs a Audit object
         /// </summary>
         /// <param name="proKnow">Parent ProKnow object</param>
-        internal Audit(ProKnowApi proKnow)
+        internal Audits(ProKnowApi proKnow)
         {
             _proKnow = proKnow;
         }
@@ -37,7 +37,8 @@ namespace ProKnow.Logs
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
         /// FilterParameters filterParams = new FilterParameters();
-        /// var auditLogs = await _proKnow.Audit.Query(filterParams);
+        /// var page = await _proKnow.Audit.Query(filterParams);
+        /// var nextPage = await page.Next();
         /// </code>
         /// </example>
         public async Task<AuditPage> Query(FilterParameters filter)

@@ -1,29 +1,29 @@
 ﻿using ProKnow.Scorecard;
 using System.Threading.Tasks;
 
-namespace ProKnow.Patient.Entities
+namespace ProKnow.Patient
 {
     /// <summary>
-    /// Provides a summary of an entity scorecard
+    /// Provides a summary of a patient scorecard
     /// </summary>
-    public class EntityScorecardSummary : ScorecardTemplateSummary
+    public class PatientScorecardSummary : ScorecardTemplateSummary
     {
-        private PatientScorecards _entityScorecards;
+        private PatientScorecards _patientScorecards;
 
         /// <summary>
-        /// Used by deserialization to create an entity scorecard summary
+        /// Used by deserialization to create a patient scorecard summary
         /// </summary>
-        public EntityScorecardSummary() : base()
+        public PatientScorecardSummary() : base()
         {
         }
 
         /// <summary>
-        /// Gets the full representation of the entity scorecard asynchronously
+        /// Gets the full representation of the patient scorecard asynchronously
         /// </summary>
-        /// <returns>The full representation of an entity scorecard</returns>
+        /// <returns>The full representation of a patient scorecard</returns>
         public override Task<ScorecardTemplateItem> GetAsync()
         {
-            return ConvertToBaseTask(_entityScorecards.GetAsync(Id));
+            return ConvertToBaseTask(_patientScorecards.GetAsync(Id));
         }
 
         /// <summary>
@@ -39,11 +39,11 @@ namespace ProKnow.Patient.Entities
         /// Finishes initialization of object after deserialization from JSON
         /// </summary>
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
-        /// <param name="entityScorecards">Interacts with scorecards for an entity in a ProKnow organization</param>
-        internal void PostProcessDeserialization(ProKnowApi proKnow, PatientScorecards entityScorecards)
+        /// <param name="patientScorecards">Interacts with scorecards for a patient in a ProKnow organization</param>
+        internal void PostProcessDeserialization(ProKnowApi proKnow, PatientScorecards patientScorecards)
         {
             _proKnow = proKnow;
-            _entityScorecards = entityScorecards;
+            _patientScorecards = patientScorecards;
         }
 
         /// <summary>

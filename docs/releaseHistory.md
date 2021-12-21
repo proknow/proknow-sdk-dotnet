@@ -8,7 +8,8 @@ All releases in the v0.x.x series are subject to breaking changes from one versi
 
 *Enhancements*
 
-- Added two new SDK methods for audit logging, Query() and Next()
+- Add Audit class for interacting with audit logging
+- Move scorecards from Entities to Patient namespace
 
 ## v0.1.8
 

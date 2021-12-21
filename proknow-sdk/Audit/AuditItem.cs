@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace ProKnow.Logs
+namespace ProKnow.Audit
 {
     /// <summary>
     /// Represents a audit log item
