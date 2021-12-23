@@ -72,12 +72,12 @@ namespace ProKnow.Patient.Test
             // Create patient scorecard
             var computedMetrics = new List<ComputedMetric>() { computedMetric };
             var customMetrics = new List<CustomMetric>() { customMetric };
-            var PatientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+            var patientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
 
             // Verify created patient scorecard
-            Assert.AreEqual($"{_testClassName}-{testNumber}", PatientScorecardItem.Name);
-            Assert.AreEqual(1, PatientScorecardItem.ComputedMetrics.Count);
-            var createdComputedMetric = PatientScorecardItem.ComputedMetrics[0];
+            Assert.AreEqual($"{_testClassName}-{testNumber}", patientScorecardItem.Name);
+            Assert.AreEqual(1, patientScorecardItem.ComputedMetrics.Count);
+            var createdComputedMetric = patientScorecardItem.ComputedMetrics[0];
             Assert.AreEqual(computedMetric.Type, createdComputedMetric.Type);
             Assert.AreEqual(computedMetric.RoiName, createdComputedMetric.RoiName);
             Assert.AreEqual(computedMetric.Arg1, createdComputedMetric.Arg1);
@@ -92,8 +92,8 @@ namespace ProKnow.Patient.Test
                 Assert.AreEqual(computedMetric.Objectives[i].Min, createdComputedMetric.Objectives[i].Min);
                 Assert.AreEqual(computedMetric.Objectives[i].Max, createdComputedMetric.Objectives[i].Max);
             }
-            Assert.AreEqual(1, PatientScorecardItem.CustomMetrics.Count);
-            var createdCustomMetricItem = PatientScorecardItem.CustomMetrics[0];
+            Assert.AreEqual(1, patientScorecardItem.CustomMetrics.Count);
+            var createdCustomMetricItem = patientScorecardItem.CustomMetrics[0];
             Assert.AreEqual(customMetricItem.Id, createdCustomMetricItem.Id);
             Assert.AreEqual(customMetricItem.Objectives.Count, createdCustomMetricItem.Objectives.Count);
             for (var i = 0; i < createdCustomMetricItem.Objectives.Count; i++)
