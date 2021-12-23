@@ -53,8 +53,8 @@ namespace ProKnow.Patient
         /// <returns>A ScorecardTemplateItem task</returns>
         private static async Task<ScorecardTemplateItem> ConvertToBaseTask(Task<PatientScorecardItem> task)
         {
-            var PatientScorecardItem = await task;
-            return PatientScorecardItem as ScorecardTemplateItem;
+            var patientScorecardItem = await task;
+            return patientScorecardItem as ScorecardTemplateItem;
         }
     }
 }

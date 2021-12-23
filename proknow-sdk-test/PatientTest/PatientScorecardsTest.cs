@@ -147,10 +147,10 @@ namespace ProKnow.Patient.Test
             // Create patient scorecard
             var computedMetrics = new List<ComputedMetric>() { computedMetric };
             var customMetrics = new List<CustomMetric>() { customMetric };
-            var PatientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+            var patientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
 
             // Delete the patient scorecard created in initialization
-            await patientScorecards.DeleteAsync(PatientScorecardItem.Id);
+            await patientScorecards.DeleteAsync(patientScorecardItem.Id);
 
             // Verify the patient scorecard was deleted
             var patientScorecardSummary = await patientScorecards.FindAsync(t => t.Name == _testClassName);
@@ -197,11 +197,11 @@ namespace ProKnow.Patient.Test
             // Create patient scorecard
             var computedMetrics = new List<ComputedMetric>() { computedMetric };
             var customMetrics = new List<CustomMetric>() { customMetric };
-            var PatientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+            var patientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
 
             var patientScorecardSummary = await patientScorecards.FindAsync(t => t.Name == $"{_testClassName}-{testNumber}");
-            Assert.AreEqual(PatientScorecardItem.Id, patientScorecardSummary.Id);
-            Assert.AreEqual(PatientScorecardItem.Name, patientScorecardSummary.Name);
+            Assert.AreEqual(patientScorecardItem.Id, patientScorecardSummary.Id);
+            Assert.AreEqual(patientScorecardItem.Name, patientScorecardSummary.Name);
         }
 
         [TestMethod]
@@ -244,10 +244,10 @@ namespace ProKnow.Patient.Test
             // Create patient scorecard
             var computedMetrics = new List<ComputedMetric>() { computedMetric };
             var customMetrics = new List<CustomMetric>() { customMetric };
-            var PatientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+            var patientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
 
             // Get the created patient scorecard
-            var createdPatientScorecardItem = await patientScorecards.GetAsync(PatientScorecardItem.Id);
+            var createdPatientScorecardItem = await patientScorecards.GetAsync(patientScorecardItem.Id);
             Assert.AreEqual($"{_testClassName}-{testNumber}", createdPatientScorecardItem.Name);
             Assert.AreEqual(1, createdPatientScorecardItem.ComputedMetrics.Count);
             var createdComputedMetric = createdPatientScorecardItem.ComputedMetrics[0];
@@ -320,11 +320,11 @@ namespace ProKnow.Patient.Test
             // Create patient scorecard
             var computedMetrics = new List<ComputedMetric>() { computedMetric };
             var customMetrics = new List<CustomMetric>() { customMetric };
-            var PatientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+            var patientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
 
             var patientScorecardSummaries = await patientScorecards.QueryAsync();
-            var patientScorecardSummary = patientScorecardSummaries.First(t => t.Id == PatientScorecardItem.Id);
-            Assert.AreEqual(PatientScorecardItem.Name, patientScorecardSummary.Name);
+            var patientScorecardSummary = patientScorecardSummaries.First(t => t.Id == patientScorecardItem.Id);
+            Assert.AreEqual(patientScorecardItem.Name, patientScorecardSummary.Name);
         }
     }
 }

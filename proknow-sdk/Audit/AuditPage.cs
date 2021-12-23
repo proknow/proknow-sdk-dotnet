@@ -63,7 +63,7 @@ namespace ProKnow.Audit
             if (this._filterParameters == null)
             {
                 throw new ProKnowException("Must call Query first");
-            }else if(this._filterParameters.FirstId == null)
+            } else if (this._filterParameters.FirstId == null)
             {
                 throw new ProKnowException("Must call Query first");
             }

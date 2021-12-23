@@ -71,8 +71,8 @@ namespace ProKnow.Patient.Test
             // Create a patient scorecard summary
             var computedMetrics = new List<ComputedMetric>() { computedMetric };
             var customMetrics = new List<CustomMetric>() { customMetric };
-            var PatientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
-            var patientScorecardSummary = await patientScorecards.FindAsync(t => t.Id == PatientScorecardItem.Id);
+            var patientScorecardItem = await patientScorecards.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
+            var patientScorecardSummary = await patientScorecards.FindAsync(t => t.Id == patientScorecardItem.Id);
 
             // Get the associated patient scorecard
             var createdPatientScorecardItem = await patientScorecardSummary.GetAsync();
