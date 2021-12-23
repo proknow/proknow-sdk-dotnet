@@ -123,15 +123,8 @@ namespace ProKnow.Audit.Test
             filterParams.WorkspaceId = "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
             filterParams.ResourceId = "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
 
-            try
-            {
-                var receivedAuditLogItem = await _proKnow.Audit.Query(filterParams);
-                Assert.IsNotNull(receivedAuditLogItem);
-            }
-            catch (Exception)
-            {
-                Assert.Fail("Bad Audit.Query filter parameter");
-            }
+            var receivedAuditLogItem = await _proKnow.Audit.Query(filterParams);
+            Assert.IsNotNull(receivedAuditLogItem);
         }
     }
 }
