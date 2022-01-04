@@ -101,6 +101,29 @@ namespace ProKnow.Audit
         [JsonPropertyName("first_id")]
         public string FirstId { get; set; }
 
+        public FilterParametersExtended()
+        { }
+
+        public FilterParametersExtended(FilterParametersExtended data) 
+        {
+            this.PageSize = data.PageSize;
+            this.StartTime = data.StartTime;
+            this.EndTime = data.EndTime;
+            this.Types = data.Types;
+            this.UserName = data.UserName;
+            this.PatientName = data.PatientName;
+            this.Classification = data.Classification;
+            this.Methods = data.Methods;
+            this.URI = data.URI;
+            this.UserAgent = data.UserAgent;
+            this.IpAddress = data.IpAddress;
+            this.StatusCodes = data.StatusCodes;
+            this.WorkspaceId = data.WorkspaceId;
+            this.ResourceId = data.ResourceId;
+            this.FirstId = data.FirstId;
+            this.PageNumber = data.PageNumber;
+        }
+
         public void Copy(FilterParameters data)
         {
             this.PageSize = data.PageSize;

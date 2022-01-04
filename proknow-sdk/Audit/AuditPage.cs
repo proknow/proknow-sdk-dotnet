@@ -41,7 +41,10 @@ namespace ProKnow.Audit
         internal void PostProcessDeserialization(ProKnowApi proKnow, FilterParametersExtended parameters)
         {
             _proKnow = proKnow;
-            _filterParameters = parameters;
+            _filterParameters = new FilterParametersExtended(parameters);
+
+            //Increment page number for next page call.
+            ++this._filterParameters.PageNumber;
         }
 
         /// <summary>
@@ -60,16 +63,6 @@ namespace ProKnow.Audit
         /// </example>
         public async Task<AuditPage> Next()
         {
-            if (this._filterParameters == null)
-            {
-                throw new ProKnowException("Must call Query first");
-            } else if (this._filterParameters.FirstId == null)
-            {
-                throw new ProKnowException("Must call Query first");
-            }
-
-            ++this._filterParameters.PageNumber;
-
             var bodyJson = JsonSerializer.Serialize(this._filterParameters, _serializerOptions);
             var requestContent = new StringContent(bodyJson, Encoding.UTF8, "application/json");
 
