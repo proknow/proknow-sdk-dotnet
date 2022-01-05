@@ -94,7 +94,7 @@ namespace ProKnow.Patient.Entities
         /// Interacts with scorecards for this entity
         /// </summary>
         [JsonIgnore]
-        public EntityScorecards Scorecards { get; private set; }
+        public PatientScorecards Scorecards { get; private set; }
 
         /// <summary>
         /// Deletes this entity asynchronously
@@ -232,7 +232,7 @@ namespace ProKnow.Patient.Entities
                 }
             }
             Metadata = metadata;
-            Scorecards = new EntityScorecards(_proKnow, WorkspaceId, Id);
+            Scorecards = new PatientScorecards(_proKnow, WorkspaceId, Id);
         }
     }
 }

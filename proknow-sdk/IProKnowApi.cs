@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using ProKnow.Collection;
+using ProKnow.Audit;
 using ProKnow.Patient;
 using ProKnow.Role;
 using ProKnow.Scorecard;
@@ -14,6 +15,11 @@ namespace ProKnow
     /// </summary>
     public interface IProKnowApi
     {
+        /// <summary>
+        /// Interacts with audit logs in the ProKnow organization
+        /// </summary>
+        Audits Audit { get; }
+
         /// <summary>
         /// Interacts with collections in the ProKnow organization
         /// </summary>

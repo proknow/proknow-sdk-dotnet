@@ -75,7 +75,7 @@ namespace ProKnow.Test
                 Assert.AreEqual("DELETE", ex.RequestMethod);
                 Assert.AreEqual($"{TestSettings.BaseUrl}/api//invalid/route", ex.RequestUri);
                 Assert.AreEqual("NotFound", ex.ResponseStatusCode);
-                Assert.IsTrue(ex.Message.Contains("Cannot DELETE /api//invalid/route"));
+                Assert.IsTrue(ex.Message.Contains("Cannot DELETE /api/invalid/route"));
             }
         }
 
