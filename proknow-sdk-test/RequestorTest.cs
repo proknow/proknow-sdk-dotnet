@@ -73,7 +73,7 @@ namespace ProKnow.Test
             catch (ProKnowHttpException ex)
             {
                 Assert.AreEqual("DELETE", ex.RequestMethod);
-                Assert.AreEqual($"{TestSettings.BaseUrl}/api//invalid/route", ex.RequestUri);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/api/invalid/route", ex.RequestUri);
                 Assert.AreEqual("NotFound", ex.ResponseStatusCode);
                 Assert.IsTrue(ex.Message.Contains("Cannot DELETE /api/invalid/route"));
             }
@@ -108,7 +108,7 @@ namespace ProKnow.Test
             catch (ProKnowHttpException ex)
             {
                 Assert.AreEqual("GET", ex.RequestMethod);
-                Assert.AreEqual($"{TestSettings.BaseUrl}/api//workspaces/12345", ex.RequestUri);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/api/workspaces/12345", ex.RequestUri);
                 Assert.AreEqual("NotFound", ex.ResponseStatusCode);
                 Assert.IsTrue(ex.Message.Contains("Cannot GET /api//workspaces/12345"));
             }
@@ -130,7 +130,7 @@ namespace ProKnow.Test
             catch (ProKnowHttpException ex)
             {
                 Assert.AreEqual("GET", ex.RequestMethod);
-                Assert.AreEqual($"{TestSettings.BaseUrl}/88/api//workspaces", ex.RequestUri);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/88/api/workspaces", ex.RequestUri);
                 Assert.AreEqual("NotFound", ex.ResponseStatusCode);
                 Assert.AreEqual($"Please verify the base URL '{baseUrl}'.", ex.Message);
             }
@@ -152,7 +152,7 @@ namespace ProKnow.Test
             catch (ProKnowHttpException ex)
             {
                 Assert.AreEqual("GET", ex.RequestMethod);
-                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api//workspaces", ex.RequestUri);
+                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api/workspaces", ex.RequestUri);
                 Assert.AreEqual("BadRequest", ex.ResponseStatusCode);
                 Assert.AreEqual("Exception occurred making HTTP request.", ex.Message);
                 Assert.AreEqual("The SSL connection could not be established, see inner exception.", ex.InnerException.Message);
@@ -207,7 +207,7 @@ namespace ProKnow.Test
             catch (ProKnowHttpException ex)
             {
                 Assert.AreEqual("GET", ex.RequestMethod);
-                Assert.AreEqual($"{TestSettings.BaseUrl}/api//imagesets/12345/images/abcde", ex.RequestUri);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/api/imagesets/12345/images/abcde", ex.RequestUri);
                 Assert.AreEqual("Unauthorized", ex.ResponseStatusCode);
                 Assert.AreEqual("Invalid or missing credentials", ex.Message);
             }
@@ -229,7 +229,7 @@ namespace ProKnow.Test
             catch (ProKnowHttpException ex)
             {
                 Assert.AreEqual("GET", ex.RequestMethod);
-                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api//imagesets/12345/images/abcde", ex.RequestUri);
+                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api/imagesets/12345/images/abcde", ex.RequestUri);
                 Assert.AreEqual("BadRequest", ex.ResponseStatusCode);
                 Assert.AreEqual("Exception occurred making HTTP request.", ex.Message);
                 Assert.AreEqual("The SSL connection could not be established, see inner exception.", ex.InnerException.Message);
@@ -269,7 +269,7 @@ namespace ProKnow.Test
             catch (ProKnowHttpException ex)
             {
                 Assert.AreEqual("POST", ex.RequestMethod);
-                Assert.AreEqual($"{TestSettings.BaseUrl}/api//workspaces", ex.RequestUri);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/api/workspaces", ex.RequestUri);
                 Assert.AreEqual("Unauthorized", ex.ResponseStatusCode);
                 Assert.AreEqual("Invalid or missing credentials", ex.Message);
             }
@@ -291,7 +291,7 @@ namespace ProKnow.Test
             catch (ProKnowHttpException ex)
             {
                 Assert.AreEqual("POST", ex.RequestMethod);
-                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api//workspaces", ex.RequestUri);
+                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api/workspaces", ex.RequestUri);
                 Assert.AreEqual("BadRequest", ex.ResponseStatusCode);
                 Assert.AreEqual("Exception occurred making HTTP request.", ex.Message);
                 Assert.AreEqual("The SSL connection could not be established, see inner exception.", ex.InnerException.Message);
@@ -341,7 +341,7 @@ namespace ProKnow.Test
             catch (ProKnowHttpException ex)
             {
                 Assert.AreEqual("PUT", ex.RequestMethod);
-                Assert.AreEqual($"{TestSettings.BaseUrl}/api//workspaces", ex.RequestUri);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/api/workspaces", ex.RequestUri);
                 Assert.AreEqual("Unauthorized", ex.ResponseStatusCode);
                 Assert.AreEqual("Invalid or missing credentials", ex.Message);
             }
@@ -363,7 +363,7 @@ namespace ProKnow.Test
             catch (ProKnowHttpException ex)
             {
                 Assert.AreEqual("PUT", ex.RequestMethod);
-                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api//workspaces", ex.RequestUri);
+                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api/workspaces", ex.RequestUri);
                 Assert.AreEqual("BadRequest", ex.ResponseStatusCode);
                 Assert.AreEqual("Exception occurred making HTTP request.", ex.Message);
                 Assert.AreEqual("The SSL connection could not be established, see inner exception.", ex.InnerException.Message);
@@ -463,7 +463,7 @@ namespace ProKnow.Test
             catch (ProKnowHttpException ex)
             {
                 Assert.AreEqual("GET", ex.RequestMethod);
-                Assert.AreEqual($"{TestSettings.BaseUrl}/api//workspaces", ex.RequestUri);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/api/workspaces", ex.RequestUri);
                 Assert.AreEqual("Unauthorized", ex.ResponseStatusCode);
                 Assert.AreEqual("Invalid or missing credentials", ex.Message);
             }
@@ -485,7 +485,7 @@ namespace ProKnow.Test
             catch (ProKnowHttpException ex)
             {
                 Assert.AreEqual("GET", ex.RequestMethod);
-                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api//workspaces", ex.RequestUri);
+                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api/workspaces", ex.RequestUri);
                 Assert.AreEqual("BadRequest", ex.ResponseStatusCode);
                 Assert.AreEqual("Exception occurred making HTTP request.", ex.Message);
                 Assert.AreEqual("The SSL connection could not be established, see inner exception.", ex.InnerException.Message);
