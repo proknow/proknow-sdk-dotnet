@@ -4,6 +4,14 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.1.10
+
+*Bug Fixes*
+
+- Replace ProKnowApi GetConnectionStatusAsync() method and returned type ProKnowConnectionStatus (for which IsValid was always true as long as the base URL was valid and ProKnow was up) with:
+    - GetDomainStatusAsync() and returned type ProKnowDomainStatus for which IsOk will be true if the ProKnow domain is up and reachable
+    - GetCredentialsStatusAsync() and returned type ProKnowCredentialsStatus for which IsValid will be true if the base URL is valid, the credentials (API key) is valid for the base URL, and ProKnow is up and reachable
+
 ## v0.1.9
 
 *Enhancements*

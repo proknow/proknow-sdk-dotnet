@@ -73,22 +73,45 @@ namespace ProKnow
         Workspaces Workspaces { get; }
 
         /// <summary>
-        /// Gets the status of the API connection asynchronously
+        /// Gets the ProKnow credentials (API key) status specified by the base URL and credentials (API key)
+        /// asynchronously
         /// </summary>
-        /// <returns>The connection status</returns>
-        /// <example>
+        /// <returns>The ProKnow credentials (API key) status</returns>
+        /// <example>This example shows how to verify that the provided base URL and credentials are valid: 
         /// <code>
         /// using ProKnow;
         /// using System.Threading.Tasks;
         /// 
         /// var pk = new ProKnowApi('https://example.proknow.com', './credentials.json');
-        /// var status = await pk.GetConnectionStatusAsync();
-        /// if (!connectionStatus.IsValid)
+        /// var status = await pk.GetCredentialsStatusAsync();
+        /// if (!status.IsValid)
         /// {
-        ///     throw new Exception($"Error connecting to ProKnow API: {connectionStatus.ErrorMessage}.");
+        ///     throw new Exception($"Error validating credentials (API key): {status.ErrorMessage}.");
         /// }
         /// </code>
         /// </example>
-        Task<ProKnowConnectionStatus> GetConnectionStatusAsync();
+        Task<ProKnowCredentialsStatus> GetCredentialsStatusAsync();
+
+        /// <summary>
+        /// Gets the ProKnow domain status asynchronously
+        /// </summary>
+        /// <returns>The ProKnow domain status</returns>
+        /// <remarks>
+        /// If the ProKnow domain is up and reachable, IsOK will be true regardless of the provided base URL and credentials.
+        /// </remarks>
+        /// <example>This example shows how to verify that the ProKnow domain is up and reachable:
+        /// <code>
+        /// using ProKnow;
+        /// using System.Threading.Tasks;
+        /// 
+        /// var pk = new ProKnowApi('https://example.proknow.com', './credentials.json');
+        /// var status = await pk.GetDomainStatusAsync();
+        /// if (!status.IsOk)
+        /// {
+        ///     throw new Exception($"Error connecting to ProKnow: {status.ErrorMessage}.");
+        /// }
+        /// </code>
+        /// </example>
+        Task<ProKnowDomainStatus> GetDomainStatusAsync();
     }
 }
