@@ -37,7 +37,6 @@ namespace ProKnow.Audit.Test
             await TestHelper.DeleteWorkspacesAsync(_testClassName);
         }
 
-        [Ignore("This test fails checking auditPage.Total because ProKnow probably already has some audit log entries prior to running the tests and the tests are being run in parallel, causing more audit log entries to be generated.")]
         [TestMethod]
         public async Task QueryTest()
         {
