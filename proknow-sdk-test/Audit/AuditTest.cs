@@ -18,8 +18,6 @@ namespace ProKnow.Audit.Test
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
         private static WorkspaceItem _workspaceItemOne;
         private static PatientItem _patientOne;
-        private static WorkspaceItem _workspaceItemTwo;
-        private static PatientItem _patientTwo;
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
