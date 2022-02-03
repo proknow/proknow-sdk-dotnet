@@ -69,30 +69,40 @@ namespace ProKnow.Test
         }
 
         [TestMethod]
-        public async Task GetConnectionStatusAsync_GoodCredentials()
+        public async Task GetCredentialsStatusAsync_GoodCredentials()
         {
             var proKnowApi = new ProKnowApi(TestSettings.BaseUrl, TestSettings.CredentialsFile);
-            var connectionStatus = await proKnowApi.GetConnectionStatusAsync();
-            Assert.IsTrue(connectionStatus.IsValid);
+            var credentialsStatus = await proKnowApi.GetCredentialsStatusAsync();
+            Assert.IsTrue(credentialsStatus.IsValid);
         }
 
         [TestMethod]
-        public async Task GetConnectionStatusAsync_BadBaseUrl()
+        public async Task GetCredentialsStatusAsync_BogusCredentials()
         {
-            var proKnowApi = new ProKnowApi("https://example.proknow.com", TestSettings.CredentialsFile);
-            var connectionStatus = await proKnowApi.GetConnectionStatusAsync();
-            Assert.IsFalse(connectionStatus.IsValid);
-            Assert.AreEqual("Invalid or missing credentials", connectionStatus.ErrorMessage);
-        }
-
-        [TestMethod]
-        public async Task GetConnectionStatusAsync_BogusCredentials()
-        {
-            var credentialsFile = Path.Combine(TestSettings.TestDataRootDirectory, "./bogus_credentials.json");
+            var credentialsFile = Path.Combine(TestSettings.TestDataRootDirectory, "bogus_credentials.json");
             var proKnowApi = new ProKnowApi(TestSettings.BaseUrl, credentialsFile);
-            var connectionStatus = await proKnowApi.GetConnectionStatusAsync();
-            Assert.IsFalse(connectionStatus.IsValid);
-            Assert.AreEqual("Invalid or missing credentials", connectionStatus.ErrorMessage);
+            var credentialsStatus = await proKnowApi.GetCredentialsStatusAsync();
+            Assert.IsFalse(credentialsStatus.IsValid);
+            Assert.AreEqual("Invalid or missing credentials", credentialsStatus.ErrorMessage);
+        }
+
+        [TestMethod]
+        public async Task GetDomainStatusAsync_GoodDomain()
+        {
+            var credentialsFile = Path.Combine(TestSettings.TestDataRootDirectory, "bogus_credentials.json");
+            var proKnowApi = new ProKnowApi("https://thisisaninvalidsubdomain.proknow.com", credentialsFile);
+            var domainStatus = await proKnowApi.GetDomainStatusAsync();
+            Assert.IsTrue(domainStatus.IsOk);
+        }
+
+        [TestMethod]
+        public async Task GetDomainStatusAsync_BadDomain()
+        {
+            var credentialsFile = Path.Combine(TestSettings.TestDataRootDirectory, "bogus_credentials.json");
+            var proKnowApi = new ProKnowApi("https://justan.example.com", credentialsFile);
+            var domainStatus = await proKnowApi.GetDomainStatusAsync();
+            Assert.IsFalse(domainStatus.IsOk);
+            Assert.AreEqual("Exception occurred making HTTP request. No such host is known.", domainStatus.ErrorMessage);
         }
     }
 }

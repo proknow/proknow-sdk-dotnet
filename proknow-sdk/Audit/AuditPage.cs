@@ -66,7 +66,7 @@ namespace ProKnow.Audit
             var bodyJson = JsonSerializer.Serialize(this._filterParameters, _serializerOptions);
             var requestContent = new StringContent(bodyJson, Encoding.UTF8, "application/json");
 
-            var json = await _proKnow.Requestor.PostAsync("audit/events/search", null, requestContent);
+            var json = await _proKnow.Requestor.PostAsync("/audit/events/search", null, requestContent);
             var auditPage = JsonSerializer.Deserialize<AuditPage>(json);
 
             auditPage.PostProcessDeserialization(this._proKnow, this._filterParameters);

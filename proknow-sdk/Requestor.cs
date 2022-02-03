@@ -137,7 +137,7 @@ namespace ProKnow
             {
                 Directory.CreateDirectory(parent);
             }
-            var request = new HttpRequestMessage(HttpMethod.Get, BuildUriString($"{_baseUrl}/{route}", queryParameters));
+            var request = new HttpRequestMessage(HttpMethod.Get, BuildUriString($"{_baseUrl}{route}", queryParameters));
             try
             {
                 request.Headers.Authorization = _authenticationHeaderValue;
@@ -164,6 +164,41 @@ namespace ProKnow
                     }
                 }
                 return path;
+            }
+            catch (ProKnowHttpException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ProKnowHttpException(request.Method.ToString(), request.RequestUri.ToString(), HttpStatusCode.BadRequest.ToString(), "Exception occurred making HTTP request.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Issues an asynchronous HTTP GET request to the domain /status route
+        /// </summary>
+        /// <returns>A task that returns the response as a string</returns>
+        /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
+        internal async Task<string> GetDomainStatusAsync()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, BuildUriString($"{_baseUrl}/status"));
+            try
+            {
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.Content != null)
+                    {
+                        // Response content contains error message from ProKnow
+                        throw new ProKnowHttpException(request.Method.ToString(), request.RequestUri.ToString(), response.StatusCode.ToString(), await response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        throw new ProKnowHttpException(request.Method.ToString(), request.RequestUri.ToString(), response.StatusCode.ToString());
+                    }
+                }
+                return await response.Content.ReadAsStringAsync();
             }
             catch (ProKnowHttpException)
             {
@@ -215,7 +250,7 @@ namespace ProKnow
             {
                 // Response content is index.html from ProKnow, most likely due to invalid base URL
                 var baseUrlWithoutApi = _baseUrl.Substring(0, _baseUrl.Length - 4);
-                throw new ProKnowHttpException(method.ToString(), $"{_baseUrl}/{route}", HttpStatusCode.NotFound.ToString(), $"Please verify the base URL '{baseUrlWithoutApi}'.");
+                throw new ProKnowHttpException(method.ToString(), $"{_baseUrl}{route}", HttpStatusCode.NotFound.ToString(), $"Please verify the base URL '{baseUrlWithoutApi}'.");
             }
             return responseContent;
         }
@@ -250,10 +285,7 @@ namespace ProKnow
         private async Task<HttpResponseMessage> MakeRequest(HttpMethod method, string route, Dictionary<string, object> queryParameters = null,
             IList <KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
-            // Note that the URI ends up with a double slash after api, e.g., 'https://example.proknow.com/api//status'.  Without
-            // that double slash, that status route will return 200 OK with a body of "OK", regardless of the credentials provided.
-            // With the double slash, that status route will return 401 Unauthorized
-            var request = new HttpRequestMessage(method, BuildUriString($"{_baseUrl}/{route}", queryParameters));
+            var request = new HttpRequestMessage(method, BuildUriString($"{_baseUrl}{route}", queryParameters));
             try
             {
                 request.Headers.Authorization = _authenticationHeaderValue;

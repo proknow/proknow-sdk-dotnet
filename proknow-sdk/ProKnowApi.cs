@@ -116,16 +116,35 @@ namespace ProKnow
         }
 
         /// <inheritdoc/>
-        public async Task<ProKnowConnectionStatus> GetConnectionStatusAsync()
+        public async Task<ProKnowCredentialsStatus> GetCredentialsStatusAsync()
         {
             try
             {
-                await Requestor.GetAsync("/status");
-                return new ProKnowConnectionStatus(true);
+                await Requestor.GetAsync("/user");
+                return new ProKnowCredentialsStatus(true);
             }
             catch (Exception ex)
             {
-                return new ProKnowConnectionStatus(false, ex.Message);
+                return new ProKnowCredentialsStatus(false, ex.Message);
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<ProKnowDomainStatus> GetDomainStatusAsync()
+        {
+            try
+            {
+                await Requestor.GetDomainStatusAsync();
+                return new ProKnowDomainStatus(true);
+            }
+            catch (Exception ex)
+            {
+                var message = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    message += " " + ex.InnerException.Message;
+                }
+                return new ProKnowDomainStatus(false, message);
             }
         }
 

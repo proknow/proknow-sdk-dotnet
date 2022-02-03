@@ -18,8 +18,6 @@ namespace ProKnow.Audit.Test
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
         private static WorkspaceItem _workspaceItemOne;
         private static PatientItem _patientOne;
-        private static WorkspaceItem _workspaceItemTwo;
-        private static PatientItem _patientTwo;
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
@@ -46,18 +44,15 @@ namespace ProKnow.Audit.Test
 
             // Create a test patient
             _patientOne = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
-
-            ++testNumber;
-            _workspaceItemTwo = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
-            _patientTwo = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "RD.dcm"));
+            await TestHelper.DeleteWorkspacesAsync(_workspaceItemOne.Name);
 
             var json = await _proKnow.Requestor.GetAsync($"/user");
             var userItem = JsonSerializer.Deserialize<UserItem>(json);
 
             FilterParameters filterParams = new FilterParameters();
             filterParams.PageSize = 1;
-            filterParams.Types = new string[] { "patient_read" };
-
+            filterParams.Types = new string[] { "patient_read", "workspace_deleted" };
+            filterParams.WorkspaceId = _workspaceItemOne.Id;
             var auditPage = await _proKnow.Audit.Query(filterParams);
 
             Assert.AreEqual(auditPage.Total, (uint)2);
@@ -65,17 +60,17 @@ namespace ProKnow.Audit.Test
             var patientItem = auditPage.Items[0];
 
             Assert.AreEqual(patientItem.Classification, "HTTP");
-            Assert.AreEqual(patientItem.Method, "GET");
-            Assert.AreEqual(patientItem.PatientId, $"{_patientTwo.Id}");
-            Assert.AreEqual(patientItem.PatientMrn, "123457-Mrn");
-            Assert.AreEqual(patientItem.PatientName, "123457-Name");
-            Assert.AreEqual(patientItem.ResourceId, $"{_patientTwo.Id}");
-            Assert.AreEqual(patientItem.ResourceName, "123457-Name");
+            Assert.AreEqual(patientItem.Method, "DELETE");
+            Assert.AreEqual(patientItem.PatientId, null);
+            Assert.AreEqual(patientItem.PatientMrn, null);
+            Assert.AreEqual(patientItem.PatientName, null);
+            Assert.AreEqual(patientItem.ResourceId, $"{_workspaceItemOne.Id}");
+            Assert.AreEqual(patientItem.ResourceName, _workspaceItemOne.Name);
             Assert.AreEqual(patientItem.StatusCode, "200");
-            Assert.AreEqual(patientItem.Uri, $"/workspaces/{_workspaceItemTwo.Id}/patients/{_patientTwo.Id}");
+            Assert.AreEqual(patientItem.Uri, $"/workspaces/{_workspaceItemOne.Id}");
             Assert.AreEqual(patientItem.UserName, userItem.Name);
-            Assert.AreEqual(patientItem.WorkspaceId, $"{_workspaceItemTwo.Id}");
-            Assert.AreEqual(patientItem.WorkspaceName, $"{_workspaceItemTwo.Name}");
+            Assert.AreEqual(patientItem.WorkspaceId, $"{_workspaceItemOne.Id}");
+            Assert.AreEqual(patientItem.WorkspaceName, null);
 
             var audit2Page = await auditPage.Next();
 
