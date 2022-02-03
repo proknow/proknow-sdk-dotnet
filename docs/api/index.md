@@ -6,7 +6,7 @@ properties for interacting with specific areas within ProKnow:
 * [Collections](xref:ProKnow.ProKnowApi#ProKnow_ProKnowApi_Collections) - Interacts with collections
 * [CustomMetrics](xref:ProKnow.ProKnowApi#ProKnow_ProKnowApi_CustomMetrics) - Interacts with custom metrics
 * [Patients](xref:ProKnow.ProKnowApi#ProKnow_ProKnowApi_Patients) - Interacts with patients
-* [Roles](xref:ProKnow.ProKnowApi#ProKnow_ProKnowApi_Roles) - Interacts with Roles
+* [Roles](xref:ProKnow.ProKnowApi#ProKnow_ProKnowApi_Roles) - Interacts with roles
 * [ScorecardTemplates](xref:ProKnow.ProKnowApi#ProKnow_ProKnowApi_ScorecardTemplates) - Interacts with scorecard templates
 * [Uploads](xref:ProKnow.ProKnowApi#ProKnow_ProKnowApi_Uploads) - Interacts with uploads
 * [Users](xref:ProKnow.ProKnowApi#ProKnow_ProKnowApi_Users) - Interacts with users
