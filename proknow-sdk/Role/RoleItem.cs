@@ -10,7 +10,6 @@ namespace ProKnow.Role
     /// <summary>
     /// Represents a role for a ProKnow organization
     /// </summary>
-    [JsonConverter(typeof(RoleItemJsonConverter))]
     public class RoleItem
     {
         private ProKnowApi _proKnow;
@@ -28,16 +27,16 @@ namespace ProKnow.Role
         public string Name { get; set; }
 
         /// <summary>
-        /// Read-only flag indicating whether role is private
+        /// The description of the role
         /// </summary>
-        [JsonPropertyName("private")]
-        public bool IsPrivate { get; set; }
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
 
         /// <summary>
         /// The permissions of the role
         /// </summary>
-        [JsonIgnore]
-        public OrganizationPermissions Permissions { get; set; }
+        [JsonPropertyName("permissions")]
+        public Permissions Permissions { get; set; }
 
         /// <summary>
         /// Properties encountered during deserialization without matching members
@@ -50,26 +49,19 @@ namespace ProKnow.Role
         /// </summary>
         public RoleItem()
         {
-            Permissions = new OrganizationPermissions();
+            Permissions = new Permissions();
         }
 
         /// <summary>
-        /// Constructs a RoleItem.  Used internally to create a public role
+        /// Constructs a RoleItem
         /// </summary>
         /// <param name="name">The name</param>
+        /// <param name="description">The description</param>
         /// <param name="permissions">The permissions</param>
-        internal RoleItem(string name, OrganizationPermissions permissions)
+        internal RoleItem(string name, string description, Permissions permissions)
         {
             Name = name;
-            Permissions = permissions;
-        }
-
-        /// <summary>
-        /// Constructs a RoleItem.  Used to create a private role for a user
-        /// </summary>
-        /// <param name="permissions">The permissions</param>
-        public RoleItem(OrganizationPermissions permissions)
-        {
+            Description = description;
             Permissions = permissions;
         }
 
@@ -103,14 +95,20 @@ namespace ProKnow.Role
         /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
         /// var roleSummary = await _proKnow.Roles.FindAsync(x => x.Name == "Researcher");
         /// var roleItem = await roleSummary.GetAsync(roleSummary.Id);
-        /// roleItem.Permissions.CanManageCustomMetrics = true;
+        /// roleItem.Permissions.CanReadPatients = true;
         /// await roleItem.SaveAsync();
         /// </code>
         /// </example>
         public Task SaveAsync()
         {
-            var content = new StringContent(JsonSerializer.Serialize(this), Encoding.UTF8, "application/json");
-            return _proKnow.Requestor.PutAsync($"/roles/{Id}", null, content);
+
+            // Convert permissions to Dictionary<string, object> and add it to the object
+            var permissions = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(this.Permissions));
+            var roleItemToUpdate = new Dictionary<string, object>() {
+                { "name", this.Name }, { "description", this.Description }, { "permissions", permissions }
+            };
+            var content = new StringContent(JsonSerializer.Serialize(roleItemToUpdate), Encoding.UTF8, "application/json");
+            return _proKnow.Requestor.PatchAsync($"/roles/{Id}", null, content);
         }
 
         /// <summary>

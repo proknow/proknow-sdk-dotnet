@@ -29,23 +29,21 @@ namespace ProKnow.Role
         /// </summary>
         /// <param name="name">The name of the role</param>
         /// <param name="permissions">The permissions of the role</param>
+        /// <param name="description">The description of the role</param>
         /// <returns>The created role</returns>
-        /// <example>This example shows how to create a role named "Researcher" that allows read-only access to the "Clinical" workspace:
+        /// <example>This example shows how to create a role named "Researcher" with patients read permissions:
         /// <code>
         /// using ProKnow;
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
-        /// var workspaceItem = await _proKnow.Workspaces.FindAsync(w => w.Name == "Clinical");
-        /// var workspacePermissions = new WorkspacePermissions(workspaceId: workspaceItem.Id, canReadPatients: true, canReadCollections: true, canViewPhi: true);
-        /// var workspacesPermissions = new List&lt;WorkspacePermissions&gt;() { workspacePermissions };
-        /// var organizationPermissions = new OrganizationPermissions(workspaces: workspacesPermissions);
-        /// var roleItem = await _proKnow.Roles.CreateAsync("Researcher", organizationPermissions);
+        /// var permissions = new Permissions(canReadPatients: true);
+        /// var roleItem = await _proKnow.Roles.CreateAsync("Researcher", "Description", permissions);
         /// </code>
         /// </example>
-        public async Task<RoleItem> CreateAsync(string name, OrganizationPermissions permissions)
+        public async Task<RoleItem> CreateAsync(string name, string description, Permissions permissions)
         {
-            var roleItemToCreate = new RoleItem(name, permissions);
+            var roleItemToCreate = new Dictionary<string, object>() { { "name", name }, { "description", description }, { "permissions", permissions } };
             var requestContent = new StringContent(JsonSerializer.Serialize(roleItemToCreate), Encoding.UTF8, "application/json");
             var responseJson = await _proKnow.Requestor.PostAsync("/roles", null, requestContent);
             var createdRoleItem =  JsonSerializer.Deserialize<RoleItem>(responseJson);

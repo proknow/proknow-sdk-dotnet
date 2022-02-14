@@ -24,6 +24,12 @@ namespace ProKnow.Role
         public string Name { get; set; }
 
         /// <summary>
+        /// The description of the role
+        /// </summary>
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+
+        /// <summary>
         /// Properties encountered during deserialization without matching members
         /// </summary>
         [JsonExtensionData]

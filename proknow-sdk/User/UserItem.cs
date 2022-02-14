@@ -1,5 +1,4 @@
-﻿using ProKnow.Role;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -40,18 +39,6 @@ namespace ProKnow.User
         public bool IsActive { get; set; }
 
         /// <summary>
-        /// The ProKnow ID of the role for user or null if the role is private
-        /// </summary>
-        [JsonIgnore]
-        public string RoleId { get; set; }
-
-        /// <summary>
-        /// The private role for the user or null if the role is public
-        /// </summary>
-        [JsonPropertyName("role")]
-        public RoleItem Role { get; set; }
-
-        /// <summary>
         /// Properties encountered during deserialization without matching members
         /// </summary>
         [JsonExtensionData]
@@ -85,38 +72,15 @@ namespace ProKnow.User
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
-        /// var userSummary = await _proKnow.Roles.FindAsync(x => x.Email == "jsmith@example.com");
+        /// var userSummary = await _proKnow.Users.FindAsync(x => x.Email == "jsmith@example.com");
         /// var userItem = await userSummary.GetAsync(userSummary.Id);
         /// userItem.IsActive = false;
-        /// await userItem.SaveAsync();
-        /// </code>
-        /// </example>
-        /// <example>To update a user with a private role, set the RoleId to null and the Role to a role definition:
-        /// <code>
-        /// using ProKnow;
-        /// using System.Threading.Tasks;
-        ///
-        /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
-        /// var userSummary = await _proKnow.Roles.FindAsync(x => x.Email == "jsmith@example.com");
-        /// var userItem = await userSummary.GetAsync(userSummary.Id);
-        /// userItem.RoleId = null;
-        /// var permissions = new OrganizationPermissions(canReadPatients: true, canReadCollections: true, canViewPhi: true);
-        /// userItem.Role = new RoleItem(permissions: permissions);
         /// await userItem.SaveAsync();
         /// </code>
         /// </example>
         public Task SaveAsync()
         {
             var properties = new Dictionary<string, object>() { { "email", Email }, { "name", Name }, { "active", IsActive } };
-            if (RoleId != null)
-            {
-                properties.Add("role_id", RoleId);
-            }
-            else
-            {
-                var permissionsAsDictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(Role.Permissions));
-                properties.Add("role", permissionsAsDictionary);
-            }
             var content = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
             return _proKnow.Requestor.PutAsync($"/users/{Id}", null, content);
         }
@@ -137,21 +101,6 @@ namespace ProKnow.User
         internal void PostProcessDeserialization(ProKnowApi proKnow)
         {
             _proKnow = proKnow;
-
-            // If the user role is public, only retain the role ID
-            if (!Role.IsPrivate)
-            {
-                RoleId = Role.Id;
-                Role = null;
-            }
-            // Else, make sure the workspaces is initialized since array is required if re-posting
-            else
-            {
-                if (Role.Permissions.Workspaces == null)
-                {
-                    Role.Permissions.Workspaces = new List<WorkspacePermissions>();
-                }
-            }
         }
     }
 }

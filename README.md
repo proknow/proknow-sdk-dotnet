@@ -44,6 +44,8 @@ actual content by running this command from the project directory:
 git lfs checkout
 ```
 
+To Run the tests, right click on the "proknow-sdk-test" folder and click on `Run Tests` option.
+
 ### Access to ProKnow
 The tests require access to ProKnow in order to create temporary custom metrics, scorecard templates, and workspaces.
 

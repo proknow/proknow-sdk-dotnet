@@ -33,6 +33,9 @@ namespace ProKnow.Test
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
+            // Delete test custom metrics
+            await TestHelper.DeleteCustomMetricsAsync(_testClassName);
+
             // Delete test workspaces
             await TestHelper.DeleteWorkspacesAsync(_testClassName);
 
@@ -299,7 +302,7 @@ namespace ProKnow.Test
         }
 
         [TestMethod]
-        public async Task PutAsyncTest()
+        public async Task PatchAsyncTest()
         {
             int testNumber = 13;
 
@@ -315,7 +318,7 @@ namespace ProKnow.Test
                 { "protected", true }
             };
             var content = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
-            await _proKnow.Requestor.PutAsync($"/workspaces/{workspaceItem.Id}", null, content);
+            await _proKnow.Requestor.PatchAsync($"/workspaces/{workspaceItem.Id}", null, content);
 
             // Retrieve the workspace
             workspaceItem = await _proKnow.Workspaces.FindAsync(w => w.Id == workspaceItem.Id);
@@ -327,6 +330,74 @@ namespace ProKnow.Test
         }
 
         [TestMethod]
+        public async Task PatchAsyncTest_NotOk()
+        {
+            // Use invalid credentials for request
+            var proKnow = new ProKnowApi(TestSettings.BaseUrl, Path.Combine(TestSettings.TestDataRootDirectory, "bogus_credentials.json"));
+
+            // Verify that the expected exception is thrown
+            try
+            {
+                await proKnow.Requestor.PatchAsync($"/workspaces");
+                Assert.Fail();
+            }
+            catch (ProKnowHttpException ex)
+            {
+                Assert.AreEqual("PATCH", ex.RequestMethod);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/api/workspaces", ex.RequestUri);
+                Assert.AreEqual("Unauthorized", ex.ResponseStatusCode);
+                Assert.AreEqual("Invalid or missing credentials", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public async Task PatchAsyncTest_HttpRequestException()
+        {
+            // Modify the base URL prefix (subdomain) so that the request causes an exception
+            var baseUrl = $"https://invalid.elekta-training.proknow.com";
+            var proKnow = new ProKnowApi(baseUrl, TestSettings.CredentialsFile);
+
+            // Verify that the expected exception is thrown
+            try
+            {
+                await proKnow.Requestor.PatchAsync($"/workspaces");
+                Assert.Fail();
+            }
+            catch (ProKnowHttpException ex)
+            {
+                Assert.AreEqual("PATCH", ex.RequestMethod);
+                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api/workspaces", ex.RequestUri);
+                Assert.AreEqual("BadRequest", ex.ResponseStatusCode);
+                Assert.AreEqual("Exception occurred making HTTP request.", ex.Message);
+                Assert.AreEqual("The SSL connection could not be established, see inner exception.", ex.InnerException.Message);
+            }
+        }
+
+        [TestMethod]
+        public async Task PutAsyncTest()
+        {
+            int testNumber = 16;
+
+            // Create a custom metric
+            var customMetricItem = await _proKnow.CustomMetrics.CreateAsync($"{_testClassName}-{testNumber}", "plan", "number");
+
+            // Change the name and context and save the changes
+            var name1 = $"{_testClassName}-{testNumber}a";
+            var properties = new Dictionary<string, object>
+            {
+                { "name", name1 },
+                { "context", "structure_set" }
+            };
+            var content = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
+            await _proKnow.Requestor.PutAsync($"/metrics/custom/{customMetricItem.Id}", null, content);
+
+            // Verify the changes were saved
+            Assert.IsNull(await _proKnow.CustomMetrics.FindAsync(t => t.Name == $"{_testClassName}-{testNumber}"));
+            var savedCustomMetricItem = await _proKnow.CustomMetrics.FindAsync(t => t.Name == $"{_testClassName}-{testNumber}a");
+            Assert.AreEqual("structure_set", savedCustomMetricItem.Context);
+        }
+
+        [TestMethod]
         public async Task PutAsyncTest_NotOk()
         {
             // Use invalid credentials for request
@@ -335,13 +406,13 @@ namespace ProKnow.Test
             // Verify that the expected exception is thrown
             try
             {
-                await proKnow.Requestor.PutAsync($"/workspaces");
+                await proKnow.Requestor.PutAsync($"/metrics/custom/");
                 Assert.Fail();
             }
             catch (ProKnowHttpException ex)
             {
                 Assert.AreEqual("PUT", ex.RequestMethod);
-                Assert.AreEqual($"{TestSettings.BaseUrl}/api/workspaces", ex.RequestUri);
+                Assert.AreEqual($"{TestSettings.BaseUrl}/api/metrics/custom/", ex.RequestUri);
                 Assert.AreEqual("Unauthorized", ex.ResponseStatusCode);
                 Assert.AreEqual("Invalid or missing credentials", ex.Message);
             }
@@ -357,13 +428,13 @@ namespace ProKnow.Test
             // Verify that the expected exception is thrown
             try
             {
-                await proKnow.Requestor.PutAsync($"/workspaces");
+                await proKnow.Requestor.PutAsync($"/metrics/custom/");
                 Assert.Fail();
             }
             catch (ProKnowHttpException ex)
             {
                 Assert.AreEqual("PUT", ex.RequestMethod);
-                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api/workspaces", ex.RequestUri);
+                Assert.AreEqual($"https://invalid.elekta-training.proknow.com/api/metrics/custom/", ex.RequestUri);
                 Assert.AreEqual("BadRequest", ex.ResponseStatusCode);
                 Assert.AreEqual("Exception occurred making HTTP request.", ex.Message);
                 Assert.AreEqual("The SSL connection could not be established, see inner exception.", ex.InnerException.Message);
@@ -373,7 +444,7 @@ namespace ProKnow.Test
         [TestMethod]
         public async Task StreamAsyncTest()
         {
-            int testNumber = 16;
+            int testNumber = 19;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -410,7 +481,7 @@ namespace ProKnow.Test
         [TestMethod]
         public async Task StreamAsyncTest_ExistingDirectory()
         {
-            int testNumber = 12;
+            int testNumber = 20;
 
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);

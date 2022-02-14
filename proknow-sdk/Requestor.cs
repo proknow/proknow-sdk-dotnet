@@ -117,6 +117,19 @@ namespace ProKnow
         }
 
         /// <summary>
+        /// Issues an asynchronous HTTP PATCH request
+        /// </summary>
+        /// <param name="route">The API route to use in the request</param>
+        /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
+        /// <param name="content">Optional content for the body</param>
+        /// <returns>A task that returns the response as a string</returns>
+        /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
+        public async Task<string> PatchAsync(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
+        {
+            return await MakeRequestForStringResponse(new HttpMethod("PATCH"), route, queryParameters: null, headerKeyValuePairs, content);
+        }
+
+        /// <summary>
         /// Issues an asynchronous HTTP GET request with a streaming response
         /// </summary>
         /// <param name="route">The API route to use in the request</param>

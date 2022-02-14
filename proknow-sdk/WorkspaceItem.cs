@@ -70,7 +70,7 @@ namespace ProKnow
                 { "protected", Protected }
             };
             var content = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
-            await _proKnow.Requestor.PutAsync($"/workspaces/{Id}", null, content);
+            await _proKnow.Requestor.PatchAsync($"/workspaces/{Id}", null, content);
         }
 
         /// <summary>

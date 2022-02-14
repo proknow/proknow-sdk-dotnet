@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProKnow.Role;
 using ProKnow.Test;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,6 @@ namespace ProKnow.User.Test
     {
         private static readonly string _testClassName = nameof(UserSummaryTest);
         private static readonly ProKnowApi _proKnow = TestSettings.ProKnow;
-        private static RoleItem _publicRole;
 
         [ClassInitialize]
 #pragma warning disable IDE0060 // Remove unused parameter
@@ -21,10 +19,6 @@ namespace ProKnow.User.Test
         {
             // Cleanup from previous test stoppage or failure, if necessary
             await ClassCleanup();
-
-            // Create a public role
-            _publicRole = await _proKnow.Roles.CreateAsync($"SDK-{_testClassName}-Public",
-                new OrganizationPermissions(canReadPatients: true, canReadCollections: true, canViewPhi: true));
         }
 
         [ClassCleanup]
@@ -42,16 +36,6 @@ namespace ProKnow.User.Test
                     await _proKnow.Users.DeleteAsync(user.Id);
                 }
             }
-
-            // Delete test roles
-            var roles = await _proKnow.Roles.QueryAsync();
-            foreach (var role in roles)
-            {
-                if (role.Name.Contains(_testClassName))
-                {
-                    await _proKnow.Roles.DeleteAsync(role.Id);
-                }
-            }
         }
 
         [TestMethod]
@@ -62,7 +46,7 @@ namespace ProKnow.User.Test
             // Create a user
             var email = $"User{testNumber}@SDK-{_testClassName}.com";
             var name = $"SDK-{_testClassName}-{testNumber}";
-            var createdUserItem = await _proKnow.Users.CreateAsync(email, name, _publicRole.Id);
+            var createdUserItem = await _proKnow.Users.CreateAsync(email, name);
 
             // Get the user just created
             var foundUserSummary = await _proKnow.Users.FindAsync(x => x.Id == createdUserItem.Id);
@@ -72,8 +56,6 @@ namespace ProKnow.User.Test
             Assert.AreEqual(name, gottenUserItem.Name);
             Assert.AreEqual(email, gottenUserItem.Email);
             Assert.IsTrue(gottenUserItem.IsActive);
-            Assert.AreEqual(_publicRole.Id, gottenUserItem.RoleId);
-            Assert.IsNull(gottenUserItem.Role);
         }
     }
 }
