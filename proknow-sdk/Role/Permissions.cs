@@ -586,7 +586,7 @@ namespace ProKnow.Role
         }
 
         /// <summary>
-        /// Constructs an Permissions object
+        /// Constructs a Permissions object
         /// </summary>
         /// <param name="canCreateApiKeys">Flag indicating whether role allows creation of API keys</param>
         /// <param name="canManageAuditLogs">Flag indicating whether role allows managing audit logs</param>

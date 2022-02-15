@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Test;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace ProKnow.Role.Test
@@ -59,14 +60,30 @@ namespace ProKnow.Role.Test
         {
             int testNumber = 2;
 
-            // Create a role with no permissions
+            // Create a role with permissions to read workspaces and patients
             var name = $"SDK-{_testClassName}-{testNumber}";
-            var roleItem = await _proKnow.Roles.CreateAsync(name, "", new Permissions(canReadPatients: true));
+            var roleItem = await _proKnow.Roles.CreateAsync(name, "", new Permissions(canReadWorkspaces: true, canReadPatients: true));
 
-            // Verify the created role name and permissions
+            // Verify the created role name
             Assert.AreEqual(name, roleItem.Name);
-            Assert.IsFalse(roleItem.Permissions.CanCreateApiKeys);
-            Assert.IsTrue(roleItem.Permissions.CanReadPatients);
+            Assert.AreEqual("", roleItem.Description);
+
+            // Verify all other permissions are false
+            HashSet<string> rolePermissions = new HashSet<string>
+            {
+                "CanReadCustomMetrics", "CanReadRenamingRules", "CanReadWorkflows",
+                "CanReadChecklistTemplates", "CanReadStructureSetTemplates", "CanReadScorecardTemplates",
+                "CanReadObjectiveTemplates", "CanReadWorkspaceAlgorithms", "CanReadGroups",
+                "CanReadUsers", "CanReadRoles", "CanListGroupMembers", "CanResolveResourcePermissions",
+                "CanReadWorkspaces", "CanReadPatients"
+            };
+            foreach (PropertyInfo prop in roleItem.Permissions.GetType().GetProperties())
+            {
+                if (!rolePermissions.Contains(prop.Name) && prop.Name != "ExtensionData")
+                {
+                    Assert.IsFalse((bool)prop.GetValue(roleItem.Permissions, null));
+                }
+            }
 
             // Change the name and permissions
             roleItem.Name = $"{name}-Copy";

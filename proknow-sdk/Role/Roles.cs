@@ -31,7 +31,7 @@ namespace ProKnow.Role
         /// <param name="permissions">The permissions of the role</param>
         /// <param name="description">The description of the role</param>
         /// <returns>The created role</returns>
-        /// <example>This example shows how to create a role named "Researcher" with patients read permissions:
+        /// <example>This example shows how to create a role named "Researcher" with permissions to read patients:
         /// <code>
         /// using ProKnow;
         /// using System.Threading.Tasks;

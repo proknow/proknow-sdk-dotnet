@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Test;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace ProKnow.Role.Test
@@ -55,9 +56,22 @@ namespace ProKnow.Role.Test
             // Verify the returned role
             Assert.AreEqual(name, gottenRoleItem.Name);
             Assert.AreEqual(description, gottenRoleItem.Description);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanCreateApiKeys);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanReadPatients);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanReadCollections);
+
+            // Verify all other permissions are false
+            HashSet<string> rolePermissions = new HashSet<string>
+            {
+                "CanReadCustomMetrics", "CanReadRenamingRules", "CanReadWorkflows",
+                "CanReadChecklistTemplates", "CanReadStructureSetTemplates", "CanReadScorecardTemplates",
+                "CanReadObjectiveTemplates", "CanReadWorkspaceAlgorithms", "CanReadGroups",
+                "CanReadUsers", "CanReadRoles", "CanListGroupMembers", "CanResolveResourcePermissions"
+            };
+            foreach (PropertyInfo prop in gottenRoleItem.Permissions.GetType().GetProperties())
+            {
+                if (!rolePermissions.Contains(prop.Name) && prop.Name != "ExtensionData")
+                {
+                    Assert.IsFalse((bool)prop.GetValue(gottenRoleItem.Permissions, null));
+                }
+            }
 
             // Verify that the ExtensionData does not contain the permissions
             Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("permissions"));
