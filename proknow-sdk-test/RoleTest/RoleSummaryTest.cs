@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Test;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace ProKnow.Role.Test
@@ -23,8 +24,6 @@ namespace ProKnow.Role.Test
         [ClassCleanup]
         public static async Task ClassCleanup()
         {
-            // Delete test workspaces
-            await TestHelper.DeleteWorkspacesAsync(_testClassName);
 
             // Delete test roles
             var roles = await _proKnow.Roles.QueryAsync();
@@ -42,15 +41,11 @@ namespace ProKnow.Role.Test
         {
             int testNumber = 1;
 
-            // Create a workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
-
             // Create a role
             var name = $"SDK-{_testClassName}-{testNumber}";
-            var workspacePermissions = new WorkspacePermissions(workspaceId: workspaceItem.Id, canReadPatients: true, canReadCollections: true, canViewPhi: true);
-            var workspacesPermissions = new List<WorkspacePermissions>() { workspacePermissions };
-            var organizationPermissions = new OrganizationPermissions(workspaces: workspacesPermissions);
-            var createdRoleItem = await _proKnow.Roles.CreateAsync(name, organizationPermissions);
+            var description = "Test";
+            var permissions = new Permissions();
+            var createdRoleItem = await _proKnow.Roles.CreateAsync(name, description, permissions);
 
             // Find the summary of the role just created
             var foundRoleSummary = await _proKnow.Roles.FindAsync(x => x.Id == createdRoleItem.Id);
@@ -60,53 +55,28 @@ namespace ProKnow.Role.Test
 
             // Verify the returned role
             Assert.AreEqual(name, gottenRoleItem.Name);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanCreateApiKeys);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanManageAccess);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanManageCustomMetrics);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanManageScorecardTemplates);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanManageRenamingRules);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanManageChecklistTemplates);
-            Assert.IsFalse(gottenRoleItem.Permissions.IsCollaborator);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanReadPatients);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanReadCollections);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanViewPhi);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanDownloadDicom);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanWriteCollections);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanWritePatients);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanContourPatients);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanDeleteCollections);
-            Assert.IsFalse(gottenRoleItem.Permissions.CanDeletePatients);
-            Assert.AreEqual(1, gottenRoleItem.Permissions.Workspaces.Count);
-            Assert.AreEqual(workspaceItem.Id, gottenRoleItem.Permissions.Workspaces[0].WorkspaceId);
-            Assert.IsFalse(gottenRoleItem.Permissions.Workspaces[0].IsCollaborator);
-            Assert.IsTrue(gottenRoleItem.Permissions.Workspaces[0].CanReadPatients);
-            Assert.IsTrue(gottenRoleItem.Permissions.Workspaces[0].CanReadCollections);
-            Assert.IsTrue(gottenRoleItem.Permissions.Workspaces[0].CanViewPhi);
-            Assert.IsFalse(gottenRoleItem.Permissions.Workspaces[0].CanDownloadDicom);
-            Assert.IsFalse(gottenRoleItem.Permissions.Workspaces[0].CanWriteCollections);
-            Assert.IsFalse(gottenRoleItem.Permissions.Workspaces[0].CanWritePatients);
-            Assert.IsFalse(gottenRoleItem.Permissions.Workspaces[0].CanContourPatients);
-            Assert.IsFalse(gottenRoleItem.Permissions.Workspaces[0].CanDeleteCollections);
-            Assert.IsFalse(gottenRoleItem.Permissions.Workspaces[0].CanDeletePatients);
+            Assert.AreEqual(description, gottenRoleItem.Description);
+
+            // Verify all other permissions are false
+            HashSet<string> rolePermissions = new HashSet<string>
+            {
+                "CanReadCustomMetrics", "CanReadRenamingRules", "CanReadWorkflows",
+                "CanReadChecklistTemplates", "CanReadStructureSetTemplates", "CanReadScorecardTemplates",
+                "CanReadObjectiveTemplates", "CanReadWorkspaceAlgorithms", "CanReadGroups",
+                "CanReadUsers", "CanReadRoles", "CanListGroupMembers", "CanResolveResourcePermissions"
+            };
+            foreach (PropertyInfo prop in gottenRoleItem.Permissions.GetType().GetProperties())
+            {
+                if (!rolePermissions.Contains(prop.Name) && prop.Name != "ExtensionData")
+                {
+                    Assert.IsFalse((bool)prop.GetValue(gottenRoleItem.Permissions, null));
+                }
+            }
 
             // Verify that the ExtensionData does not contain the permissions
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("create_api_keys"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("manage_access"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("manage_custom_metrics"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("manage_template_metric_sets"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("manage_renaming_rules"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("manage_template_checklists"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_collaborator"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_read_patients"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_read_collections"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_view_phi"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_download_dicom"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_write_collections"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_write_patients"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_contour_patients"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_delete_collections"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("organization_delete_patients"));
-            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("workspaces"));
+            Assert.IsFalse(gottenRoleItem.ExtensionData.ContainsKey("permissions"));
+            Assert.IsTrue(gottenRoleItem.ExtensionData.ContainsKey("system"));
+            Assert.IsTrue(gottenRoleItem.ExtensionData.ContainsKey("created_at"));
         }
     }
 }

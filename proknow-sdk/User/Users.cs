@@ -29,7 +29,6 @@ namespace ProKnow.User
         /// </summary>
         /// <param name="email">The email address of the user</param>
         /// <param name="name">The name of the user</param>
-        /// <param name="roleId">The ProKnow ID of the role for the user</param>
         /// <param name="password">The optional password of the user</param>
         /// <returns>The created user</returns>
         /// <example>This example shows how to create a user:
@@ -38,13 +37,12 @@ namespace ProKnow.User
         /// using System.Threading.Tasks;
         ///
         /// var pk = new ProKnowApi("https://example.proknow.com", "./credentials.json");
-        /// var roleSummary = await _proKnow.Roles.FindAsync(x => x.Name == "Researcher");
-        /// var userItem = await _proKnow.Users.CreateAsync("jane.doe@gmail.com", "Jane Doe", roleSummary.Id);
+        /// var userItem = await _proKnow.Users.CreateAsync("jane.doe@gmail.com", "Jane Doe");
         /// </code>
         /// </example>
-        public async Task<UserItem> CreateAsync(string email, string name, string roleId, string password = null)
+        public async Task<UserItem> CreateAsync(string email, string name, string password = null)
         {
-            var properties = new Dictionary<string, object>() { { "email", email }, { "name", name }, { "role_id", roleId } };
+            var properties = new Dictionary<string, object>() { { "email", email }, { "name", name } };
             if (password != null)
             {
                 properties.Add("password", password);

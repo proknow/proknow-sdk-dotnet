@@ -4,6 +4,12 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.2.0
+
+*Enhancements*
+
+- Fix breaking areas for Users and Roles modules ahead of the 1.31.0 release of ProKnow
+
 ## v0.1.10
 
 *Bug Fixes*
