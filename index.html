@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Introduction </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Introduction ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="introduction">Introduction</h1>
+
+<p>proknow-sdk is a .NET Core software development kit (SDK) to interface with <a href="https://proknow.com">ProKnow</a> from .NET
+applications.</p>
+<h1 id="installation">Installation</h1>
+<p>Install the SDK using <a href="https://nuget.org/packages/ProKnow">NuGet</a>.</p>
+<h1 id="basic-usage">Basic Usage</h1>
+<p>To use the SDK, you'll need two important items:</p>
+<ul>
+<li><p>Base URL:  This is the URL that will be used to make API requests to ProKnow.  It's the first part of the web address
+you see when you are signed into your ProKnow account.  The form of this URL is typically
+<code>https://your-domain.proknow.com</code>.</p>
+</li>
+<li><p>API Token: You can generate an <a href="https://support.proknow.com/article/165-configuring-your-profile#api-keys">API token</a>
+in the ProKnow user interface. Always keep your API token secret.  Once you have your <code>credentials.json</code>, make note of
+the file path.</p>
+</li>
+</ul>
+<p>The code snippet below can be used to test your installation and configuration of the <code>proknow-sdk</code> package.</p>
+<p>The LoggerFactory property of the ProKnow.ProKnowLogging class needs to be initialized prior to using the SDK, if
+logging is desired.  See the Microsoft article <a href="https://docs.microsoft.com/en-us/dotnet/core/extensions/logging">Logging in .NET</a>
+for more information.  The example below requires the Microsoft.Extensions.Logging and Microsoft.Extension.Logging.Debug
+NuGet packages.  When run in debug mode, it will output debug-level messages from the ProKnow.Upload.Uploads class.</p>
+<p>Please be sure to replace <code>https://example.proknow.com</code> with your organization's base URL described above, and replace
+<code>./credentials.json</code> with the path to your credentials file:</p>
+<pre><code>using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Debug;
+using ProKnow;
+using System.Threading.Tasks;
+
+using var loggerFactory = LoggerFactory.Create(builder =&gt;
+{
+    builder
+        .AddFilter(typeof(Uploads).FullName, LogLevel.Debug)
+        .AddProvider(new DebugLoggerProvider());
+});
+ProKnowLogging.LoggerFactory = loggerFactory;
+var pk = new ProKnowApi('https://example.proknow.com', './credentials.json');
+var connectionStatus = await pk.GetConnectionStatusAsync();
+if (!connectionStatus.IsValid)
+{
+    throw new Exception($&quot;Error connecting to ProKnow API: {connectionStatus.ErrorMessage}.&quot;);
+}
+</code></pre>
+<p>Note that the majority of the methods in the SDK are asynchronous.  Asynchronous methods are named with the 'Async'
+suffix per convention.  For more information about asynchronous programming, please refer to the Microsoft
+<a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/async/">Asynchronous programming with async and await</a>
+article.</p>
+<p>If an adaptation of the above code snippet does not work for you, please see the troubleshooting guide.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

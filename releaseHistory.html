@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Release History </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Release History ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="release-history">Release History</h1>
+
+<p><em>Disclaimer</em></p>
+<p>All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to <a href="http://semver.org/">semantic versioning</a>.</p>
+<h2 id="v020">v0.2.0</h2>
+<p><em>Enhancements</em></p>
+<ul>
+<li>Fix breaking areas for Users and Roles modules ahead of the 1.31.0 release of ProKnow</li>
+</ul>
+<h2 id="v0110">v0.1.10</h2>
+<p><em>Bug Fixes</em></p>
+<ul>
+<li>Replace ProKnowApi GetConnectionStatusAsync() method and returned type ProKnowConnectionStatus (for which IsValid was always true as long as the base URL was valid and ProKnow was up) with:
+<ul>
+<li>GetDomainStatusAsync() and returned type ProKnowDomainStatus for which IsOk will be true if the ProKnow domain is up and reachable</li>
+<li>GetCredentialsStatusAsync() and returned type ProKnowCredentialsStatus for which IsValid will be true if the base URL is valid, the credentials (API key) is valid for the base URL, and ProKnow is up and reachable</li>
+</ul>
+</li>
+</ul>
+<h2 id="v019">v0.1.9</h2>
+<p><em>Enhancements</em></p>
+<ul>
+<li>Add Audit class for interacting with audit logging</li>
+<li>Move scorecards from Entities to Patient namespace</li>
+</ul>
+<h2 id="v018">v0.1.8</h2>
+<p><em>Bug Fixes</em></p>
+<ul>
+<li>Fix &quot;Invalid document name&quot; error when streaming documents by adding name parameter to Document StreamAsync()</li>
+<li>Fix &quot;Invalid request to stream non-openable document without attachment parameter&quot; error when streaming non-PDF document&quot; by adding attachment query parameter to API call</li>
+</ul>
+<h2 id="v017">v0.1.7</h2>
+<p><em>Enhancements</em></p>
+<ul>
+<li>Append &quot;.dcm&quot; to downloaded image files</li>
+</ul>
+<h2 id="v016">v0.1.6</h2>
+<p><em>Bug Fixes</em></p>
+<ul>
+<li>Include patient ProKnow ID in UploadFileOverrides</li>
+</ul>
+<h2 id="v015">v0.1.5</h2>
+<p><em>Bug Fixes and Enhancements</em></p>
+<ul>
+<li>Fix bug retrieving upload processing results when there are always 200 or more with non-terminal processing results (i.e., uploads that were initiated whose content was never uploaded)</li>
+<li>Add more logging details when uploading</li>
+</ul>
+<h2 id="v014">v0.1.4</h2>
+<p><em>Enhancements</em></p>
+<ul>
+<li>Add logging for ProKnowApi and Uploads classes</li>
+<li>Create symbol package (.snupkg) for debugging</li>
+</ul>
+<h2 id="v013">v0.1.3</h2>
+<p><em>Bug Fixes</em></p>
+<ul>
+<li>Improve HTTP request error handling in Requestor</li>
+<li>Correct exception error message thrown by ProKnowApi constructor when directory containing credentials file is not found</li>
+</ul>
+<h2 id="v012">v0.1.2</h2>
+<p><em>Bug Fixes</em></p>
+<ul>
+<li>Upload large files in chunks to avoid HTTP request and asynchronous task timeouts</li>
+</ul>
+<h2 id="v011">v0.1.1</h2>
+<p><em>Bug Fixes and Enhancements</em></p>
+<ul>
+<li>Enable user configuration of retry delays for waiting for ProKnow upload processing through the Uploads RetryDelays property</li>
+<li>Set default retry delays to five 200 msec delays followed by 29 1000 msec delays for a total retry delay of 30 sec</li>
+<li>Fix bug where an upload processing result is occasionally missed</li>
+<li>For GetUploadProcessingResultsAsync:
+<ul>
+<li>Modify the return to be an UploadProcessingResults class object that includes:
+<ul>
+<li>The list of UploadProcessingResult for each upload</li>
+<li>A flag indicating whether the retry delays were exhausted</li>
+<li>The total retry delay</li>
+</ul>
+</li>
+<li>Don't throw an exception if any uploads don't reach a terminal state, just include those uploads in the list with the status of &quot;processing&quot;</li>
+</ul>
+</li>
+</ul>
+<h2 id="v010">v0.1.0</h2>
+<p><em>Enhancements</em></p>
+<ul>
+<li>Separate uploading from waiting for ProKnow processing to complete:
+<ul>
+<li>UploadAsync only uploads to ProKnow, does not wait for processing, and now returns an IList<uploadresult></uploadresult></li>
+<li>Uploads class has new GetUploadProcessingResults method to wait for processing of provided IList<uploadresult> and return an IList<uploadprocessingresult></uploadprocessingresult></uploadresult></li>
+<li>UploadBatch can now be constructed from an IList<uploadprocessingresult></uploadprocessingresult></li>
+</ul>
+</li>
+</ul>
+<h2 id="v0029">v0.0.29</h2>
+<p><em>Bug Fixes and Enhancements</em></p>
+<ul>
+<li>Fix error uploading duplicate objects</li>
+<li>Improve upload performance</li>
+<li>When uploading, don't return an UploadBatch unless waiting for processing to complete</li>
+<li>Throw an exception if, even after retrying, there are still unresolved uploads</li>
+</ul>
+<h2 id="v0028">v0.0.28</h2>
+<p><em>Bug Fixes</em></p>
+<ul>
+<li>Fix UploadAsync bug handling more than 200 upload results from ProKnow</li>
+<li>Don't return UploadBatch from UploadAsync unless waiting for uploads to reach a terminal state</li>
+</ul>
+<h2 id="v0027">v0.0.27</h2>
+<p><em>Bug Fixes and Enhancements</em></p>
+<ul>
+<li>Fix construction of UploadBatch to only include data from the upload from which it was created</li>
+<li>Add GetStatus method to UploadBatch to get the status for a specified file</li>
+</ul>
+<h2 id="v0026">v0.0.26</h2>
+<p><em>Enhancements</em></p>
+<ul>
+<li>Add UploadAsync overloads to Uploads class that are more performant by taking a WorkspaceItem rather than a string for the workspace parameter</li>
+<li>Add interfaces IProKnowApi, IWorkspaces, and IUploads so that users of this library can mock the ProKnowApi, Workspaces, and Uploads classes for testing purposes</li>
+</ul>
+<h2 id="v0025">v0.0.25</h2>
+<p><em>New Features and Enhancements</em></p>
+<ul>
+<li>Add support for Roles and Users</li>
+</ul>
+<h2 id="v0024">v0.0.24</h2>
+<p><em>New Features and Enhancements</em></p>
+<ul>
+<li>Add GetSliceDataAsync method to DoseItem class to retrieve voxel data (DoseSlice)</li>
+<li>Add DoseData property to DoseItem class to provide dose properties</li>
+<li>Modify GetImageDataAsync method of ImageSetItem class to return UInt16[] instead of byte[]</li>
+<li>Modify Position property of ImageSetItem to be mm instead of 1/1000 mm</li>
+</ul>
+<h2 id="v0023">v0.0.23</h2>
+<p><em>New Features and Enhancements</em></p>
+<ul>
+<li>Add GetDataAsync method to StructureSetItem class to retrieve contour and point data (StructureSetRoiData)</li>
+<li>Add SaveAsync method to StructureSetRoiData class to save contour and point data</li>
+</ul>
+<h2 id="v0022">v0.0.22</h2>
+<p><em>Enhancements</em></p>
+<ul>
+<li>Refactor and fix possible threading issues in unit tests</li>
+<li>Replace use of generic ApplicationException with more specific InvalidOperationError</li>
+</ul>
+<p><em>Bug fixes</em></p>
+<ul>
+<li>Ensure that a structure set draft lock renewer timer does not fire after the edit lock has been removed</li>
+</ul>
+<h2 id="v0021">v0.0.21</h2>
+<p><em>New Features and Enhancements</em></p>
+<ul>
+<li>Add GetImageDataAsync method to ImageSetItem class to retrieve pixel data</li>
+<li>In ImageSetData and Image classes, replace many ExtensionData with concrete properties</li>
+</ul>
+<h2 id="v0020">v0.0.20</h2>
+<p><em>Bug fixes</em></p>
+<ul>
+<li>Fix issue limiting threads for uploading to ProKnow</li>
+</ul>
+<h2 id="v0019">v0.0.19</h2>
+<p><em>New Features and Enhancements</em></p>
+<ul>
+<li>Renamed Roi to StructureSetRoiItem</li>
+<li>Added ability to create a structure set</li>
+<li>Added ability to create a region of interest (ROI) with no contours</li>
+<li>Added ability to retrieve and edit structure set information, including ROIs, except for contour data</li>
+<li>Updated README.md to include developer information for Git Large File Storage (LFS) support</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

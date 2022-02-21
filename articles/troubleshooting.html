@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Troubleshooting </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Troubleshooting ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="troubleshooting">Troubleshooting</h1>
+
+<h2 id="connection-errors">Connection errors</h2>
+<p>These can be caused by the failure to replace <code>https://example.proknow.com</code> as your <code>baseUrl</code> in the call to the
+ProKnowApi constructor. <code>https://example.proknow.com</code> is not a real endpoint and will not work. If you've already
+replaced the base URL, log into your ProKnow account and check to make sure it matches the base URL shown in the
+address bar.</p>
+<p>If you are able to log into your ProKnow account and have verified that the base URLs match, there is also a chance
+that your organization's firewall is configured to block traffic originating from unknown sources such as your .NET
+application. If this is the case, please contact your IT department to request special permission for your application
+to access the ProKnow API from inside your organization's network.</p>
+<h2 id="file-not-found-errors">File not found errors</h2>
+<p>If you specified a <code>credentialsFile</code> in the call to the ProKnowApi constructor, but are receiving a message saying
+that the file or directory does not exist, you may have a typo in your credentials file path. Correct the file path,
+and try again. Note that relative file paths are usually relative to the directory from which the application is being
+invoked.</p>
+<h2 id="copying-examples-without-modification">Copying examples without modification</h2>
+<p>The examples shown throughout the documentation are meant to be representative and are not likely to work without
+modification. Let's take a look at the example for the method ProKnowApi.Patients.PatientItem.SetMetadataAsync():</p>
+<pre><code>using ProKnow;
+using System.Threading.Tasks;
+
+var pk = new ProKnowApi(&quot;https://example.proknow.com&quot;, &quot;./credentials.json&quot;);
+var patients = await pk.Patients.Lookup(&quot;Clinical&quot;, new string[] { &quot;HNC-0522c0009&quot; });
+var patient = await patients[0].GetAsync();
+var metadata = await patient.GetMetadataAsync();
+metadata[&quot;Genetic Type&quot;] = &quot;Type II&quot;;
+await patient.SetMetadataAsync(metadata);
+await patient.SaveAsync();
+</code></pre>
+<p>This code will not work in your setup for several reasons:</p>
+<ul>
+<li>Your <code>baseUrl</code> for your ProKnow account is not &quot;https://example.proknow.com.&quot;</li>
+<li>Your <code>credentials.json</code> file may not be located at the path &quot;./credentials.json.&quot;&quot;</li>
+<li>You probably do not have a patient with the MRN &quot;HNC-0522c0009&quot; in a workspace called &quot;Clinical.&quot;</li>
+<li>You probably do not have a custom metric called &quot;Genetic Type.&quot;</li>
+</ul>
+<p>If you run into problems while running your script, examine the error message and make sure you didn't copy a code
+example without making the proper modifications. Values may need to be replaced or additional setup code may need to
+be added in order for your code to function properly.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
