@@ -24,7 +24,7 @@ namespace ProKnow
 
         /// <inheritdoc/>
         public Audits Audit { get; private set; }
-        
+
         /// <inheritdoc/>
         public Requestor Requestor { get; private set; }
 
@@ -122,6 +122,10 @@ namespace ProKnow
             {
                 await Requestor.GetAsync("/user");
                 return new ProKnowCredentialsStatus(true);
+            }
+            catch (ProKnowHttpException ex)
+            {
+                return new ProKnowCredentialsStatus(false, ex.Message, ex.ResponseStatusCode);
             }
             catch (Exception ex)
             {
