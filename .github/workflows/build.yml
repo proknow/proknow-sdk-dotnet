@@ -71,6 +71,7 @@ jobs:
       env:
         BUILD_DIR: docs/_site
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_PAT: x-access-token:${{ secrets.GITHUB_TOKEN }}
       
     - name: Download NuGet package artifacts
       uses: actions/download-artifact@v2
