@@ -64,7 +64,7 @@ jobs:
         path: docs/_site
 
     - name: Publish documentation site to GitHub Pages (see https://github.com/marketplace/actions/deploy-to-github-pages)
-      uses: JamesIves/github-pages-deploy-action@v4
+      uses: JamesIves/github-pages-deploy-action@v4.3.4
       with:
         folder: docs/_site
         token: ${{ secrets.GH_TOKEN }}
