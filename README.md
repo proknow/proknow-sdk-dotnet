@@ -62,7 +62,9 @@ git lfs checkout
 
 To run the tests, right click on the "proknow-sdk-test" folder and click on `Run Tests` option.
 
-## Create New Release
+# Deployment
+
+## Creating a New Release
 
 The pipeline will automatically create and publish a new NuGet package when code is merged into the master branch. 
 The following files need to be updated before each release:
