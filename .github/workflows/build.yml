@@ -47,7 +47,7 @@ jobs:
         path: "**/*.*nupkg"
 
   deploy:
-    #if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -77,4 +77,3 @@ jobs:
       run: dotnet nuget push **/*.nupkg
             --api-key ${{ secrets.NUGET_DEPLOY_KEY }}
             --source https://api.nuget.org/v3/index.json
-      if: github.ref == 'refs/heads/master'
