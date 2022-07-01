@@ -70,7 +70,7 @@ jobs:
       uses: maxheld83/ghpages@v0.3.0
       env:
         BUILD_DIR: docs/_site
-        GH_PAT: ${{ secrets.GH_PAT }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
     - name: Download NuGet package artifacts
       uses: actions/download-artifact@v2
