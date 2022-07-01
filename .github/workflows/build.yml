@@ -2,9 +2,7 @@ name: build
 
 on:
   push:
-    branches: 
-    - master
-    - 'stories/US323157'
+    branches: [master]
   pull_request:
     branches: [master]
 
@@ -49,7 +47,7 @@ jobs:
         path: "**/*.*nupkg"
 
   deploy:
-    #if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -68,13 +66,6 @@ jobs:
       with:
         folder: docs/_site
         token: ${{ secrets.GITHUB_TOKEN }}
-
-#    - name: Publish documentation site to GitHub Pages (see https://github.com/maxheld83/ghpages)
-#      uses: maxheld83/ghpages@v0.3.0
-#      env:
-#        BUILD_DIR: docs/_site
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        GH_PAT: x-access-token:${{ secrets.GITHUB_TOKEN }}
       
     - name: Download NuGet package artifacts
       uses: actions/download-artifact@v2
@@ -86,4 +77,3 @@ jobs:
       run: dotnet nuget push **/*.nupkg
             --api-key ${{ secrets.NUGET_DEPLOY_KEY }}
             --source https://api.nuget.org/v3/index.json
-      if: github.ref == 'refs/heads/master'
