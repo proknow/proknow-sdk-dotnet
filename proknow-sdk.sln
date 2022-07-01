@@ -7,8 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "proknow-sdk", "proknow-sdk\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8CAF1A2E-40A8-48F5-A594-FB2630288A00}"
 	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		.runsettings = .runsettings
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\pull_request_template.md = .github\pull_request_template.md
 		README.md = README.md
 	EndProjectSection
 EndProject

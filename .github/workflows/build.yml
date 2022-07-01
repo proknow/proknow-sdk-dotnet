@@ -58,11 +58,11 @@ jobs:
         name: docfx-artifact
         path: docs/_site
 
-    - name: Publish documentation site to GitHub Pages (see https://github.com/maxheld83/ghpages)
-      uses: maxheld83/ghpages@v0.3.0
-      env:
-        BUILD_DIR: docs/_site
-        GH_PAT: ${{ secrets.GH_PAT }}
+    - name: Publish documentation site to GitHub Pages (see https://github.com/marketplace/actions/deploy-to-github-pages)
+      uses: JamesIves/github-pages-deploy-action@v4.3.4
+      with:
+        folder: docs/_site
+        token: ${{ secrets.GITHUB_TOKEN }}
       
     - name: Download NuGet package artifacts
       uses: actions/download-artifact@v2
