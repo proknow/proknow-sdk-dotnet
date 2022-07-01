@@ -67,7 +67,7 @@ jobs:
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         folder: docs/_site
-        token: ${{ secrets.GH_PAT }}
+        token: ${{ secrets.GITHUB_TOKEN }}
 
 #    - name: Publish documentation site to GitHub Pages (see https://github.com/maxheld83/ghpages)
 #      uses: maxheld83/ghpages@v0.3.0
