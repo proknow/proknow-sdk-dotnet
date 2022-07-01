@@ -60,6 +60,10 @@ jobs:
         name: docfx-artifact
         path: docs/_site
 
+    - name: Configure git to trust the workspace despite the different owner
+      run:
+        git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
     - name: Publish documentation site to GitHub Pages (see https://github.com/marketplace/actions/deploy-to-github-pages)
       uses: JamesIves/github-pages-deploy-action@v4
       with:
