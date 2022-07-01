@@ -70,4 +70,4 @@ The pipeline will automatically create and publish a new NuGet package when code
 The following files need to be updated before each release:
 
 1. `releaseHistory.md`
-2. `proknow-sdk.csproj`
+2. `proknow-sdk.csproj` - Update the `<Version>` attribute with the new version following the [semantic versioning](https://semver.org/) rules.
