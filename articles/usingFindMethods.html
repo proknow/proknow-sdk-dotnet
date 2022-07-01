@@ -90,7 +90,7 @@ var patientSummary = await pk.Patients.FindAsync(workspace.Id, p =&gt; p.Name ==
 <p>Note that, in this case, the predicate is a <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/statements-expressions-operators/lambda-expressions">lambda expression</a>.</p>
 <h2 id="other-important-points">Other Important Points</h2>
 <p><strong>The method ProKnow.Patient.PatientItem.FindEntities behaves in a similar fashion.</strong></p>
-<p>The method <a class="xref" href="../api/ProKnow.Patient.PatientItem.html#ProKnow_Patient_PatientItem_FindEntities_System_Func_ProKnow_Patient_Entities_EntitySummary_System_Boolean__">ProKnow.Patient.PatientItem.FindEntities</a>
+<p>The method <a href="xref:ProKnow.Patient.PatientItem#ProKnow_Patient_PatientItem_FindEntities_System_Func_ProKnow_Patient_Entities_EntitySummary_System_Boolean__">ProKnow.Patient.PatientItem.FindEntities</a>
 behaves similarly to the <code>FindAsync</code> method described above except that the <code>FindEntities</code> method traverses through
 each entity in the entity hierarchy within a PatientItem to find find matching entities. It returns a list of all
 matching entities whereas the <code>FindAsync</code> method returns the first matching item it finds.</p>
