@@ -4,15 +4,1464 @@
   "xrefmap": "xrefmap.yml",
   "files": [
     {
-      "log_codes": [
-        "UidNotFound"
-      ],
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Audit.AuditItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Audit.AuditItem.html",
+          "hash": "T1q27MxqbX4CuX73Zv6mXA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Audit.AuditPage.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Audit.AuditPage.html",
+          "hash": "AFC11U2AksVwF+amqO74dA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Audit.Audits.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Audit.Audits.html",
+          "hash": "jFNZ0OBfMgYg2ZO9EoDhgw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Audit.FilterParameters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Audit.FilterParameters.html",
+          "hash": "alqGUSZs0aWiZX+oqJmf8g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Audit.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Audit.html",
+          "hash": "Yu383PjAnxq29gx2Pjv/MQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Collection.CollectionItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Collection.CollectionItem.html",
+          "hash": "VNAtgIPVSxG1dQCZD/vtTw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Collection.CollectionPatientSummary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Collection.CollectionPatientSummary.html",
+          "hash": "eekO4P6hIq4poQ0Q2IrDFw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Collection.CollectionPatientSummaryEntity.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Collection.CollectionPatientSummaryEntity.html",
+          "hash": "azv2lPrNaVuVxFlxgfx12A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Collection.CollectionPatientSummaryPatient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Collection.CollectionPatientSummaryPatient.html",
+          "hash": "AvCkaoMie3n4g04dGMnyEg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Collection.CollectionPatientSummaryWorkspace.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Collection.CollectionPatientSummaryWorkspace.html",
+          "hash": "AhiHClI7c+QzFhOb76jGdw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Collection.CollectionPatients.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Collection.CollectionPatients.html",
+          "hash": "Q1JH5BXxrepTKAL3007rNQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Collection.CollectionPatientsAddSchema.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Collection.CollectionPatientsAddSchema.html",
+          "hash": "AGXD8acXIJZRh8eEKp8A0g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Collection.CollectionSummary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Collection.CollectionSummary.html",
+          "hash": "SWHdtvgDc7/0jg6iugir0w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Collection.Collections.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Collection.Collections.html",
+          "hash": "p7LcZMxpTavQTpe/L1kqPA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Collection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Collection.html",
+          "hash": "CMVVij9MYXFH6ZtzS7JN+Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Exceptions.InvalidOperationError.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Exceptions.InvalidOperationError.html",
+          "hash": "5dQbyN65kW+Jyl9j6bZxMg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Exceptions.ProKnowException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Exceptions.ProKnowException.html",
+          "hash": "nIma/CO7pgnw8FFX3YEQCA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Exceptions.ProKnowHttpException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Exceptions.ProKnowHttpException.html",
+          "hash": "huL83eIZXJFN5fQrolFC9w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Exceptions.ProKnowWorkspaceLookupException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Exceptions.ProKnowWorkspaceLookupException.html",
+          "hash": "4NO/Z2+jiExgD5/nlr79PA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Exceptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Exceptions.html",
+          "hash": "3NLFuiw4vpcqWE9KMcFrPg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Geometry.Point2D.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Geometry.Point2D.html",
+          "hash": "gDzddMIq7pP7MZt++Xblqw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Geometry.Point3D.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Geometry.Point3D.html",
+          "hash": "MDb1vv1+j2fs0Jp1guuKHQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Geometry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Geometry.html",
+          "hash": "pE2XOnc+9iGNMWRcNt7/LQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.IProKnowApi.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.IProKnowApi.html",
+          "hash": "BfaV1RSiC+CCEizKTyW5bQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.IWorkspaces.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.IWorkspaces.html",
+          "hash": "DWa/35WcWvLcwQv87jdFog=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.JsonConverters.ByteArrayJsonConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.JsonConverters.ByteArrayJsonConverter.html",
+          "hash": "sPg5fN2flw3pTBG6n8ytkw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.JsonConverters.ColorJsonConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.JsonConverters.ColorJsonConverter.html",
+          "hash": "AOcoT+8HIQ2VuyYYEx+dEg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.JsonConverters.CoordinateJsonConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.JsonConverters.CoordinateJsonConverter.html",
+          "hash": "Aa5sWHcVGysc9Vm3hRdk6w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.JsonConverters.Paths2DJsonConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.JsonConverters.Paths2DJsonConverter.html",
+          "hash": "o1PIV+wT7cC4hJFFFPrlCQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.JsonConverters.Points3DJsonConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.JsonConverters.Points3DJsonConverter.html",
+          "hash": "L/m2nWxSdo1Cbad9uekUNg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.JsonConverters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.JsonConverters.html",
+          "hash": "X0EBxa96e60elejZPXrfnw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Document.DocumentSummary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Document.DocumentSummary.html",
+          "hash": "3N15yQwszc27Z5LIxb4G+A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Document.DocumentUpdateSchema.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Document.DocumentUpdateSchema.html",
+          "hash": "mDy879AYDkVxuPmVC6yagw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Document.Documents.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Document.Documents.html",
+          "hash": "ddMaXjCzjY5hnG7sRAdOqw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Document.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Document.html",
+          "hash": "MIrgzi1AWR2A1UGFxb0ABQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.DoseData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.DoseData.html",
+          "hash": "YMzFG2N3Q5dKHrOtyLNNfw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.DoseItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.DoseItem.html",
+          "hash": "RnFOBdPuOnkmkID0OY7ZUg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.DoseSlice.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.DoseSlice.html",
+          "hash": "zmevqcBnuCpwGXBXVpa+EQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.EntityItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.EntityItem.html",
+          "hash": "2qEZA0PxZKuvyHpsNuVx3Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.EntitySaveSchema.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.EntitySaveSchema.html",
+          "hash": "NUjEze/ci8Z5wWd/GH8kgw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.EntitySummary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.EntitySummary.html",
+          "hash": "7uqNiu4oJPFk8yT4Sq7Akw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.Image.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.Image.html",
+          "hash": "h/jNcjoprJ+Ni6GaG5JGpQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.ImageSetData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.ImageSetData.html",
+          "hash": "aSMgKdJqXPX4+AuQ10yYJw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.ImageSetItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.ImageSetItem.html",
+          "hash": "g5XZOjSOMAWRzKqZx9bXuA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.PlanItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.PlanItem.html",
+          "hash": "2ewmf8iOBtXGI8r7/YtQ+A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetData.html",
+          "hash": "9fdXuHb6a3wlkvpl2VekVQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetDraftLock.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetDraftLock.html",
+          "hash": "nyskt/SKN1Rp4No+9yRqRw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetDraftLockRenewer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetDraftLockRenewer.html",
+          "hash": "O/o/8ky3cyKSMLhrxiBmPA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetRoiContour.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetRoiContour.html",
+          "hash": "QOeWqCQQi7dOZKW3yBABBg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetRoiData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetRoiData.html",
+          "hash": "CzrswP8ivCDjykVMNL6qSA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetRoiItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetRoiItem.html",
+          "hash": "XNDhAowHAy9jUNnQJDiVjQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetVersionItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetVersionItem.html",
+          "hash": "Qaezf9g+XoZ7KZsxmmc3ZQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetVersions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.StructureSet.StructureSetVersions.html",
+          "hash": "JMk4meHyd8MmZUvoJDb4bw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.StructureSet.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.StructureSet.html",
+          "hash": "IEE4uwWW1Qnib+Ol6v7EzA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.StructureSetItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.StructureSetItem.html",
+          "hash": "FNyA0Co3kPB9tgsVM6mq4w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Entities.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Entities.html",
+          "hash": "MeM4QZ4X9sRqR9/yfm0L7g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.PatientItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.PatientItem.html",
+          "hash": "xzAT8kX6gLyDwvH2d7LAHg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.PatientSaveSchema.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.PatientSaveSchema.html",
+          "hash": "r48xWdMJgi3C/LouicvZ1w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.PatientScorecardItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.PatientScorecardItem.html",
+          "hash": "EfwOFUJ3yVusLoDgrAqI5w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.PatientScorecardSummary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.PatientScorecardSummary.html",
+          "hash": "rwqYSCKJ/QI3nIiC5Qc4/g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.PatientScorecards.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.PatientScorecards.html",
+          "hash": "FYA6NvE59zauUofYm+YUQw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.PatientSummary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.PatientSummary.html",
+          "hash": "lVoy7gB26jttPa0nL8G51Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Patients.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Patients.html",
+          "hash": "sWCk6aqmbDPX0WA2oeEK/Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Registrations.RegistrationCoordinateSystem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Registrations.RegistrationCoordinateSystem.html",
+          "hash": "vjNB2a3XSfQA0J3Qi/th1Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Registrations.SroItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Registrations.SroItem.html",
+          "hash": "Pn0Zw5x5pAjbsOJN9M53RA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Registrations.SroSummary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Registrations.SroSummary.html",
+          "hash": "on7z3vsF3f15FcSYeZeLMw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Registrations.SroTransformation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Registrations.SroTransformation.html",
+          "hash": "33zEGnpgsbfWhyGnic4jsQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.Registrations.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.Registrations.html",
+          "hash": "y29YMOEc1N2klkBfjo+cbA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.StudySummary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.StudySummary.html",
+          "hash": "uDsHHrXmhRXBIwAiFBjmNQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Patient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Patient.html",
+          "hash": "AmN9lkcE/IWR79T5pugqqQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.ProKnowApi.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.ProKnowApi.html",
+          "hash": "NG8g51vLW5IRnYGlW9/uaQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.ProKnowCredentials.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.ProKnowCredentials.html",
+          "hash": "8OrfvAOkrGg1Fo669SbLRw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.ProKnowCredentialsStatus.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.ProKnowCredentialsStatus.html",
+          "hash": "ovZ7qsFOdOURLo7RuMLLtA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.ProKnowDomainStatus.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.ProKnowDomainStatus.html",
+          "hash": "dyID3FUpLtmr1SyibWHIZA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.ProKnowLogging.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.ProKnowLogging.html",
+          "hash": "pgrgExilo4vW+fYWgF+4mA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Requestor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Requestor.html",
+          "hash": "4gmxBNq88ZLhvSLTyjGrsQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Role.Permissions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Role.Permissions.html",
+          "hash": "e7L6KTO8Nm26s3N55iFkBg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Role.RoleItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Role.RoleItem.html",
+          "hash": "wtYLvJfO9PZmVuyRJebr1w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Role.RoleSummary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Role.RoleSummary.html",
+          "hash": "ZDaHWbf78LUnL5JhcrFg0g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Role.Roles.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Role.Roles.html",
+          "hash": "muwqnnNfGclY84Z3suazeQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Role.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Role.html",
+          "hash": "gH/8WhRSqxkuKH872785ww=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Scorecard.ComputedMetric.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Scorecard.ComputedMetric.html",
+          "hash": "hwvozVcX7PxltrCF31xL0g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Scorecard.ComputedMetricJsonConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Scorecard.ComputedMetricJsonConverter.html",
+          "hash": "iRLKvKVfQJJQQS0E0wmHzA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Scorecard.CustomMetric.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Scorecard.CustomMetric.html",
+          "hash": "/b4v1h8LO1uijyUr1mTdZQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Scorecard.CustomMetricEnum.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Scorecard.CustomMetricEnum.html",
+          "hash": "2b8T3xlve3ij1r/YzDP9+Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Scorecard.CustomMetricItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Scorecard.CustomMetricItem.html",
+          "hash": "C6gRO5Ug3k0goHIwRqsIdA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Scorecard.CustomMetricItemJsonConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Scorecard.CustomMetricItemJsonConverter.html",
+          "hash": "lwS1dWW8EmfJYItRbLF3+Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Scorecard.CustomMetricType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Scorecard.CustomMetricType.html",
+          "hash": "MUChzqvPQsGAs9EF/PSByw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Scorecard.CustomMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Scorecard.CustomMetrics.html",
+          "hash": "pFnywnTny3g8lpAEMOYIfA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Scorecard.MetricBin.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Scorecard.MetricBin.html",
+          "hash": "P1k4mXxwX17LLFX8g7zu0g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Scorecard.MetricBinJsonConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Scorecard.MetricBinJsonConverter.html",
+          "hash": "sfsHHgcsIU+NMRy0TQeyEQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Scorecard.ScorecardTemplateItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Scorecard.ScorecardTemplateItem.html",
+          "hash": "13J5FnCvxA1M8UKgwCG6PA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Scorecard.ScorecardTemplateItemJsonConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Scorecard.ScorecardTemplateItemJsonConverter.html",
+          "hash": "vORdS7LOuJBH+CssUPWCIQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Scorecard.ScorecardTemplateSummary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Scorecard.ScorecardTemplateSummary.html",
+          "hash": "ZLgbTFpSTHQmpzCD4+P3cQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Scorecard.ScorecardTemplates.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Scorecard.ScorecardTemplates.html",
+          "hash": "eIJRi7toIFa5YZet+O7x0Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Scorecard.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Scorecard.html",
+          "hash": "OnLl7uaGQShF5VDm3+6vkg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.IUploads.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.IUploads.html",
+          "hash": "IrC+g8wk0yJjaRAvqGh3NA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.PatientOverridesSchema.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.PatientOverridesSchema.html",
+          "hash": "XHApVyM43eALKwiTrXoP8Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.UploadBatch.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.UploadBatch.html",
+          "hash": "1HLyI3NiYxLJg41n4oLSnA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.UploadEntitySummary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.UploadEntitySummary.html",
+          "hash": "OBIJ6f6edSxz8D7up2urVQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.UploadFileOverrides.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.UploadFileOverrides.html",
+          "hash": "LxBXJCPONqWpU4zo/MtAxg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.UploadPatientSummary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.UploadPatientSummary.html",
+          "hash": "NdIqiq9yPx44lOXI2LMhHQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.UploadProcessingResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.UploadProcessingResult.html",
+          "hash": "vvW5Zkaptlhw0TjrXFNcEQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.UploadProcessingResultEntity.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.UploadProcessingResultEntity.html",
+          "hash": "DYESpX/v3pJA8b0cKsx6Jw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.UploadProcessingResultPatient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.UploadProcessingResultPatient.html",
+          "hash": "MR4znRdjklnOEXMT3nc8eQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.UploadProcessingResultSro.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.UploadProcessingResultSro.html",
+          "hash": "JfkN8U2Jl7RktAcnsNVLmA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.UploadProcessingResultStudy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.UploadProcessingResultStudy.html",
+          "hash": "1x1vEh4JDTNZLEWeVZ5L/A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.UploadProcessingResults.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.UploadProcessingResults.html",
+          "hash": "8V4X0V1DRqJccBq8mdavFw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.UploadResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.UploadResult.html",
+          "hash": "PyS3BB2WCne82MDXxhxKQQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.UploadSroSummary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.UploadSroSummary.html",
+          "hash": "dOonNywmXiB2q+GPqI0b9A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.Uploads.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.Uploads.html",
+          "hash": "uG6FyU0MsqPOZmQu+JA7dw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Upload.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Upload.html",
+          "hash": "BCSwUaiEZVsaWYNU1XdS+g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.User.UserItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.User.UserItem.html",
+          "hash": "quS+ZY1VN8KO6Q0Fu6sDXg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.User.UserSummary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.User.UserSummary.html",
+          "hash": "mSVStWr12Twm1Q46pJB4Fg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.User.Users.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.User.Users.html",
+          "hash": "P/jnDYcrO5yjBAAimhQorA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.User.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.User.html",
+          "hash": "df/yHqudwWvnQRHM/qdAEA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.UserSummary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.UserSummary.html",
+          "hash": "fMQ9NoiU1ygmwtDXi32hhg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.WorkspaceItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.WorkspaceItem.html",
+          "hash": "7IqHsFx2EqvApsuNJemEGg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.Workspaces.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.Workspaces.html",
+          "hash": "h3jVifGt3vQXLMVCuLEp6Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/ProKnow.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ProKnow.html",
+          "hash": "9GAlGIbRy8fDdUuOTTeyJw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "type": "Conceptual",
       "source_relative_path": "api/index.md",
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "O5g4+HTr15RnUcYhxnnMhQ=="
+          "hash": "98tsyyiH/OkX+ngz4ZPg6g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "UgT72UoDJ4zDhADAydSovw=="
         }
       },
       "is_incremental": false,
@@ -24,7 +1473,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/computedMetrics.html",
-          "hash": "EBS71hDZCXNjjKh5dD7bLA=="
+          "hash": "ZxIZZuIKQUyW0+SsfyuNsQ=="
         }
       },
       "is_incremental": false,
@@ -36,7 +1485,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/index.html",
-          "hash": "JGpPKo3sArTSLqhydf9TTg=="
+          "hash": "ZFf9IGMLwGqDovKcmfPxbA=="
         }
       },
       "is_incremental": false,
@@ -48,7 +1497,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "DWioS8XG9GJg6nLd7C4Cvw=="
+          "hash": "ClAazhPjGUBEegiTvB/arw=="
         }
       },
       "is_incremental": false,
@@ -60,22 +1509,19 @@
       "output": {
         ".html": {
           "relative_path": "articles/troubleshooting.html",
-          "hash": "CqUPda3YbHpSWn4AShTUMw=="
+          "hash": "7sWRZ5/3twSofk8wqSnMGQ=="
         }
       },
       "is_incremental": false,
       "version": ""
     },
     {
-      "log_codes": [
-        "UidNotFound"
-      ],
       "type": "Conceptual",
       "source_relative_path": "articles/usingFindMethods.md",
       "output": {
         ".html": {
           "relative_path": "articles/usingFindMethods.html",
-          "hash": "TbdBCgdFWU2a5w3WjQEtZw=="
+          "hash": "9iUyRa81Z3T6jrNPg/FNAQ=="
         }
       },
       "is_incremental": false,
@@ -87,7 +1533,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "42R/BNlb7GG8s2aHP2aMwg=="
+          "hash": "lb6n3bDA5ABKVzdgrJPLSg=="
         }
       },
       "is_incremental": false,
@@ -99,7 +1545,7 @@
       "output": {
         ".html": {
           "relative_path": "releaseHistory.html",
-          "hash": "k8VDANe4JeeVu48UQa+a9A=="
+          "hash": "uClN+kl0fbQmWUqnU66T2A=="
         }
       },
       "is_incremental": false,
@@ -111,7 +1557,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "QQhidjbAg/9LbKmjieCbXQ=="
+          "hash": "YeiDxhasa2mgJAaNEwdnZw=="
         }
       },
       "is_incremental": false,
@@ -129,17 +1575,23 @@
         "full_build_reason_code": "NoAvailableBuildCache"
       },
       "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 7,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 120,
+          "skipped_file_count": 0
+        },
         "TocDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
           "total_file_count": 0,
-          "skipped_file_count": 0
-        },
-        "ConceptualDocumentProcessor": {
-          "can_incremental": false,
-          "incrementalPhase": "build",
-          "total_file_count": 7,
           "skipped_file_count": 0
         }
       }

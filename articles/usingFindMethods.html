@@ -8,7 +8,7 @@
     <title>Using Find Methods </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Using Find Methods ">
-    <meta name="generator" content="docfx 2.45.1.0">
+    <meta name="generator" content="docfx 2.56.7.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -90,7 +90,7 @@ var patientSummary = await pk.Patients.FindAsync(workspace.Id, p =&gt; p.Name ==
 <p>Note that, in this case, the predicate is a <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/statements-expressions-operators/lambda-expressions">lambda expression</a>.</p>
 <h2 id="other-important-points">Other Important Points</h2>
 <p><strong>The method ProKnow.Patient.PatientItem.FindEntities behaves in a similar fashion.</strong></p>
-<p>The method <a href="xref:ProKnow.Patient.PatientItem#ProKnow_Patient_PatientItem_FindEntities_System_Func_ProKnow_Patient_Entities_EntitySummary_System_Boolean__">ProKnow.Patient.PatientItem.FindEntities</a>
+<p>The method <a class="xref" href="../api/ProKnow.Patient.PatientItem.html#ProKnow_Patient_PatientItem_FindEntities_System_Func_ProKnow_Patient_Entities_EntitySummary_System_Boolean__">ProKnow.Patient.PatientItem.FindEntities</a>
 behaves similarly to the <code>FindAsync</code> method described above except that the <code>FindEntities</code> method traverses through
 each entity in the entity hierarchy within a PatientItem to find find matching entities. It returns a list of all
 matching entities whereas the <code>FindAsync</code> method returns the first matching item it finds.</p>
@@ -101,10 +101,14 @@ matching entities whereas the <code>FindAsync</code> method returns the first ma
             <div class="sideaffix">
               <div class="contribution">
                 <ul class="nav">
+                  <li>
+                    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/5a559755081af7cf91af7b3376d44edfaee4c0a4/docs/articles/usingFindMethods.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
                 </ul>
               </div>
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+                <h5>In This Article</h5>
+                <div></div>
               </nav>
             </div>
           </div>
