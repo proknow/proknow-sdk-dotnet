@@ -29,7 +29,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Build documentation site (see https://github.com/nikeee/docfx-action)
-      uses: nikeee/docfx-action@v0.1.0
+      uses: nikeee/docfx-action@v1.0.0
       with:
         args: docs/docfx.json
         
