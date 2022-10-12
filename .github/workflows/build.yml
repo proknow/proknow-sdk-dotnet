@@ -2,7 +2,9 @@ name: build
 
 on:
   push:
-    branches: [master]
+    branches: 
+    - master
+    - 'stories/US323157'
   pull_request:
     branches: [master]
 
