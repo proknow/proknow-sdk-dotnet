@@ -2,9 +2,7 @@ name: build
 
 on:
   push:
-    branches: 
-    - master
-    - 'stories/US343314'
+    branches: [master]
   pull_request:
     branches: [master]
 
@@ -49,7 +47,7 @@ jobs:
         path: "**/*.*nupkg"
 
   deploy:
-    #if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
     steps:
