@@ -175,7 +175,6 @@ namespace ProKnow.Patient
         /// </example>
         public async Task<IList<PatientSummary>> QueryAsync(string workspace, string searchString = null)
         {
-            //todo--paging (response header includes "proknow-has-more" -> "true")
             var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
             var workspaceId = workspaceItem.Id;
             Dictionary<string, object> queryParameters = null;
@@ -183,8 +182,8 @@ namespace ProKnow.Patient
             {
                 queryParameters = new Dictionary<string, object>() { { "search", searchString } };
             }
-            var json = await _proKnow.Requestor.GetAsync($"/workspaces/{workspaceId}/patients", null, queryParameters);
-            return DeserializePatients(workspaceId, json);
+            var json = await _proKnow.Requestor.GetAsyncWithPaging($"/workspaces/{workspaceId}/patients", null, queryParameters);
+            return DeserializePatientsWithPaging(workspaceId, json);
         }
 
         /// <summary>
@@ -204,6 +203,30 @@ namespace ProKnow.Patient
                 }
             }
             return patientSummaries;
+        }
+
+        /// <summary>
+        /// Creates a collection of patient summaries from their JSON representation
+        /// </summary>
+        /// <param name="workspaceId">ID of the workspace containing the patients</param>
+        /// <param name="json">list of JSON representations of a collection of patient summaries</param>
+        /// <returns>A collection of patient summaries</returns>
+        private IList<PatientSummary> DeserializePatientsWithPaging(string workspaceId, IList<string> json)
+        {
+            var allPatientSummaries = new List<PatientSummary>();
+            foreach (var item in json)
+            {
+                var patientSummaries = JsonSerializer.Deserialize<IList<PatientSummary>>(item);
+                foreach (var patientSummary in patientSummaries)
+                {
+                    if (patientSummary != null)
+                    {
+                        patientSummary.PostProcessDeserialization(_proKnow, workspaceId);
+                    }
+                }
+                allPatientSummaries.AddRange(patientSummaries);
+            }
+            return allPatientSummaries;
         }
     }
 }

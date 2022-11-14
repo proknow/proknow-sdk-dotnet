@@ -4,6 +4,13 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.2.2
+
+*Bug Fixes and Enhancements*
+
+- Added ability for Patients query and Collections.Patients query to get all of the results through paging.
+- Fix bug when adding patients to a collection that required both patient ID and entity ID when entity should be optional.
+
 ## v0.2.1
 
 *Enhancements*
