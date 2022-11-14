@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -75,21 +74,6 @@ namespace ProKnow
         {
             // With a GET request, if the base URL is malformed, it's possible that ProKnow will return 200 OK along with its index.html, hence why we request a non-HTML string response
             return await MakeRequestForNonHtmlStringResponse(HttpMethod.Get, route, queryParameters, headerKeyValuePairs);
-        }
-
-        /// <summary>
-        /// Issues an asynchronous HTTP GET request that expects a string response
-        /// </summary>
-        /// <param name="route">The API route to use in the request</param>
-        /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
-        /// <param name="queryParameters">Optional query parameters</param>
-        /// <returns>A task that returns the response as a string</returns>
-        /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
-        public async Task<IList<string>> GetAsyncWithPaging(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null,
-            Dictionary<string, object> queryParameters = null)
-        {
-            // With a GET request, if the base URL is malformed, it's possible that ProKnow will return 200 OK along with its index.html, hence why we request a non-HTML string response
-            return await MakeRequestForNonHtmlStringResponseWithPaging(HttpMethod.Get, route, queryParameters, headerKeyValuePairs);
         }
 
         /// <summary>
@@ -282,54 +266,6 @@ namespace ProKnow
                 throw new ProKnowHttpException(method.ToString(), $"{_baseUrl}{route}", HttpStatusCode.NotFound.ToString(), $"Please verify the base URL '{baseUrlWithoutApi}'.");
             }
             return responseContent;
-        }
-
-        /// <summary>
-        /// Makes an HTTP request that will return a non-HTML string response
-        /// </summary>
-        /// <param name="method">The HTTP method</param>
-        /// <param name="route">The API route to use in the request</param>
-        /// <param name="queryParameters">Optional query parameters</param>
-        /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
-        /// <param name="content">Optional content for the body</param>
-        /// <returns>The non-HTML string response</returns>
-        /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
-        private async Task<IList<string>> MakeRequestForNonHtmlStringResponseWithPaging(HttpMethod method, string route, Dictionary<string, object> queryParameters = null,
-            IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
-        {
-            string hasMore = "true";
-            string next = null;
-            var patients = new List<string>();
-            while (hasMore == "true")
-            {
-                if (next != null)
-                {
-                    if (queryParameters == null)
-                    {
-                        queryParameters = new Dictionary<string, object>();
-                    }
-                    queryParameters["next"] = next;
-                }
-                var responseContent = String.Empty;
-                var response = await MakeRequest(method, route, queryParameters, headerKeyValuePairs, content);
-                if (response.Content != null)
-                {
-                    responseContent = await response.Content.ReadAsStringAsync();
-                }
-                if (response.Content.Headers.ContentType.MediaType == "text/html" && responseContent.Length >= 13 && responseContent.Substring(0, 14).ToUpper() == "<!DOCTYPE HTML")
-                {
-                    // Response content is index.html from ProKnow, most likely due to invalid base URL
-                    var baseUrlWithoutApi = _baseUrl.Substring(0, _baseUrl.Length - 4);
-                    throw new ProKnowHttpException(method.ToString(), $"{_baseUrl}{route}", HttpStatusCode.NotFound.ToString(), $"Please verify the base URL '{baseUrlWithoutApi}'.");
-                }
-				
-				//determine if paging is required and parameters needed for the next request
-				hasMore = response.Headers.TryGetValues("proknow-has-more", out var values) ? values.FirstOrDefault() : null;
-                next = response.Headers.TryGetValues("proknow-next", out var values2) ? values2.FirstOrDefault() : null;
-
-                patients.Add(responseContent);
-            }
-            return patients;
         }
 
         /// <summary>

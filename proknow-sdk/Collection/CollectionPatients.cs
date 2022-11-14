@@ -36,11 +36,7 @@ namespace ProKnow.Collection
         {
             var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
             var route = $"/collections/{_collectionItem.Id}/workspaces/{workspaceItem.Id}/patients";
-            var options = new JsonSerializerOptions
-            {
-                IgnoreNullValues = true
-            };
-            var requestJson = JsonSerializer.Serialize(items, options);
+            var requestJson = JsonSerializer.Serialize(items);
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
             await _proKnow.Requestor.PutAsync(route, null, requestContent);
         }
@@ -60,8 +56,8 @@ namespace ProKnow.Collection
                     { "workspace", _collectionItem.WorkspaceIds[0] }
                 };
             }
-            var responseJson = await _proKnow.Requestor.GetAsyncWithPaging(route, null, queryParameters);
-            return DeserializeCollectionPatientSummariesWithPaging(responseJson);
+            var responseJson = await _proKnow.Requestor.GetAsync(route, null, queryParameters);
+            return DeserializeCollectionPatientSummaries(responseJson);
         }
 
         /// <summary>
@@ -100,29 +96,6 @@ namespace ProKnow.Collection
                 }
             }
             return collectionPatientSummaries;
-        }
-
-        /// <summary>
-        /// Creates a collection of collection patient summaries from their JSON representation
-        /// </summary>
-        /// <param name="json">JSON representation of a collection of collection patient summaries</param>
-        /// <returns>A collection of collection patient summaries</returns>
-        private IList<CollectionPatientSummary> DeserializeCollectionPatientSummariesWithPaging(IList<string> json)
-        {
-            var allPatientSummaries = new List<CollectionPatientSummary>();
-            foreach (var item in json)
-            {
-                var collectionPatientSummaries = JsonSerializer.Deserialize<IList<CollectionPatientSummary>>(item);
-                foreach (var collectionPatientSummary in collectionPatientSummaries)
-                {
-                    if (collectionPatientSummary != null)
-                    {
-                        collectionPatientSummary.PostProcessDeserialization(_proKnow);
-                    }
-                }
-                allPatientSummaries.AddRange(collectionPatientSummaries);
-            }
-            return allPatientSummaries;
         }
     }
 }

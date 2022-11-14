@@ -2,7 +2,6 @@
 using ProKnow.Test;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProKnow.Patient.Test
@@ -179,36 +178,6 @@ namespace ProKnow.Patient.Test
             // Verify with matching name
             patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id, patientItem.Name);
             Assert.IsTrue(patientSummaries.Count == 1);
-        }
-
-        [TestMethod]
-        public async Task QueryAsyncTest_Paging()
-        {
-            int testNumber = 9;
-
-            // Create a workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
-
-            // Create enough patients to invoke paging (over 1000)
-            int numPatients = 1010;
-            var patientItems = await TestHelper.CreateMultiPatientAsync(_testClassName, testNumber, numPatients);
-
-            // Query for the patients
-            var patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id);
-
-            // Sort by ID for comparison
-            var patientItemsList = new List<PatientItem>(patientItems);
-            var patientSummariesList = new List<PatientSummary>(patientSummaries);
-            patientItemsList.Sort((x, y) => x.Id.CompareTo(y.Id));
-            patientSummariesList.Sort((x, y) => x.Id.CompareTo(y.Id));
-
-            // Verify the return patients
-            Assert.IsTrue(patientSummaries.Count == numPatients);
-            for (var i = 0; i < numPatients; i++)
-            {
-                Assert.AreEqual(patientItemsList[i].Id, patientSummariesList[i].Id);
-                Assert.AreEqual(patientItemsList[i].Name, patientSummariesList[i].Name);
-            }
         }
     }
 }
