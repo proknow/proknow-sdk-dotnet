@@ -87,25 +87,7 @@ namespace ProKnow.Collection
         /// <summary>
         /// Creates a collection of collection patient summaries from their JSON representation
         /// </summary>
-        /// <param name="json">JSON representation of a collection of collection patient summaries</param>
-        /// <returns>A collection of collection patient summaries</returns>
-        private IList<CollectionPatientSummary> DeserializeCollectionPatientSummaries(string json)
-        {
-            var collectionPatientSummaries = JsonSerializer.Deserialize<IList<CollectionPatientSummary>>(json);
-            foreach (var collectionPatientSummary in collectionPatientSummaries)
-            {
-                if (collectionPatientSummary != null)
-                {
-                    collectionPatientSummary.PostProcessDeserialization(_proKnow);
-                }
-            }
-            return collectionPatientSummaries;
-        }
-
-        /// <summary>
-        /// Creates a collection of collection patient summaries from their JSON representation
-        /// </summary>
-        /// <param name="json">JSON representation of a collection of collection patient summaries</param>
+        /// <param name="json">A list of JSON representations of a collection of collection patient summaries</param>
         /// <returns>A collection of collection patient summaries</returns>
         private IList<CollectionPatientSummary> DeserializeCollectionPatientSummariesWithPaging(IList<string> json)
         {

@@ -270,7 +270,7 @@ namespace ProKnow
             IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
             var response = await MakeRequest(method, route, queryParameters, headerKeyValuePairs, content);
-            var responseContent = String.Empty;
+            var responseContent = string.Empty;
             if (response.Content != null)
             {
                 responseContent = await response.Content.ReadAsStringAsync();
@@ -310,7 +310,7 @@ namespace ProKnow
                     }
                     queryParameters["next"] = next;
                 }
-                var responseContent = String.Empty;
+                var responseContent = string.Empty;
                 var response = await MakeRequest(method, route, queryParameters, headerKeyValuePairs, content);
                 if (response.Content != null)
                 {
