@@ -102,30 +102,7 @@ namespace ProKnow.Test
             var workspaceName = $"SDK-{testClassName}-{testNumber}";
             var workspaceItem = await _proKnow.Workspaces.ResolveByNameAsync(workspaceName);
 
-            //+++++++++++++++++++++++++++++++
-            // Here are two option for how to handle sending the patient creation request concurrently
-            //    without screwing up the communication between this test and ProKnow (WSL issue).
-            // Pick your favorite and I'll clean up the code accordingly
-            //+++++++++++++++++++++++++++++++
-
-            //// Create the patients
-            //var patientCreateTasks = new List<Task<PatientItem>>();
-            //for (int i = 0; i < numPatients; i++)
-            //{
-            //    var mrn = $"{testNumber}-{i}-Mrn";
-            //    var name = $"{testNumber}-{i}-Name";
-            //    if (i % 500 == 0)
-            //    {
-            //        await Task.Delay(1000);
-            //    }
-            //    patientCreateTasks.Add(_proKnow.Patients.CreateAsync(workspaceItem.Id, mrn, name));
-            //}
-            //var patientItems = await Task.WhenAll(patientCreateTasks);
-            //return patientItems;
-
-            //++++++++++++++++++++++++++
-
-            //Limit number of active requests
+            // Limit number of active requests
             var throttler = new SemaphoreSlim(500);
             var patientCreateTasksResults = new ConcurrentBag<PatientItem>();
             var finalTaskList = new List<Task>();

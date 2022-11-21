@@ -316,14 +316,8 @@ namespace ProKnow
                 {
                     responseContent = await response.Content.ReadAsStringAsync();
                 }
-                if (response.Content.Headers.ContentType.MediaType == "text/html" && responseContent.Length >= 13 && responseContent.Substring(0, 14).ToUpper() == "<!DOCTYPE HTML")
-                {
-                    // Response content is index.html from ProKnow, most likely due to invalid base URL
-                    var baseUrlWithoutApi = _baseUrl.Substring(0, _baseUrl.Length - 4);
-                    throw new ProKnowHttpException(method.ToString(), $"{_baseUrl}{route}", HttpStatusCode.NotFound.ToString(), $"Please verify the base URL '{baseUrlWithoutApi}'.");
-                }
 				
-				//determine if paging is required and parameters needed for the next request
+				// Determine if paging is required and parameters needed for the next request
 				hasMore = response.Headers.TryGetValues("proknow-has-more", out var values) ? values.FirstOrDefault() : null;
                 next = response.Headers.TryGetValues("proknow-next", out var values2) ? values2.FirstOrDefault() : null;
 
