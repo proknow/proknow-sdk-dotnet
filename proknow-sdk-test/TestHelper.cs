@@ -3,9 +3,11 @@ using ProKnow.Exceptions;
 using ProKnow.Patient;
 using ProKnow.Upload;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ProKnow.Test
@@ -85,6 +87,50 @@ namespace ProKnow.Test
             }
 
             return patientItem;
+        }
+
+        /// <summary>
+        /// Creates an array of patients asynchronously in workspace {testClassName} with MRN {testNumber}-i-Mrn and name {testNumber}-i-Name
+        /// </summary>
+        /// <param name="testClassName">The test class name</param>
+        /// <param name="testNumber">The test number</param>
+        /// <param name="numPatients">The number of patients to create (informs the range of values of "i" for MRN and name)</param>
+        /// <returns></returns>
+        public static async Task<IList<PatientItem>> CreateMultiPatientAsync(string testClassName, int testNumber, int numPatients)
+        {
+            // Find the workspace for this test
+            var workspaceName = $"SDK-{testClassName}-{testNumber}";
+            var workspaceItem = await _proKnow.Workspaces.ResolveByNameAsync(workspaceName);
+
+            // Limit number of active requests
+            var throttler = new SemaphoreSlim(500);
+            var patientCreateTasksResults = new ConcurrentBag<PatientItem>();
+            var finalTaskList = new List<Task>();
+
+            async Task PatientCreate(string mrn, string name, string workspaceId)
+            {
+                try
+                {
+                    patientCreateTasksResults.Add(await _proKnow.Patients.CreateAsync(workspaceId, mrn, name));
+                }
+                finally
+                {
+                    throttler.Release();
+                }
+            }
+
+            for (int i = 0; i < numPatients; i++)
+            {
+                var mrn = $"{testNumber}-{i}-Mrn";
+                var name = $"{testNumber}-{i}-Name";
+
+                // Create the patients when allowed
+                throttler.Wait();
+                finalTaskList.Add(PatientCreate(mrn, name, workspaceItem.Id));
+            }
+            await Task.WhenAll(finalTaskList);
+
+            return patientCreateTasksResults.ToList();
         }
 
         /// <summary>
