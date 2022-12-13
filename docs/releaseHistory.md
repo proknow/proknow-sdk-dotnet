@@ -4,7 +4,7 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
-## v0.2.2
+## v0.2.3
 
 *Bug Fixes and Enhancements*
 
