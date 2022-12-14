@@ -4,6 +4,13 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.2.4
+
+*Enhancements*
+
+- Update to work with workspace scorecard templates as well as organizational scorecard templates.
+- Updated the JSON to return Rx and Rx Scale for custom metrics in relative mode.
+
 ## v0.2.3
 
 *Bug Fixes and Enhancements*

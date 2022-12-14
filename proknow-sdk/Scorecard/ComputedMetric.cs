@@ -55,6 +55,18 @@ namespace ProKnow.Scorecard
         public double? Arg2 { get; set; }
 
         /// <summary>
+        /// The rx or null if not required
+        /// </summary>
+        [JsonPropertyName("rx")]
+        public string Rx { get; set; }
+
+        /// <summary>
+        /// The rx_scale or null if not required
+        /// </summary>
+        [JsonPropertyName("rx_scale")]
+        public double? RxScale { get; set; }
+
+        /// <summary>
         /// The objectives or null if not specified
         /// </summary>
         [JsonPropertyName("objectives")]
@@ -74,6 +86,8 @@ namespace ProKnow.Scorecard
         /// <param name="roiName">The ROI name or null if not required</param>
         /// <param name="arg1">The first argument or null if not required</param>
         /// <param name="arg2">The second argument or null if not required</param>
+        /// <param name="rx">the rx or null if not required</param>
+        /// <param name="rxScale">The RX scale or null if not required</param>"
         /// <param name="objectives">The objectives or null if not specified</param>
         /// <remarks>
         /// The allowable values for metric type are:
@@ -100,12 +114,14 @@ namespace ProKnow.Scorecard
         /// <para/>'VOLUME'- Volume (cc) of the RoiName
         /// </remarks>
         public ComputedMetric(string type, string roiName = null, double? arg1 = null, double? arg2 = null,
-            IList<MetricBin> objectives = null)
+            string rx = null, double? rxScale = null, IList < MetricBin> objectives = null)
         {
             Type = type;
             RoiName = roiName;
             Arg1 = arg1;
             Arg2 = arg2;
+            Rx = rx;
+            RxScale = rxScale;
             Objectives = objectives;
         }
 
@@ -118,7 +134,9 @@ namespace ProKnow.Scorecard
             var roiName = RoiName != null ? $" | {RoiName}" : "";
             var arg1 = Arg1 != null ? $" | {Arg1}" : "";
             var arg2 = Arg2 != null ? $" | {Arg2}" : "";
-            return $"{Type}{roiName}{arg1}{arg2}";
+            var rx = Rx != null ? $" | {Rx}" : "";
+            var rxScale = RxScale != null ? $" | {RxScale}" : "";
+            return $"{Type}{roiName}{arg1}{arg2}{rx}{rxScale}";
         }
     }
 }
