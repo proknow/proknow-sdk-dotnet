@@ -28,7 +28,7 @@ namespace ProKnow.Scorecard
         {
             string id = null;
             string name = null;
-            string workspaceid = null;
+            string workspaceId = null;
             IList<ComputedMetric> computed = null;
             IList<CustomMetricItem> custom = null;
 
@@ -41,7 +41,7 @@ namespace ProKnow.Scorecard
             {
                 if (reader.TokenType == JsonTokenType.EndObject)
                 {
-                    return new ScorecardTemplateItem(id, name, workspaceid, computed, custom);
+                    return new ScorecardTemplateItem(id, name, workspaceId, computed, custom);
                 }
 
                 // Read property name
@@ -63,7 +63,7 @@ namespace ProKnow.Scorecard
                 }
                 else if (propertyName == "workspace_id")
                 {
-                    workspaceid = reader.GetString();
+                    workspaceId = reader.GetString();
                 }
                 else if (propertyName == "computed")
                 {
@@ -103,10 +103,10 @@ namespace ProKnow.Scorecard
             }
 
             // workspaceid
-            if (scorecardTemplateItem.WorkspaceID != null) 
+            if (scorecardTemplateItem.Workspace != null) 
             {
                 writer.WritePropertyName(_workspaceID);
-                writer.WriteStringValue(scorecardTemplateItem.WorkspaceID);
+                writer.WriteStringValue(scorecardTemplateItem.Workspace);
             }
 
             // computed (must be an array, even if empty)

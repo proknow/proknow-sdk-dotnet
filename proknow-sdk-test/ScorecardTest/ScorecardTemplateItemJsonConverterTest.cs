@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ProKnow.Test;
 using System.Collections.Generic;
 using System.Text.Json;
 
@@ -142,6 +143,38 @@ namespace ProKnow.Scorecard.Test
             string customMetricObjectivesJson = "[{\"label\":\"IDEAL\",\"color\":[18,191,0],\"max\":90},{\"label\":\"UNACCEPTABLE\",\"color\":[255,0,0]}]";
             string customMetricsJson = $"[{{\"id\":\"5b9c00f90e40e073f43aec25ff9f851a\",\"objectives\":{customMetricObjectivesJson}}}]";
             string expected = $"{{\"name\":\"SDK Testing\",\"computed\":{computedMetricsJson},\"custom\":{customMetricsJson}}}";
+            var actual = JsonSerializer.Serialize<ScorecardTemplateItem>(scorecardTemplateItem);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void WriteTestWorkspaceAsync()
+        {
+
+            var computedMetricObjectives = new List<MetricBin>()
+            {
+                new MetricBin("IDEAL", new byte[] { 18, 191, 0 }, null, 85),
+                new MetricBin("UNACCEPTABLE", new byte[] { 255, 0, 0 })
+            };
+            var computedMetric = new ComputedMetric("CUMULATIVE_METERSET", null, null, null, null, null, computedMetricObjectives);
+            var computedMetrics = new List<ComputedMetric>() { computedMetric };
+            var customMetricObjectives = new List<MetricBin>()
+            {
+                new MetricBin("IDEAL", new byte[] { 18, 191, 0 }, null, 90),
+                new MetricBin("UNACCEPTABLE", new byte[] { 255, 0, 0 })
+            };
+            var customMetricItem = new CustomMetricItem()
+            {
+                Id = "5b9c00f90e40e073f43aec25ff9f851a",
+                Objectives = customMetricObjectives
+            };
+            var customMetricItems = new List<CustomMetricItem>() { customMetricItem };
+            var scorecardTemplateItem = new ScorecardTemplateItem(null, "SDK Testing", "Workspace Testing", computedMetrics, customMetricItems);
+            string computedMetricObjectivesJson = "[{\"label\":\"IDEAL\",\"color\":[18,191,0],\"max\":85},{\"label\":\"UNACCEPTABLE\",\"color\":[255,0,0]}]";
+            string computedMetricsJson = $"[{{\"type\":\"CUMULATIVE_METERSET\",\"roi_name\":null,\"arg_1\":null,\"arg_2\":null,\"rx\":null,\"rx_scale\":null,\"objectives\":{computedMetricObjectivesJson}}}]";
+            string customMetricObjectivesJson = "[{\"label\":\"IDEAL\",\"color\":[18,191,0],\"max\":90},{\"label\":\"UNACCEPTABLE\",\"color\":[255,0,0]}]";
+            string customMetricsJson = $"[{{\"id\":\"5b9c00f90e40e073f43aec25ff9f851a\",\"objectives\":{customMetricObjectivesJson}}}]";
+            string expected = $"{{\"name\":\"SDK Testing\",\"workspace_id\":\"Workspace Testing\",\"computed\":{computedMetricsJson},\"custom\":{customMetricsJson}}}";
             var actual = JsonSerializer.Serialize<ScorecardTemplateItem>(scorecardTemplateItem);
             Assert.AreEqual(expected, actual);
         }

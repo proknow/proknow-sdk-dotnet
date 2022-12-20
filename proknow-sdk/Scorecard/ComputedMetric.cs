@@ -86,7 +86,7 @@ namespace ProKnow.Scorecard
         /// <param name="roiName">The ROI name or null if not required</param>
         /// <param name="arg1">The first argument or null if not required</param>
         /// <param name="arg2">The second argument or null if not required</param>
-        /// <param name="rx">the rx or null if not required</param>
+        /// <param name="rx">The rx value or null if not required</param>
         /// <param name="rxScale">The RX scale or null if not required</param>"
         /// <param name="objectives">The objectives or null if not specified</param>
         /// <remarks>
@@ -114,7 +114,7 @@ namespace ProKnow.Scorecard
         /// <para/>'VOLUME'- Volume (cc) of the RoiName
         /// </remarks>
         public ComputedMetric(string type, string roiName = null, double? arg1 = null, double? arg2 = null,
-            string rx = null, double? rxScale = null, IList < MetricBin> objectives = null)
+            string rx = null, double? rxScale = null, IList<MetricBin> objectives = null)
         {
             Type = type;
             RoiName = roiName;

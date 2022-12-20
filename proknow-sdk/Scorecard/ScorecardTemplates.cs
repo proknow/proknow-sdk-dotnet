@@ -53,7 +53,7 @@ namespace ProKnow.Scorecard
                 throw new ArgumentNullException("customMetrics");
             }
 
-            string workspaceID=null;
+            string workspaceID = null;
             if (workspace != null)
             {
                 var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
@@ -86,7 +86,7 @@ namespace ProKnow.Scorecard
 
             // Return the created scorecard template, with complete custom metric representations
             var responseSchema = JsonSerializer.Deserialize<ScorecardTemplateItem>(responseJson);
-            return new ScorecardTemplateItem(_proKnow, responseSchema.Id, responseSchema.Name, responseSchema.WorkspaceID,
+            return new ScorecardTemplateItem(_proKnow, responseSchema.Id, responseSchema.Name, responseSchema.Workspace,
                 responseSchema.ComputedMetrics, resolvedCustomMetrics);
         }
 
@@ -104,15 +104,15 @@ namespace ProKnow.Scorecard
         /// Finds a scorecard template asynchronously based on a predicate
         /// </summary>
         /// <param name="predicate">The predicate for the search</param>
-        /// <param name="workspaceID">The ProKnow ID or name of the workspace or null to query for only organization
-        /// templates</param>
+        /// <param name="workspace">The ProKnow ID or name of the workspace or null to query for organization
+        /// templates only</param>
         /// <returns>The first scorecard template that satisfies the predicate or null if the predicate was null or no
         /// scorecard template satisfies the predicate</returns>
-        public async Task<ScorecardTemplateSummary> FindAsync(Func<ScorecardTemplateSummary, bool> predicate, string workspaceID=null)
+        public async Task<ScorecardTemplateSummary> FindAsync(Func<ScorecardTemplateSummary, bool> predicate, string workspace = null)
         {
             if (_cache == null)
             {
-                await QueryAsync(workspaceID);
+                await QueryAsync(workspace);
             }
             return Find(predicate);
         }

@@ -100,7 +100,7 @@ namespace ProKnow.Scorecard.Test
 
             // Modify name
             scorecardTemplateItem.Name = $"{_testClassName}-{testNumber}-2";
-            scorecardTemplateItem.WorkspaceID = null;
+            scorecardTemplateItem.Workspace = null;
 
             // Modify computed metrics
             var computedMetric2 = new ComputedMetric("MIN_DOSE_ROI", "BODY");
@@ -160,7 +160,7 @@ namespace ProKnow.Scorecard.Test
 
             // Modify name
             scorecardTemplateItem.Name = $"{_testClassName}-{testNumber}-2";
-            scorecardTemplateItem.WorkspaceID = null;
+            scorecardTemplateItem.Workspace = null;
 
             // Modify computed metrics
             var computedMetric2 = new ComputedMetric("MIN_DOSE_ROI", "BODY");
