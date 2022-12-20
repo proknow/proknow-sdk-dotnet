@@ -35,6 +35,7 @@ namespace ProKnow.Scorecard.Test
         public async Task CreateAsyncTest()
         {
             var testNumber = 1;
+
             // Create computed metric for testing
             var expectedComputedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60, null, null,
                 new List<MetricBin>() {
@@ -58,7 +59,7 @@ namespace ProKnow.Scorecard.Test
             // Create a scorecard template
             var expectedComputedMetrics = new List<ComputedMetric>() { expectedComputedMetric };
             var expectedCustomMetrics = new List<CustomMetric>() { new CustomMetric(expectedCustomMetricItem.Name, expectedCustomMetricItem.Objectives) };
-            var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", expectedComputedMetrics, expectedCustomMetrics, null);
+            var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", expectedComputedMetrics, expectedCustomMetrics);
 
             // Verify the returned scorecard template
             Assert.AreEqual($"{_testClassName}-{testNumber}", scorecardTemplateItem.Name);
@@ -111,7 +112,7 @@ namespace ProKnow.Scorecard.Test
                 new MetricBin("FAIL", new byte[] { 255, 0, 0 })
             };
 
-            // Create a scorecard template
+            // Create a workspace scorecard template
             var expectedComputedMetrics = new List<ComputedMetric>() { expectedComputedMetric };
             var expectedCustomMetrics = new List<CustomMetric>() { new CustomMetric(expectedCustomMetricItem.Name, expectedCustomMetricItem.Objectives) };
             var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", expectedComputedMetrics, expectedCustomMetrics, workspace.Id);
@@ -161,6 +162,7 @@ namespace ProKnow.Scorecard.Test
         public async Task DeleteAsyncWorkspaceTest()
         {
             var testNumber = 4;
+
             // Create a test workspace
             var workspace = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
@@ -169,7 +171,7 @@ namespace ProKnow.Scorecard.Test
             var customMetrics = new List<CustomMetric>();
             var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics, workspace.Id);
 
-            // Delete the scorecard template
+            // Delete the workspace scorecard template
             await _proKnow.ScorecardTemplates.DeleteAsync(scorecardTemplateItem.Id);
 
             // Verify the scorecard template was deleted
@@ -199,10 +201,11 @@ namespace ProKnow.Scorecard.Test
         public async Task FindAsyncWorkspaceTest()
         {
             var testNumber = 6;
+
             // Create a test workspace
             var workspace = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
-            // Create a scorecard template
+            // Create a workspace scorecard template
             var computedMetrics = new List<ComputedMetric>();
             var customMetrics = new List<CustomMetric>();
             var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics, workspace.Id);
@@ -243,7 +246,7 @@ namespace ProKnow.Scorecard.Test
             // Create a scorecard template
             var expectedComputedMetrics = new List<ComputedMetric>() { expectedComputedMetric };
             var expectedCustomMetrics = new List<CustomMetric>() { new CustomMetric(expectedCustomMetricItem.Name, expectedCustomMetricItem.Objectives) };
-            var expectedScorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", expectedComputedMetrics, expectedCustomMetrics, null);
+            var expectedScorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", expectedComputedMetrics, expectedCustomMetrics);
 
             // Get that scorecard template
             var actualScorecardTemplateItem = await _proKnow.ScorecardTemplates.GetAsync(expectedScorecardTemplateItem.Id);
@@ -275,6 +278,7 @@ namespace ProKnow.Scorecard.Test
         public async Task GetAsyncWorkspaceTest()
         {
             var testNumber = 8;
+
             // Create a test workspace
             var workspace = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
@@ -298,11 +302,11 @@ namespace ProKnow.Scorecard.Test
                 new MetricBin("FAIL", new byte[] { 255, 0, 0 })
             };
 
-            // Create a scorecard template
+            // Create a workspace scorecard template
             var expectedComputedMetrics = new List<ComputedMetric>() { expectedComputedMetric };
             var expectedCustomMetrics = new List<CustomMetric>() { new CustomMetric(expectedCustomMetricItem.Name, expectedCustomMetricItem.Objectives) };
-            var expectedScorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", expectedComputedMetrics, expectedCustomMetrics,
-                workspace.Name);
+            var expectedScorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync(
+                $"{_testClassName}-{testNumber}", expectedComputedMetrics, expectedCustomMetrics, workspace.Name);
 
             // Get that scorecard template
             var actualScorecardTemplateItem = await _proKnow.ScorecardTemplates.GetAsync(expectedScorecardTemplateItem.Id);
@@ -352,10 +356,11 @@ namespace ProKnow.Scorecard.Test
         public async Task QueryAsyncWorkspaceTest()
         {
             var testNumber = 10;
+
             // Create a test workspace
             var workspace = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
-            // Create a scorecard template
+            // Create a workspace scorecard template
             var computedMetrics = new List<ComputedMetric>();
             var customMetrics = new List<CustomMetric>();
             var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics, workspace.Id);
@@ -376,7 +381,7 @@ namespace ProKnow.Scorecard.Test
             // Create a scorecard template
             var computedMetrics = new List<ComputedMetric>();
             var customMetrics = new List<CustomMetric>();
-            var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics, null);
+            var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
 
             // Resolve that scorecard template by providing the ID
             var scorecardTemplateSummary = await _proKnow.ScorecardTemplates.ResolveAsync(scorecardTemplateItem.Id);
@@ -390,9 +395,11 @@ namespace ProKnow.Scorecard.Test
         public async Task ResolveAsyncWorkspaceTest_Id()
         {
             var testNumber = 12;
+
             // Create a test workspace
             var workspace = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
-            // Create a scorecard template
+
+            // Create a workspace scorecard template
             var computedMetrics = new List<ComputedMetric>();
             var customMetrics = new List<CustomMetric>();
             var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics, workspace.Name);
@@ -410,10 +417,10 @@ namespace ProKnow.Scorecard.Test
         {
             var testNumber = 13;
 
-            // Create scorecard template
+            // Create a scorecard template
             var computedMetrics = new List<ComputedMetric>();
             var customMetrics = new List<CustomMetric>();
-            var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics, null);
+            var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics);
 
             // Resolve that scorecard template by providing the name
             var scorecardTemplateSummary = await _proKnow.ScorecardTemplates.ResolveAsync(scorecardTemplateItem.Name);
@@ -427,10 +434,11 @@ namespace ProKnow.Scorecard.Test
         public async Task ResolveAsyncWorkspaceTest_Name()
         {
             var testNumber = 14;
+
             // Create a test workspace
             var workspace = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
-            // Create scorecard template
+            // Create a workspace scorecard template
             var computedMetrics = new List<ComputedMetric>();
             var customMetrics = new List<CustomMetric>();
             var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics, workspace.Name);
@@ -465,10 +473,11 @@ namespace ProKnow.Scorecard.Test
         public async Task ResolveByIdWorkspaceAsyncTest()
         {
             var testNumber = 16;
+
             // Create a test workspace
             var workspace = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
-            // Create a scorecard template
+            // Create a workspace scorecard template
             var computedMetrics = new List<ComputedMetric>();
             var customMetrics = new List<CustomMetric>();
             var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics, workspace.Id);
@@ -502,10 +511,11 @@ namespace ProKnow.Scorecard.Test
         public async Task ResolveByNameWorkspaceAsyncTest()
         {
             var testNumber = 18;
+
             // Create a test workspace
             var workspace = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
-            // Create a scorecard template
+            // Create a workspace scorecard template
             var computedMetrics = new List<ComputedMetric>();
             var customMetrics = new List<CustomMetric>();
             var scorecardTemplateItem = await _proKnow.ScorecardTemplates.CreateAsync($"{_testClassName}-{testNumber}", computedMetrics, customMetrics, workspace.Name);

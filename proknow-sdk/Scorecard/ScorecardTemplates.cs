@@ -104,8 +104,8 @@ namespace ProKnow.Scorecard
         /// Finds a scorecard template asynchronously based on a predicate
         /// </summary>
         /// <param name="predicate">The predicate for the search</param>
-        /// <param name="workspace">The ProKnow ID or name of the workspace or null to query for organization
-        /// templates only</param>
+        /// <param name="workspace">The ProKnow ID or name of the workspace or null to query for only organization
+        /// templates</param>
         /// <returns>The first scorecard template that satisfies the predicate or null if the predicate was null or no
         /// scorecard template satisfies the predicate</returns>
         public async Task<ScorecardTemplateSummary> FindAsync(Func<ScorecardTemplateSummary, bool> predicate, string workspace = null)
@@ -130,11 +130,11 @@ namespace ProKnow.Scorecard
 
         /// <summary>
         /// Queries for scorecard templates asynchronously
+        /// </summary>
         /// <param name="workspace">The ProKnow ID or name of the workspace or null to query for only organization
         /// templates</param>
-        /// </summary>
         /// <returns>The scorecard templates</returns>
-        public async Task<IList<ScorecardTemplateSummary>> QueryAsync(string workspace=null)
+        public async Task<IList<ScorecardTemplateSummary>> QueryAsync(string workspace = null)
         {
             var queryParameters = new Dictionary<string, object>();
             if (workspace != null)
@@ -154,7 +154,7 @@ namespace ProKnow.Scorecard
         /// templates</param>
         /// <returns>The scorecard template corresponding to the specified ID or name or null if no matching
         /// scorecard template was found</returns>
-        public Task<ScorecardTemplateSummary> ResolveAsync(string scorecardTemplate, string workspace=null)
+        public Task<ScorecardTemplateSummary> ResolveAsync(string scorecardTemplate, string workspace = null)
         {
             Regex regex = new Regex(@"^[0-9a-f]{32}$");
             Match match = regex.Match(scorecardTemplate);
@@ -176,7 +176,7 @@ namespace ProKnow.Scorecard
         /// templates</param>
         /// <returns>The scorecard template corresponding to the specified ID or null if no matching scorecard template
         /// was found</returns>
-        public Task<ScorecardTemplateSummary> ResolveByIdAsync(string scorecardTemplateId, string workspace=null)
+        public Task<ScorecardTemplateSummary> ResolveByIdAsync(string scorecardTemplateId, string workspace = null)
         {
             if (String.IsNullOrWhiteSpace(scorecardTemplateId))
             {
@@ -193,7 +193,7 @@ namespace ProKnow.Scorecard
         /// templates</param>
         /// <returns>The scorecard template corresponding to the specified name or null if no matching scorecard template
         /// was found</returns>
-        public Task<ScorecardTemplateSummary> ResolveByNameAsync(string scorecardTemplateName, string workspace=null)
+        public Task<ScorecardTemplateSummary> ResolveByNameAsync(string scorecardTemplateName, string workspace = null)
         {
             if (String.IsNullOrWhiteSpace(scorecardTemplateName))
             {

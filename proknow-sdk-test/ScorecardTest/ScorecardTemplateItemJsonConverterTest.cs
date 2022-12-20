@@ -150,7 +150,6 @@ namespace ProKnow.Scorecard.Test
         [TestMethod]
         public void WriteTestWorkspaceAsync()
         {
-
             var computedMetricObjectives = new List<MetricBin>()
             {
                 new MetricBin("IDEAL", new byte[] { 18, 191, 0 }, null, 85),
