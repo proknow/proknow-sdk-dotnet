@@ -86,9 +86,9 @@ namespace ProKnow.Scorecard
         /// <param name="roiName">The ROI name or null if not required</param>
         /// <param name="arg1">The first argument or null if not required</param>
         /// <param name="arg2">The second argument or null if not required</param>
+        /// <param name="objectives">The objectives or null if not specified</param>
         /// <param name="rx">The rx value or null if not required</param>
         /// <param name="rxScale">The RX scale or null if not required</param>"
-        /// <param name="objectives">The objectives or null if not specified</param>
         /// <remarks>
         /// The allowable values for metric type are:
         /// <para/>'DOSE_VOLUME_CC_ROI' - Dose (Gy) covering Arg1 (cc) of the RoiName
@@ -114,7 +114,7 @@ namespace ProKnow.Scorecard
         /// <para/>'VOLUME'- Volume (cc) of the RoiName
         /// </remarks>
         public ComputedMetric(string type, string roiName = null, double? arg1 = null, double? arg2 = null,
-            string rx = null, double? rxScale = null, IList<MetricBin> objectives = null)
+            IList<MetricBin> objectives = null, string rx = null, double? rxScale = null)
         {
             Type = type;
             RoiName = roiName;

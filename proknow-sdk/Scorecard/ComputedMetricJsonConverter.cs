@@ -44,7 +44,7 @@ namespace ProKnow.Scorecard
             {
                 if (reader.TokenType == JsonTokenType.EndObject)
                 {
-                    return new ComputedMetric(type, roiName, maybeArg1, maybeArg2, Rx, maybeRxScale, objectives);
+                    return new ComputedMetric(type, roiName, maybeArg1, maybeArg2, objectives, Rx, maybeRxScale);
                 }
 
                 // Read property name

@@ -46,7 +46,7 @@ namespace ProKnow.Patient.Test
             var patientScorecards = new PatientScorecards(_proKnow, workspace.Id, patientItem.Id);
 
             // Create computed metric
-            var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60, null, null,
+            var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
                 new List<MetricBin>() {
                     new MetricBin("IDEAL", new byte[] { Color.Green.R, Color.Green.G, Color.Green.B }),
                     new MetricBin("GOOD", new byte[] { Color.LightGreen.R, Color.LightGreen.G, Color.LightGreen.B }, 20),
@@ -96,7 +96,7 @@ namespace ProKnow.Patient.Test
             var patientScorecards = new PatientScorecards(_proKnow, workspace.Id, patientItem.Id);
 
             // Create computed metric
-            var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60, null, null,
+            var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
                 new List<MetricBin>() {
                     new MetricBin("IDEAL", new byte[] { Color.Green.R, Color.Green.G, Color.Green.B }),
                     new MetricBin("GOOD", new byte[] { Color.LightGreen.R, Color.LightGreen.G, Color.LightGreen.B }, 20),
@@ -127,7 +127,7 @@ namespace ProKnow.Patient.Test
             patientScorecardItem.Name = $"{_testClassName}-{testNumber}-2";
 
             // Modify computed metrics
-            var computedMetric2 = new ComputedMetric("MIN_DOSE_ROI", "PTV", null, null, null, null,
+            var computedMetric2 = new ComputedMetric("MIN_DOSE_ROI", "PTV", null, null,
                 new List<MetricBin>() {
                     new MetricBin("BAD", new byte[] { 0, 255, 0 }),
                     new MetricBin("ACCEPTABLE", new byte[] { 0, 0, 0 }, 60, 63),

@@ -125,7 +125,7 @@ namespace ProKnow.Scorecard.Test
                 new MetricBin("IDEAL", new byte[] { 18, 191, 0 }, null, 85),
                 new MetricBin("UNACCEPTABLE", new byte[] { 255, 0, 0 })
             };
-            var computedMetric = new ComputedMetric("CUMULATIVE_METERSET", null, null, null, null, null, computedMetricObjectives);
+            var computedMetric = new ComputedMetric("CUMULATIVE_METERSET", null, null, null, computedMetricObjectives);
             var computedMetrics = new List<ComputedMetric>() { computedMetric };
             var customMetricObjectives = new List<MetricBin>()
             {
@@ -137,7 +137,7 @@ namespace ProKnow.Scorecard.Test
                 Objectives = customMetricObjectives
             };
             var customMetricItems = new List<CustomMetricItem>() { customMetricItem };
-            var scorecardTemplateItem = new ScorecardTemplateItem(null, "SDK Testing", null, computedMetrics, customMetricItems);
+            var scorecardTemplateItem = new ScorecardTemplateItem(null, "SDK Testing", computedMetrics, customMetricItems);
             string computedMetricObjectivesJson = "[{\"label\":\"IDEAL\",\"color\":[18,191,0],\"max\":85},{\"label\":\"UNACCEPTABLE\",\"color\":[255,0,0]}]";
             string computedMetricsJson = $"[{{\"type\":\"CUMULATIVE_METERSET\",\"roi_name\":null,\"arg_1\":null,\"arg_2\":null,\"rx\":null,\"rx_scale\":null,\"objectives\":{computedMetricObjectivesJson}}}]";
             string customMetricObjectivesJson = "[{\"label\":\"IDEAL\",\"color\":[18,191,0],\"max\":90},{\"label\":\"UNACCEPTABLE\",\"color\":[255,0,0]}]";
@@ -155,7 +155,7 @@ namespace ProKnow.Scorecard.Test
                 new MetricBin("IDEAL", new byte[] { 18, 191, 0 }, null, 85),
                 new MetricBin("UNACCEPTABLE", new byte[] { 255, 0, 0 })
             };
-            var computedMetric = new ComputedMetric("CUMULATIVE_METERSET", null, null, null, null, null, computedMetricObjectives);
+            var computedMetric = new ComputedMetric("CUMULATIVE_METERSET", null, null, null, computedMetricObjectives);
             var computedMetrics = new List<ComputedMetric>() { computedMetric };
             var customMetricObjectives = new List<MetricBin>()
             {
@@ -168,7 +168,7 @@ namespace ProKnow.Scorecard.Test
                 Objectives = customMetricObjectives
             };
             var customMetricItems = new List<CustomMetricItem>() { customMetricItem };
-            var scorecardTemplateItem = new ScorecardTemplateItem(null, "SDK Testing", "Workspace Testing", computedMetrics, customMetricItems);
+            var scorecardTemplateItem = new ScorecardTemplateItem(null, "SDK Testing", computedMetrics, customMetricItems, "Workspace Testing");
             string computedMetricObjectivesJson = "[{\"label\":\"IDEAL\",\"color\":[18,191,0],\"max\":85},{\"label\":\"UNACCEPTABLE\",\"color\":[255,0,0]}]";
             string computedMetricsJson = $"[{{\"type\":\"CUMULATIVE_METERSET\",\"roi_name\":null,\"arg_1\":null,\"arg_2\":null,\"rx\":null,\"rx_scale\":null,\"objectives\":{computedMetricObjectivesJson}}}]";
             string customMetricObjectivesJson = "[{\"label\":\"IDEAL\",\"color\":[18,191,0],\"max\":90},{\"label\":\"UNACCEPTABLE\",\"color\":[255,0,0]}]";

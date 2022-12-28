@@ -74,7 +74,7 @@ namespace ProKnow.Scorecard.Test
             var testNumber = 3;
 
             // Create computed metric for testing
-            var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60, null, null,
+            var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
                 new List<MetricBin>() {
                     new MetricBin("IDEAL", new byte[] { Color.Green.R, Color.Green.G, Color.Green.B }),
                     new MetricBin("GOOD", new byte[] { Color.LightGreen.R, Color.LightGreen.G, Color.LightGreen.B }, 20),
@@ -134,7 +134,7 @@ namespace ProKnow.Scorecard.Test
             var workspace = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create computed metric for testing
-            var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60, null, null,
+            var computedMetric = new ComputedMetric("VOLUME_PERCENT_DOSE_RANGE_ROI", "PTV", 30, 60,
                 new List<MetricBin>() {
                     new MetricBin("IDEAL", new byte[] { Color.Green.R, Color.Green.G, Color.Green.B }),
                     new MetricBin("GOOD", new byte[] { Color.LightGreen.R, Color.LightGreen.G, Color.LightGreen.B }, 20),

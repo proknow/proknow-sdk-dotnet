@@ -41,7 +41,7 @@ namespace ProKnow.Scorecard
             {
                 if (reader.TokenType == JsonTokenType.EndObject)
                 {
-                    return new ScorecardTemplateItem(id, name, workspaceId, computed, custom);
+                    return new ScorecardTemplateItem(id, name, computed, custom, workspaceId);
                 }
 
                 // Read property name

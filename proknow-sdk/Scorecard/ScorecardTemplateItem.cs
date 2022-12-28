@@ -61,11 +61,11 @@ namespace ProKnow.Scorecard
         /// </summary>
         /// <param name="id">The ProKnow ID</param>
         /// <param name="name">The name</param>
-        /// <param name="workspace">The Workspace for the scorecard template</param>
         /// <param name="computedMetrics">The computed metrics</param>
         /// <param name="customMetrics">The custom metrics</param>
-        public ScorecardTemplateItem(string id, string name, string workspace, IList<ComputedMetric> computedMetrics,
-            IList<CustomMetricItem> customMetrics)
+        /// <param name="workspace">The Workspace for the scorecard template</param>
+        public ScorecardTemplateItem(string id, string name, IList<ComputedMetric> computedMetrics,
+            IList<CustomMetricItem> customMetrics, string workspace=null)
         {
             Id = id;
             Name = name;

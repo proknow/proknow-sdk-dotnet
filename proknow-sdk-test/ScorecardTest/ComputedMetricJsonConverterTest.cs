@@ -163,8 +163,14 @@ namespace ProKnow.Scorecard.Test
         [TestMethod]
         public void WriteTest_TypeRoiNameArg1Arg2RxRxScale()
         {
-            var computedMetric = new ComputedMetric("DOSE_VOLUME_PERCENT_ROI_RELATIVE", "PTV", 1.23, 3.14, "90", 2.0);
-            string expected = "{\"type\":\"DOSE_VOLUME_PERCENT_ROI_RELATIVE\",\"roi_name\":\"PTV\",\"arg_1\":1.23,\"arg_2\":3.14,\"rx\":\"90\",\"rx_scale\":2}";
+            var objectives = new List<MetricBin>()
+            {
+                new MetricBin("PASS", new byte[] { 18, 191, 0 }, null, 1),
+                new MetricBin("FAIL", new byte[] { 255, 0, 0 })
+            };
+            var computedMetric = new ComputedMetric("DOSE_VOLUME_PERCENT_ROI_RELATIVE", "PTV", 1.23, 3.14, objectives, "90", 2.0);
+            string objectivesJson = "[{\"label\":\"PASS\",\"color\":[18,191,0],\"max\":1},{\"label\":\"FAIL\",\"color\":[255,0,0]}]";
+            string expected = $"{{\"type\":\"DOSE_VOLUME_PERCENT_ROI_RELATIVE\",\"roi_name\":\"PTV\",\"arg_1\":1.23,\"arg_2\":3.14,\"rx\":\"90\",\"rx_scale\":2,\"objectives\":{objectivesJson}}}";
             var actual = JsonSerializer.Serialize<ComputedMetric>(computedMetric);
             Assert.AreEqual(expected, actual);
         }
@@ -177,7 +183,7 @@ namespace ProKnow.Scorecard.Test
                 new MetricBin("PASS", new byte[] { 18, 191, 0 }, null, 1),
                 new MetricBin("FAIL", new byte[] { 255, 0, 0 })
             };
-            var computedMetric = new ComputedMetric("DOSE_VOLUME_CC_ROI", "PTV", 1.23, 3.14, null, null, objectives);
+            var computedMetric = new ComputedMetric("DOSE_VOLUME_CC_ROI", "PTV", 1.23, 3.14, objectives);
             string objectivesJson = "[{\"label\":\"PASS\",\"color\":[18,191,0],\"max\":1},{\"label\":\"FAIL\",\"color\":[255,0,0]}]";
             string expected = $"{{\"type\":\"DOSE_VOLUME_CC_ROI\",\"roi_name\":\"PTV\",\"arg_1\":1.23,\"arg_2\":3.14,\"rx\":null,\"rx_scale\":null,\"objectives\":{objectivesJson}}}";
             var actual = JsonSerializer.Serialize<ComputedMetric>(computedMetric);
