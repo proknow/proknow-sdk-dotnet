@@ -65,7 +65,7 @@ namespace ProKnow.Scorecard
         /// <param name="customMetrics">The custom metrics</param>
         /// <param name="workspace">The Workspace for the scorecard template</param>
         public ScorecardTemplateItem(string id, string name, IList<ComputedMetric> computedMetrics,
-            IList<CustomMetricItem> customMetrics, string workspace=null)
+            IList<CustomMetricItem> customMetrics, string workspace = null)
         {
             Id = id;
             Name = name;

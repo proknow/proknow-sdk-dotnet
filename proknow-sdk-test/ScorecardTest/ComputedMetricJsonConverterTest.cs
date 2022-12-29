@@ -79,6 +79,7 @@ namespace ProKnow.Scorecard.Test
             Assert.IsNull(computedMetric.Objectives[1].Min);
             Assert.IsNull(computedMetric.Objectives[1].Max);
         }
+
         [TestMethod]
         public void ReadTest_TypeRoiNameArg1Arg2RxRxScaleAndObjectives()
         {
