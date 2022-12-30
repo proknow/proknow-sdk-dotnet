@@ -91,19 +91,19 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplates_CreateAsync_System_String_IList_ProKnow_Scorecard_ComputedMetric__IList_ProKnow_Scorecard_CustomMetric__.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplates.CreateAsync(System.String%2CIList%7BProKnow.Scorecard.ComputedMetric%7D%2CIList%7BProKnow.Scorecard.CustomMetric%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplates_CreateAsync_System_String_IList_ProKnow_Scorecard_ComputedMetric__IList_ProKnow_Scorecard_CustomMetric__System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplates.CreateAsync(System.String%2CIList%7BProKnow.Scorecard.ComputedMetric%7D%2CIList%7BProKnow.Scorecard.CustomMetric%7D%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L37">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L39">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ScorecardTemplates_CreateAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.CreateAsync*"></a>
-  <h4 id="ProKnow_Scorecard_ScorecardTemplates_CreateAsync_System_String_IList_ProKnow_Scorecard_ComputedMetric__IList_ProKnow_Scorecard_CustomMetric__" data-uid="ProKnow.Scorecard.ScorecardTemplates.CreateAsync(System.String,IList{ProKnow.Scorecard.ComputedMetric},IList{ProKnow.Scorecard.CustomMetric})">CreateAsync(String, IList&lt;ComputedMetric&gt;, IList&lt;CustomMetric&gt;)</h4>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplates_CreateAsync_System_String_IList_ProKnow_Scorecard_ComputedMetric__IList_ProKnow_Scorecard_CustomMetric__System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.CreateAsync(System.String,IList{ProKnow.Scorecard.ComputedMetric},IList{ProKnow.Scorecard.CustomMetric},System.String)">CreateAsync(String, IList&lt;ComputedMetric&gt;, IList&lt;CustomMetric&gt;, String)</h4>
   <div class="markdown level1 summary"><p>Creates a scorecard template asynchronously</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateItem&gt; CreateAsync(string name, IList&lt;ComputedMetric&gt; computedMetrics, IList&lt;CustomMetric&gt; customMetrics)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateItem&gt; CreateAsync(string name, IList&lt;ComputedMetric&gt; computedMetrics, IList&lt;CustomMetric&gt; customMetrics, string workspace = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -133,6 +133,13 @@
         <td><p>The custom metrics</p>
 </td>
       </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">workspace</span></td>
+        <td><p>The ProKnow ID or name of the workspace or null to query for only organization
+templates</p>
+</td>
+      </tr>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
@@ -156,7 +163,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplates_DeleteAsync_System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplates.DeleteAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L88">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L97">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ScorecardTemplates_DeleteAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.DeleteAsync*"></a>
   <h4 id="ProKnow_Scorecard_ScorecardTemplates_DeleteAsync_System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.DeleteAsync(System.String)">DeleteAsync(String)</h4>
@@ -202,19 +209,19 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplates_FindAsync_Func_ProKnow_Scorecard_ScorecardTemplateSummary_System_Boolean__.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplates.FindAsync(Func%7BProKnow.Scorecard.ScorecardTemplateSummary%2CSystem.Boolean%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplates_FindAsync_Func_ProKnow_Scorecard_ScorecardTemplateSummary_System_Boolean__System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplates.FindAsync(Func%7BProKnow.Scorecard.ScorecardTemplateSummary%2CSystem.Boolean%7D%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L100">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L111">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ScorecardTemplates_FindAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.FindAsync*"></a>
-  <h4 id="ProKnow_Scorecard_ScorecardTemplates_FindAsync_Func_ProKnow_Scorecard_ScorecardTemplateSummary_System_Boolean__" data-uid="ProKnow.Scorecard.ScorecardTemplates.FindAsync(Func{ProKnow.Scorecard.ScorecardTemplateSummary,System.Boolean})">FindAsync(Func&lt;ScorecardTemplateSummary, Boolean&gt;)</h4>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplates_FindAsync_Func_ProKnow_Scorecard_ScorecardTemplateSummary_System_Boolean__System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.FindAsync(Func{ProKnow.Scorecard.ScorecardTemplateSummary,System.Boolean},System.String)">FindAsync(Func&lt;ScorecardTemplateSummary, Boolean&gt;, String)</h4>
   <div class="markdown level1 summary"><p>Finds a scorecard template asynchronously based on a predicate</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateSummary&gt; FindAsync(Func&lt;ScorecardTemplateSummary, bool&gt; predicate)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateSummary&gt; FindAsync(Func&lt;ScorecardTemplateSummary, bool&gt; predicate, string workspace = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -230,6 +237,13 @@
         <td><span class="xref">Func</span>&lt;<a class="xref" href="ProKnow.Scorecard.ScorecardTemplateSummary.html">ScorecardTemplateSummary</a>, <span class="xref">System.Boolean</span>&gt;</td>
         <td><span class="parametername">predicate</span></td>
         <td><p>The predicate for the search</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">workspace</span></td>
+        <td><p>The ProKnow ID or name of the workspace or null to query for only organization
+templates</p>
 </td>
       </tr>
     </tbody>
@@ -256,7 +270,7 @@ scorecard template satisfies the predicate</p>
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplates_GetAsync_System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplates.GetAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L114">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L125">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ScorecardTemplates_GetAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.GetAsync*"></a>
   <h4 id="ProKnow_Scorecard_ScorecardTemplates_GetAsync_System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.GetAsync(System.String)">GetAsync(String)</h4>
@@ -303,20 +317,39 @@ scorecard template satisfies the predicate</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplates_QueryAsync.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplates.QueryAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplates_QueryAsync_System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplates.QueryAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L124">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L137">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ScorecardTemplates_QueryAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.QueryAsync*"></a>
-  <h4 id="ProKnow_Scorecard_ScorecardTemplates_QueryAsync" data-uid="ProKnow.Scorecard.ScorecardTemplates.QueryAsync">QueryAsync()</h4>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplates_QueryAsync_System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.QueryAsync(System.String)">QueryAsync(String)</h4>
   <div class="markdown level1 summary"><p>Queries for scorecard templates asynchronously</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;IList&lt;ScorecardTemplateSummary&gt;&gt; QueryAsync()</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;IList&lt;ScorecardTemplateSummary&gt;&gt; QueryAsync(string workspace = null)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">workspace</span></td>
+        <td><p>The ProKnow ID or name of the workspace or null to query for only organization
+templates</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -335,19 +368,19 @@ scorecard template satisfies the predicate</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplates_ResolveAsync_System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplates.ResolveAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplates_ResolveAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplates.ResolveAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L136">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L157">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ScorecardTemplates_ResolveAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.ResolveAsync*"></a>
-  <h4 id="ProKnow_Scorecard_ScorecardTemplates_ResolveAsync_System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.ResolveAsync(System.String)">ResolveAsync(String)</h4>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplates_ResolveAsync_System_String_System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.ResolveAsync(System.String,System.String)">ResolveAsync(String, String)</h4>
   <div class="markdown level1 summary"><p>Resolves a scorecard template asynchronously</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateSummary&gt; ResolveAsync(string scorecardTemplate)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateSummary&gt; ResolveAsync(string scorecardTemplate, string workspace = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -363,6 +396,13 @@ scorecard template satisfies the predicate</p>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">scorecardTemplate</span></td>
         <td><p>The ProKnow ID or name of the scorecard template</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">workspace</span></td>
+        <td><p>The ProKnow ID or name of the workspace or null to query for only organization
+templates</p>
 </td>
       </tr>
     </tbody>
@@ -386,19 +426,19 @@ scorecard template was found</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplates_ResolveByIdAsync_System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplates.ResolveByIdAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplates_ResolveByIdAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplates.ResolveByIdAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L156">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L179">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ScorecardTemplates_ResolveByIdAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.ResolveByIdAsync*"></a>
-  <h4 id="ProKnow_Scorecard_ScorecardTemplates_ResolveByIdAsync_System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.ResolveByIdAsync(System.String)">ResolveByIdAsync(String)</h4>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplates_ResolveByIdAsync_System_String_System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.ResolveByIdAsync(System.String,System.String)">ResolveByIdAsync(String, String)</h4>
   <div class="markdown level1 summary"><p>Resolves a scorecard template by its ProKnow ID asynchronously</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateSummary&gt; ResolveByIdAsync(string scorecardTemplateId)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateSummary&gt; ResolveByIdAsync(string scorecardTemplateId, string workspace = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -414,6 +454,13 @@ scorecard template was found</p>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">scorecardTemplateId</span></td>
         <td><p>The ProKnow ID of the scorecard template</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">workspace</span></td>
+        <td><p>The ProKnow ID or name of the workspace or null to query for only organization
+templates</p>
 </td>
       </tr>
     </tbody>
@@ -437,19 +484,19 @@ was found</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplates_ResolveByNameAsync_System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplates.ResolveByNameAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplates_ResolveByNameAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplates.ResolveByNameAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L171">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplates.cs/#L196">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ScorecardTemplates_ResolveByNameAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplates.ResolveByNameAsync*"></a>
-  <h4 id="ProKnow_Scorecard_ScorecardTemplates_ResolveByNameAsync_System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.ResolveByNameAsync(System.String)">ResolveByNameAsync(String)</h4>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplates_ResolveByNameAsync_System_String_System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplates.ResolveByNameAsync(System.String,System.String)">ResolveByNameAsync(String, String)</h4>
   <div class="markdown level1 summary"><p>Resolves a scorecard template by its name asynchronously</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateSummary&gt; ResolveByNameAsync(string scorecardTemplateName)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ScorecardTemplateSummary&gt; ResolveByNameAsync(string scorecardTemplateName, string workspace = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -465,6 +512,13 @@ was found</p>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">scorecardTemplateName</span></td>
         <td><p>The name of the scorecard template</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">workspace</span></td>
+        <td><p>The ProKnow ID or name of the workspace or null to query for only organization
+templates</p>
 </td>
       </tr>
     </tbody>

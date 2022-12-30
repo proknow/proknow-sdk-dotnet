@@ -8067,15 +8067,15 @@ references:
   commentId: M:ProKnow.Scorecard.ComputedMetric.#ctor
   fullName: ProKnow.Scorecard.ComputedMetric.ComputedMetric()
   nameWithType: ComputedMetric.ComputedMetric()
-- uid: ProKnow.Scorecard.ComputedMetric.#ctor(System.String,System.String,System.Nullable{System.Double},System.Nullable{System.Double},IList{ProKnow.Scorecard.MetricBin})
-  name: ComputedMetric(String, String, Nullable<Double>, Nullable<Double>, IList<MetricBin>)
-  href: api/ProKnow.Scorecard.ComputedMetric.html#ProKnow_Scorecard_ComputedMetric__ctor_System_String_System_String_System_Nullable_System_Double__System_Nullable_System_Double__IList_ProKnow_Scorecard_MetricBin__
-  commentId: M:ProKnow.Scorecard.ComputedMetric.#ctor(System.String,System.String,System.Nullable{System.Double},System.Nullable{System.Double},IList{ProKnow.Scorecard.MetricBin})
-  name.vb: ComputedMetric(String, String, Nullable(Of Double), Nullable(Of Double), IList(Of MetricBin))
-  fullName: ProKnow.Scorecard.ComputedMetric.ComputedMetric(System.String, System.String, System.Nullable<System.Double>, System.Nullable<System.Double>, IList<ProKnow.Scorecard.MetricBin>)
-  fullName.vb: ProKnow.Scorecard.ComputedMetric.ComputedMetric(System.String, System.String, System.Nullable(Of System.Double), System.Nullable(Of System.Double), IList(Of ProKnow.Scorecard.MetricBin))
-  nameWithType: ComputedMetric.ComputedMetric(String, String, Nullable<Double>, Nullable<Double>, IList<MetricBin>)
-  nameWithType.vb: ComputedMetric.ComputedMetric(String, String, Nullable(Of Double), Nullable(Of Double), IList(Of MetricBin))
+- uid: ProKnow.Scorecard.ComputedMetric.#ctor(System.String,System.String,System.Nullable{System.Double},System.Nullable{System.Double},IList{ProKnow.Scorecard.MetricBin},System.String,System.Nullable{System.Double})
+  name: ComputedMetric(String, String, Nullable<Double>, Nullable<Double>, IList<MetricBin>, String, Nullable<Double>)
+  href: api/ProKnow.Scorecard.ComputedMetric.html#ProKnow_Scorecard_ComputedMetric__ctor_System_String_System_String_System_Nullable_System_Double__System_Nullable_System_Double__IList_ProKnow_Scorecard_MetricBin__System_String_System_Nullable_System_Double__
+  commentId: M:ProKnow.Scorecard.ComputedMetric.#ctor(System.String,System.String,System.Nullable{System.Double},System.Nullable{System.Double},IList{ProKnow.Scorecard.MetricBin},System.String,System.Nullable{System.Double})
+  name.vb: ComputedMetric(String, String, Nullable(Of Double), Nullable(Of Double), IList(Of MetricBin), String, Nullable(Of Double))
+  fullName: ProKnow.Scorecard.ComputedMetric.ComputedMetric(System.String, System.String, System.Nullable<System.Double>, System.Nullable<System.Double>, IList<ProKnow.Scorecard.MetricBin>, System.String, System.Nullable<System.Double>)
+  fullName.vb: ProKnow.Scorecard.ComputedMetric.ComputedMetric(System.String, System.String, System.Nullable(Of System.Double), System.Nullable(Of System.Double), IList(Of ProKnow.Scorecard.MetricBin), System.String, System.Nullable(Of System.Double))
+  nameWithType: ComputedMetric.ComputedMetric(String, String, Nullable<Double>, Nullable<Double>, IList<MetricBin>, String, Nullable<Double>)
+  nameWithType.vb: ComputedMetric.ComputedMetric(String, String, Nullable(Of Double), Nullable(Of Double), IList(Of MetricBin), String, Nullable(Of Double))
 - uid: ProKnow.Scorecard.ComputedMetric.#ctor*
   name: ComputedMetric
   href: api/ProKnow.Scorecard.ComputedMetric.html#ProKnow_Scorecard_ComputedMetric__ctor_
@@ -8135,6 +8135,32 @@ references:
   isSpec: "True"
   fullName: ProKnow.Scorecard.ComputedMetric.RoiName
   nameWithType: ComputedMetric.RoiName
+- uid: ProKnow.Scorecard.ComputedMetric.Rx
+  name: Rx
+  href: api/ProKnow.Scorecard.ComputedMetric.html#ProKnow_Scorecard_ComputedMetric_Rx
+  commentId: P:ProKnow.Scorecard.ComputedMetric.Rx
+  fullName: ProKnow.Scorecard.ComputedMetric.Rx
+  nameWithType: ComputedMetric.Rx
+- uid: ProKnow.Scorecard.ComputedMetric.Rx*
+  name: Rx
+  href: api/ProKnow.Scorecard.ComputedMetric.html#ProKnow_Scorecard_ComputedMetric_Rx_
+  commentId: Overload:ProKnow.Scorecard.ComputedMetric.Rx
+  isSpec: "True"
+  fullName: ProKnow.Scorecard.ComputedMetric.Rx
+  nameWithType: ComputedMetric.Rx
+- uid: ProKnow.Scorecard.ComputedMetric.RxScale
+  name: RxScale
+  href: api/ProKnow.Scorecard.ComputedMetric.html#ProKnow_Scorecard_ComputedMetric_RxScale
+  commentId: P:ProKnow.Scorecard.ComputedMetric.RxScale
+  fullName: ProKnow.Scorecard.ComputedMetric.RxScale
+  nameWithType: ComputedMetric.RxScale
+- uid: ProKnow.Scorecard.ComputedMetric.RxScale*
+  name: RxScale
+  href: api/ProKnow.Scorecard.ComputedMetric.html#ProKnow_Scorecard_ComputedMetric_RxScale_
+  commentId: Overload:ProKnow.Scorecard.ComputedMetric.RxScale
+  isSpec: "True"
+  fullName: ProKnow.Scorecard.ComputedMetric.RxScale
+  nameWithType: ComputedMetric.RxScale
 - uid: ProKnow.Scorecard.ComputedMetric.ToString
   name: ToString()
   href: api/ProKnow.Scorecard.ComputedMetric.html#ProKnow_Scorecard_ComputedMetric_ToString
@@ -8753,15 +8779,15 @@ references:
   commentId: M:ProKnow.Scorecard.ScorecardTemplateItem.#ctor
   fullName: ProKnow.Scorecard.ScorecardTemplateItem.ScorecardTemplateItem()
   nameWithType: ScorecardTemplateItem.ScorecardTemplateItem()
-- uid: ProKnow.Scorecard.ScorecardTemplateItem.#ctor(System.String,System.String,IList{ProKnow.Scorecard.ComputedMetric},IList{ProKnow.Scorecard.CustomMetricItem})
-  name: ScorecardTemplateItem(String, String, IList<ComputedMetric>, IList<CustomMetricItem>)
-  href: api/ProKnow.Scorecard.ScorecardTemplateItem.html#ProKnow_Scorecard_ScorecardTemplateItem__ctor_System_String_System_String_IList_ProKnow_Scorecard_ComputedMetric__IList_ProKnow_Scorecard_CustomMetricItem__
-  commentId: M:ProKnow.Scorecard.ScorecardTemplateItem.#ctor(System.String,System.String,IList{ProKnow.Scorecard.ComputedMetric},IList{ProKnow.Scorecard.CustomMetricItem})
-  name.vb: ScorecardTemplateItem(String, String, IList(Of ComputedMetric), IList(Of CustomMetricItem))
-  fullName: ProKnow.Scorecard.ScorecardTemplateItem.ScorecardTemplateItem(System.String, System.String, IList<ProKnow.Scorecard.ComputedMetric>, IList<ProKnow.Scorecard.CustomMetricItem>)
-  fullName.vb: ProKnow.Scorecard.ScorecardTemplateItem.ScorecardTemplateItem(System.String, System.String, IList(Of ProKnow.Scorecard.ComputedMetric), IList(Of ProKnow.Scorecard.CustomMetricItem))
-  nameWithType: ScorecardTemplateItem.ScorecardTemplateItem(String, String, IList<ComputedMetric>, IList<CustomMetricItem>)
-  nameWithType.vb: ScorecardTemplateItem.ScorecardTemplateItem(String, String, IList(Of ComputedMetric), IList(Of CustomMetricItem))
+- uid: ProKnow.Scorecard.ScorecardTemplateItem.#ctor(System.String,System.String,IList{ProKnow.Scorecard.ComputedMetric},IList{ProKnow.Scorecard.CustomMetricItem},System.String)
+  name: ScorecardTemplateItem(String, String, IList<ComputedMetric>, IList<CustomMetricItem>, String)
+  href: api/ProKnow.Scorecard.ScorecardTemplateItem.html#ProKnow_Scorecard_ScorecardTemplateItem__ctor_System_String_System_String_IList_ProKnow_Scorecard_ComputedMetric__IList_ProKnow_Scorecard_CustomMetricItem__System_String_
+  commentId: M:ProKnow.Scorecard.ScorecardTemplateItem.#ctor(System.String,System.String,IList{ProKnow.Scorecard.ComputedMetric},IList{ProKnow.Scorecard.CustomMetricItem},System.String)
+  name.vb: ScorecardTemplateItem(String, String, IList(Of ComputedMetric), IList(Of CustomMetricItem), String)
+  fullName: ProKnow.Scorecard.ScorecardTemplateItem.ScorecardTemplateItem(System.String, System.String, IList<ProKnow.Scorecard.ComputedMetric>, IList<ProKnow.Scorecard.CustomMetricItem>, System.String)
+  fullName.vb: ProKnow.Scorecard.ScorecardTemplateItem.ScorecardTemplateItem(System.String, System.String, IList(Of ProKnow.Scorecard.ComputedMetric), IList(Of ProKnow.Scorecard.CustomMetricItem), System.String)
+  nameWithType: ScorecardTemplateItem.ScorecardTemplateItem(String, String, IList<ComputedMetric>, IList<CustomMetricItem>, String)
+  nameWithType.vb: ScorecardTemplateItem.ScorecardTemplateItem(String, String, IList(Of ComputedMetric), IList(Of CustomMetricItem), String)
 - uid: ProKnow.Scorecard.ScorecardTemplateItem.#ctor*
   name: ScorecardTemplateItem
   href: api/ProKnow.Scorecard.ScorecardTemplateItem.html#ProKnow_Scorecard_ScorecardTemplateItem__ctor_
@@ -8866,6 +8892,19 @@ references:
   isSpec: "True"
   fullName: ProKnow.Scorecard.ScorecardTemplateItem.ToString
   nameWithType: ScorecardTemplateItem.ToString
+- uid: ProKnow.Scorecard.ScorecardTemplateItem.Workspace
+  name: Workspace
+  href: api/ProKnow.Scorecard.ScorecardTemplateItem.html#ProKnow_Scorecard_ScorecardTemplateItem_Workspace
+  commentId: P:ProKnow.Scorecard.ScorecardTemplateItem.Workspace
+  fullName: ProKnow.Scorecard.ScorecardTemplateItem.Workspace
+  nameWithType: ScorecardTemplateItem.Workspace
+- uid: ProKnow.Scorecard.ScorecardTemplateItem.Workspace*
+  name: Workspace
+  href: api/ProKnow.Scorecard.ScorecardTemplateItem.html#ProKnow_Scorecard_ScorecardTemplateItem_Workspace_
+  commentId: Overload:ProKnow.Scorecard.ScorecardTemplateItem.Workspace
+  isSpec: "True"
+  fullName: ProKnow.Scorecard.ScorecardTemplateItem.Workspace
+  nameWithType: ScorecardTemplateItem.Workspace
 - uid: ProKnow.Scorecard.ScorecardTemplateItemJsonConverter
   name: ScorecardTemplateItemJsonConverter
   href: api/ProKnow.Scorecard.ScorecardTemplateItemJsonConverter.html
@@ -8907,15 +8946,15 @@ references:
   commentId: T:ProKnow.Scorecard.ScorecardTemplates
   fullName: ProKnow.Scorecard.ScorecardTemplates
   nameWithType: ScorecardTemplates
-- uid: ProKnow.Scorecard.ScorecardTemplates.CreateAsync(System.String,IList{ProKnow.Scorecard.ComputedMetric},IList{ProKnow.Scorecard.CustomMetric})
-  name: CreateAsync(String, IList<ComputedMetric>, IList<CustomMetric>)
-  href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_CreateAsync_System_String_IList_ProKnow_Scorecard_ComputedMetric__IList_ProKnow_Scorecard_CustomMetric__
-  commentId: M:ProKnow.Scorecard.ScorecardTemplates.CreateAsync(System.String,IList{ProKnow.Scorecard.ComputedMetric},IList{ProKnow.Scorecard.CustomMetric})
-  name.vb: CreateAsync(String, IList(Of ComputedMetric), IList(Of CustomMetric))
-  fullName: ProKnow.Scorecard.ScorecardTemplates.CreateAsync(System.String, IList<ProKnow.Scorecard.ComputedMetric>, IList<ProKnow.Scorecard.CustomMetric>)
-  fullName.vb: ProKnow.Scorecard.ScorecardTemplates.CreateAsync(System.String, IList(Of ProKnow.Scorecard.ComputedMetric), IList(Of ProKnow.Scorecard.CustomMetric))
-  nameWithType: ScorecardTemplates.CreateAsync(String, IList<ComputedMetric>, IList<CustomMetric>)
-  nameWithType.vb: ScorecardTemplates.CreateAsync(String, IList(Of ComputedMetric), IList(Of CustomMetric))
+- uid: ProKnow.Scorecard.ScorecardTemplates.CreateAsync(System.String,IList{ProKnow.Scorecard.ComputedMetric},IList{ProKnow.Scorecard.CustomMetric},System.String)
+  name: CreateAsync(String, IList<ComputedMetric>, IList<CustomMetric>, String)
+  href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_CreateAsync_System_String_IList_ProKnow_Scorecard_ComputedMetric__IList_ProKnow_Scorecard_CustomMetric__System_String_
+  commentId: M:ProKnow.Scorecard.ScorecardTemplates.CreateAsync(System.String,IList{ProKnow.Scorecard.ComputedMetric},IList{ProKnow.Scorecard.CustomMetric},System.String)
+  name.vb: CreateAsync(String, IList(Of ComputedMetric), IList(Of CustomMetric), String)
+  fullName: ProKnow.Scorecard.ScorecardTemplates.CreateAsync(System.String, IList<ProKnow.Scorecard.ComputedMetric>, IList<ProKnow.Scorecard.CustomMetric>, System.String)
+  fullName.vb: ProKnow.Scorecard.ScorecardTemplates.CreateAsync(System.String, IList(Of ProKnow.Scorecard.ComputedMetric), IList(Of ProKnow.Scorecard.CustomMetric), System.String)
+  nameWithType: ScorecardTemplates.CreateAsync(String, IList<ComputedMetric>, IList<CustomMetric>, String)
+  nameWithType.vb: ScorecardTemplates.CreateAsync(String, IList(Of ComputedMetric), IList(Of CustomMetric), String)
 - uid: ProKnow.Scorecard.ScorecardTemplates.CreateAsync*
   name: CreateAsync
   href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_CreateAsync_
@@ -8936,15 +8975,15 @@ references:
   isSpec: "True"
   fullName: ProKnow.Scorecard.ScorecardTemplates.DeleteAsync
   nameWithType: ScorecardTemplates.DeleteAsync
-- uid: ProKnow.Scorecard.ScorecardTemplates.FindAsync(Func{ProKnow.Scorecard.ScorecardTemplateSummary,System.Boolean})
-  name: FindAsync(Func<ScorecardTemplateSummary, Boolean>)
-  href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_FindAsync_Func_ProKnow_Scorecard_ScorecardTemplateSummary_System_Boolean__
-  commentId: M:ProKnow.Scorecard.ScorecardTemplates.FindAsync(Func{ProKnow.Scorecard.ScorecardTemplateSummary,System.Boolean})
-  name.vb: FindAsync(Func(Of ScorecardTemplateSummary, Boolean))
-  fullName: ProKnow.Scorecard.ScorecardTemplates.FindAsync(Func<ProKnow.Scorecard.ScorecardTemplateSummary, System.Boolean>)
-  fullName.vb: ProKnow.Scorecard.ScorecardTemplates.FindAsync(Func(Of ProKnow.Scorecard.ScorecardTemplateSummary, System.Boolean))
-  nameWithType: ScorecardTemplates.FindAsync(Func<ScorecardTemplateSummary, Boolean>)
-  nameWithType.vb: ScorecardTemplates.FindAsync(Func(Of ScorecardTemplateSummary, Boolean))
+- uid: ProKnow.Scorecard.ScorecardTemplates.FindAsync(Func{ProKnow.Scorecard.ScorecardTemplateSummary,System.Boolean},System.String)
+  name: FindAsync(Func<ScorecardTemplateSummary, Boolean>, String)
+  href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_FindAsync_Func_ProKnow_Scorecard_ScorecardTemplateSummary_System_Boolean__System_String_
+  commentId: M:ProKnow.Scorecard.ScorecardTemplates.FindAsync(Func{ProKnow.Scorecard.ScorecardTemplateSummary,System.Boolean},System.String)
+  name.vb: FindAsync(Func(Of ScorecardTemplateSummary, Boolean), String)
+  fullName: ProKnow.Scorecard.ScorecardTemplates.FindAsync(Func<ProKnow.Scorecard.ScorecardTemplateSummary, System.Boolean>, System.String)
+  fullName.vb: ProKnow.Scorecard.ScorecardTemplates.FindAsync(Func(Of ProKnow.Scorecard.ScorecardTemplateSummary, System.Boolean), System.String)
+  nameWithType: ScorecardTemplates.FindAsync(Func<ScorecardTemplateSummary, Boolean>, String)
+  nameWithType.vb: ScorecardTemplates.FindAsync(Func(Of ScorecardTemplateSummary, Boolean), String)
 - uid: ProKnow.Scorecard.ScorecardTemplates.FindAsync*
   name: FindAsync
   href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_FindAsync_
@@ -8965,12 +9004,12 @@ references:
   isSpec: "True"
   fullName: ProKnow.Scorecard.ScorecardTemplates.GetAsync
   nameWithType: ScorecardTemplates.GetAsync
-- uid: ProKnow.Scorecard.ScorecardTemplates.QueryAsync
-  name: QueryAsync()
-  href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_QueryAsync
-  commentId: M:ProKnow.Scorecard.ScorecardTemplates.QueryAsync
-  fullName: ProKnow.Scorecard.ScorecardTemplates.QueryAsync()
-  nameWithType: ScorecardTemplates.QueryAsync()
+- uid: ProKnow.Scorecard.ScorecardTemplates.QueryAsync(System.String)
+  name: QueryAsync(String)
+  href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_QueryAsync_System_String_
+  commentId: M:ProKnow.Scorecard.ScorecardTemplates.QueryAsync(System.String)
+  fullName: ProKnow.Scorecard.ScorecardTemplates.QueryAsync(System.String)
+  nameWithType: ScorecardTemplates.QueryAsync(String)
 - uid: ProKnow.Scorecard.ScorecardTemplates.QueryAsync*
   name: QueryAsync
   href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_QueryAsync_
@@ -8978,12 +9017,12 @@ references:
   isSpec: "True"
   fullName: ProKnow.Scorecard.ScorecardTemplates.QueryAsync
   nameWithType: ScorecardTemplates.QueryAsync
-- uid: ProKnow.Scorecard.ScorecardTemplates.ResolveAsync(System.String)
-  name: ResolveAsync(String)
-  href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_ResolveAsync_System_String_
-  commentId: M:ProKnow.Scorecard.ScorecardTemplates.ResolveAsync(System.String)
-  fullName: ProKnow.Scorecard.ScorecardTemplates.ResolveAsync(System.String)
-  nameWithType: ScorecardTemplates.ResolveAsync(String)
+- uid: ProKnow.Scorecard.ScorecardTemplates.ResolveAsync(System.String,System.String)
+  name: ResolveAsync(String, String)
+  href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_ResolveAsync_System_String_System_String_
+  commentId: M:ProKnow.Scorecard.ScorecardTemplates.ResolveAsync(System.String,System.String)
+  fullName: ProKnow.Scorecard.ScorecardTemplates.ResolveAsync(System.String, System.String)
+  nameWithType: ScorecardTemplates.ResolveAsync(String, String)
 - uid: ProKnow.Scorecard.ScorecardTemplates.ResolveAsync*
   name: ResolveAsync
   href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_ResolveAsync_
@@ -8991,12 +9030,12 @@ references:
   isSpec: "True"
   fullName: ProKnow.Scorecard.ScorecardTemplates.ResolveAsync
   nameWithType: ScorecardTemplates.ResolveAsync
-- uid: ProKnow.Scorecard.ScorecardTemplates.ResolveByIdAsync(System.String)
-  name: ResolveByIdAsync(String)
-  href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_ResolveByIdAsync_System_String_
-  commentId: M:ProKnow.Scorecard.ScorecardTemplates.ResolveByIdAsync(System.String)
-  fullName: ProKnow.Scorecard.ScorecardTemplates.ResolveByIdAsync(System.String)
-  nameWithType: ScorecardTemplates.ResolveByIdAsync(String)
+- uid: ProKnow.Scorecard.ScorecardTemplates.ResolveByIdAsync(System.String,System.String)
+  name: ResolveByIdAsync(String, String)
+  href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_ResolveByIdAsync_System_String_System_String_
+  commentId: M:ProKnow.Scorecard.ScorecardTemplates.ResolveByIdAsync(System.String,System.String)
+  fullName: ProKnow.Scorecard.ScorecardTemplates.ResolveByIdAsync(System.String, System.String)
+  nameWithType: ScorecardTemplates.ResolveByIdAsync(String, String)
 - uid: ProKnow.Scorecard.ScorecardTemplates.ResolveByIdAsync*
   name: ResolveByIdAsync
   href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_ResolveByIdAsync_
@@ -9004,12 +9043,12 @@ references:
   isSpec: "True"
   fullName: ProKnow.Scorecard.ScorecardTemplates.ResolveByIdAsync
   nameWithType: ScorecardTemplates.ResolveByIdAsync
-- uid: ProKnow.Scorecard.ScorecardTemplates.ResolveByNameAsync(System.String)
-  name: ResolveByNameAsync(String)
-  href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_ResolveByNameAsync_System_String_
-  commentId: M:ProKnow.Scorecard.ScorecardTemplates.ResolveByNameAsync(System.String)
-  fullName: ProKnow.Scorecard.ScorecardTemplates.ResolveByNameAsync(System.String)
-  nameWithType: ScorecardTemplates.ResolveByNameAsync(String)
+- uid: ProKnow.Scorecard.ScorecardTemplates.ResolveByNameAsync(System.String,System.String)
+  name: ResolveByNameAsync(String, String)
+  href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_ResolveByNameAsync_System_String_System_String_
+  commentId: M:ProKnow.Scorecard.ScorecardTemplates.ResolveByNameAsync(System.String,System.String)
+  fullName: ProKnow.Scorecard.ScorecardTemplates.ResolveByNameAsync(System.String, System.String)
+  nameWithType: ScorecardTemplates.ResolveByNameAsync(String, String)
 - uid: ProKnow.Scorecard.ScorecardTemplates.ResolveByNameAsync*
   name: ResolveByNameAsync
   href: api/ProKnow.Scorecard.ScorecardTemplates.html#ProKnow_Scorecard_ScorecardTemplates_ResolveByNameAsync_

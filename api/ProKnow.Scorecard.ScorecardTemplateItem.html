@@ -95,7 +95,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplateItem__ctor.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplateItem.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplateItem.cs/#L49">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplateItem.cs/#L55">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ScorecardTemplateItem__ctor_" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.#ctor*"></a>
   <h4 id="ProKnow_Scorecard_ScorecardTemplateItem__ctor" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.#ctor">ScorecardTemplateItem()</h4>
@@ -108,19 +108,19 @@
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplateItem__ctor_System_String_System_String_IList_ProKnow_Scorecard_ComputedMetric__IList_ProKnow_Scorecard_CustomMetricItem__.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplateItem.%23ctor(System.String%2CSystem.String%2CIList%7BProKnow.Scorecard.ComputedMetric%7D%2CIList%7BProKnow.Scorecard.CustomMetricItem%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplateItem__ctor_System_String_System_String_IList_ProKnow_Scorecard_ComputedMetric__IList_ProKnow_Scorecard_CustomMetricItem__System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplateItem.%23ctor(System.String%2CSystem.String%2CIList%7BProKnow.Scorecard.ComputedMetric%7D%2CIList%7BProKnow.Scorecard.CustomMetricItem%7D%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplateItem.cs/#L60">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplateItem.cs/#L67">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ScorecardTemplateItem__ctor_" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.#ctor*"></a>
-  <h4 id="ProKnow_Scorecard_ScorecardTemplateItem__ctor_System_String_System_String_IList_ProKnow_Scorecard_ComputedMetric__IList_ProKnow_Scorecard_CustomMetricItem__" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.#ctor(System.String,System.String,IList{ProKnow.Scorecard.ComputedMetric},IList{ProKnow.Scorecard.CustomMetricItem})">ScorecardTemplateItem(String, String, IList&lt;ComputedMetric&gt;, IList&lt;CustomMetricItem&gt;)</h4>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplateItem__ctor_System_String_System_String_IList_ProKnow_Scorecard_ComputedMetric__IList_ProKnow_Scorecard_CustomMetricItem__System_String_" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.#ctor(System.String,System.String,IList{ProKnow.Scorecard.ComputedMetric},IList{ProKnow.Scorecard.CustomMetricItem},System.String)">ScorecardTemplateItem(String, String, IList&lt;ComputedMetric&gt;, IList&lt;CustomMetricItem&gt;, String)</h4>
   <div class="markdown level1 summary"><p>Used by deserialization to create scorecard template item</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ScorecardTemplateItem(string id, string name, IList&lt;ComputedMetric&gt; computedMetrics, IList&lt;CustomMetricItem&gt; customMetrics)</code></pre>
+    <pre><code class="lang-csharp hljs">public ScorecardTemplateItem(string id, string name, IList&lt;ComputedMetric&gt; computedMetrics, IList&lt;CustomMetricItem&gt; customMetrics, string workspace = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -154,6 +154,12 @@
         <td><span class="xref">IList</span>&lt;<a class="xref" href="ProKnow.Scorecard.CustomMetricItem.html">CustomMetricItem</a>&gt;</td>
         <td><span class="parametername">customMetrics</span></td>
         <td><p>The custom metrics</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">workspace</span></td>
+        <td><p>The Workspace for the scorecard template</p>
 </td>
       </tr>
     </tbody>
@@ -197,7 +203,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplateItem_ComputedMetrics.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplateItem.ComputedMetrics%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplateItem.cs/#L37">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplateItem.cs/#L43">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ScorecardTemplateItem_ComputedMetrics_" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.ComputedMetrics*"></a>
   <h4 id="ProKnow_Scorecard_ScorecardTemplateItem_ComputedMetrics" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.ComputedMetrics">ComputedMetrics</h4>
@@ -228,7 +234,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplateItem_CustomMetrics.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplateItem.CustomMetrics%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplateItem.cs/#L43">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplateItem.cs/#L49">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ScorecardTemplateItem_CustomMetrics_" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.CustomMetrics*"></a>
   <h4 id="ProKnow_Scorecard_ScorecardTemplateItem_CustomMetrics" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.CustomMetrics">CustomMetrics</h4>
@@ -316,6 +322,37 @@
       </tr>
     </tbody>
   </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplateItem_Workspace.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplateItem.Workspace%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplateItem.cs/#L37">View Source</a>
+  </span>
+  <a id="ProKnow_Scorecard_ScorecardTemplateItem_Workspace_" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.Workspace*"></a>
+  <h4 id="ProKnow_Scorecard_ScorecardTemplateItem_Workspace" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.Workspace">Workspace</h4>
+  <div class="markdown level1 summary"><p>The workspace</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Workspace { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="methods">Methods
   </h3>
   <span class="small pull-right mobile-hide">
@@ -323,7 +360,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplateItem_DeleteAsync.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplateItem.DeleteAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplateItem.cs/#L105">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplateItem.cs/#L116">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ScorecardTemplateItem_DeleteAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.DeleteAsync*"></a>
   <h4 id="ProKnow_Scorecard_ScorecardTemplateItem_DeleteAsync" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.DeleteAsync">DeleteAsync()</h4>
@@ -354,7 +391,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplateItem_SaveAsync.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplateItem.SaveAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplateItem.cs/#L113">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplateItem.cs/#L124">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ScorecardTemplateItem_SaveAsync_" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.SaveAsync*"></a>
   <h4 id="ProKnow_Scorecard_ScorecardTemplateItem_SaveAsync" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.SaveAsync">SaveAsync()</h4>
@@ -385,7 +422,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ScorecardTemplateItem_ToString.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ScorecardTemplateItem.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplateItem.cs/#L124">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ScorecardTemplateItem.cs/#L135">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ScorecardTemplateItem_ToString_" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.ToString*"></a>
   <h4 id="ProKnow_Scorecard_ScorecardTemplateItem_ToString" data-uid="ProKnow.Scorecard.ScorecardTemplateItem.ToString">ToString()</h4>

@@ -94,7 +94,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ComputedMetric__ctor.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ComputedMetric.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ComputedMetric.cs/#L66">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ComputedMetric.cs/#L78">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ComputedMetric__ctor_" data-uid="ProKnow.Scorecard.ComputedMetric.#ctor*"></a>
   <h4 id="ProKnow_Scorecard_ComputedMetric__ctor" data-uid="ProKnow.Scorecard.ComputedMetric.#ctor">ComputedMetric()</h4>
@@ -107,19 +107,19 @@
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ComputedMetric__ctor_System_String_System_String_System_Nullable_System_Double__System_Nullable_System_Double__IList_ProKnow_Scorecard_MetricBin__.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ComputedMetric.%23ctor(System.String%2CSystem.String%2CSystem.Nullable%7BSystem.Double%7D%2CSystem.Nullable%7BSystem.Double%7D%2CIList%7BProKnow.Scorecard.MetricBin%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ComputedMetric__ctor_System_String_System_String_System_Nullable_System_Double__System_Nullable_System_Double__IList_ProKnow_Scorecard_MetricBin__System_String_System_Nullable_System_Double__.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ComputedMetric.%23ctor(System.String%2CSystem.String%2CSystem.Nullable%7BSystem.Double%7D%2CSystem.Nullable%7BSystem.Double%7D%2CIList%7BProKnow.Scorecard.MetricBin%7D%2CSystem.String%2CSystem.Nullable%7BSystem.Double%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ComputedMetric.cs/#L102">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ComputedMetric.cs/#L116">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ComputedMetric__ctor_" data-uid="ProKnow.Scorecard.ComputedMetric.#ctor*"></a>
-  <h4 id="ProKnow_Scorecard_ComputedMetric__ctor_System_String_System_String_System_Nullable_System_Double__System_Nullable_System_Double__IList_ProKnow_Scorecard_MetricBin__" data-uid="ProKnow.Scorecard.ComputedMetric.#ctor(System.String,System.String,System.Nullable{System.Double},System.Nullable{System.Double},IList{ProKnow.Scorecard.MetricBin})">ComputedMetric(String, String, Nullable&lt;Double&gt;, Nullable&lt;Double&gt;, IList&lt;MetricBin&gt;)</h4>
+  <h4 id="ProKnow_Scorecard_ComputedMetric__ctor_System_String_System_String_System_Nullable_System_Double__System_Nullable_System_Double__IList_ProKnow_Scorecard_MetricBin__System_String_System_Nullable_System_Double__" data-uid="ProKnow.Scorecard.ComputedMetric.#ctor(System.String,System.String,System.Nullable{System.Double},System.Nullable{System.Double},IList{ProKnow.Scorecard.MetricBin},System.String,System.Nullable{System.Double})">ComputedMetric(String, String, Nullable&lt;Double&gt;, Nullable&lt;Double&gt;, IList&lt;MetricBin&gt;, String, Nullable&lt;Double&gt;)</h4>
   <div class="markdown level1 summary"><p>Constructs a computed metric</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ComputedMetric(string type, string roiName = null, double? arg1 = null, double? arg2 = null, IList&lt;MetricBin&gt; objectives = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public ComputedMetric(string type, string roiName = null, double? arg1 = null, double? arg2 = null, IList&lt;MetricBin&gt; objectives = null, string rx = null, double? rxScale = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -161,9 +161,21 @@
         <td><p>The objectives or null if not specified</p>
 </td>
       </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">rx</span></td>
+        <td><p>The rx value or null if not required</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">rxScale</span></td>
+        <td><p>The RX scale or null if not required</p>
+</td>
+      </tr>
     </tbody>
   </table>
-  <h5 id="ProKnow_Scorecard_ComputedMetric__ctor_System_String_System_String_System_Nullable_System_Double__System_Nullable_System_Double__IList_ProKnow_Scorecard_MetricBin___remarks">Remarks</h5>
+  <h5 id="ProKnow_Scorecard_ComputedMetric__ctor_System_String_System_String_System_Nullable_System_Double__System_Nullable_System_Double__IList_ProKnow_Scorecard_MetricBin__System_String_System_Nullable_System_Double___remarks">Remarks</h5>
   <div class="markdown level1 remarks"><p>The allowable values for metric type are:</p>
 <p>&apos;DOSE_VOLUME_CC_ROI&apos; - Dose (Gy) covering Arg1 (cc) of the RoiName
 <p>&apos;DOSE_VOLUME_MINUS_CC_ROI&apos; - Dose (Gy) covering the total volume (cc) minus Arg1 (cc) of the RoiName
@@ -256,7 +268,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ComputedMetric_Objectives.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ComputedMetric.Objectives%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ComputedMetric.cs/#L60">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ComputedMetric.cs/#L72">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ComputedMetric_Objectives_" data-uid="ProKnow.Scorecard.ComputedMetric.Objectives*"></a>
   <h4 id="ProKnow_Scorecard_ComputedMetric_Objectives" data-uid="ProKnow.Scorecard.ComputedMetric.Objectives">Objectives</h4>
@@ -309,6 +321,68 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ComputedMetric_Rx.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ComputedMetric.Rx%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ComputedMetric.cs/#L60">View Source</a>
+  </span>
+  <a id="ProKnow_Scorecard_ComputedMetric_Rx_" data-uid="ProKnow.Scorecard.ComputedMetric.Rx*"></a>
+  <h4 id="ProKnow_Scorecard_ComputedMetric_Rx" data-uid="ProKnow.Scorecard.ComputedMetric.Rx">Rx</h4>
+  <div class="markdown level1 summary"><p>The rx or null if not required</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Rx { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ComputedMetric_RxScale.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ComputedMetric.RxScale%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ComputedMetric.cs/#L66">View Source</a>
+  </span>
+  <a id="ProKnow_Scorecard_ComputedMetric_RxScale_" data-uid="ProKnow.Scorecard.ComputedMetric.RxScale*"></a>
+  <h4 id="ProKnow_Scorecard_ComputedMetric_RxScale" data-uid="ProKnow.Scorecard.ComputedMetric.RxScale">RxScale</h4>
+  <div class="markdown level1 summary"><p>The rx_scale or null if not required</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double? RxScale { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Double</span>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -372,7 +446,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Scorecard_ComputedMetric_ToString.md&amp;value=---%0Auid%3A%20ProKnow.Scorecard.ComputedMetric.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ComputedMetric.cs/#L116">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Scorecard/ComputedMetric.cs/#L132">View Source</a>
   </span>
   <a id="ProKnow_Scorecard_ComputedMetric_ToString_" data-uid="ProKnow.Scorecard.ComputedMetric.ToString*"></a>
   <h4 id="ProKnow_Scorecard_ComputedMetric_ToString" data-uid="ProKnow.Scorecard.ComputedMetric.ToString">ToString()</h4>

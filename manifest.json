@@ -705,7 +705,7 @@
       "output": {
         ".html": {
           "relative_path": "api/ProKnow.Patient.PatientScorecardItem.html",
-          "hash": "HinyeEYKwZTXvUmYKHSOnQ=="
+          "hash": "GZMqESQO/7jTsxrQu6Xwlg=="
         }
       },
       "is_incremental": false,
@@ -981,7 +981,7 @@
       "output": {
         ".html": {
           "relative_path": "api/ProKnow.Scorecard.ComputedMetric.html",
-          "hash": "kQ2ywn8LLJORsp8yuXkumg=="
+          "hash": "FQacLO7ESbDoFz8dAVgL/Q=="
         }
       },
       "is_incremental": false,
@@ -993,7 +993,7 @@
       "output": {
         ".html": {
           "relative_path": "api/ProKnow.Scorecard.ComputedMetricJsonConverter.html",
-          "hash": "lohHELieFl0FMGB6zuMWAQ=="
+          "hash": "KXwKECmCVRQd06xBKVjJig=="
         }
       },
       "is_incremental": false,
@@ -1101,7 +1101,7 @@
       "output": {
         ".html": {
           "relative_path": "api/ProKnow.Scorecard.ScorecardTemplateItem.html",
-          "hash": "VH8MoxPAaBnM/yRnxALFgg=="
+          "hash": "LBaxEbYvAANZbV/3LWZifQ=="
         }
       },
       "is_incremental": false,
@@ -1113,7 +1113,7 @@
       "output": {
         ".html": {
           "relative_path": "api/ProKnow.Scorecard.ScorecardTemplateItemJsonConverter.html",
-          "hash": "x+joapbW3ClV+LXIi2nn0Q=="
+          "hash": "I7Vn6wbA9wTo2DBbjJkbYw=="
         }
       },
       "is_incremental": false,
@@ -1137,7 +1137,7 @@
       "output": {
         ".html": {
           "relative_path": "api/ProKnow.Scorecard.ScorecardTemplates.html",
-          "hash": "4uiSmDOmlmhFuUQ7I9f6UQ=="
+          "hash": "/WjElyxhoplGTHyw7LAqlQ=="
         }
       },
       "is_incremental": false,
@@ -1545,7 +1545,7 @@
       "output": {
         ".html": {
           "relative_path": "releaseHistory.html",
-          "hash": "2nrnDFMN/lCUoOFpMKWEuw=="
+          "hash": "t6PKKS0to26HEOLT7VFT3w=="
         }
       },
       "is_incremental": false,
