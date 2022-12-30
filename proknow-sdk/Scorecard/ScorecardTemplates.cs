@@ -33,9 +33,11 @@ namespace ProKnow.Scorecard
         /// <param name="name">The name</param>
         /// <param name="computedMetrics">The computed metrics</param>
         /// <param name="customMetrics">The custom metrics</param>
+        /// <param name="workspace">The ProKnow ID or name of the workspace or null to query for only organization
+        /// templates</param>
         /// <returns>The created scorecard template</returns>
         public async Task<ScorecardTemplateItem> CreateAsync(string name, IList<ComputedMetric> computedMetrics,
-            IList<CustomMetric> customMetrics)
+            IList<CustomMetric> customMetrics, string workspace = null)
         {
             // Check arguments
             if (name == null)
@@ -49,6 +51,13 @@ namespace ProKnow.Scorecard
             if (customMetrics == null)
             {
                 throw new ArgumentNullException("customMetrics");
+            }
+
+            string workspaceID = null;
+            if (workspace != null)
+            {
+                var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
+                workspaceID = workspaceItem.Id;
             }
 
             // Resolve custom metrics (obtain their IDs) and add objectives
@@ -69,7 +78,7 @@ namespace ProKnow.Scorecard
             var customMetricIdsAndObjectives = resolvedCustomMetrics.Select(c => c.ConvertToScorecardSchema()).ToList();
 
             // Request the creation
-            var requestSchema = new ScorecardTemplateItem(null, null, name, computedMetrics, customMetricIdsAndObjectives);
+            var requestSchema = new ScorecardTemplateItem(null, null, name, workspaceID, computedMetrics, customMetricIdsAndObjectives);
             var contentJson = JsonSerializer.Serialize(requestSchema);
             var content = new StringContent(contentJson, Encoding.UTF8, "application/json");
             string responseJson = await _proKnow.Requestor.PostAsync("/metrics/templates", null, content);
@@ -77,7 +86,7 @@ namespace ProKnow.Scorecard
 
             // Return the created scorecard template, with complete custom metric representations
             var responseSchema = JsonSerializer.Deserialize<ScorecardTemplateItem>(responseJson);
-            return new ScorecardTemplateItem(_proKnow, responseSchema.Id, responseSchema.Name,
+            return new ScorecardTemplateItem(_proKnow, responseSchema.Id, responseSchema.Name, responseSchema.Workspace,
                 responseSchema.ComputedMetrics, resolvedCustomMetrics);
         }
 
@@ -95,13 +104,15 @@ namespace ProKnow.Scorecard
         /// Finds a scorecard template asynchronously based on a predicate
         /// </summary>
         /// <param name="predicate">The predicate for the search</param>
+        /// <param name="workspace">The ProKnow ID or name of the workspace or null to query for only organization
+        /// templates</param>
         /// <returns>The first scorecard template that satisfies the predicate or null if the predicate was null or no
         /// scorecard template satisfies the predicate</returns>
-        public async Task<ScorecardTemplateSummary> FindAsync(Func<ScorecardTemplateSummary, bool> predicate)
+        public async Task<ScorecardTemplateSummary> FindAsync(Func<ScorecardTemplateSummary, bool> predicate, string workspace = null)
         {
             if (_cache == null)
             {
-                await QueryAsync();
+                await QueryAsync(workspace);
             }
             return Find(predicate);
         }
@@ -120,10 +131,18 @@ namespace ProKnow.Scorecard
         /// <summary>
         /// Queries for scorecard templates asynchronously
         /// </summary>
+        /// <param name="workspace">The ProKnow ID or name of the workspace or null to query for only organization
+        /// templates</param>
         /// <returns>The scorecard templates</returns>
-        public async Task<IList<ScorecardTemplateSummary>> QueryAsync()
+        public async Task<IList<ScorecardTemplateSummary>> QueryAsync(string workspace = null)
         {
-            string scorecardTemplatesJson = await _proKnow.Requestor.GetAsync("/metrics/templates");
+            var queryParameters = new Dictionary<string, object>();
+            if (workspace != null)
+            {
+                var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
+                queryParameters.Add("workspace", workspaceItem.Id);
+            }
+            string scorecardTemplatesJson = await _proKnow.Requestor.GetAsync("/metrics/templates", null, queryParameters);
             return DeserializeScorecardTemplates(scorecardTemplatesJson);
         }
 
@@ -131,19 +150,21 @@ namespace ProKnow.Scorecard
         /// Resolves a scorecard template asynchronously
         /// </summary>
         /// <param name="scorecardTemplate">The ProKnow ID or name of the scorecard template</param>
+        /// <param name="workspace">The ProKnow ID or name of the workspace or null to query for only organization
+        /// templates</param>
         /// <returns>The scorecard template corresponding to the specified ID or name or null if no matching
         /// scorecard template was found</returns>
-        public Task<ScorecardTemplateSummary> ResolveAsync(string scorecardTemplate)
+        public Task<ScorecardTemplateSummary> ResolveAsync(string scorecardTemplate, string workspace = null)
         {
             Regex regex = new Regex(@"^[0-9a-f]{32}$");
             Match match = regex.Match(scorecardTemplate);
             if (match.Success)
             {
-                return ResolveByIdAsync(scorecardTemplate);
+                return ResolveByIdAsync(scorecardTemplate, workspace);
             }
             else
             {
-                return ResolveByNameAsync(scorecardTemplate);
+                return ResolveByNameAsync(scorecardTemplate, workspace);
             }
         }
 
@@ -151,30 +172,34 @@ namespace ProKnow.Scorecard
         /// Resolves a scorecard template by its ProKnow ID asynchronously
         /// </summary>
         /// <param name="scorecardTemplateId">The ProKnow ID of the scorecard template</param>
+        /// <param name="workspace">The ProKnow ID or name of the workspace or null to query for only organization
+        /// templates</param>
         /// <returns>The scorecard template corresponding to the specified ID or null if no matching scorecard template
         /// was found</returns>
-        public Task<ScorecardTemplateSummary> ResolveByIdAsync(string scorecardTemplateId)
+        public Task<ScorecardTemplateSummary> ResolveByIdAsync(string scorecardTemplateId, string workspace = null)
         {
             if (String.IsNullOrWhiteSpace(scorecardTemplateId))
             {
                 throw new ArgumentException("The scorecard template ID must be specified.");
             }
-            return FindAsync(t => t.Id == scorecardTemplateId);
+            return FindAsync(t => t.Id == scorecardTemplateId, workspace);
         }
 
         /// <summary>
         /// Resolves a scorecard template by its name asynchronously
         /// </summary>
         /// <param name="scorecardTemplateName">The name of the scorecard template</param>
+        /// <param name="workspace">The ProKnow ID or name of the workspace or null to query for only organization
+        /// templates</param>
         /// <returns>The scorecard template corresponding to the specified name or null if no matching scorecard template
         /// was found</returns>
-        public Task<ScorecardTemplateSummary> ResolveByNameAsync(string scorecardTemplateName)
+        public Task<ScorecardTemplateSummary> ResolveByNameAsync(string scorecardTemplateName, string workspace = null)
         {
             if (String.IsNullOrWhiteSpace(scorecardTemplateName))
             {
                 throw new ArgumentException("The scorecard template name must be specified.");
             }
-            return FindAsync(t => t.Name == scorecardTemplateName);
+            return FindAsync(t => t.Name == scorecardTemplateName, workspace);
         }
 
         /// <summary>

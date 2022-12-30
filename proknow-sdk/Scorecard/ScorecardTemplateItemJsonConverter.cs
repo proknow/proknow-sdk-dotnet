@@ -13,6 +13,7 @@ namespace ProKnow.Scorecard
     {
         private readonly JsonEncodedText _idKey = JsonEncodedText.Encode("id");
         private readonly JsonEncodedText _nameKey = JsonEncodedText.Encode("name");
+        private readonly JsonEncodedText _workspaceID = JsonEncodedText.Encode("workspace_id");
         private readonly JsonEncodedText _computedKey = JsonEncodedText.Encode("computed");
         private readonly JsonEncodedText _customKey = JsonEncodedText.Encode("custom");
 
@@ -27,6 +28,7 @@ namespace ProKnow.Scorecard
         {
             string id = null;
             string name = null;
+            string workspaceId = null;
             IList<ComputedMetric> computed = null;
             IList<CustomMetricItem> custom = null;
 
@@ -39,7 +41,7 @@ namespace ProKnow.Scorecard
             {
                 if (reader.TokenType == JsonTokenType.EndObject)
                 {
-                    return new ScorecardTemplateItem(id, name, computed, custom);
+                    return new ScorecardTemplateItem(id, name, computed, custom, workspaceId);
                 }
 
                 // Read property name
@@ -58,6 +60,10 @@ namespace ProKnow.Scorecard
                 else if (propertyName == "name")
                 {
                     name = reader.GetString();
+                }
+                else if (propertyName == "workspace_id")
+                {
+                    workspaceId = reader.GetString();
                 }
                 else if (propertyName == "computed")
                 {
@@ -94,6 +100,13 @@ namespace ProKnow.Scorecard
             {
                 writer.WritePropertyName(_nameKey);
                 writer.WriteStringValue(scorecardTemplateItem.Name);
+            }
+
+            // workspaceid
+            if (scorecardTemplateItem.Workspace != null) 
+            {
+                writer.WritePropertyName(_workspaceID);
+                writer.WriteStringValue(scorecardTemplateItem.Workspace);
             }
 
             // computed (must be an array, even if empty)

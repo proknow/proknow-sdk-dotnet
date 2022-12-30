@@ -32,6 +32,12 @@ namespace ProKnow.Scorecard
         public string Name { get; set; }
 
         /// <summary>
+        /// The workspace
+        /// </summary>
+        [JsonPropertyName("workspace")]
+        public string Workspace { get; set; }
+
+        /// <summary>
         /// The computed metrics
         /// </summary>
         [JsonPropertyName("computed")]
@@ -57,11 +63,13 @@ namespace ProKnow.Scorecard
         /// <param name="name">The name</param>
         /// <param name="computedMetrics">The computed metrics</param>
         /// <param name="customMetrics">The custom metrics</param>
+        /// <param name="workspace">The Workspace for the scorecard template</param>
         public ScorecardTemplateItem(string id, string name, IList<ComputedMetric> computedMetrics,
-            IList<CustomMetricItem> customMetrics)
+            IList<CustomMetricItem> customMetrics, string workspace = null)
         {
             Id = id;
             Name = name;
+            Workspace = workspace;
             ComputedMetrics = computedMetrics;
             CustomMetrics = customMetrics;
         }
@@ -72,14 +80,16 @@ namespace ProKnow.Scorecard
         /// <param name="proKnow">Root object for interfacing with the ProKnow API</param>
         /// <param name="id">The ProKnow ID</param>
         /// <param name="name">The name</param>
+        /// <param name="workspace">The Workspace for the scorecard template</param>
         /// <param name="computedMetrics">The computed metrics</param>
         /// <param name="customMetrics">The custom metrics</param>
-        internal ScorecardTemplateItem(ProKnowApi proKnow, string id, string name, IList<ComputedMetric> computedMetrics,
+        internal ScorecardTemplateItem(ProKnowApi proKnow, string id, string name, string workspace, IList<ComputedMetric> computedMetrics,
             IList<CustomMetricItem> customMetrics)
         {
             _proKnow = proKnow;
             Id = id;
             Name = name;
+            Workspace = workspace;
             ComputedMetrics = computedMetrics;
             CustomMetrics = customMetrics;
         }
@@ -95,6 +105,7 @@ namespace ProKnow.Scorecard
             _proKnow = proKnow;
             Id = scorecardTemplateItem.Id;
             Name = scorecardTemplateItem.Name;
+            Workspace = scorecardTemplateItem.Workspace;
             ComputedMetrics = scorecardTemplateItem.ComputedMetrics;
             CustomMetrics = scorecardTemplateItem.CustomMetrics;
         }
@@ -136,6 +147,7 @@ namespace ProKnow.Scorecard
             return new ScorecardTemplateItem()
             {
                 Name = Name,
+                Workspace = Workspace,
                 ComputedMetrics = ComputedMetrics,
                 CustomMetrics = CustomMetrics.Select(c => c.ConvertToScorecardSchema()).ToList()
             };

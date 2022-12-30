@@ -37,7 +37,7 @@ namespace ProKnow.Patient
         /// <param name="customMetrics">The custom metrics</param>
         internal PatientScorecardItem(ProKnowApi proKnow, string workspaceId, string patientId,
             PatientScorecards patientScorecards, string id, string name, IList<ComputedMetric> computedMetrics,
-            IList<CustomMetricItem> customMetrics) : base(proKnow, id, name, computedMetrics, customMetrics)
+            IList<CustomMetricItem> customMetrics) : base(proKnow, id, name, workspaceId, computedMetrics, customMetrics)
         {
             _workspaceId = workspaceId;
             _patientId = patientId;

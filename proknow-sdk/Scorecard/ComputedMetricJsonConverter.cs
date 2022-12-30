@@ -14,6 +14,8 @@ namespace ProKnow.Scorecard
         private readonly JsonEncodedText _roiNameKey = JsonEncodedText.Encode("roi_name");
         private readonly JsonEncodedText _arg1Key = JsonEncodedText.Encode("arg_1");
         private readonly JsonEncodedText _arg2Key = JsonEncodedText.Encode("arg_2");
+        private readonly JsonEncodedText _rxKey = JsonEncodedText.Encode("rx");
+        private readonly JsonEncodedText _rxScaleKey = JsonEncodedText.Encode("rx_scale");
         private readonly JsonEncodedText _objectivesKey = JsonEncodedText.Encode("objectives");
 
         /// <summary>
@@ -29,6 +31,8 @@ namespace ProKnow.Scorecard
             string roiName = null;
             double? maybeArg1 = null;
             double? maybeArg2 = null;
+            string Rx = null;
+            double? maybeRxScale = null;
             IList<MetricBin> objectives = null;
 
             if (reader.TokenType != JsonTokenType.StartObject)
@@ -40,7 +44,7 @@ namespace ProKnow.Scorecard
             {
                 if (reader.TokenType == JsonTokenType.EndObject)
                 {
-                    return new ComputedMetric(type, roiName, maybeArg1, maybeArg2, objectives);
+                    return new ComputedMetric(type, roiName, maybeArg1, maybeArg2, objectives, Rx, maybeRxScale);
                 }
 
                 // Read property name
@@ -74,6 +78,21 @@ namespace ProKnow.Scorecard
                     {
                         double arg2 = reader.GetDouble();
                         maybeArg2 = arg2;
+                    }
+                }
+                else if (propertyName == "rx")
+                {
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        Rx = reader.GetString();
+                    }
+                }
+                else if (propertyName == "rx_scale")
+                {
+                    if (reader.TokenType != JsonTokenType.Null)
+                    {
+                        double rxScale = reader.GetDouble();
+                        maybeRxScale = rxScale;
                     }
                 }
                 else if (propertyName == "objectives")
@@ -126,6 +145,29 @@ namespace ProKnow.Scorecard
             if (computedMetric.Arg2.HasValue)
             {
                 writer.WriteNumberValue(computedMetric.Arg2.Value);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+            // rx (required, even if null)
+            writer.WritePropertyName(_rxKey);
+            if (computedMetric.Rx != null)
+            {
+                writer.WriteStringValue(computedMetric.Rx);
+            }
+            else
+            {
+                writer.WriteNullValue();
+            }
+
+
+            // rx_scale (required, even if null)
+            writer.WritePropertyName(_rxScaleKey);
+            if (computedMetric.RxScale.HasValue)
+            {
+                writer.WriteNumberValue(computedMetric.RxScale.Value);
             }
             else
             {
