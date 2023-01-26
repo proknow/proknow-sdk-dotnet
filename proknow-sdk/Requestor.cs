@@ -298,17 +298,26 @@ namespace ProKnow
             IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
             string hasMore = "true";
-            string next = null;
+            string nextPage = null;
             var patients = new List<string>();
+            var patientsRoute = route.StartsWith("/collections") ? false : true;
             while (hasMore == "true")
             {
-                if (next != null)
+                if (nextPage != null)
                 {
                     if (queryParameters == null)
                     {
                         queryParameters = new Dictionary<string, object>();
                     }
-                    queryParameters["next"] = next;
+                    if (patientsRoute)
+                    {
+                        queryParameters["page_newest"] = DateTime.UtcNow.ToString("o");
+                        queryParameters["page_number"] = nextPage;
+                    }
+                     else
+                    {
+                        queryParameters["next"] = nextPage;
+                    }
                 }
                 var responseContent = string.Empty;
                 var response = await MakeRequest(method, route, queryParameters, headerKeyValuePairs, content);
@@ -319,7 +328,8 @@ namespace ProKnow
 				
 				// Determine if paging is required and parameters needed for the next request
 				hasMore = response.Headers.TryGetValues("proknow-has-more", out var values) ? values.FirstOrDefault() : null;
-                next = response.Headers.TryGetValues("proknow-next", out var values2) ? values2.FirstOrDefault() : null;
+                var headerKey = patientsRoute ? "proknow-next-page" : "proknow-next"; 
+                nextPage = response.Headers.TryGetValues(headerKey, out var values2) ? values2.FirstOrDefault() : null;
 
                 patients.Add(responseContent);
             }
