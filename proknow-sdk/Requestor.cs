@@ -298,25 +298,25 @@ namespace ProKnow
             IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
             string hasMore = "true";
-            string nextPage = null;
+            string next = null;
             var patients = new List<string>();
-            var patientsRoute = route.StartsWith("/collections") ? false : true;
+            var isPatientsRoute = route.StartsWith("/collections") ? false : true;
             while (hasMore == "true")
             {
-                if (nextPage != null)
+                if (next != null)
                 {
                     if (queryParameters == null)
                     {
                         queryParameters = new Dictionary<string, object>();
                     }
-                    if (patientsRoute)
+                    if (isPatientsRoute)
                     {
                         queryParameters["page_newest"] = DateTime.UtcNow.ToString("o");
-                        queryParameters["page_number"] = nextPage;
+                        queryParameters["page_number"] = next;
                     }
-                     else
+                    else
                     {
-                        queryParameters["next"] = nextPage;
+                        queryParameters["next"] = next;
                     }
                 }
                 var responseContent = string.Empty;
@@ -328,8 +328,8 @@ namespace ProKnow
 				
 				// Determine if paging is required and parameters needed for the next request
 				hasMore = response.Headers.TryGetValues("proknow-has-more", out var values) ? values.FirstOrDefault() : null;
-                var headerKey = patientsRoute ? "proknow-next-page" : "proknow-next"; 
-                nextPage = response.Headers.TryGetValues(headerKey, out var values2) ? values2.FirstOrDefault() : null;
+                var headerKey = isPatientsRoute ? "proknow-next-page" : "proknow-next"; 
+                next = response.Headers.TryGetValues(headerKey, out var tmpValues) ? tmpValues.FirstOrDefault() : null;
 
                 patients.Add(responseContent);
             }
