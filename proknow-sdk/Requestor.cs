@@ -301,7 +301,7 @@ namespace ProKnow
             string hasMore = "true";
             string next = null;
             var patients = new List<string>();
-            var match = Regex.Match(route, @"/workspaces/.+/patients");
+            var match = Regex.Match(route, @"^/workspaces/[a-fA-F0-9]{32}/patients$");
             var isPatientsRoute = match.Success && method == HttpMethod.Get;
             while (hasMore == "true")
             {
