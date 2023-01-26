@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ProKnow.Exceptions;
 
@@ -300,7 +301,8 @@ namespace ProKnow
             string hasMore = "true";
             string next = null;
             var patients = new List<string>();
-            var isPatientsRoute = route.StartsWith("/collections") ? false : true;
+            var match = Regex.Match(route, @"/workspaces/.+/patients");
+            var isPatientsRoute = match.Success && method == HttpMethod.Get;
             while (hasMore == "true")
             {
                 if (next != null)
