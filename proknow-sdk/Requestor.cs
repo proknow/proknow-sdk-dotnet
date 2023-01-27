@@ -84,13 +84,14 @@ namespace ProKnow
         /// <param name="route">The API route to use in the request</param>
         /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
         /// <param name="queryParameters">Optional query parameters</param>
+        /// <param name="strategy">Optional paging strategy</param>
         /// <returns>A task that returns the response as a string</returns>
         /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
         public async Task<IList<string>> GetAsyncWithPaging(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null,
-            Dictionary<string, object> queryParameters = null)
+            Dictionary<string, object> queryParameters = null, string strategy = "next")
         {
             // With a GET request, if the base URL is malformed, it's possible that ProKnow will return 200 OK along with its index.html, hence why we request a non-HTML string response
-            return await MakeRequestForNonHtmlStringResponseWithPaging(HttpMethod.Get, route, queryParameters, headerKeyValuePairs);
+            return await MakeRequestForNonHtmlStringResponseWithPaging(HttpMethod.Get, route, queryParameters, strategy, headerKeyValuePairs);
         }
 
         /// <summary>
@@ -291,18 +292,18 @@ namespace ProKnow
         /// <param name="method">The HTTP method</param>
         /// <param name="route">The API route to use in the request</param>
         /// <param name="queryParameters">Optional query parameters</param>
+        /// <param name="strategy">Optional paging strategy</param>
         /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
         /// <param name="content">Optional content for the body</param>
         /// <returns>The non-HTML string response</returns>
         /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
         private async Task<IList<string>> MakeRequestForNonHtmlStringResponseWithPaging(HttpMethod method, string route, Dictionary<string, object> queryParameters = null,
-            IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
+            string strategy = "next", IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
             string hasMore = "true";
             string next = null;
+            string epoch = null;
             var patients = new List<string>();
-            var match = Regex.Match(route, @"^/workspaces/[a-fA-F0-9]{32}/patients$");
-            var isPatientsRoute = match.Success && method == HttpMethod.Get;
             while (hasMore == "true")
             {
                 if (next != null)
@@ -311,9 +312,9 @@ namespace ProKnow
                     {
                         queryParameters = new Dictionary<string, object>();
                     }
-                    if (isPatientsRoute)
+                    if (strategy == "numbered")
                     {
-                        queryParameters["page_newest"] = DateTime.UtcNow.ToString("o");
+                        queryParameters["page_epoch"] = epoch;
                         queryParameters["page_number"] = next;
                     }
                     else
@@ -330,8 +331,17 @@ namespace ProKnow
 				
 				// Determine if paging is required and parameters needed for the next request
 				hasMore = response.Headers.TryGetValues("proknow-has-more", out var values) ? values.FirstOrDefault() : null;
-                var headerKey = isPatientsRoute ? "proknow-next-page" : "proknow-next"; 
-                next = response.Headers.TryGetValues(headerKey, out var tmpValues) ? tmpValues.FirstOrDefault() : null;
+                if (strategy == "numbered")
+                {
+                    epoch = response.Headers.TryGetValues("proknow-epoch", out var tmpEpoch) ? tmpEpoch.FirstOrDefault() : null;
+                    next = response.Headers.TryGetValues("proknow-next-page", out var tmpNext) ? tmpNext.FirstOrDefault() : null;
+
+                }
+                else
+                {
+                    next = response.Headers.TryGetValues("proknow-next", out var tmpValues) ? tmpValues.FirstOrDefault() : null;
+
+                }
 
                 patients.Add(responseContent);
             }
