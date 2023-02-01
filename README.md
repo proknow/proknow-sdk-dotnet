@@ -26,8 +26,17 @@ generating the documentation, they will be highlighted in yellow.
 Once branch changes have been merged into the master branch, the build pipeline will regenerate the documentation which
 can then be viewed on [Github Pages](http://proknow.github.io/proknow-sdk-dotnet).
 
+## Running Tests
+
+
 ### Access to ProKnow
 The tests require access to ProKnow in order to create temporary custom metrics, scorecard templates, and workspaces.
+
+The tests require the ProKnow API service to be started with the `PATIENTS_MIN_PAGE_SIZE` environment variable set to `1`. To do this, at the top level of the the ProKnow directory, run
+
+```sh
+$ PATIENTS_MIN_PAGE_SIZE=1 grunt start
+```
 
 Create a .runsettings file in the solution folder with the following content, edited appropriately:
 ```
@@ -41,8 +50,6 @@ Create a .runsettings file in the solution folder with the following content, ed
 </RunSettings>
 ```
 Refer to these [instructions](https://docs.microsoft.com/en-us/visualstudio/test/configure-unit-tests-by-using-a-dot-runsettings-file) regarding how to use the .runsettings file when running tests in Visual Studio or from the command prompt.
-
-## Running Tests
 
 ### Test Data
 The project test data is managed using [Git Large File Storage](https://github.com/git-lfs/git-lfs).  This tool must be
