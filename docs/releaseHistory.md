@@ -9,7 +9,7 @@ All releases in the v0.x.x series are subject to breaking changes from one versi
 *Enhancements*
 
 - Added ability to set the client name and version in the User-Agent header for outgoing requests.
-- Added inner exceptions to thrown ProKnowExceptions, ProKnowCredentialsStatus and ProKnowDomainStatus objects.
+- Added inner exceptions to ProKnowExceptions, ProKnowCredentialsStatus and ProKnowDomainStatus objects.
 
 ## v0.2.4
 
