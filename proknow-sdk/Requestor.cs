@@ -17,7 +17,7 @@ namespace ProKnow
     public class Requestor
     {
         // HttpClient is intended to be instantiated once per application, rather than per-use
-        private static HttpClient _httpClient = new HttpClient(new HttpClientHandler()
+        internal static HttpClient HttpClient = new HttpClient(new HttpClientHandler()
         {
             AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
         });
@@ -50,20 +50,6 @@ namespace ProKnow
             _baseUrl = $"{baseUrl}/api";
             _authenticationHeaderValue = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{id}:{secret}")));
             _clientInfo = clientInfo;
-        }
-
-        /// <summary>
-        /// Internal constructor used for testing
-        /// </summary>
-        /// <param name="baseUrl"></param>
-        /// <param name="id"></param>
-        /// <param name="secret"></param>
-        /// <param name="clientInfo"></param>
-        /// <param name="httpClient"></param>
-        internal Requestor(string baseUrl, string id, string secret, ClientInfo clientInfo, HttpClient httpClient)
-            : this(baseUrl, id, secret, clientInfo)
-        {
-            _httpClient = httpClient;
         }
 
         /// <summary>
@@ -193,7 +179,7 @@ namespace ProKnow
                 }
                 request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
                 request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
-                var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                var response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
                 if (!response.IsSuccessStatusCode)
                 {
                     if (response.Content != null)
@@ -235,7 +221,7 @@ namespace ProKnow
             var request = new HttpRequestMessage(HttpMethod.Get, BuildUriString($"{_baseUrl}/status"));
             try
             {
-                var response = await _httpClient.SendAsync(request);
+                var response = await HttpClient.SendAsync(request);
                 if (!response.IsSuccessStatusCode)
                 {
                     if (response.Content != null)
@@ -396,7 +382,7 @@ namespace ProKnow
                 {
                     request.Content = content;
                 }
-                var response = await _httpClient.SendAsync(request);
+                var response = await HttpClient.SendAsync(request);
                 if (!response.IsSuccessStatusCode)
                 {
                     if (response.Content != null)

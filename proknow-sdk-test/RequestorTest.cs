@@ -570,13 +570,15 @@ namespace ProKnow.Test
         [TestMethod]
         public async Task RequestHeadersTest_UserAgent()
         {
+            var intialClient = Requestor.HttpClient;
             var server = new TestServer(new WebHostBuilder().UseStartup<TestStartup>());
             var client = server.CreateClient();
             try
             {
                 var clientName = "TestClient";
                 var clientVersion = "1.2.3";
-                var requestor = new Requestor("http://foo.com", "id", "secret", new ClientInfo(clientName, clientVersion), client);
+                Requestor.HttpClient = client;
+                var requestor = new Requestor("http://foo.com", "id", "secret", new ClientInfo(clientName, clientVersion));
                 var response = await requestor.GetAsync("/bar");
                 Assert.AreEqual($"{clientName}/{clientVersion}", response);
             }
@@ -584,6 +586,7 @@ namespace ProKnow.Test
             {
                 server?.Dispose();
                 client?.Dispose();
+                Requestor.HttpClient = intialClient;
             }
         }
 
