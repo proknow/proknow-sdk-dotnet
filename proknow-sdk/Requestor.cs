@@ -17,7 +17,7 @@ namespace ProKnow
     public class Requestor
     {
         // HttpClient is intended to be instantiated once per application, rather than per-use
-        private static readonly HttpClient _httpClient = new HttpClient(new HttpClientHandler()
+        private static HttpClient _httpClient = new HttpClient(new HttpClientHandler()
         {
             AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
         });
@@ -50,6 +50,20 @@ namespace ProKnow
             _baseUrl = $"{baseUrl}/api";
             _authenticationHeaderValue = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{id}:{secret}")));
             _clientInfo = clientInfo;
+        }
+
+        /// <summary>
+        /// Internal constructor used for testing
+        /// </summary>
+        /// <param name="baseUrl"></param>
+        /// <param name="id"></param>
+        /// <param name="secret"></param>
+        /// <param name="clientInfo"></param>
+        /// <param name="httpClient"></param>
+        internal Requestor(string baseUrl, string id, string secret, ClientInfo clientInfo, HttpClient httpClient)
+            : this(baseUrl, id, secret, clientInfo)
+        {
+            _httpClient = httpClient;
         }
 
         /// <summary>

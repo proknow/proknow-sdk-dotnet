@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Patient.Entities;
 using ProKnow.Exceptions;
 using System.Collections.Generic;
@@ -8,6 +10,8 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 
 namespace ProKnow.Test
 {
@@ -560,6 +564,38 @@ namespace ProKnow.Test
                 Assert.AreEqual("BadRequest", ex.ResponseStatusCode);
                 Assert.AreEqual("Exception occurred making HTTP request.", ex.Message);
                 Assert.AreEqual("The SSL connection could not be established, see inner exception.", ex.InnerException.Message);
+            }
+        }
+
+        [TestMethod]
+        public async Task RequestHeadersTest_UserAgent()
+        {
+            var server = new TestServer(new WebHostBuilder().UseStartup<TestStartup>());
+            var client = server.CreateClient();
+            try
+            {
+                var clientName = "TestClient";
+                var clientVersion = "1.2.3";
+                var requestor = new Requestor("http://foo.com", "id", "secret", new ClientInfo(clientName, clientVersion), client);
+                var response = await requestor.GetAsync("/bar");
+                Assert.AreEqual($"{clientName}/{clientVersion}", response);
+            }
+            finally
+            {
+                server?.Dispose();
+                client?.Dispose();
+            }
+        }
+
+        public class TestStartup
+        {
+            public void Configure(IApplicationBuilder app)
+            {
+                app.Run(async (context) =>
+                {
+                    context.Response.ContentType = "application/json";
+                    await context.Response.WriteAsync(context.Request.Headers["User-Agent"]);
+                });
             }
         }
     }

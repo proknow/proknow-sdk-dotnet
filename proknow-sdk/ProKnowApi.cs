@@ -11,6 +11,9 @@ using System;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("proknow-sdk-test")]
 
 namespace ProKnow
 {
