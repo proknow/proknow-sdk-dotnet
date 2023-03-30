@@ -169,9 +169,7 @@ namespace ProKnow
         private void ConstructorHelper(string baseUrl, string credentialsId, string credentialsSecret, int lockRenewalBuffer)
         {
             LockRenewalBuffer = lockRenewalBuffer;
-            Requestor = ClientInfo != null
-                ? new Requestor(baseUrl, credentialsId, credentialsSecret)
-                : new Requestor(baseUrl, credentialsId, credentialsSecret, ClientInfo);
+            Requestor = new Requestor(baseUrl, credentialsId, credentialsSecret, ClientInfo);
             CustomMetrics = new CustomMetrics(this);
             ScorecardTemplates = new ScorecardTemplates(this);
             Workspaces = new Workspaces(this);
