@@ -80,23 +80,23 @@ namespace ProKnow
                     proKnowCredentials = JsonSerializer.Deserialize<ProKnowCredentials>(sr.ReadToEnd());
                 }
             }
-            catch (DirectoryNotFoundException)
+            catch (DirectoryNotFoundException ex)
             {
                 var message = $"The credentials file '{credentialsFile}' was not found.";
-                _logger.LogError(message);
-                throw new ProKnowException(message);
+                _logger.LogError(ex, message);
+                throw new ProKnowException(message, ex);
             }
-            catch (FileNotFoundException)
+            catch (FileNotFoundException ex)
             {
                 var message = $"The credentials file '{credentialsFile}' was not found.";
-                _logger.LogError(message);
-                throw new ProKnowException(message);
+                _logger.LogError(ex, message);
+                throw new ProKnowException(message, ex);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 var message = $"The credentials file '{credentialsFile}' is not valid JSON.";
-                _logger.LogError(message);
-                throw new ProKnowException(message);
+                _logger.LogError(ex, message);
+                throw new ProKnowException(message, ex);
             }
             if (proKnowCredentials.Id == null || proKnowCredentials.Secret == null)
             {
@@ -131,11 +131,11 @@ namespace ProKnow
             }
             catch (ProKnowHttpException ex)
             {
-                return new ProKnowCredentialsStatus(false, ex.Message, ex.ResponseStatusCode);
+                return new ProKnowCredentialsStatus(false, ex.Message, ex.ResponseStatusCode, ex);
             }
             catch (Exception ex)
             {
-                return new ProKnowCredentialsStatus(false, ex.Message);
+                return new ProKnowCredentialsStatus(false, ex.Message, null, ex);
             }
         }
 
@@ -149,12 +149,13 @@ namespace ProKnow
             }
             catch (Exception ex)
             {
+                // QUESTION: Can we remove this now that we have the whole exception object?
                 var message = ex.Message;
                 if (ex.InnerException != null)
                 {
                     message += " " + ex.InnerException.Message;
                 }
-                return new ProKnowDomainStatus(false, message);
+                return new ProKnowDomainStatus(false, message, ex);
             }
         }
 

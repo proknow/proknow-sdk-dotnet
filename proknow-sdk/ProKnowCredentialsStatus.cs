@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 
 namespace ProKnow
 {
@@ -19,9 +20,14 @@ namespace ProKnow
         public string ErrorMessage { get; private set; }
 
         /// <summary>
-        ///  The<see cref="HttpStatusCode"/> string value
+        ///  The <see cref="HttpStatusCode"/> string value
         /// </summary>
         public string ErrorCode { get; private set; }
+
+        /// <summary>
+        ///  The original <see cref="Exception"/>
+        /// </summary>
+        public Exception Exception { get; private set; }
 
         /// <summary>
         /// Creates a ProKnowCredentialsStatus object
@@ -30,11 +36,13 @@ namespace ProKnow
         /// for the ProKnow subdomain specified by the base URL</param>
         /// <param name="errorMessage">The error message or null if the credentials (API key) is invalid</param>
         /// <param name="errorCode">The <see cref="HttpStatusCode"/> string value</param>
-        internal ProKnowCredentialsStatus(bool isValid, string errorMessage = null, string errorCode = null)
+        /// <param name="exception">The original <see cref="Exception"/></param>
+        internal ProKnowCredentialsStatus(bool isValid, string errorMessage = null, string errorCode = null, Exception exception = null)
         {
             IsValid = isValid;
             ErrorMessage = errorMessage;
             ErrorCode = errorCode;
+            Exception = exception;
         }
     }
 }
