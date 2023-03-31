@@ -146,13 +146,7 @@ namespace ProKnow
             }
             catch (Exception ex)
             {
-                // QUESTION: Can we remove this now that we have the whole exception object?
-                var message = ex.Message;
-                if (ex.InnerException != null)
-                {
-                    message += " " + ex.InnerException.Message;
-                }
-                return new ProKnowDomainStatus(false, message, ex);
+                return new ProKnowDomainStatus(false, ex.Message, ex);
             }
         }
 
