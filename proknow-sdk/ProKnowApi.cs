@@ -32,9 +32,6 @@ namespace ProKnow
         public Requestor Requestor { get; private set; }
 
         /// <inheritdoc/>
-        public ClientInfo ClientInfo { get; set; }
-
-        /// <inheritdoc/>
         public CustomMetrics CustomMetrics { get; private set; }
 
         /// <inheritdoc/>
@@ -170,7 +167,7 @@ namespace ProKnow
         private void ConstructorHelper(string baseUrl, string credentialsId, string credentialsSecret, int lockRenewalBuffer)
         {
             LockRenewalBuffer = lockRenewalBuffer;
-            Requestor = new Requestor(baseUrl, credentialsId, credentialsSecret, ClientInfo);
+            Requestor = new Requestor(baseUrl, credentialsId, credentialsSecret);
             CustomMetrics = new CustomMetrics(this);
             ScorecardTemplates = new ScorecardTemplates(this);
             Workspaces = new Workspaces(this);

@@ -575,12 +575,13 @@ namespace ProKnow.Test
             var client = server.CreateClient();
             try
             {
+                Requestor.HttpClient = client;
                 var clientName = "TestClient";
                 var clientVersion = "1.2.3";
-                Requestor.HttpClient = client;
-                var requestor = new Requestor("http://foo.com", "id", "secret", new ClientInfo(clientName, clientVersion));
-                var response = await requestor.GetAsync("/bar");
-                Assert.AreEqual($"{clientName}/{clientVersion}", response);
+                var headers = new List<KeyValuePair<string, string>>();
+                headers.Add(new KeyValuePair<string, string>("User-Agent", $"{clientName}/{clientVersion}"));
+                var requestor = new Requestor("http://foo.com", "id", "secret", headers);
+                Assert.AreEqual($"{clientName}/{clientVersion}", await requestor.GetAsync("/bar"));
             }
             finally
             {

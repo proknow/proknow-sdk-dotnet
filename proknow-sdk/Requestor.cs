@@ -16,6 +16,11 @@ namespace ProKnow
     /// </summary>
     public class Requestor
     {
+        /// <summary>
+        /// List of headers to include in all requests.
+        /// </summary>
+        public IList<KeyValuePair<string, string>> DefaultHeaders { get; set; }
+
         // HttpClient is intended to be instantiated once per application, rather than per-use
         internal static HttpClient HttpClient = new HttpClient(new HttpClientHandler()
         {
@@ -24,7 +29,6 @@ namespace ProKnow
 
         private readonly string _baseUrl;
         private readonly AuthenticationHeaderValue _authenticationHeaderValue;
-        private readonly ClientInfo _clientInfo;
 
         /// <summary>
         /// Constructs a requestor object
@@ -32,8 +36,8 @@ namespace ProKnow
         /// <param name="baseUrl">The base URL to ProKnow, e.g. 'https://example.proknow.com'</param>
         /// <param name="id">The ID from the ProKnow credentials JSON file</param>
         /// <param name="secret">The secret from the ProKnow credentials JSON file</param>
-        /// <param name="clientInfo">Optional client information of the calling process</param>
-        public Requestor(string baseUrl, string id, string secret, ClientInfo clientInfo = null)
+        /// <param name="defaultHeaders">Optional list of headers to include in all requests</param>
+        public Requestor(string baseUrl, string id, string secret, IList<KeyValuePair<string, string>> defaultHeaders = null)
         {
             if (String.IsNullOrWhiteSpace(baseUrl))
             {
@@ -49,7 +53,7 @@ namespace ProKnow
             }
             _baseUrl = $"{baseUrl}/api";
             _authenticationHeaderValue = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{id}:{secret}")));
-            _clientInfo = clientInfo;
+            DefaultHeaders = defaultHeaders;
         }
 
         /// <summary>
@@ -173,9 +177,12 @@ namespace ProKnow
             try
             {
                 request.Headers.Authorization = _authenticationHeaderValue;
-                if (_clientInfo != null)
+                if (DefaultHeaders != null)
                 {
-                    request.Headers.UserAgent.Add(new ProductInfoHeaderValue(_clientInfo.Name, _clientInfo.Version));
+                    foreach (var kvp in DefaultHeaders)
+                    {
+                        request.Headers.Add(kvp.Key, kvp.Value);
+                    }
                 }
                 request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
                 request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
@@ -367,9 +374,12 @@ namespace ProKnow
             try
             {
                 request.Headers.Authorization = _authenticationHeaderValue;
-                if (_clientInfo != null)
+                if (DefaultHeaders != null)
                 {
-                    request.Headers.UserAgent.Add(new ProductInfoHeaderValue(_clientInfo.Name, _clientInfo.Version));
+                    foreach (var kvp in DefaultHeaders)
+                    {
+                        request.Headers.Add(kvp.Key, kvp.Value);
+                    }
                 }
                 if (headerKeyValuePairs != null)
                 {
