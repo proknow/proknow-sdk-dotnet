@@ -4,6 +4,13 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.2.5
+
+*Enhancements*
+
+- Added ability to set the client name and version in the User-Agent header for outgoing requests.
+- Added inner exceptions to ProKnowExceptions, ProKnowCredentialsStatus and ProKnowDomainStatus objects.
+
 ## v0.2.4
 
 *Enhancements*
