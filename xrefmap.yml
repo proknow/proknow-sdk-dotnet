@@ -6278,6 +6278,19 @@ references:
   isSpec: "True"
   fullName: ProKnow.ProKnowCredentialsStatus.ErrorMessage
   nameWithType: ProKnowCredentialsStatus.ErrorMessage
+- uid: ProKnow.ProKnowCredentialsStatus.Exception
+  name: Exception
+  href: api/ProKnow.ProKnowCredentialsStatus.html#ProKnow_ProKnowCredentialsStatus_Exception
+  commentId: P:ProKnow.ProKnowCredentialsStatus.Exception
+  fullName: ProKnow.ProKnowCredentialsStatus.Exception
+  nameWithType: ProKnowCredentialsStatus.Exception
+- uid: ProKnow.ProKnowCredentialsStatus.Exception*
+  name: Exception
+  href: api/ProKnow.ProKnowCredentialsStatus.html#ProKnow_ProKnowCredentialsStatus_Exception_
+  commentId: Overload:ProKnow.ProKnowCredentialsStatus.Exception
+  isSpec: "True"
+  fullName: ProKnow.ProKnowCredentialsStatus.Exception
+  nameWithType: ProKnowCredentialsStatus.Exception
 - uid: ProKnow.ProKnowCredentialsStatus.IsValid
   name: IsValid
   href: api/ProKnow.ProKnowCredentialsStatus.html#ProKnow_ProKnowCredentialsStatus_IsValid
@@ -6310,6 +6323,19 @@ references:
   isSpec: "True"
   fullName: ProKnow.ProKnowDomainStatus.ErrorMessage
   nameWithType: ProKnowDomainStatus.ErrorMessage
+- uid: ProKnow.ProKnowDomainStatus.Exception
+  name: Exception
+  href: api/ProKnow.ProKnowDomainStatus.html#ProKnow_ProKnowDomainStatus_Exception
+  commentId: P:ProKnow.ProKnowDomainStatus.Exception
+  fullName: ProKnow.ProKnowDomainStatus.Exception
+  nameWithType: ProKnowDomainStatus.Exception
+- uid: ProKnow.ProKnowDomainStatus.Exception*
+  name: Exception
+  href: api/ProKnow.ProKnowDomainStatus.html#ProKnow_ProKnowDomainStatus_Exception_
+  commentId: Overload:ProKnow.ProKnowDomainStatus.Exception
+  isSpec: "True"
+  fullName: ProKnow.ProKnowDomainStatus.Exception
+  nameWithType: ProKnowDomainStatus.Exception
 - uid: ProKnow.ProKnowDomainStatus.IsOk
   name: IsOk
   href: api/ProKnow.ProKnowDomainStatus.html#ProKnow_ProKnowDomainStatus_IsOk
@@ -6361,12 +6387,15 @@ references:
   commentId: T:ProKnow.Requestor
   fullName: ProKnow.Requestor
   nameWithType: Requestor
-- uid: ProKnow.Requestor.#ctor(System.String,System.String,System.String)
-  name: Requestor(String, String, String)
-  href: api/ProKnow.Requestor.html#ProKnow_Requestor__ctor_System_String_System_String_System_String_
-  commentId: M:ProKnow.Requestor.#ctor(System.String,System.String,System.String)
-  fullName: ProKnow.Requestor.Requestor(System.String, System.String, System.String)
-  nameWithType: Requestor.Requestor(String, String, String)
+- uid: ProKnow.Requestor.#ctor(System.String,System.String,System.String,IList{KeyValuePair{System.String,System.String}})
+  name: Requestor(String, String, String, IList<KeyValuePair<String, String>>)
+  href: api/ProKnow.Requestor.html#ProKnow_Requestor__ctor_System_String_System_String_System_String_IList_KeyValuePair_System_String_System_String___
+  commentId: M:ProKnow.Requestor.#ctor(System.String,System.String,System.String,IList{KeyValuePair{System.String,System.String}})
+  name.vb: Requestor(String, String, String, IList(Of KeyValuePair(Of String, String)))
+  fullName: ProKnow.Requestor.Requestor(System.String, System.String, System.String, IList<KeyValuePair<System.String, System.String>>)
+  fullName.vb: ProKnow.Requestor.Requestor(System.String, System.String, System.String, IList(Of KeyValuePair(Of System.String, System.String)))
+  nameWithType: Requestor.Requestor(String, String, String, IList<KeyValuePair<String, String>>)
+  nameWithType.vb: Requestor.Requestor(String, String, String, IList(Of KeyValuePair(Of String, String)))
 - uid: ProKnow.Requestor.#ctor*
   name: Requestor
   href: api/ProKnow.Requestor.html#ProKnow_Requestor__ctor_
@@ -6374,6 +6403,19 @@ references:
   isSpec: "True"
   fullName: ProKnow.Requestor.Requestor
   nameWithType: Requestor.Requestor
+- uid: ProKnow.Requestor.DefaultHeaders
+  name: DefaultHeaders
+  href: api/ProKnow.Requestor.html#ProKnow_Requestor_DefaultHeaders
+  commentId: P:ProKnow.Requestor.DefaultHeaders
+  fullName: ProKnow.Requestor.DefaultHeaders
+  nameWithType: Requestor.DefaultHeaders
+- uid: ProKnow.Requestor.DefaultHeaders*
+  name: DefaultHeaders
+  href: api/ProKnow.Requestor.html#ProKnow_Requestor_DefaultHeaders_
+  commentId: Overload:ProKnow.Requestor.DefaultHeaders
+  isSpec: "True"
+  fullName: ProKnow.Requestor.DefaultHeaders
+  nameWithType: Requestor.DefaultHeaders
 - uid: ProKnow.Requestor.DeleteAsync(System.String,IList{KeyValuePair{System.String,System.String}},HttpContent)
   name: DeleteAsync(String, IList<KeyValuePair<String, String>>, HttpContent)
   href: api/ProKnow.Requestor.html#ProKnow_Requestor_DeleteAsync_System_String_IList_KeyValuePair_System_String_System_String___HttpContent_

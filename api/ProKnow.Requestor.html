@@ -91,19 +91,19 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Requestor__ctor_System_String_System_String_System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Requestor.%23ctor(System.String%2CSystem.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Requestor__ctor_System_String_System_String_System_String_IList_KeyValuePair_System_String_System_String___.md&amp;value=---%0Auid%3A%20ProKnow.Requestor.%23ctor(System.String%2CSystem.String%2CSystem.String%2CIList%7BKeyValuePair%7BSystem.String%2CSystem.String%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L34">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L40">View Source</a>
   </span>
   <a id="ProKnow_Requestor__ctor_" data-uid="ProKnow.Requestor.#ctor*"></a>
-  <h4 id="ProKnow_Requestor__ctor_System_String_System_String_System_String_" data-uid="ProKnow.Requestor.#ctor(System.String,System.String,System.String)">Requestor(String, String, String)</h4>
+  <h4 id="ProKnow_Requestor__ctor_System_String_System_String_System_String_IList_KeyValuePair_System_String_System_String___" data-uid="ProKnow.Requestor.#ctor(System.String,System.String,System.String,IList{KeyValuePair{System.String,System.String}})">Requestor(String, String, String, IList&lt;KeyValuePair&lt;String, String&gt;&gt;)</h4>
   <div class="markdown level1 summary"><p>Constructs a requestor object</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Requestor(string baseUrl, string id, string secret)</code></pre>
+    <pre><code class="lang-csharp hljs">public Requestor(string baseUrl, string id, string secret, IList&lt;KeyValuePair&lt;string, string&gt;&gt; defaultHeaders = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -133,6 +133,45 @@
         <td><p>The secret from the ProKnow credentials JSON file</p>
 </td>
       </tr>
+      <tr>
+        <td><span class="xref">IList</span>&lt;<span class="xref">KeyValuePair</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.String</span>&gt;&gt;</td>
+        <td><span class="parametername">defaultHeaders</span></td>
+        <td><p>Optional list of headers to include in all requests</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Requestor_DefaultHeaders.md&amp;value=---%0Auid%3A%20ProKnow.Requestor.DefaultHeaders%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L22">View Source</a>
+  </span>
+  <a id="ProKnow_Requestor_DefaultHeaders_" data-uid="ProKnow.Requestor.DefaultHeaders*"></a>
+  <h4 id="ProKnow_Requestor_DefaultHeaders" data-uid="ProKnow.Requestor.DefaultHeaders">DefaultHeaders</h4>
+  <div class="markdown level1 summary"><p>List of headers to include in all requests.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IList&lt;KeyValuePair&lt;string, string&gt;&gt; DefaultHeaders { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IList</span>&lt;<span class="xref">KeyValuePair</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.String</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
@@ -142,7 +181,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Requestor_DeleteAsync_System_String_IList_KeyValuePair_System_String_System_String___HttpContent_.md&amp;value=---%0Auid%3A%20ProKnow.Requestor.DeleteAsync(System.String%2CIList%7BKeyValuePair%7BSystem.String%2CSystem.String%7D%7D%2CHttpContent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L60">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L67">View Source</a>
   </span>
   <a id="ProKnow_Requestor_DeleteAsync_" data-uid="ProKnow.Requestor.DeleteAsync*"></a>
   <h4 id="ProKnow_Requestor_DeleteAsync_System_String_IList_KeyValuePair_System_String_System_String___HttpContent_" data-uid="ProKnow.Requestor.DeleteAsync(System.String,IList{KeyValuePair{System.String,System.String}},HttpContent)">DeleteAsync(String, IList&lt;KeyValuePair&lt;String, String&gt;&gt;, HttpContent)</h4>
@@ -220,7 +259,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Requestor_GetAsync_System_String_IList_KeyValuePair_System_String_System_String___Dictionary_System_String_System_Object__.md&amp;value=---%0Auid%3A%20ProKnow.Requestor.GetAsync(System.String%2CIList%7BKeyValuePair%7BSystem.String%2CSystem.String%7D%7D%2CDictionary%7BSystem.String%2CSystem.Object%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L73">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L80">View Source</a>
   </span>
   <a id="ProKnow_Requestor_GetAsync_" data-uid="ProKnow.Requestor.GetAsync*"></a>
   <h4 id="ProKnow_Requestor_GetAsync_System_String_IList_KeyValuePair_System_String_System_String___Dictionary_System_String_System_Object__" data-uid="ProKnow.Requestor.GetAsync(System.String,IList{KeyValuePair{System.String,System.String}},Dictionary{System.String,System.Object})">GetAsync(String, IList&lt;KeyValuePair&lt;String, String&gt;&gt;, Dictionary&lt;String, Object&gt;)</h4>
@@ -298,7 +337,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Requestor_GetAsyncWithPaging_System_String_IList_KeyValuePair_System_String_System_String___Dictionary_System_String_System_Object__.md&amp;value=---%0Auid%3A%20ProKnow.Requestor.GetAsyncWithPaging(System.String%2CIList%7BKeyValuePair%7BSystem.String%2CSystem.String%7D%7D%2CDictionary%7BSystem.String%2CSystem.Object%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L88">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L95">View Source</a>
   </span>
   <a id="ProKnow_Requestor_GetAsyncWithPaging_" data-uid="ProKnow.Requestor.GetAsyncWithPaging*"></a>
   <h4 id="ProKnow_Requestor_GetAsyncWithPaging_System_String_IList_KeyValuePair_System_String_System_String___Dictionary_System_String_System_Object__" data-uid="ProKnow.Requestor.GetAsyncWithPaging(System.String,IList{KeyValuePair{System.String,System.String}},Dictionary{System.String,System.Object})">GetAsyncWithPaging(String, IList&lt;KeyValuePair&lt;String, String&gt;&gt;, Dictionary&lt;String, Object&gt;)</h4>
@@ -376,7 +415,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Requestor_GetBinaryAsync_System_String_IList_KeyValuePair_System_String_System_String___Dictionary_System_String_System_Object__.md&amp;value=---%0Auid%3A%20ProKnow.Requestor.GetBinaryAsync(System.String%2CIList%7BKeyValuePair%7BSystem.String%2CSystem.String%7D%7D%2CDictionary%7BSystem.String%2CSystem.Object%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L103">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L110">View Source</a>
   </span>
   <a id="ProKnow_Requestor_GetBinaryAsync_" data-uid="ProKnow.Requestor.GetBinaryAsync*"></a>
   <h4 id="ProKnow_Requestor_GetBinaryAsync_System_String_IList_KeyValuePair_System_String_System_String___Dictionary_System_String_System_Object__" data-uid="ProKnow.Requestor.GetBinaryAsync(System.String,IList{KeyValuePair{System.String,System.String}},Dictionary{System.String,System.Object})">GetBinaryAsync(String, IList&lt;KeyValuePair&lt;String, String&gt;&gt;, Dictionary&lt;String, Object&gt;)</h4>
@@ -454,7 +493,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Requestor_PatchAsync_System_String_IList_KeyValuePair_System_String_System_String___HttpContent_.md&amp;value=---%0Auid%3A%20ProKnow.Requestor.PatchAsync(System.String%2CIList%7BKeyValuePair%7BSystem.String%2CSystem.String%7D%7D%2CHttpContent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L143">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L150">View Source</a>
   </span>
   <a id="ProKnow_Requestor_PatchAsync_" data-uid="ProKnow.Requestor.PatchAsync*"></a>
   <h4 id="ProKnow_Requestor_PatchAsync_System_String_IList_KeyValuePair_System_String_System_String___HttpContent_" data-uid="ProKnow.Requestor.PatchAsync(System.String,IList{KeyValuePair{System.String,System.String}},HttpContent)">PatchAsync(String, IList&lt;KeyValuePair&lt;String, String&gt;&gt;, HttpContent)</h4>
@@ -532,7 +571,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Requestor_PostAsync_System_String_IList_KeyValuePair_System_String_System_String___HttpContent_.md&amp;value=---%0Auid%3A%20ProKnow.Requestor.PostAsync(System.String%2CIList%7BKeyValuePair%7BSystem.String%2CSystem.String%7D%7D%2CHttpContent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L117">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L124">View Source</a>
   </span>
   <a id="ProKnow_Requestor_PostAsync_" data-uid="ProKnow.Requestor.PostAsync*"></a>
   <h4 id="ProKnow_Requestor_PostAsync_System_String_IList_KeyValuePair_System_String_System_String___HttpContent_" data-uid="ProKnow.Requestor.PostAsync(System.String,IList{KeyValuePair{System.String,System.String}},HttpContent)">PostAsync(String, IList&lt;KeyValuePair&lt;String, String&gt;&gt;, HttpContent)</h4>
@@ -610,7 +649,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Requestor_PutAsync_System_String_IList_KeyValuePair_System_String_System_String___HttpContent_.md&amp;value=---%0Auid%3A%20ProKnow.Requestor.PutAsync(System.String%2CIList%7BKeyValuePair%7BSystem.String%2CSystem.String%7D%7D%2CHttpContent)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L130">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L137">View Source</a>
   </span>
   <a id="ProKnow_Requestor_PutAsync_" data-uid="ProKnow.Requestor.PutAsync*"></a>
   <h4 id="ProKnow_Requestor_PutAsync_System_String_IList_KeyValuePair_System_String_System_String___HttpContent_" data-uid="ProKnow.Requestor.PutAsync(System.String,IList{KeyValuePair{System.String,System.String}},HttpContent)">PutAsync(String, IList&lt;KeyValuePair&lt;String, String&gt;&gt;, HttpContent)</h4>
@@ -688,7 +727,7 @@
     <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Requestor_StreamAsync_System_String_System_String_Dictionary_System_String_System_Object__.md&amp;value=---%0Auid%3A%20ProKnow.Requestor.StreamAsync(System.String%2CSystem.String%2CDictionary%7BSystem.String%2CSystem.Object%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L157">View Source</a>
+    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Requestor.cs/#L164">View Source</a>
   </span>
   <a id="ProKnow_Requestor_StreamAsync_" data-uid="ProKnow.Requestor.StreamAsync*"></a>
   <h4 id="ProKnow_Requestor_StreamAsync_System_String_System_String_Dictionary_System_String_System_Object__" data-uid="ProKnow.Requestor.StreamAsync(System.String,System.String,Dictionary{System.String,System.Object})">StreamAsync(String, String, Dictionary&lt;String, Object&gt;)</h4>
