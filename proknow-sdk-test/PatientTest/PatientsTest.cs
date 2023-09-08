@@ -29,6 +29,12 @@ namespace ProKnow.Patient.Test
             await TestHelper.DeleteWorkspacesAsync(_testClassName);
         }
 
+        [TestCleanup]
+        public void Cleanup() 
+        { 
+            Environment.SetEnvironmentVariable("PATIENTS_PAGE_SIZE", null); 
+        }
+
         [TestMethod]
         public async Task CreateAsyncTest()
         {
@@ -186,11 +192,13 @@ namespace ProKnow.Patient.Test
         {
             int testNumber = 9;
 
+            Environment.SetEnvironmentVariable("PATIENTS_PAGE_SIZE", "5");
+
             // Create a workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
-            // Create enough patients to invoke paging (over 1000)
-            int numPatients = 1010;
+            // Create enough patients to invoke paging (over 5 (page size))
+            int numPatients = 12;
             var patientItems = await TestHelper.CreateMultiPatientAsync(_testClassName, testNumber, numPatients);
 
             // Query for the patients

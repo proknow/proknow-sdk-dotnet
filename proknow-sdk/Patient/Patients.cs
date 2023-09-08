@@ -177,12 +177,17 @@ namespace ProKnow.Patient
         {
             var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
             var workspaceId = workspaceItem.Id;
-            Dictionary<string, object> queryParameters = null;
+            Dictionary<string, object> queryParameters = new Dictionary<string, object>();
+            if (Environment.GetEnvironmentVariable("PATIENTS_PAGE_SIZE") != null)
+            {
+                queryParameters.Add("page_size", Environment.GetEnvironmentVariable("PATIENTS_PAGE_SIZE"));
+            }
             if (searchString != null)
             {
-                queryParameters = new Dictionary<string, object>() { { "search", searchString } };
+                queryParameters.Add("search", searchString);
             }
-            var json = await _proKnow.Requestor.GetAsyncWithPaging($"/workspaces/{workspaceId}/patients", null, queryParameters);
+            var json = await _proKnow.Requestor.GetAsyncWithPaging($"/workspaces/{workspaceId}/patients", null,
+                                                                   queryParameters, "numbered");
             return DeserializePatientsWithPaging(workspaceId, json);
         }
 
