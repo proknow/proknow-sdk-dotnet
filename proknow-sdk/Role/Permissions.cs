@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 
 namespace ProKnow.Role
-{
+{ 
     /// <summary>
     /// A container for the permissions for a role
     /// </summary>
