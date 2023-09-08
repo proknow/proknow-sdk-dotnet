@@ -17,8 +17,13 @@ namespace ProKnow
     /// </summary>
     public class Requestor
     {
+        /// <summary>
+        /// List of headers to include in all requests.
+        /// </summary>
+        public IList<KeyValuePair<string, string>> DefaultHeaders { get; set; }
+
         // HttpClient is intended to be instantiated once per application, rather than per-use
-        private static readonly HttpClient _httpClient = new HttpClient(new HttpClientHandler()
+        internal static HttpClient HttpClient = new HttpClient(new HttpClientHandler()
         {
             AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
         });
@@ -32,7 +37,8 @@ namespace ProKnow
         /// <param name="baseUrl">The base URL to ProKnow, e.g. 'https://example.proknow.com'</param>
         /// <param name="id">The ID from the ProKnow credentials JSON file</param>
         /// <param name="secret">The secret from the ProKnow credentials JSON file</param>
-        public Requestor(string baseUrl, string id, string secret)
+        /// <param name="defaultHeaders">Optional list of headers to include in all requests</param>
+        public Requestor(string baseUrl, string id, string secret, IList<KeyValuePair<string, string>> defaultHeaders = null)
         {
             if (String.IsNullOrWhiteSpace(baseUrl))
             {
@@ -48,6 +54,7 @@ namespace ProKnow
             }
             _baseUrl = $"{baseUrl}/api";
             _authenticationHeaderValue = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes($"{id}:{secret}")));
+            DefaultHeaders = defaultHeaders;
         }
 
         /// <summary>
@@ -172,9 +179,16 @@ namespace ProKnow
             try
             {
                 request.Headers.Authorization = _authenticationHeaderValue;
+                if (DefaultHeaders != null)
+                {
+                    foreach (var kvp in DefaultHeaders)
+                    {
+                        request.Headers.Add(kvp.Key, kvp.Value);
+                    }
+                }
                 request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
                 request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
-                var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                var response = await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
                 if (!response.IsSuccessStatusCode)
                 {
                     if (response.Content != null)
@@ -216,7 +230,7 @@ namespace ProKnow
             var request = new HttpRequestMessage(HttpMethod.Get, BuildUriString($"{_baseUrl}/status"));
             try
             {
-                var response = await _httpClient.SendAsync(request);
+                var response = await HttpClient.SendAsync(request);
                 if (!response.IsSuccessStatusCode)
                 {
                     if (response.Content != null)
@@ -382,6 +396,13 @@ namespace ProKnow
             try
             {
                 request.Headers.Authorization = _authenticationHeaderValue;
+                if (DefaultHeaders != null)
+                {
+                    foreach (var kvp in DefaultHeaders)
+                    {
+                        request.Headers.Add(kvp.Key, kvp.Value);
+                    }
+                }
                 if (headerKeyValuePairs != null)
                 {
                     foreach (var kvp in headerKeyValuePairs)
@@ -393,7 +414,7 @@ namespace ProKnow
                 {
                     request.Content = content;
                 }
-                var response = await _httpClient.SendAsync(request);
+                var response = await HttpClient.SendAsync(request);
                 if (!response.IsSuccessStatusCode)
                 {
                     if (response.Content != null)
