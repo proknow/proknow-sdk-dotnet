@@ -35,7 +35,7 @@ The tests require access to ProKnow in order to create temporary custom metrics,
 The tests require the ProKnow API service to be started with the `PATIENTS_MIN_PAGE_SIZE` environment variable set to `1`. To do this, at the top level of the the ProKnow directory, run
 
 ```sh
-$ PATIENTS_MIN_PAGE_SIZE=1 grunt start
+$ PATIENTS_MIN_PAGE_SIZE=1 npm run start
 ```
 
 Create a .runsettings file in the solution folder with the following content, edited appropriately:
