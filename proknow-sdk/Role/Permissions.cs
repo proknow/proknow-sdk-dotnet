@@ -9,6 +9,12 @@ namespace ProKnow.Role
     public class Permissions
     {
         /// <summary>
+        /// Flag indicating whether role allows an orgainzation update
+        /// </summary>
+        [JsonPropertyName("organizations_update")]
+        public bool CanUpdateOrganizations { get; set; }
+
+        /// <summary>
         /// Flag indicating whether role allows creation of API keys
         /// </summary>
         [JsonPropertyName("api_keys_create")]
@@ -386,12 +392,6 @@ namespace ProKnow.Role
         public bool CanUploadPatientDICOM { get; set; }
 
         /// <summary>
-        /// Flag indicating whether role allows downloading patient DICOM
-        /// </summary>
-        [JsonPropertyName("patient_dicom_download")]
-        public bool CanDownloadPatientDICOM { get; set; }
-
-        /// <summary>
         /// Flag indicating whether role allows creating patient checklists
         /// </summary>
         [JsonPropertyName("patient_checklists_create")]
@@ -588,6 +588,7 @@ namespace ProKnow.Role
         /// <summary>
         /// Constructs a Permissions object
         /// </summary>
+        /// <param name="canUpdateOrganizations">Flag indicating whether role allows updating the orgainization</param>
         /// <param name="canCreateApiKeys">Flag indicating whether role allows creation of API keys</param>
         /// <param name="canManageAuditLogs">Flag indicating whether role allows managing audit logs</param>
         /// <param name="canCreateCustomMetrics">Flag indicating whether role allows creating custom metrics</param>
@@ -638,7 +639,6 @@ namespace ProKnow.Role
         /// <param name="canViewPatientsPHI">Flag indicating whether role allows viewing patients PHI</param>
         /// <param name="canContourPatients">Flag indicating whether role allows contouring patients</param>
         /// <param name="canUploadPatientDICOM">Flag indicating whether role allows uploading patient DICOM</param>
-        /// <param name="canDownloadPatientDICOM">Flag indicating whether role allows downloading patient DICOM</param>
         /// <param name="canCreatePatientChecklists">Flag indicating whether role allows creating patient checklists</param>
         /// <param name="canReadPatientChecklists">Flag indicating whether role allows reading patient checklists</param>
         /// <param name="canUpdatePatientChecklists">Flag indicating whether role allows updating patient checklists</param>
@@ -670,12 +670,12 @@ namespace ProKnow.Role
         /// <param name="canUpdateCollectionBookmarks">Flag indicating whether role allows updating collection bookmarks</param>
         /// <param name="canDeleteCollectionBookmarks">Flag indicating whether role allows deleting collection bookmarks</param>
         public Permissions(
-            bool canCreateApiKeys = false, bool canManageAuditLogs = false, bool canCreateCustomMetrics = false,
-            bool canUpdateCustomMetrics = false, bool canDeleteCustomMetrics = false, bool canUpdateRenamingRules = false,
-            bool canSearchRenamingRules = false, bool canExecuteRenamingRules = false, bool canCreateWorkflows = false,
-            bool canUpdateWorkflows = false, bool canDeleteWorkflows = false, bool canCreateChecklistTemplates = false,
-            bool canUpdateChecklistTemplates = false, bool canDeleteChecklistTemplates = false, bool canCreateStructureSetTemplates = false,
-            bool canUpdateStructureSetTemplates = false, bool canDeleteStructureSetTemplates = false,
+            bool canUpdateOrganizations = false, bool canCreateApiKeys = false, bool canManageAuditLogs = false, 
+            bool canCreateCustomMetrics = false, bool canUpdateCustomMetrics = false, bool canDeleteCustomMetrics = false, 
+            bool canUpdateRenamingRules = false, bool canSearchRenamingRules = false, bool canExecuteRenamingRules = false, 
+            bool canCreateWorkflows = false, bool canUpdateWorkflows = false, bool canDeleteWorkflows = false, 
+            bool canCreateChecklistTemplates = false, bool canUpdateChecklistTemplates = false, bool canDeleteChecklistTemplates = false, 
+            bool canCreateStructureSetTemplates = false, bool canUpdateStructureSetTemplates = false, bool canDeleteStructureSetTemplates = false,
             bool canCreateScorecardTemplates = false, bool canUpdateScorecardTemplates = false, bool canDeleteScorecardTemplates = false,
             bool canCreateObjectiveTemplates = false, bool canDeleteObjectiveTemplates = false, bool canCreateWorkspaces = false,
             bool canReadWorkspaces = false, bool canUpdateWorkspaces = false, bool canDeleteWorkspaces = false,
@@ -687,7 +687,7 @@ namespace ProKnow.Role
             bool canCreatePatients = false, bool canReadPatients = false, bool canUpdatePatients = false,
             bool canDeletePatients = false, bool canCopyPatients = false, bool canMovePatients = false,
             bool canViewPatientsPHI = false, bool canContourPatients = false, bool canUploadPatientDICOM = false,
-            bool canDownloadPatientDICOM = false, bool canCreatePatientChecklists = false, bool canReadPatientChecklists = false,
+            bool canCreatePatientChecklists = false, bool canReadPatientChecklists = false,
             bool canUpdatePatientChecklists = false, bool canDeletePatientChecklists = false, bool canCreatePatientScorecards = false,
             bool canReadPatientScorecards = false, bool canUpdatePatientScorecards = false, bool canDeletePatientScorecards = false,
             bool canCreatePatientDocuments = false, bool canReadPatientDocuments = false, bool canUpdatePatientDocuments = false,
@@ -698,6 +698,7 @@ namespace ProKnow.Role
             bool canUpdateCollectionScorecards = false, bool canDeleteCollectionScorecards = false, bool canCreateCollectionBookmarks = false,
             bool canReadCollectionBookmarks = false, bool canUpdateCollectionBookmarks = false, bool canDeleteCollectionBookmarks = false)
         {
+            CanUpdateOrganizations = canUpdateOrganizations;
             CanCreateApiKeys = canCreateApiKeys;
             CanManageAuditLogs = canManageAuditLogs;
             CanCreateCustomMetrics = canCreateCustomMetrics;
@@ -748,7 +749,6 @@ namespace ProKnow.Role
             CanViewPatientsPHI = canViewPatientsPHI;
             CanContourPatients = canContourPatients;
             CanUploadPatientDICOM = canUploadPatientDICOM;
-            CanDownloadPatientDICOM = canDownloadPatientDICOM;
             CanCreatePatientChecklists = canCreatePatientChecklists;
             CanReadPatientChecklists = canReadPatientChecklists;
             CanUpdatePatientChecklists = canUpdatePatientChecklists;
