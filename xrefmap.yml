@@ -6448,15 +6448,15 @@ references:
   isSpec: "True"
   fullName: ProKnow.Requestor.GetAsync
   nameWithType: Requestor.GetAsync
-- uid: ProKnow.Requestor.GetAsyncWithPaging(System.String,IList{KeyValuePair{System.String,System.String}},Dictionary{System.String,System.Object})
-  name: GetAsyncWithPaging(String, IList<KeyValuePair<String, String>>, Dictionary<String, Object>)
-  href: api/ProKnow.Requestor.html#ProKnow_Requestor_GetAsyncWithPaging_System_String_IList_KeyValuePair_System_String_System_String___Dictionary_System_String_System_Object__
-  commentId: M:ProKnow.Requestor.GetAsyncWithPaging(System.String,IList{KeyValuePair{System.String,System.String}},Dictionary{System.String,System.Object})
-  name.vb: GetAsyncWithPaging(String, IList(Of KeyValuePair(Of String, String)), Dictionary(Of String, Object))
-  fullName: ProKnow.Requestor.GetAsyncWithPaging(System.String, IList<KeyValuePair<System.String, System.String>>, Dictionary<System.String, System.Object>)
-  fullName.vb: ProKnow.Requestor.GetAsyncWithPaging(System.String, IList(Of KeyValuePair(Of System.String, System.String)), Dictionary(Of System.String, System.Object))
-  nameWithType: Requestor.GetAsyncWithPaging(String, IList<KeyValuePair<String, String>>, Dictionary<String, Object>)
-  nameWithType.vb: Requestor.GetAsyncWithPaging(String, IList(Of KeyValuePair(Of String, String)), Dictionary(Of String, Object))
+- uid: ProKnow.Requestor.GetAsyncWithPaging(System.String,IList{KeyValuePair{System.String,System.String}},Dictionary{System.String,System.Object},System.String)
+  name: GetAsyncWithPaging(String, IList<KeyValuePair<String, String>>, Dictionary<String, Object>, String)
+  href: api/ProKnow.Requestor.html#ProKnow_Requestor_GetAsyncWithPaging_System_String_IList_KeyValuePair_System_String_System_String___Dictionary_System_String_System_Object__System_String_
+  commentId: M:ProKnow.Requestor.GetAsyncWithPaging(System.String,IList{KeyValuePair{System.String,System.String}},Dictionary{System.String,System.Object},System.String)
+  name.vb: GetAsyncWithPaging(String, IList(Of KeyValuePair(Of String, String)), Dictionary(Of String, Object), String)
+  fullName: ProKnow.Requestor.GetAsyncWithPaging(System.String, IList<KeyValuePair<System.String, System.String>>, Dictionary<System.String, System.Object>, System.String)
+  fullName.vb: ProKnow.Requestor.GetAsyncWithPaging(System.String, IList(Of KeyValuePair(Of System.String, System.String)), Dictionary(Of System.String, System.Object), System.String)
+  nameWithType: Requestor.GetAsyncWithPaging(String, IList<KeyValuePair<String, String>>, Dictionary<String, Object>, String)
+  nameWithType.vb: Requestor.GetAsyncWithPaging(String, IList(Of KeyValuePair(Of String, String)), Dictionary(Of String, Object), String)
 - uid: ProKnow.Requestor.GetAsyncWithPaging*
   name: GetAsyncWithPaging
   href: api/ProKnow.Requestor.html#ProKnow_Requestor_GetAsyncWithPaging_
@@ -7121,19 +7121,6 @@ references:
   isSpec: "True"
   fullName: ProKnow.Role.Permissions.CanDeleteWorkspaces
   nameWithType: Permissions.CanDeleteWorkspaces
-- uid: ProKnow.Role.Permissions.CanDownloadPatientDICOM
-  name: CanDownloadPatientDICOM
-  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanDownloadPatientDICOM
-  commentId: P:ProKnow.Role.Permissions.CanDownloadPatientDICOM
-  fullName: ProKnow.Role.Permissions.CanDownloadPatientDICOM
-  nameWithType: Permissions.CanDownloadPatientDICOM
-- uid: ProKnow.Role.Permissions.CanDownloadPatientDICOM*
-  name: CanDownloadPatientDICOM
-  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanDownloadPatientDICOM_
-  commentId: Overload:ProKnow.Role.Permissions.CanDownloadPatientDICOM
-  isSpec: "True"
-  fullName: ProKnow.Role.Permissions.CanDownloadPatientDICOM
-  nameWithType: Permissions.CanDownloadPatientDICOM
 - uid: ProKnow.Role.Permissions.CanExecuteRenamingRules
   name: CanExecuteRenamingRules
   href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanExecuteRenamingRules
@@ -7602,6 +7589,19 @@ references:
   isSpec: "True"
   fullName: ProKnow.Role.Permissions.CanUpdateGroups
   nameWithType: Permissions.CanUpdateGroups
+- uid: ProKnow.Role.Permissions.CanUpdateOrganizations
+  name: CanUpdateOrganizations
+  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanUpdateOrganizations
+  commentId: P:ProKnow.Role.Permissions.CanUpdateOrganizations
+  fullName: ProKnow.Role.Permissions.CanUpdateOrganizations
+  nameWithType: Permissions.CanUpdateOrganizations
+- uid: ProKnow.Role.Permissions.CanUpdateOrganizations*
+  name: CanUpdateOrganizations
+  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanUpdateOrganizations_
+  commentId: Overload:ProKnow.Role.Permissions.CanUpdateOrganizations
+  isSpec: "True"
+  fullName: ProKnow.Role.Permissions.CanUpdateOrganizations
+  nameWithType: Permissions.CanUpdateOrganizations
 - uid: ProKnow.Role.Permissions.CanUpdatePatientChecklists
   name: CanUpdatePatientChecklists
   href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanUpdatePatientChecklists
