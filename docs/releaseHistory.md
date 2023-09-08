@@ -10,6 +10,13 @@ All releases in the v0.x.x series are subject to breaking changes from one versi
 
 - Updated the `Patients.query` route to reflect changes to the v2.0.1.0 version of the ProKnow API to return all patients.
 
+## v0.2.5
+
+*Enhancements*
+
+- Added ability to set the client name and version in the User-Agent header for outgoing requests.
+- Added inner exceptions to ProKnowExceptions, ProKnowCredentialsStatus and ProKnowDomainStatus objects.
+
 ## v0.2.4
 
 *Enhancements*
