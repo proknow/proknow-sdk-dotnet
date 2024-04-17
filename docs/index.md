@@ -1,5 +1,5 @@
 # Introduction 
-proknow-sdk is a .NET Core software development kit (SDK) to interface with [ProKnow](https://proknow.com) from .NET
+proknow-sdk is a .NET software development kit (SDK) to interface with [ProKnow](https://proknow.com) from .NET
 applications.
 
 # Installation

@@ -1,5 +1,5 @@
 # Introduction 
-proknow-sdk is a .NET Core SDK to interface with ProKnow.
+proknow-sdk is a .NET SDK to interface with ProKnow.
 
 # Documentation
 Complete documentation is available at [Github Pages](http://proknow.github.io/proknow-sdk-dotnet).
@@ -13,7 +13,7 @@ Documentation is generated using the tool [DocFx](https://dotnet.github.io/docfx
 - Windows PowerShell v2+ - This is automatically included in Windows 10 starting with update 1607.  If you are running
 an earlier version of Windows, PowerShell can be installed following these
 [instructions](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows).
-- .NET Framework 4+ - The installer for this can be downloaded [here](https://dotnet.microsoft.com/download).
+- .NET 8+ - The installer for this can be downloaded [here](https://dotnet.microsoft.com/download).
 - Chocolatey - This is a package manager for Windows.  The instructions for installing this can be found [here](https://chocolatey.org/install).
 - DocFx - This can be installed using Chocolatey from an administrative command prompt with the command `choco install docfx`.
 
