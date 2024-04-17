@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ProKnow.Patient
@@ -75,7 +76,7 @@ namespace ProKnow.Patient
             // Request the creation
             var route = $"/workspaces/{_workspaceId}/patients/{_patientId}/metrics/sets";
             var requestSchema = new PatientScorecardItem(null, null, null, null, null, name, computedMetrics, customMetricIdsAndObjectives);
-            var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+            var jsonSerializerOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
             var contentJson = JsonSerializer.Serialize(requestSchema, jsonSerializerOptions);
             var content = new StringContent(contentJson, Encoding.UTF8, "application/json");
             string responseJson = await _proKnow.Requestor.PostAsync(route, null, content);

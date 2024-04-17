@@ -119,7 +119,7 @@ namespace ProKnow.Scorecard
             if (customMetricItem.Type != null)
             {
                 writer.WritePropertyName(_typeKey);
-                var overrideOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+                var overrideOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
                 JsonSerializer.Serialize(writer, customMetricItem.Type, overrideOptions);
             }
 

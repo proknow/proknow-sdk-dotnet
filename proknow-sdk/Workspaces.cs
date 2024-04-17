@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ProKnow.Exceptions;
@@ -31,7 +32,7 @@ namespace ProKnow
         public async Task<WorkspaceItem> CreateAsync(string slug, string name, bool isProtected = true)
         {
             var workspaceItem = new WorkspaceItem { Slug = slug, Name = name, Protected = isProtected };
-            var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+            var jsonSerializerOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
             var content = new StringContent(JsonSerializer.Serialize(workspaceItem, jsonSerializerOptions),
                 Encoding.UTF8, "application/json");
             string workspaceJson = await _proKnow.Requestor.PostAsync("/workspaces", null, content);

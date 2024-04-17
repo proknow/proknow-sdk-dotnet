@@ -1,4 +1,4 @@
-﻿using Dicom;
+﻿using FellowOakDicom;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Patient.Entities;
 using ProKnow.Test;

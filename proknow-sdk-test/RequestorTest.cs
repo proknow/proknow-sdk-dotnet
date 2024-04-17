@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using System.Text.Json.Serialization;
 
 namespace ProKnow.Test
 {
@@ -251,7 +252,7 @@ namespace ProKnow.Test
             // Create a workspace using the Requestor
             var workspaceName = $"SDK-{_testClassName}-{testNumber}";
             var workspaceItem = new WorkspaceItem { Slug = workspaceName.ToLower(), Name = workspaceName, Protected = false };
-            var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+            var jsonSerializerOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
             var json = JsonSerializer.Serialize(workspaceItem, jsonSerializerOptions);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             await _proKnow.Requestor.PostAsync("/workspaces", null, content);
