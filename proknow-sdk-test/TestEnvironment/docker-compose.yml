@@ -1,0 +1,50 @@
+version: "3"
+services:
+  postgres:
+    image: bitnami/postgresql:12.11.0
+    ports:
+      - 5449:5432
+    environment:
+      ALLOW_EMPTY_PASSWORD: "yes"
+      POSTGRESQL_EXTRA_FLAGS: "-c random_page_cost=1.1 -c work_mem=16MB"
+    volumes:
+      - postgres:/bitnami/postgresql
+  minio:
+    image: minio/minio:RELEASE.2020-08-18T19-41-00Z
+    ports:
+      - 9009:9000
+    environment:
+      MINIO_ACCESS_KEY: AKIAIOSFODNN7PROKNOW
+      MINIO_SECRET_KEY: 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
+      # MINIO_SSE_MASTER_KEY: proknow-key:a8c66e84344e22a11a555bc3e345295580a9d541cf7f03620438160f4004b83a
+    volumes:
+      - minio:/export
+    command: server /export
+  redis:
+    image: redis:6.0-alpine
+    ports:
+      - 6399:6379
+  proknow-init:
+    image: proknow.azurecr.io/proknow:latest
+    command: "upgrade --config /etc/opt/proknow/config.json"
+    depends_on:
+      - postgres
+      - minio
+      - redis
+    volumes:
+      - ./etc:/etc/opt/proknow
+  proknow:
+    image: proknow.azurecr.io/proknow:latest
+    depends_on:
+      - proknow-init
+    environment:
+      PATIENTS_MIN_PAGE_SIZE: 1
+    ports:
+      - 3005:8080
+    volumes:
+      - ./etc:/etc/opt/proknow
+      - proknow-opt:/var/opt/proknow
+volumes:
+  postgres:
+  minio:
+  proknow-opt:

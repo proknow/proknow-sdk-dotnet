@@ -28,28 +28,37 @@ can then be viewed on [Github Pages](http://proknow.github.io/proknow-sdk-dotnet
 
 ## Running Tests
 
-
 ### Access to ProKnow
-The tests require access to ProKnow in order to create temporary custom metrics, scorecard templates, and workspaces.
+The tests require access to ProKnow in order to create temporary custom metrics, scorecard templates, and workspaces. To configure your environment to run tests locally
 
-The tests require the ProKnow API service to be started with the `PATIENTS_MIN_PAGE_SIZE` environment variable set to `1`. To do this, at the top level of the the ProKnow directory, run
+1. Copy `./proknow-sdk-test/TestEnvironment/templates/config.json` into `./proknow-sdk-test/TestEnvironment/etc` and replace the following values with what is in your Atlas development `config.json`:
+    - `S3_ACCESS_KEY_ID`
+    - `S3_ACCESS_KEY_SECRET`
+    - `IDENTITY_CONFIGURATION_INFORMATION`
+2. Open a PowerShell command prompt in the solution folder run the following:
 
-```sh
-$ PATIENTS_MIN_PAGE_SIZE=1 npm run start
-```
+    ```ps1
+    $ cd ./proknow-sdk-test/TestEnvironment
+    $ docker-compose up -d
+    $ ./test-env-setup.ps1
+    ```
 
-Create a .runsettings file in the solution folder with the following content, edited appropriately:
-```
-<?xml version="1.0" encoding="utf-8"?>
-<RunSettings>
-  <!-- Parameters used by tests at run time -->
-  <TestRunParameters>
-    <Parameter name="baseUrl" value="https://example.proknow.com" />
-    <Parameter name="credentialsFile" value="C:/Users/user1/AppData/Local/ProKnow/credentials.json" />
-  </TestRunParameters>
-</RunSettings>
-```
-Refer to these [instructions](https://docs.microsoft.com/en-us/visualstudio/test/configure-unit-tests-by-using-a-dot-runsettings-file) regarding how to use the .runsettings file when running tests in Visual Studio or from the command prompt.
+    If you encounter errors running the last command, you may need to adjust the PowerShell execution policy to allow script execution. To do this, run PowerShell as an administrator and execute `$ Set-ExecutionPolicy RemoteSigned`.
+
+    A `credentials.json` file will be created in the local directory. Update the `.runsettings` file with the full path to the `credentials.json` file.
+
+3. If a `.runsettings` file does not yet exist, create one in the solution folder with the following content:
+    ```
+    <?xml version="1.0" encoding="utf-8"?>
+    <RunSettings>
+      <!-- Parameters used by tests at run time -->
+      <TestRunParameters>
+        <Parameter name="baseUrl" value="https://localhost:3005" />
+        <Parameter name="credentialsFile" value="C:/src/pk/proknow-sdk-dotnet/proknow-sdk-test/TestEnvironment/credentials.json" />
+      </TestRunParameters>
+    </RunSettings>
+    ```
+    Refer to these [instructions](https://docs.microsoft.com/en-us/visualstudio/test/configure-unit-tests-by-using-a-dot-runsettings-file) regarding how to use the .runsettings file when running tests in Visual Studio or from the command prompt.
 
 ### Test Data
 The project test data is managed using [Git Large File Storage](https://github.com/git-lfs/git-lfs).  This tool must be

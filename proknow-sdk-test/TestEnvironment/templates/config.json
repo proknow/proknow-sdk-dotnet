@@ -1,0 +1,142 @@
+{
+  "hostname": "http://localhost:3005",
+  "subdomain": "pk-test",
+  "security": {
+    "accessKeyId": "proknow",
+    "secretAccessKey": "password",
+    "certificate": "support/certs/localhost.crt",
+    "key": "support/certs/localhost.key"
+  },
+  "maxUploadFileSize": 50000000,
+  "cache": "/var/opt/proknow",
+  "storage": {
+    "type": "s3",
+    "name": "atlas",
+    "config": {
+      "accessKeyId": "S3_ACCESS_KEY_ID",
+      "secretAccessKey": "S3_ACCESS_KEY_SECRET",
+      "region": "us-east-1",
+      "sslEnabled": false
+    },
+    "client": {
+      "endpoint": "http://minio:9000",
+      "s3ForcePathStyle": true,
+      "sslEnabled": false,
+      "bucket": "atlas-test"
+    }
+  },
+  "audit": {
+    "postgres": true,
+    "archiver": {
+      "storage": {
+        "type": "s3",
+        "name": "atlas",
+        "config": {
+          "accessKeyId": "S3_ACCESS_KEY_ID",
+          "secretAccessKey": "S3_ACCESS_KEY_SECRET",
+          "region": "us-east-1",
+          "sslEnabled": false
+        },
+        "client": {
+          "endpoint": "http://minio:9000",
+          "s3ForcePathStyle": true,
+          "sslEnabled": false,
+          "bucket": "atlas-test"
+        }
+      }
+    }
+  },
+  "database": {
+    "type": "postgres",
+    "schema": "/opt/proknow/env",
+    "host": "postgres",
+    "port": 5432,
+    "username": "postgres",
+    "database": "atlas_test"
+  },
+  "identity": {
+    IDENTITY_CONFIGURATION_INFORMATION
+  },
+  "supervisor": {
+    "visibilityTimeout": 30,
+    "pollingInterval": 5,
+    "failureMaxRetries": 2,
+    "failureRetryDelays": [
+      5,
+      30
+    ],
+    "reservations": {
+      "1": 1,
+      "2": 1,
+      "10": 2
+    }
+  },
+  "gc": {
+    "cronPattern": "0 0 3 * * *",
+    "cronTimeZone": "America/New_York",
+    "batchSize": 100,
+    "visibilityTimeout": 30,
+    "concurrency": 4,
+    "entityCollectionThreshold": 2592000
+  },
+  "variables": {
+    "auth0": {
+      "domain": "auth.proknow-dev.com",
+      "audience": "https://app.proknow.com/api/"
+    },
+    "contacts": [
+      {
+        "icon": {
+          "backgroundImage": "url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAyMDAgMjAwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHN0eWxlIHR5cGU9InRleHQvY3NzIj4uc3Qwe2ZpbGw6IzgyOEY5ODt9LnN0MXtkaXNwbGF5Om5vbmU7fS5zdDJ7ZGlzcGxheTppbmxpbmU7fS5zdDN7ZmlsbDojNTM5N0M5O308L3N0eWxlPjxnIGlkPSJMYXllcl8xIj48cGF0aCBjbGFzcz0ic3QwIiBkPSJNLTAuMSwyMDBjMC0wLjgsMC0xLjYsMC0yLjNjMC0yMC4xLDAuMS00MC4yLTAuMS02MC4zYzAtMi45LDAuNy01LjIsMi4yLTcuNmM4LjMtMTMuMiwxNi41LTI2LjUsMjQuNy0zOS43YzAuNC0wLjcsMC45LTEuMywxLjUtMi4yYzgsMTMsMTUuOSwyNS44LDI0LjEsMzkuMWM4LjEtMTMuMSwxNS45LTI1LjgsMjQuMS0zOS4xYzguMSwxMy4yLDE1LjksMjYsMjMuOSwzOS4yYzguMS0xMy4yLDE2LTI1LjksMjQuMS0zOS4xYzkuNCwxNSwxOC41LDI5LjUsMjcuNiw0NGMwLjItMC4xLDAuNC0wLjIsMC43LTAuMmMwLTM4LjksMC03Ny45LDAtMTE2LjljMTYsMCwzMS42LDAsNDcuNCwwYzAsNjEuNywwLDEyMy40LDAsMTg1LjJDMTMzLjMsMjAwLDY2LjcsMjAwLTAuMSwyMDB6Ii8+PC9nPjxnIGlkPSJMYXllcl8yIiBjbGFzcz0ic3QxIj48ZyBjbGFzcz0ic3QyIj48cGF0aCBjbGFzcz0ic3QzIiBkPSJNMTk5LjksMzcuN2MwLDQ2LjksMCw5My41LDAsMTQwLjRjLTIuNywwLTUuNSwwLjItOC4yLDBjLTIuMy0wLjItNC42LTAuOC02LjktMS4yYy01LjYtMS0xMC43LTMuMi0xNS45LTUuM2MtNy44LTMuMi0xNS42LTYuNS0yMy41LTkuNGMtNS41LTItMTEuMy0yLjItMTcuMS0xLjVjLTYuOCwwLjktMTMuMywyLjctMTkuNCw1LjhjLTIuNSwxLjMtNC45LDIuOC03LjIsNC4zYy0xLDAuNy0xLjcsMC44LTIuNywwLjFjLTcuNy01LjUtMTYuMi04LjctMjUuNS0xMGMtNC45LTAuNy05LjctMC45LTE0LjQsMC4zYy00LjMsMS4xLTguNiwyLjUtMTIuNyw0LjJjLTcuNiwzLTE1LjEsNi41LTIyLjcsOS40Yy0zLjQsMS4zLTcsMi0xMC42LDIuNmMtMy42LDAuNi03LjMsMC42LTExLDAuOWMtMC42LDAtMS4xLDAtMS45LTAuMWMwLTAuNiwwLTEuMiwwLTEuOGMwLTQ1LjYsMC05MS4yLDAtMTM2LjhjMC0xLjUsMC41LTEuOSwxLjktMmM3LjctMC43LDE1LjQtMS44LDIyLjgtNC4zYzktMywxNy45LTUuOSwyNy04LjdjNy40LTIuMywxNS0zLjQsMjIuNi0yLjRjOS40LDEuMiwxOC4zLDQsMjUsMTEuNGMwLjEsMC4yLDAuMywwLjMsMC41LDAuNGMwLjIsMC4xLDAuMywwLjIsMC41LDAuNGMxLjUtMS40LDIuOS0yLjksNC41LTQuMWM1LjMtNC4yLDExLjQtNi42LDE4LjEtNy40YzMuNS0wLjUsNy4xLTAuNiwxMC43LTAuOGM0LjUtMC4yLDguOCwwLjksMTMsMi4xYzUuNSwxLjUsMTAuOSwzLjIsMTYuNCw1YzQuNSwxLjQsOC44LDMuMiwxMy4zLDQuNGM1LjMsMS40LDEwLjcsMi40LDE2LjEsMy40QzE5NC44LDM3LjMsMTk3LjMsMzcuNCwxOTkuOSwzNy43eiBNOTYuOCwxNjEuM2MwLjEtMC45LDAuMS0xLjcsMC4xLTIuNGMwLTM3LjcsMC03NS40LDAuMS0xMTMuMWMwLTQuMi0xLjgtNy4yLTQuNy05LjdjLTQuMi0zLjYtOS4xLTUuNS0xNC41LTYuNWMtNS43LTEuMS0xMS40LTEuMi0xNy0wLjJjLTksMS43LTE3LjUsNC44LTI2LjEsNy43Yy04LjUsMi45LTE3LjEsNS40LTI2LjEsNi41Yy0xLjQsMC4yLTEuNywwLjctMS43LDJjMCw0MS4zLDAsODIuNiwwLDEyMy45YzAsMS41LDAuNSwxLjksMS45LDEuN2M0LjgtMC41LDkuNi0xLjUsMTQuMS0zLjNjOC4zLTMuNCwxNi40LTcsMjQuNy0xMC4zYzQuNi0xLjksOS40LTMuNCwxNC40LTMuNmMzLjMtMC4yLDYuNi0wLjEsOS44LDBjNS43LDAuMywxMS4yLDEuNywxNi41LDMuN0M5MS4xLDE1OC44LDkzLjcsMTYwLDk2LjgsMTYxLjN6IE0xOTMuNywxMDcuNmMwLTIwLjYsMC00MS4xLDAtNjEuN2MwLTEuNS0wLjQtMi0xLjktMi4zYy01LjItMC45LTEwLjQtMS43LTE1LjQtMy4xYy04LjItMi40LTE2LjItNS4zLTI0LjMtNy44Yy03LjctMi40LTE1LjQtNC41LTIzLjctMy44Yy02LjksMC42LTEzLjQsMi4yLTE5LjEsNi40Yy0zLjYsMi43LTUuOCw2LTUuNywxMC45YzAuMiwxNC4xLDAuMSwyOC4xLDAuMSw0Mi4yYzAsMjMuNiwwLDQ3LjMsMCw3MC45YzAsMi4yLDAuMSwyLjIsMiwxLjNjNi4zLTMuMSwxMi45LTUuMiwxOS45LTYuMmM5LjItMS4zLDE4LjMtMC40LDI3LDMuMWM3LDIuOCwxNCw1LjgsMjAuOSw4LjljNS43LDIuNSwxMS42LDQuMywxNy44LDQuOWMyLjMsMC4yLDIuNCwwLjEsMi40LTIuMkMxOTMuNywxNDguNSwxOTMuNywxMjgsMTkzLjcsMTA3LjZ6Ii8+PHBhdGggY2xhc3M9InN0MyIgZD0iTTE1NywxMDcuOWMwLDgtMC4xLDE1LjksMCwyMy45YzAsMy43LDAuNyw0LjYsNC4zLDUuN2MxLjUsMC40LDEuNSwxLjMsMS40LDIuNGMtMC4xLDEuMy0xLjEsMS4yLTIsMS4yYy05LDAtMTgsMC0yNywwYy0wLjgsMC0xLjgsMC4xLTEuOC0xLjJjMC0xLjEtMC4yLTIuMSwxLjQtMi40YzMuMi0wLjYsNC43LTIuNCw1LTUuN2MwLjEtMS43LDAuMS0zLjQsMC4xLTUuMmMwLTExLjMsMC0yMi42LDAtMzMuOWMwLTAuNywwLTEuNCwwLTJjLTAuMi0zLjYtMC45LTQuNi00LjQtNS44Yy0xLTAuNC0yLjMtMC4zLTIuMi0yLjFjMC4xLTEuMiwwLjUtMS42LDEuNy0xLjZjNC44LDAsOS43LDAsMTQuNSwwYzIuMywwLDQuNiwwLjEsNi45LDBjMS40LDAsMS45LDAuNSwxLjksMS45Yy0wLjEsOC4yLDAsMTYuNSwwLDI0LjdDMTU2LjksMTA3LjksMTU2LjksMTA3LjksMTU3LDEwNy45eiIvPjxwYXRoIGNsYXNzPSJzdDMiIGQ9Ik0xNDcuOCw3MS41Yy01LjgsMC40LTEwLjItNC43LTEwLjItOS45YzAtNS42LDQuNS0xMC4yLDEwLjEtMTAuMWM1LjYsMCwxMCw0LjUsMTAuMSwxMEMxNTcuOSw2Ni4zLDE1My42LDcxLjksMTQ3LjgsNzEuNXoiLz48L2c+PC9nPjwvc3ZnPg==)",
+          "backgroundRepeat": "no-repeat",
+          "cursor": "default",
+          "height": "54px",
+          "width": "50px"
+        },
+        "name": "Elekta Solutions AB",
+        "address": [
+          "Kungstensgatan 18, Box 7593",
+          "SE-103 93 Stockholm",
+          "Sweden",
+          "Phone: +46 8 587 254 00",
+          "Fax: +46 8 587 255 00",
+          "eu_ar@elekta.com"
+        ]
+      },
+      {
+        "icon": {
+          "backgroundImage": "url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI2LjAuMiwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAxMTAgMzciIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDExMCAzNzsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJLnN0MHtmaWxsOiNGRkZGRkY7fQoJLnN0MXtmaWxsOiM4NzhGOTg7fQo8L3N0eWxlPgo8Zz4KCTxyZWN0IHg9IjEiIHk9IjQuNiIgY2xhc3M9InN0MCIgd2lkdGg9IjU0LjEiIGhlaWdodD0iMjcuNyIvPgoJPGc+CgkJPHBhdGggY2xhc3M9InN0MSIgZD0iTTU0LjEsNS43djI1LjdIMlY1LjdINTQuMSBNNTYuMSwzLjdIMHYyOS43aDU2LjFWMy43TDU2LjEsMy43eiIvPgoJPC9nPgo8L2c+CjxnPgoJPHJlY3QgeD0iNTQuOSIgeT0iNC42IiBjbGFzcz0ic3QwIiB3aWR0aD0iNTQuMSIgaGVpZ2h0PSIyNy43Ii8+Cgk8Zz4KCQk8cGF0aCBjbGFzcz0ic3QxIiBkPSJNMTA4LDUuN3YyNS43SDU1LjlWNS43SDEwOCBNMTEwLDMuN0g1My45djI5LjdIMTEwVjMuN0wxMTAsMy43eiIvPgoJPC9nPgo8L2c+CjxnPgoJPHBhdGggY2xhc3M9InN0MSIgZD0iTTY0LjIsMjUuMlYxMS44aDUuN2MxLjQsMCwyLjUsMC4xLDMuMSwwLjRjMC42LDAuMiwxLjIsMC43LDEuNiwxLjNzMC42LDEuMywwLjYsMi4xYzAsMS0wLjMsMS44LTAuOSwyLjUKCQlzLTEuNSwxLjEtMi43LDEuMmMwLjYsMC4zLDEuMSwwLjcsMS41LDEuMXMwLjksMS4xLDEuNSwyLjJsMS42LDIuNkg3M2wtMi0yLjljLTAuNy0xLTEuMi0xLjctMS40LTJzLTAuNS0wLjUtMC44LTAuNgoJCXMtMC43LTAuMi0xLjQtMC4yaC0wLjV2NS42TDY0LjIsMjUuMkw2NC4yLDI1LjJ6IE02Ni45LDE3LjVoMmMxLjMsMCwyLjEtMC4xLDIuNC0wLjJzMC42LTAuMywwLjgtMC42czAuMy0wLjYsMC4zLTEKCQljMC0wLjUtMC4xLTAuOC0wLjQtMS4xYy0wLjItMC4zLTAuNi0wLjUtMS0wLjVjLTAuMiwwLTAuOSwwLTIsMGgtMi4xQzY2LjksMTQuMSw2Ni45LDE3LjUsNjYuOSwxNy41eiIvPgoJPHBhdGggY2xhc3M9InN0MSIgZD0iTTc3LjgsMjUuMlYxMS44aDkuOXYyLjNoLTcuMnYzaDYuN3YyLjNoLTYuN3YzLjdIODh2Mi4zSDc3LjhWMjUuMnoiLz4KCTxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik05MC4yLDI1LjJWMTEuOGg0LjNjMS42LDAsMi43LDAuMSwzLjIsMC4yYzAuOCwwLjIsMS40LDAuNiwxLjksMS4zczAuOCwxLjUsMC44LDIuNmMwLDAuOC0wLjEsMS41LTAuNCwyLjEKCQlzLTAuNywxLTEuMSwxLjNjLTAuNSwwLjMtMC45LDAuNS0xLjQsMC42Yy0wLjYsMC4xLTEuNiwwLjItMi44LDAuMkg5M3Y1LjFIOTAuMnogTTkzLDE0LjF2My44aDEuNWMxLjEsMCwxLjgtMC4xLDIuMS0wLjIKCQljMC40LTAuMSwwLjYtMC40LDAuOC0wLjdjMC4yLTAuMywwLjMtMC42LDAuMy0xYzAtMC41LTAuMS0wLjktMC40LTEuMnMtMC42LTAuNS0xLjEtMC42Yy0wLjMtMC4xLTEtMC4xLTEuOS0wLjEKCQlDOTQuMywxNC4xLDkzLDE0LjEsOTMsMTQuMXoiLz4KPC9nPgo8Zz4KCTxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik0yMy40LDIwLjNsMi42LDAuOGMtMC40LDEuNS0xLjEsMi42LTIsMy4zcy0yLjEsMS4xLTMuNiwxLjFjLTEuOCwwLTMuMi0wLjYtNC40LTEuOHMtMS43LTIuOS0xLjctNQoJCWMwLTIuMiwwLjYtNCwxLjctNS4yczIuNy0xLjksNC41LTEuOWMxLjYsMCwzLDAuNSw0LDEuNWMwLjYsMC42LDEuMSwxLjQsMS40LDIuNWwtMi43LDAuNmMtMC4yLTAuNy0wLjUtMS4yLTEtMS42CgkJYy0wLjUtMC40LTEuMS0wLjYtMS44LTAuNmMtMSwwLTEuOCwwLjQtMi40LDEuMWMtMC42LDAuNy0wLjksMS45LTAuOSwzLjVjMCwxLjcsMC4zLDIuOSwwLjksMy42YzAuNiwwLjcsMS40LDEuMSwyLjQsMS4xCgkJYzAuNywwLDEuMy0wLjIsMS45LTAuN1MyMy4yLDIxLjMsMjMuNCwyMC4zeiIvPgo8L2c+CjxnPgoJPHBhdGggY2xhc3M9InN0MSIgZD0iTTI4LjMsMTEuOGgyLjh2NS40aDUuNnYtNS40aDIuOHYxMy40aC0yLjh2LTUuNGgtNS42djUuNGgtMi44VjExLjh6Ii8+CjwvZz4KPC9zdmc+Cg==)",
+          "backgroundRepeat": "no-repeat",
+          "cursor": "default",
+          "height": "37px",
+          "width": "50px"
+        },
+        "name": "Elekta GmbH",
+        "address": [
+          "Grienbachstrasse 17",
+          "6300 Zug",
+          "Switzerland"
+        ]
+      },
+      {
+        "name": "Australia Sponsor Information",
+        "address": [
+          "Elekta Pty Ltd is the sponsor of this device",
+          "All inquiries in relation to this product to be made to the following: Sales.Ausnz@elekta.com",
+          "Elekta Pty Ltd",
+          "Suite 10.02 Level 10",
+          "146 Arthur Street",
+          "North Sydney",
+          "NSW 2060",
+          "+61 (0) 2 8907 1800",
+          "A.B.N. 49 109 006 966"
+        ]
+      }
+    ],
+    "forceOrganizationResolve": true
+  },
+  "redis": {
+    "host": "redis",
+    "port": 6379
+  }
+}
