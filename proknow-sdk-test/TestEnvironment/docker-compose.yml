@@ -16,7 +16,6 @@ services:
     environment:
       MINIO_ACCESS_KEY: AKIAIOSFODNN7PROKNOW
       MINIO_SECRET_KEY: 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
-      # MINIO_SSE_MASTER_KEY: proknow-key:a8c66e84344e22a11a555bc3e345295580a9d541cf7f03620438160f4004b83a
     volumes:
       - minio:/export
     command: server /export
