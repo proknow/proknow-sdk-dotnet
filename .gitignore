@@ -10,7 +10,7 @@
 *.userosscache
 *.sln.docstates
 credentials.json
-proknow-sdk-test/TestEnvironment/etc
+/proknow-sdk-test/TestEnvironment/etc/config.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
