@@ -51,6 +51,7 @@ jobs:
     - name: Start dependency containers
       run: |
         docker-compose -f ./proknow-sdk-test/TestEnvironment/docker-compose.yml up -d
+        sleep 10
 
     - name: Configure test environment
       shell: pwsh
