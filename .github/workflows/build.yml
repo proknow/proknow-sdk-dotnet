@@ -23,8 +23,23 @@ jobs:
     - name: Install dependencies (NuGet packages)
       run: dotnet restore
 
+    - name: Configure ProKnow
+      run: |
+        sed -e 's/S3_ACCESS_KEY_ID/${{ secrets.S3_ACCESS_KEY_ID }}/g' \
+            -e 's/S3_ACCESS_KEY_SECRET/${{ secrets.S3_ACCESS_KEY_SECRET }}/g' \
+            -e 's/S3_ACCESS_KEY_ID/${{ secrets.AUTH0_CLIENT_ID }}/g' \
+            -e 's/S3_ACCESS_KEY_SECRET/${{ secrets.AUTH0_CLIENT_SECRET }}/g' \
+            ./proknow-sdk-test/TestEnvironment/templates/config.json > \
+            ./proknow-sdk-test/TestEnvironment/etc/config.json
+
+    - name: Start dependency containers
+      run: ./proknow-sdk-test/TestEnvironment/docker-compose up -d
+
     - name: Build release version
       run: dotnet build --configuration Release --no-restore
+
+    - name: Run tests
+      run: dotnet test
 
     - name: Build documentation site (see https://github.com/nikeee/docfx-action)
       uses: nikeee/docfx-action@v1.0.0

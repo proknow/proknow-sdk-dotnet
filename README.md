@@ -34,7 +34,8 @@ The tests require access to ProKnow in order to create temporary custom metrics,
 1. Copy `./proknow-sdk-test/TestEnvironment/templates/config.json` into `./proknow-sdk-test/TestEnvironment/etc` and replace the following values with what is in your Atlas development `config.json`:
     - `S3_ACCESS_KEY_ID`
     - `S3_ACCESS_KEY_SECRET`
-    - `IDENTITY_CONFIGURATION_INFORMATION`
+    - `AUTH0_CLIENT_ID`
+    - `AUTH0_CLIENT_SECRET`
 2. Open a PowerShell command prompt in the solution folder run the following:
 
     ```ps1

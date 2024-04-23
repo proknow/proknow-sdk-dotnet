@@ -55,7 +55,16 @@
     "database": "atlas_test"
   },
   "identity": {
-    IDENTITY_CONFIGURATION_INFORMATION
+    "type": "auth0",
+    "account": "proknow-dev",
+    "domain": "https://auth.proknow-dev.com",
+    "jqksUri": "https://auth.proknow-dev.com/.well-known/jwks.json",
+    "issuer": "https://auth.proknow-dev.com/",
+    "audience": "https://app.proknow.com/api/",
+    "clientId": "AUTH0_CLIENT_ID",
+    "clientSecret": "AUTH0_CLIENT_SECRET",
+    "connection": "Username-Password-Authentication",
+    "namespace": "pk-qpUj"
   },
   "supervisor": {
     "visibilityTimeout": 30,
