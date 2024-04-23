@@ -56,6 +56,7 @@ jobs:
     - name: Configure test environment
       shell: pwsh
       run: |
+        Start-Sleep -Seconds 10
         ./proknow-sdk-test/TestEnvironment/test-env-setup.ps1
         $runSettings = @"
         <?xml version="1.0" encoding="utf-8"?>
