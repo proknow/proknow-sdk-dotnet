@@ -140,7 +140,7 @@ namespace ProKnow.Patient.Registrations.Test
             Assert.AreEqual(expectedDownloadPath, actualDownloadPath);
 
             // Compare it to the uploaded one
-            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "REG.dcm");
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm");
             Console.WriteLine(uploadPath);
             Console.WriteLine(actualDownloadPath);
             Assert.IsTrue(TestHelper.FileEquals(uploadPath, actualDownloadPath));
