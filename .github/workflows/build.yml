@@ -23,6 +23,9 @@ jobs:
     - name: Install dependencies (NuGet packages)
       run: dotnet restore
 
+    - name: Build release version
+      run: dotnet build --configuration Release --no-restore
+
     - name: Configure ProKnow
       run: |
         mkdir ./proknow-sdk-test/TestEnvironment/etc
@@ -49,8 +52,21 @@ jobs:
       run: |
         docker-compose -f ./proknow-sdk-test/TestEnvironment/docker-compose.yml up -d
 
-    - name: Build release version
-      run: dotnet build --configuration Release --no-restore
+    - name: Configure test environment
+      shell: pwsh
+      run: |
+        ./proknow-sdk-test/TestEnvironment/test-env-setup.ps1
+        $runSettings = @"
+        <?xml version="1.0" encoding="utf-8"?>
+        <RunSettings>
+          <!-- Parameters used by tests at run time -->
+          <TestRunParameters>
+            <Parameter name="baseUrl" value="http://localhost:3005" />
+            <Parameter name="credentialsFile" value="./credentials.json" />
+          </TestRunParameters>
+        </RunSettings>
+        "@
+        $runSettings | Out-File -FilePath "./.runsettings"
 
     - name: Run tests
       run: dotnet test
