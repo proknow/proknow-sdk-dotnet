@@ -33,10 +33,13 @@ jobs:
             ./proknow-sdk-test/TestEnvironment/templates/config.json > \
             ./proknow-sdk-test/TestEnvironment/etc/config.json
 
+    - name: Login to ProKnow ACR
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
     - name: Start dependency containers
       run: |
-        pwd
-        ls ./proknow-sdk-test
         docker-compose -f ./proknow-sdk-test/TestEnvironment/docker-compose.yml up -d
 
     - name: Build release version
