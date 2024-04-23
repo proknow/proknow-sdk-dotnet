@@ -72,7 +72,7 @@ jobs:
         $runSettings | Out-File -FilePath "./.runsettings"
 
     - name: Run tests
-      run: dotnet test --configuration Release --no-build -l:trx;LogFileName=${{ github.workspace }}/TestResults.xml
+      run: dotnet test --configuration Release --no-build -l:"trx;LogFileName=${{ github.workspace }}/TestResults.xml"
 
     - name: Publish test results
       if: ${{ always() }}
