@@ -82,7 +82,7 @@ jobs:
         path: ${{ github.workspace }}/TestResults.xml
 
     - name: Build documentation site (see https://github.com/nikeee/docfx-action)
-      uses: nikeee/docfx-action@1
+      uses: nikeee/docfx-action@1.0.0
       with:
         args: docs/docfx.json
         
