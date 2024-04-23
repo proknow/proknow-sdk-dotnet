@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProKnow.Test;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -140,6 +141,8 @@ namespace ProKnow.Patient.Registrations.Test
 
             // Compare it to the uploaded one
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "REG.dcm");
+            Console.WriteLine(uploadPath);
+            Console.WriteLine(actualDownloadPath);
             Assert.IsTrue(TestHelper.FileEquals(uploadPath, actualDownloadPath));
         }
     }
