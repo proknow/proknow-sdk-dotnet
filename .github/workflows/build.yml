@@ -34,7 +34,9 @@ jobs:
             ./proknow-sdk-test/TestEnvironment/etc/config.json
 
     - name: Start dependency containers
-      run: ./proknow-sdk-test/TestEnvironment/docker-compose up -d
+      run: |
+        pwd
+        ./proknow-sdk-test/TestEnvironment/docker-compose up -d
 
     - name: Build release version
       run: dotnet build --configuration Release --no-restore
