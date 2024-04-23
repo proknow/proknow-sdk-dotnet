@@ -51,11 +51,12 @@ jobs:
     - name: Start dependency containers
       run: |
         docker-compose -f ./proknow-sdk-test/TestEnvironment/docker-compose.yml up -d
-        sleep 10
 
     - name: Configure test environment
       shell: pwsh
       run: |
+        Get-Contents ./proknow-sdk-test-TestEnvironment/etc/config.json
+        docker ps --format table --no-trunc
         Start-Sleep -Seconds 10
         ./proknow-sdk-test/TestEnvironment/test-env-setup.ps1
         $runSettings = @"
