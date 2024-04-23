@@ -39,14 +39,14 @@ jobs:
             ./proknow-sdk-test/TestEnvironment/etc/config.json
 
     - name: Login to Azure
-      uses: azure/login@v1
+      uses: azure/login@v2
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Login to ProKnow ACR
-      uses: azure/docker-login@v1
+      uses: docker/login-action@v3
       with:
-        login-server: proknow.azurecr.io
+        registry: proknow.azurecr.io
         username: ${{ secrets.AZURE_ACR_USERNAME }}
         password: ${{ secrets.AZURE_ACR_PASSWORD }}
 
@@ -72,15 +72,22 @@ jobs:
         $runSettings | Out-File -FilePath "./.runsettings"
 
     - name: Run tests
-      run: dotnet test --configuration Release --no-build
+      run: dotnet test --configuration Release --no-build -l:trx;LogFileName=${{ github.workspace }}/TestResults.xml
+
+    - name: Publish test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: sdk-test-results
+        path: ${{ github.workspace }}/TestResults.xml
+        if: ${{ always() }}
 
     - name: Build documentation site (see https://github.com/nikeee/docfx-action)
-      uses: nikeee/docfx-action@v1.0.0
+      uses: nikeee/docfx-action@4
       with:
         args: docs/docfx.json
         
     - name: Upload documentation site artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: docfx-artifact
         path: docs/_site
@@ -89,7 +96,7 @@ jobs:
       run: dotnet pack --configuration Release -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
       
     - name: Upload NuGet package artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: nuget-artifacts
         path: "**/*.*nupkg"
