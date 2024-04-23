@@ -55,17 +55,15 @@ jobs:
     - name: Configure test environment
       shell: pwsh
       run: |
-        Get-Content ./proknow-sdk-test/TestEnvironment/etc/config.json
-        docker ps --format table --no-trunc
-        Start-Sleep -Seconds 10
         ./proknow-sdk-test/TestEnvironment/test-env-setup.ps1
+        $credsPath = Join-Path -Path $PSScriptRoot -ChildPath "./credentials.json"
         $runSettings = @"
         <?xml version="1.0" encoding="utf-8"?>
         <RunSettings>
           <!-- Parameters used by tests at run time -->
           <TestRunParameters>
             <Parameter name="baseUrl" value="http://localhost:3005" />
-            <Parameter name="credentialsFile" value="./credentials.json" />
+            <Parameter name="credentialsFile" value="$credsPath" />
           </TestRunParameters>
         </RunSettings>
         "@
