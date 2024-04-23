@@ -55,7 +55,7 @@ jobs:
     - name: Configure test environment
       shell: pwsh
       run: |
-        Get-Contents ./proknow-sdk-test-TestEnvironment/etc/config.json
+        Get-Content ./proknow-sdk-test-TestEnvironment/etc/config.json
         docker ps --format table --no-trunc
         Start-Sleep -Seconds 10
         ./proknow-sdk-test/TestEnvironment/test-env-setup.ps1
