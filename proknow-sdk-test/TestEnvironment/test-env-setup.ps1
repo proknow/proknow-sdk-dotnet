@@ -1,5 +1,5 @@
 # Step 1: Check if config.json file exists
-$configPath = "./etc/config.json"
+$configPath = Join-Path -Path $PSScriptRoot -ChildPath "etc/config.json"
 if (-not (Test-Path $configPath)) {
     Write-Host "Config file not found at $configPath" -ForegroundColor Red
     exit 1
