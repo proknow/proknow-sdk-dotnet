@@ -55,7 +55,7 @@ jobs:
     - name: Configure test environment
       shell: pwsh
       run: |
-        Get-Content ./proknow-sdk-test-TestEnvironment/etc/config.json
+        Get-Content ./proknow-sdk-test/TestEnvironment/etc/config.json
         docker ps --format table --no-trunc
         Start-Sleep -Seconds 10
         ./proknow-sdk-test/TestEnvironment/test-env-setup.ps1
@@ -72,7 +72,7 @@ jobs:
         $runSettings | Out-File -FilePath "./.runsettings"
 
     - name: Run tests
-      run: dotnet test
+      run: dotnet test --configuration Release --no-build
 
     - name: Build documentation site (see https://github.com/nikeee/docfx-action)
       uses: nikeee/docfx-action@v1.0.0
