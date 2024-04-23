@@ -68,7 +68,7 @@ $apiKeyId = $newOrgContent.user.api_key.id
 $apiKeySecret = $newOrgContent.user.api_key.secret
 
 # Step 8: Write credentials to credentials.json
-$credentialsPath = "./credentials.json"
+$credentialsPath = "credentials.json"
 if (Test-Path $credentialsPath) {
     Remove-Item $credentialsPath -Force
 }

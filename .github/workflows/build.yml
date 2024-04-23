@@ -56,7 +56,7 @@ jobs:
       shell: pwsh
       run: |
         ./proknow-sdk-test/TestEnvironment/test-env-setup.ps1
-        $credsPath = Join-Path -Path $PSScriptRoot -ChildPath "./credentials.json"
+        $credsPath = Join-Path -Path $($PWD.Path) -ChildPath "credentials.json"
         $runSettings = @"
         <?xml version="1.0" encoding="utf-8"?>
         <RunSettings>
