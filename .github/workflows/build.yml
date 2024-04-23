@@ -36,6 +36,7 @@ jobs:
     - name: Start dependency containers
       run: |
         pwd
+        ls
         ./proknow-sdk-test/TestEnvironment/docker-compose up -d
 
     - name: Build release version
