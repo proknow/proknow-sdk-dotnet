@@ -36,8 +36,8 @@ jobs:
     - name: Start dependency containers
       run: |
         pwd
-        ls
-        ./proknow-sdk-test/TestEnvironment/docker-compose up -d
+        ls ./proknow-sdk-test
+        docker-compose -f ./proknow-sdk-test/TestEnvironment/docker-compose.yml up -d
 
     - name: Build release version
       run: dotnet build --configuration Release --no-restore
