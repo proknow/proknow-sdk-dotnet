@@ -55,16 +55,12 @@
     "database": "atlas_test"
   },
   "identity": {
-    "type": "auth0",
-    "account": "proknow-dev",
-    "domain": "https://auth.proknow-dev.com",
-    "jqksUri": "https://auth.proknow-dev.com/.well-known/jwks.json",
-    "issuer": "https://auth.proknow-dev.com/",
-    "audience": "https://app.proknow.com/api/",
-    "clientId": "AUTH0_CLIENT_ID",
-    "clientSecret": "AUTH0_CLIENT_SECRET",
-    "connection": "Username-Password-Authentication",
-    "namespace": "pk-qpUj"
+    "type": "keycloak",
+    "realm": "keycloak",
+    "url": "http://localhost:8289",
+    "metadata_url": "http://localhost:8289/realms/keycloak/.well-known/openid-configuration",
+    "username": "admin",
+    "password": "keycloak"
   },
   "supervisor": {
     "visibilityTimeout": 30,

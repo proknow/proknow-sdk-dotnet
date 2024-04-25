@@ -122,6 +122,7 @@
   <ItemGroup>
     <Folder Include="TestData\Dose\" />
     <Folder Include="TestData\Sro\" />
+    <Folder Include="TestEnvironment\keycloak\" />
   </ItemGroup>
 
 </Project>
