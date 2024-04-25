@@ -56,8 +56,8 @@ jobs:
       shell: pwsh
       run: |
         Start-Sleep -Seconds 15
-        Set-PSDebug -Trace 1
         ./proknow-sdk-test/TestEnvironment/test-env-setup.ps1
+        docker-compose logs proknow
         $credsPath = Join-Path -Path $($PWD.Path) -ChildPath "credentials.json"
         $runSettings = @"
         <?xml version="1.0" encoding="utf-8"?>
