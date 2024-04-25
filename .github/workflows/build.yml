@@ -13,7 +13,13 @@ jobs:
     steps:
 
     - name: print variable
-      run: echo ${{ secrets.TEST }}
+      run: echo ${{ secrets.TEST }} > test.txt
+
+    - name: Upload print variable 
+      uses: actions/upload-artifact@v2
+      with:
+        name: print-variable-to-file
+        path: "./test.txt"
 
     - name: Check out repository
       uses: actions/checkout@v2
