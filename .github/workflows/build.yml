@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+    - name: print variable
+      run: echo ${{ secrets.TEST }}
+
     - name: Check out repository
       uses: actions/checkout@v2
 
