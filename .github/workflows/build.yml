@@ -55,6 +55,7 @@ jobs:
     - name: Configure test environment
       shell: pwsh
       run: |
+        Set-PSDebug -Trace 1
         ./proknow-sdk-test/TestEnvironment/test-env-setup.ps1
         $credsPath = Join-Path -Path $($PWD.Path) -ChildPath "credentials.json"
         $runSettings = @"
