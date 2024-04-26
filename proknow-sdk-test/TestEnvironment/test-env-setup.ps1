@@ -10,7 +10,6 @@ function Invoke-Url {
 
     do {
         $attempts++
-        Write-Host "Calling $Method $Uri... (attempt: $attempts)"
         try {
             $params =@{
                 Uri = $Uri
