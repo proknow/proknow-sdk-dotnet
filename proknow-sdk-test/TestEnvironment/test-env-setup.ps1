@@ -1,3 +1,38 @@
+function Invoke-Url {
+    param (
+        [string]$Uri,
+        [hashtable]$Headers = @{},
+        [string]$Body = "",
+        [string]$Method = "GET"
+    )
+    $attempts = 0
+    $maxAttempts = 30
+
+    do {
+        $attempts++
+        Write-Host "Calling $Method $Uri... (attempt: $attempts)"
+        try {
+            $params =@{
+                Uri = $Uri
+                Method = $Method
+                Headers = $Headers
+                TimeoutSec = 10
+            }
+            if ($Body -ne "") {
+                $params.Add("Body", $Body)
+            }
+            $response = Invoke-WebRequest @params
+            return $response
+        } catch {
+            if ($attempts -eq $maxAttempts) {
+                Write-Host "Failed to call $Uri" -ForegroundColor Red
+                throw
+            }
+            Start-Sleep -Seconds 1
+        }
+    } while ($attempts -lt $maxAttempts)
+}
+
 # Step 1: Check if config.json file exists
 $configPath = Join-Path -Path $PSScriptRoot -ChildPath "etc/config.json"
 if (-not (Test-Path $configPath)) {
@@ -11,7 +46,7 @@ $accessKeyId = $config.security.accessKeyId
 $secretAccessKey = $config.security.secretAccessKey
 
 # Step 3: Call GET http://localhost:3005/api/status
-$statusResponse = Invoke-WebRequest -Uri "http://localhost:3005/api/status"
+$statusResponse = Invoke-Url -Uri "http://localhost:3005/api/status"
 if ($statusResponse.StatusCode -ne 200) {
     Write-Host "Failed to get status of ProKnow. Make sure to run 'docker-compose up -d' first. Status code: $($statusResponse.StatusCode)" -ForegroundColor Red
     exit 1
@@ -22,7 +57,7 @@ $basicAuth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("$($acces
 $headers = @{
     Authorization = "Basic $basicAuth"
 }
-$organizationsResponse = Invoke-WebRequest -Uri "http://localhost:3005/api/organizations" -Headers $headers
+$organizationsResponse = Invoke-Url -Uri "http://localhost:3005/api/organizations" -Headers $headers
 if ($organizationsResponse.StatusCode -ne 200) {
     Write-Host "Failed to get list of existing organizations from ProKnow. Status code: $($organizationsResponse.StatusCode)" -ForegroundColor Red
     exit 1
@@ -56,7 +91,7 @@ $headers = @{
     "Content-Type" = "application/json"
 }
 
-$newOrgResponse = Invoke-WebRequest -Uri "http://localhost:3005/api/organizations" -Method Post -Body $body -Headers $headers
+$newOrgResponse = Invoke-Url -Uri "http://localhost:3005/api/organizations" -Method Post -Body $body -Headers $headers
 if ($newOrgResponse.StatusCode -ne 200) {
     Write-Host "Failed to create organization for SDK testing. Status code: $($newOrgResponse.StatusCode)" -ForegroundColor Red
     exit 1
