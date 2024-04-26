@@ -73,7 +73,7 @@ jobs:
       if: ${{ always() }}
       run: |
         cd ./proknow-sdk-test/TestEnvironment
-        docker-compose -t --tail 200 proknow
+        docker-compose logs -t --tail 200 proknow
 
     - name: Run tests
       run: dotnet test --configuration Release --no-build -l:"trx;LogFileName=${{ github.workspace }}/TestResults.xml"
