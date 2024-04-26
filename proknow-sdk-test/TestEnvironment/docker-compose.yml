@@ -39,6 +39,7 @@ services:
       - postgres
       - minio
       - redis
+      - keycloak
     volumes:
       - ./etc:/etc/opt/proknow
   proknow:
