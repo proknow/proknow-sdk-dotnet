@@ -44,7 +44,7 @@ namespace ProKnow.Test
             BaseUrl = context.Properties["baseUrl"].ToString();
             CredentialsFile = context.Properties["credentialsFile"].ToString();
             ProKnow = new ProKnowApi(TestSettings.BaseUrl, TestSettings.CredentialsFile);
-            TestDataRootDirectory = Path.Combine(context.DeploymentDirectory, "TestData");
+            TestDataRootDirectory = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "TestData");
         }
     }
 }

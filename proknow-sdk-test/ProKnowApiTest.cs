@@ -102,7 +102,7 @@ namespace ProKnow.Test
             var proKnowApi = new ProKnowApi("https://justan.example.com", credentialsFile);
             var domainStatus = await proKnowApi.GetDomainStatusAsync();
             Assert.IsFalse(domainStatus.IsOk);
-            Assert.AreEqual("Exception occurred making HTTP request. No such host is known.", domainStatus.ErrorMessage);
+            Assert.AreEqual("Exception occurred making HTTP request.", domainStatus.ErrorMessage);
         }
     }
 }

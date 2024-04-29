@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ProKnow.Patient
@@ -75,7 +76,7 @@ namespace ProKnow.Patient
         public override async Task SaveAsync()
         {
             var route = $"/workspaces/{_workspaceId}/patients/{_patientId}/metrics/sets/{Id}";
-            var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+            var jsonSerializerOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
             var contentJson = JsonSerializer.Serialize(ConvertToSaveSchema(), jsonSerializerOptions);
             var content = new StringContent(contentJson, Encoding.UTF8, "application/json");
             await _proKnow.Requestor.PutAsync(route, null, content);

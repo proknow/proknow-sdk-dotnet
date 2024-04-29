@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ProKnow.Exceptions;
 
@@ -38,7 +39,7 @@ namespace ProKnow.Collection
             var route = $"/collections/{_collectionItem.Id}/workspaces/{workspaceItem.Id}/patients";
             var options = new JsonSerializerOptions
             {
-                IgnoreNullValues = true
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
             var requestJson = JsonSerializer.Serialize(items, options);
             var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");

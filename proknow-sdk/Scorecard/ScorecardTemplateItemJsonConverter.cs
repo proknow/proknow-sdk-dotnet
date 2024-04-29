@@ -111,7 +111,7 @@ namespace ProKnow.Scorecard
 
             // computed (must be an array, even if empty)
             writer.WritePropertyName(_computedKey);
-            var overrideOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+            var overrideOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
             JsonSerializer.Serialize(writer, scorecardTemplateItem.ComputedMetrics, overrideOptions);
 
             // custom (must be an array, even if empty)
