@@ -34,11 +34,14 @@ The tests require access to ProKnow in order to create temporary custom metrics,
 1. Copy `./proknow-sdk-test/TestEnvironment/templates/config.json` into `./proknow-sdk-test/TestEnvironment/etc` and replace the following values with what is in your Atlas development `config.json`:
     - `S3_ACCESS_KEY_ID`
     - `S3_ACCESS_KEY_SECRET`
-    - `AUTH0_CLIENT_ID`
-    - `AUTH0_CLIENT_SECRET`
-2. Open a PowerShell command prompt in the solution folder run the following:
+2. Login to the `proknow` Azure Container Registry
+    ```sh
+    $ az login
+    $ az acr login -n proknow
+    ```
+3. Open a PowerShell command prompt in the solution folder run the following:
 
-    ```ps1
+    ```sh
     $ cd ./proknow-sdk-test/TestEnvironment
     $ docker-compose up -d
     $ ./test-env-setup.ps1
@@ -48,7 +51,7 @@ The tests require access to ProKnow in order to create temporary custom metrics,
 
     A `credentials.json` file will be created in the local directory. Update the `.runsettings` file with the full path to the `credentials.json` file.
 
-3. If a `.runsettings` file does not yet exist, create one in the solution folder with the following content:
+4. If a `.runsettings` file does not yet exist, create one in the solution folder with the following content:
     ```
     <?xml version="1.0" encoding="utf-8"?>
     <RunSettings>
