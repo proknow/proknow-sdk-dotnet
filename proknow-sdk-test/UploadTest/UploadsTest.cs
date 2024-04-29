@@ -333,7 +333,6 @@ namespace ProKnow.Upload.Test
             Assert.AreEqual(30000, uploadProcessingResults.TotalRetryDelayInMsec);
         }
 
-        [Ignore("This test always fails on demo.proknow.com because paging through the upload results always takes longer than the time needed to process the upload results.")]
         [TestMethod]
         public async Task GetUploadProcessingResultsAsyncTest_ExhaustRetries()
         {
