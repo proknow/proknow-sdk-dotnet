@@ -103,25 +103,6 @@ namespace ProKnow.Test
             Assert.IsTrue(workspaceItems.Any(w => w.Name == workspaceItem.Name));
         }
 
-        [Ignore("There are no longer any GET routes that return anything other than the ProKnow index.html page when the status is not OK.")]
-        [TestMethod]
-        public async Task GetAsyncTest_NotOk()
-        {
-            // Verify that the expected exception is thrown
-            try
-            {
-                await _proKnow.Requestor.GetAsync($"/workspaces/12345");
-                Assert.Fail();
-            }
-            catch (ProKnowHttpException ex)
-            {
-                Assert.AreEqual("GET", ex.RequestMethod);
-                Assert.AreEqual($"{TestSettings.BaseUrl}/api/workspaces/12345", ex.RequestUri);
-                Assert.AreEqual("NotFound", ex.ResponseStatusCode);
-                Assert.IsTrue(ex.Message.Contains("Cannot GET /api//workspaces/12345"));
-            }
-        }
-
         [TestMethod]
         public async Task GetAsyncTest_OkWithIndexHtmlResponse()
         {
