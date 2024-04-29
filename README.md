@@ -10,6 +10,7 @@ Complete documentation is available at [Github Pages](http://proknow.github.io/p
 Documentation is generated using the tool [DocFx](https://dotnet.github.io/docfx) and served on [Github Pages](http://proknow.github.io/proknow-sdk-dotnet).
 
 ### Prerequisites
+- Visual Studio 2022+
 - Windows PowerShell v2+ - This is automatically included in Windows 10 starting with update 1607.  If you are running
 an earlier version of Windows, PowerShell can be installed following these
 [instructions](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows).
