@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using System.Text.Json.Serialization;
 
 namespace ProKnow.Test
 {
@@ -100,25 +101,6 @@ namespace ProKnow.Test
 
             // Verify that the created workspace was one of the workspaces returned
             Assert.IsTrue(workspaceItems.Any(w => w.Name == workspaceItem.Name));
-        }
-
-        [Ignore("There are no longer any GET routes that return anything other than the ProKnow index.html page when the status is not OK.")]
-        [TestMethod]
-        public async Task GetAsyncTest_NotOk()
-        {
-            // Verify that the expected exception is thrown
-            try
-            {
-                await _proKnow.Requestor.GetAsync($"/workspaces/12345");
-                Assert.Fail();
-            }
-            catch (ProKnowHttpException ex)
-            {
-                Assert.AreEqual("GET", ex.RequestMethod);
-                Assert.AreEqual($"{TestSettings.BaseUrl}/api/workspaces/12345", ex.RequestUri);
-                Assert.AreEqual("NotFound", ex.ResponseStatusCode);
-                Assert.IsTrue(ex.Message.Contains("Cannot GET /api//workspaces/12345"));
-            }
         }
 
         [TestMethod]
@@ -251,7 +233,7 @@ namespace ProKnow.Test
             // Create a workspace using the Requestor
             var workspaceName = $"SDK-{_testClassName}-{testNumber}";
             var workspaceItem = new WorkspaceItem { Slug = workspaceName.ToLower(), Name = workspaceName, Protected = false };
-            var jsonSerializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+            var jsonSerializerOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
             var json = JsonSerializer.Serialize(workspaceItem, jsonSerializerOptions);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             await _proKnow.Requestor.PostAsync("/workspaces", null, content);

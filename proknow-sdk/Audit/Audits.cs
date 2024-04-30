@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ProKnow.Audit
@@ -14,7 +15,7 @@ namespace ProKnow.Audit
         private readonly ProKnowApi _proKnow;
         private JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
         {
-            IgnoreNullValues = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
         /// <summary>

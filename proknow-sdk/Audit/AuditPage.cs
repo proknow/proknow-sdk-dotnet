@@ -18,7 +18,7 @@ namespace ProKnow.Audit
 
         private JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
         {
-            IgnoreNullValues = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
         /// <summary>
