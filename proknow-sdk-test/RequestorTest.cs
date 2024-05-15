@@ -149,39 +149,6 @@ namespace ProKnow.Test
         }
 
         [TestMethod]
-        public async Task GetBinaryAsyncTest()
-        {
-            int testNumber = 7;
-
-            // Create a workspace
-            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
-
-            // Create a patient with an image set
-            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Becker^Matthew", "CT"));
-            var entitySummaries = patientItem.FindEntities(e => e.Type == "image_set");
-            var imageSetItem = await entitySummaries[0].GetAsync() as ImageSetItem;
-
-            // Get the data for the first image
-            var image = imageSetItem.Data.Images.First(i => i.Uid == "1.3.6.1.4.1.22213.2.26558.2.61");
-            var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
-                new KeyValuePair<string, string>("ProKnow-Key", imageSetItem.Key) };
-            var bytes = await _proKnow.Requestor.GetBinaryAsync($"/imagesets/{imageSetItem.Id}/images/{image.Tag}", headerKeyValuePairs);
-
-            // Verify the data
-            Assert.AreEqual(512 * 512 * 2, bytes.Length);
-            Assert.AreEqual(32, bytes[401]);
-            Assert.AreEqual(0, bytes[402]);
-            Assert.AreEqual(41, bytes[403]);
-            Assert.AreEqual(0, bytes[404]);
-            Assert.AreEqual(46, bytes[405]);
-            Assert.AreEqual(0, bytes[406]);
-            Assert.AreEqual(47, bytes[407]);
-            Assert.AreEqual(00, bytes[408]);
-            Assert.AreEqual(48, bytes[409]);
-            Assert.AreEqual(0, bytes[410]);
-        }
-
-        [TestMethod]
         public async Task GetBinaryAsyncTest_NotOk()
         {
             // Use invalid credentials for request

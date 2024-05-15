@@ -82,8 +82,9 @@ namespace ProKnow.Patient.Entities
         {
             var image = Data.Images[index];
             var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
-                new KeyValuePair<string, string>("ProKnow-Key", Key) };
-            var bytes = await _proKnow.Requestor.GetBinaryAsync($"/imagesets/{Id}/images/{image.Tag}", headerKeyValuePairs);
+                new KeyValuePair<string, string>("Authorization", "Bearer " + Data.DicomToken) };
+            var bytes = await _proKnow.RtvRequestor.GetBinaryAsync(
+                $"/imageset/{Data.ProcessedId}/image/{image.ProcessedId}", headerKeyValuePairs);
             var imageData = new UInt16[bytes.Length / 2];
             var i = 0;
             var j = 0;

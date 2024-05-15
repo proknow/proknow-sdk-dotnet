@@ -12,6 +12,8 @@ using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
+using System.Collections.Generic;
+using System.Reflection;
 
 [assembly: InternalsVisibleTo("proknow-sdk-test")]
 
@@ -25,11 +27,16 @@ namespace ProKnow
     {
         private readonly ILogger _logger;
 
+        private static Version Version = Assembly.GetExecutingAssembly().GetName().Version;
+
         /// <inheritdoc/>
         public Audits Audit { get; private set; }
 
         /// <inheritdoc/>
         public Requestor Requestor { get; private set; }
+
+        /// <inheritdoc/>
+        public RtvRequestor RtvRequestor { get; private set; }
 
         /// <inheritdoc/>
         public CustomMetrics CustomMetrics { get; private set; }
@@ -161,7 +168,17 @@ namespace ProKnow
         private void ConstructorHelper(string baseUrl, string credentialsId, string credentialsSecret, int lockRenewalBuffer)
         {
             LockRenewalBuffer = lockRenewalBuffer;
-            Requestor = new Requestor(baseUrl, credentialsId, credentialsSecret);
+            Console.WriteLine(Assembly.GetExecutingAssembly().GetName().Version);
+            Requestor = new Requestor(baseUrl, credentialsId, credentialsSecret, new List<KeyValuePair<string, string>>{
+                new KeyValuePair<string, string>(
+                    "User-Agent",
+                    $"ProKnow-SDK-dotnet/v{Version.Major}.{Version.Minor}.{Version.Build}"
+                )
+            });
+            RtvRequestor = new RtvRequestor(baseUrl, new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("Accept-Version", "1")
+            });
             CustomMetrics = new CustomMetrics(this);
             ScorecardTemplates = new ScorecardTemplates(this);
             Workspaces = new Workspaces(this);

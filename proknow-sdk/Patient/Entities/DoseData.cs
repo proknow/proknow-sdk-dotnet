@@ -9,6 +9,24 @@ namespace ProKnow.Patient.Entities
     public class DoseData
     {
         /// <summary>
+        /// Dicom blob ids
+        /// </summary>
+        [JsonPropertyName("dicom")]
+        public string[] Dicom { get; set; }
+
+        /// <summary>
+        /// JSON web token (JWT) for dicom blob ids
+        /// </summary>
+        [JsonPropertyName("dicom_token")]
+        public string DicomToken { get; set; }
+
+        /// <summary>
+        /// The process id for the dose in RTV
+        /// </summary>
+        [JsonPropertyName("processed_id")]
+        public string ProcessedId { get; set; }
+
+        /// <summary>
         /// The minimum IEC couch x position in mm
         /// </summary>
         [JsonPropertyName("min_x")]

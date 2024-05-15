@@ -48,6 +48,11 @@ namespace ProKnow
         Requestor Requestor { get; }
 
         /// <summary>
+        /// Issues requests to the RTV API
+        /// </summary>
+        RtvRequestor RtvRequestor { get; }
+
+        /// <summary>
         /// Interacts with roles in the ProKnow organization
         /// </summary>
         Roles Roles { get; }

@@ -85,8 +85,9 @@ namespace ProKnow.Patient.Entities
         {
             var slice = Data.Slices[index];
             var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
-                new KeyValuePair<string, string>("ProKnow-Key", Key) };
-            var bytes = await _proKnow.Requestor.GetBinaryAsync($"/doses/{Id}/slices/{slice.Tag}", headerKeyValuePairs);
+                new KeyValuePair<string, string>("Authorization", "Bearer " + Data.DicomToken) };
+            var bytes = await _proKnow.RtvRequestor.GetBinaryAsync(
+                $"/dose/{Data.ProcessedId}/slice/{slice.Id}", headerKeyValuePairs);
             if (bytes.Length % 2 != 0)
             {
                 throw new ProKnowException("Dose slices should contain an even number of bytes.");

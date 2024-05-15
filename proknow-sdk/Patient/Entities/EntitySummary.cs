@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Linq;
+
 
 namespace ProKnow.Patient.Entities
 {
@@ -136,7 +140,7 @@ namespace ProKnow.Patient.Entities
                     }
                 }
             }
-         }
+        }
 
         /// <summary>
         /// Returns a string that represents the current object
@@ -177,7 +181,7 @@ namespace ProKnow.Patient.Entities
                 throw new ArgumentOutOfRangeException("The entity 'type' must be one of 'image_set', 'structure_set', 'plan', or 'dose'.");
             }
             var json = await _proKnow.Requestor.GetAsync($"/workspaces/{WorkspaceId}/{typeToRoutePartMap[Type]}/{Id}");
-            return DeserializeEntity(json);
+            return await DeserializeEntity(json);
         }
 
         /// <summary>
@@ -185,28 +189,152 @@ namespace ProKnow.Patient.Entities
         /// </summary>
         /// <param name="json">JSON representation of the entity item</param>
         /// <returns>An entity item</returns>
-        private EntityItem DeserializeEntity(string json)
+        private async Task<EntityItem> DeserializeEntity(string json)
         {
+
+            // Converts Dicom to IEC Patient Coordinate System
             EntityItem entityItem;
-            switch (Type)
+            if (Type == "image_set")
             {
-                case "image_set":
-                    entityItem = JsonSerializer.Deserialize<ImageSetItem>(json);
-                    break;
-                case "structure_set":
-                    entityItem = JsonSerializer.Deserialize<StructureSetItem>(json);
-                    break;
-                case "plan":
-                    entityItem = JsonSerializer.Deserialize<PlanItem>(json);
-                    break;
-                case "dose":
-                    entityItem = JsonSerializer.Deserialize<DoseItem>(json);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException("The entity 'type' must be one of 'image_set', 'structure_set', 'plan', or 'dose'.");
+                var imageSetItem = JsonSerializer.Deserialize<ImageSetItem>(json);
+                JsonElement body = await processDicom($"/imageset", imageSetItem.Data.Dicom, imageSetItem.Data.DicomToken);
+                var data = body.GetProperty("data");
+                imageSetItem.Data.MinX = data.GetProperty("min_x").GetDouble();
+                imageSetItem.Data.MaxX = data.GetProperty("max_x").GetDouble();
+                imageSetItem.Data.MinY = data.GetProperty("min_z").GetDouble();
+                imageSetItem.Data.MaxY = data.GetProperty("max_z").GetDouble();
+                imageSetItem.Data.MinZ = data.GetProperty("max_y").GetDouble() * -1;
+                imageSetItem.Data.MaxZ = data.GetProperty("min_y").GetDouble() * -1;
+                imageSetItem.Data.MaxValue = data.GetProperty("max_value").GetDouble();
+                imageSetItem.Data.MinValue = data.GetProperty("min_value").GetDouble();
+                imageSetItem.Data.PatientPosition = data.GetProperty("patient_position").GetString();
+                imageSetItem.Data.PhotometricInterpretation = data.GetProperty("photometric_interpretation").GetString();
+                imageSetItem.Data.NumberOfColumns = data.GetProperty("resolution_u").GetUInt16();
+                imageSetItem.Data.NumberOfRows = data.GetProperty("resolution_v").GetUInt16();
+                imageSetItem.Data.NumberOfImages = (ushort)data.GetProperty("resolution_w").GetDouble();
+                imageSetItem.Data.ColumnExtents = data.GetProperty("size_u").GetDouble();
+                imageSetItem.Data.RowExtents = data.GetProperty("size_v").GetDouble();
+                imageSetItem.Data.SliceExtents = data.GetProperty("size_w").GetDouble();
+                imageSetItem.Data.ColumnSpacing = data.GetProperty("spacing_u").GetDouble();
+                imageSetItem.Data.RowSpacing = data.GetProperty("spacing_v").GetDouble();
+                imageSetItem.Data.SliceSpacing = data.GetProperty("spacing_w").GetDouble();
+                imageSetItem.Data.HasUniformSliceSpacing = data.GetProperty("uniform_w").GetBoolean();
+                imageSetItem.Data.RowXDirectionCosine = data.GetProperty("u_x").GetDouble();
+                imageSetItem.Data.RowYDirectionCosine = data.GetProperty("u_y").GetDouble();
+                imageSetItem.Data.RowZDirectionCosine = data.GetProperty("u_z").GetDouble();
+                imageSetItem.Data.ColumnXDirectionCosine = data.GetProperty("v_x").GetDouble();
+                imageSetItem.Data.ColumnYDirectionCosine = data.GetProperty("v_z").GetDouble();
+                imageSetItem.Data.ColumnZDirectionCosine = data.GetProperty("v_y").GetDouble() * -1;
+                imageSetItem.Data.ProcessedId = data.GetProperty("processed_id").GetString();
+
+                // Iterate through images and create a dictionary
+                var ImagesUidMap = data.GetProperty("images").EnumerateArray().ToDictionary(
+                    imageElement => imageElement.GetProperty("uid").GetString());
+
+                // Update images information
+                foreach (var image in imageSetItem.Data.Images)
+                {
+                    if (ImagesUidMap.ContainsKey(image.Uid))
+                    {
+                        JsonElement matchingElement = ImagesUidMap[image.Uid];
+                        image.RescaleIntercept = matchingElement.GetProperty("b").GetDouble();
+                        image.RescaleSlope = matchingElement.GetProperty("m").GetDouble();
+                        image.PositionX = matchingElement.GetProperty("pos_x").GetDouble();
+                        image.PositionY = matchingElement.GetProperty("pos_z").GetDouble();
+                        image.PositionZ = matchingElement.GetProperty("pos_y").GetDouble() * -1;
+                        image.ProcessedId = matchingElement.GetProperty("processed_id").GetString();
+                    }
+                }
+
+                entityItem = imageSetItem;
+            }
+            else if (Type == "structure_set")
+            {
+                entityItem = JsonSerializer.Deserialize<StructureSetItem>(json);
+            }
+            else if (Type == "plan")
+            {
+                entityItem = JsonSerializer.Deserialize<PlanItem>(json);
+            }
+            else if (Type == "dose")
+            {
+                var doseItem = JsonSerializer.Deserialize<DoseItem>(json);
+                JsonElement body = await processDicom($"/dose", doseItem.Data.Dicom, doseItem.Data.DicomToken);
+                var data = body.GetProperty("data");
+                doseItem.Data.MinX = data.GetProperty("min_x").GetDouble();
+                doseItem.Data.MaxX = data.GetProperty("max_x").GetDouble();
+                doseItem.Data.MinY = data.GetProperty("min_z").GetDouble();
+                doseItem.Data.MaxY = data.GetProperty("max_z").GetDouble();
+                doseItem.Data.MinZ = data.GetProperty("max_y").GetDouble() * -1;
+                doseItem.Data.MaxZ = data.GetProperty("min_y").GetDouble() * -1;
+                doseItem.Data.MaxValue = data.GetProperty("max_value").GetDouble();
+                doseItem.Data.MinValue = data.GetProperty("min_value").GetDouble();
+                doseItem.Data.ResolutionX = data.GetProperty("resolution_x").GetInt32();
+                doseItem.Data.ResolutionY = data.GetProperty("resolution_z").GetInt32();
+                doseItem.Data.ResolutionZ = data.GetProperty("resolution_y").GetInt32();
+                doseItem.Data.SpacingX = data.GetProperty("spacing_x").GetDouble();
+                doseItem.Data.SpacingY = data.GetProperty("spacing_z").GetDouble();
+                doseItem.Data.SpacingZ = data.GetProperty("spacing_y").GetDouble();
+                doseItem.Data.SizeX = data.GetProperty("size_x").GetDouble();
+                doseItem.Data.SizeY = data.GetProperty("size_z").GetDouble();
+                doseItem.Data.SizeZ = data.GetProperty("size_y").GetDouble();
+                doseItem.Data.PixelIntercept = data.GetProperty("pixel_intercept").GetDouble();
+                doseItem.Data.PixelSlope = data.GetProperty("pixel_slope").GetDouble();
+                doseItem.Data.SummationType = data.GetProperty("summation_type").GetString();
+                doseItem.Data.DoseType = data.GetProperty("type").GetString();
+                doseItem.Data.DoseUnits = data.GetProperty("units").GetString();
+                doseItem.Data.ProcessedId = data.GetProperty("processed_id").GetString();
+                doseItem.Data.Slices = data.GetProperty("slices").EnumerateArray()
+                    .Select(sliceElement => new DoseSlice
+                    {
+                        Id = sliceElement.GetProperty("id").GetString(),
+                        Position = sliceElement.GetProperty("pos").GetDouble()
+                    }).ToList();
+
+                entityItem = doseItem;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(
+                    "The entity 'type' must be one of 'image_set', 'structure_set', 'plan', or 'dose'.");
             }
             entityItem.PostProcessDeserialization(_proKnow, WorkspaceId);
             return entityItem;
+        }
+
+        private async Task<JsonElement> processDicom(string route, string[] dicom, string dicomToken)
+        {
+
+            // Post request to RTV until the status is completed
+            var properties = new Dictionary<string, object>() { { "data", dicom } };
+            var content = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
+            var headers = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("Authorization", "Bearer " + dicomToken)
+            };
+            int numberOfRetries = 0;
+            JsonElement postResponseJson;
+            while (true)
+            {
+                var postResponse = await _proKnow.RtvRequestor.PostAsync(route, headers, content);
+                postResponseJson = JsonSerializer.Deserialize<JsonElement>(postResponse);
+                if (postResponseJson.GetProperty("status").GetString() == "completed")
+                {
+                    return postResponseJson;
+                }
+                else
+                {
+                    if (numberOfRetries < MAX_RETRIES)
+                    {
+                        await Task.Delay(RETRY_DELAY);
+                        numberOfRetries++;
+                    }
+                    else
+                    {
+                        throw new TimeoutException($"Timeout while waiting for {Type} entity to reach completed status.");
+                    }
+                }
+            }
         }
     }
 }
