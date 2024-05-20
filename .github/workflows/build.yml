@@ -78,8 +78,8 @@ jobs:
         name: sdk-test-results
         path: ${{ github.workspace }}/TestResults.xml
 
-    - name: Build documentation site (see https://github.com/nikeee/docfx-action)
-      uses: nikeee/docfx-action@v1.0.0
+    - name: Build documentation site (see https://github.com/NUnit/docfx-action)
+      uses: nunit/docfx-action@v2.4.0
       with:
         args: docs/docfx.json
         
@@ -114,7 +114,7 @@ jobs:
         path: docs/_site
 
     - name: Publish documentation site to GitHub Pages (see https://github.com/marketplace/actions/deploy-to-github-pages)
-      uses: JamesIves/github-pages-deploy-action@v4.3.4
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
         folder: docs/_site
         token: ${{ secrets.GITHUB_TOKEN }}

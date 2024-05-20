@@ -168,8 +168,8 @@ namespace ProKnow
         private void ConstructorHelper(string baseUrl, string credentialsId, string credentialsSecret, int lockRenewalBuffer)
         {
             LockRenewalBuffer = lockRenewalBuffer;
-            Console.WriteLine(Assembly.GetExecutingAssembly().GetName().Version);
-            Requestor = new Requestor(baseUrl, credentialsId, credentialsSecret, new List<KeyValuePair<string, string>>{
+            Requestor = new Requestor(
+                baseUrl, credentialsId, credentialsSecret, new List<KeyValuePair<string, string>>{
                 new KeyValuePair<string, string>(
                     "User-Agent",
                     $"ProKnow-SDK-dotnet/v{Version.Major}.{Version.Minor}.{Version.Build}"
@@ -177,7 +177,7 @@ namespace ProKnow
             });
             RtvRequestor = new RtvRequestor(baseUrl, new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("Accept-Version", "1")
+                new KeyValuePair<string, string>("Accept-Version", "2")
             });
             CustomMetrics = new CustomMetrics(this);
             ScorecardTemplates = new ScorecardTemplates(this);

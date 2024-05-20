@@ -220,8 +220,8 @@ namespace ProKnow.Patient.Entities
                 imageSetItem.Data.SliceSpacing = data.GetProperty("spacing_w").GetDouble();
                 imageSetItem.Data.HasUniformSliceSpacing = data.GetProperty("uniform_w").GetBoolean();
                 imageSetItem.Data.RowXDirectionCosine = data.GetProperty("u_x").GetDouble();
-                imageSetItem.Data.RowYDirectionCosine = data.GetProperty("u_y").GetDouble();
-                imageSetItem.Data.RowZDirectionCosine = data.GetProperty("u_z").GetDouble();
+                imageSetItem.Data.RowYDirectionCosine = data.GetProperty("u_z").GetDouble();
+                imageSetItem.Data.RowZDirectionCosine = data.GetProperty("u_y").GetDouble() * -1;
                 imageSetItem.Data.ColumnXDirectionCosine = data.GetProperty("v_x").GetDouble();
                 imageSetItem.Data.ColumnYDirectionCosine = data.GetProperty("v_z").GetDouble();
                 imageSetItem.Data.ColumnZDirectionCosine = data.GetProperty("v_y").GetDouble() * -1;

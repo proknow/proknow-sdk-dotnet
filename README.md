@@ -15,13 +15,13 @@ Documentation is generated using the tool [DocFx](https://dotnet.github.io/docfx
 an earlier version of Windows, PowerShell can be installed following these
 [instructions](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows).
 - .NET 8+ - The installer for this can be downloaded [here](https://dotnet.microsoft.com/download).
-- Chocolatey - This is a package manager for Windows.  The instructions for installing this can be found [here](https://chocolatey.org/install).
-- DocFx - This can be installed using Chocolatey from an administrative command prompt with the command `choco install docfx`.
+- DocFx - This can be installed using dotnet command from an administrative command prompt with the command `dotnet tool update -g docfx`. The instructions can be found [here](https://dotnet.github.io/docfx/index.html).
 
 ### Previewing Documentation
-In a command prompt, from the project root directory, run `docfx "./docs/docfx.json" --serve`.  This will serve a
-documentation website on *http://localhost:8080* to verify proper content, links, formatting, etc.  If there are errors
-generating the documentation, they will be highlighted in yellow.
+In a command prompt, from the project root directory
+- Run `npm install` and `npm run docfx`
+  - This uses npm-watch package to run docfx serve command when files change, and will serve documentation website on *http://localhost:8080*.
+- Verify proper content, links, formatting, etc. If there are errors generating the documentation, they will be highlighted in yellow.
 
 ### Verifying Documentation
 Once branch changes have been merged into the master branch, the build pipeline will regenerate the documentation which
