@@ -84,7 +84,7 @@ namespace ProKnow.Patient.Entities
             var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
                 new KeyValuePair<string, string>("Authorization", "Bearer " + Data.DicomToken) };
             var bytes = await _proKnow.RtvRequestor.GetBinaryAsync(
-                $"/imageset/{Data.ProcessedId}/image/{image.ProcessedId}", headerKeyValuePairs);
+                $"/imageset/{Data.ProcessedId}/image/{image.Tag}", headerKeyValuePairs);
             var imageData = new UInt16[bytes.Length / 2];
             var i = 0;
             var j = 0;

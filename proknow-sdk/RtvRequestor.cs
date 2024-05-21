@@ -11,25 +11,21 @@ namespace ProKnow
     /// <summary>
     /// Issues requests to the RTV API
     /// </summary>
-    public class RtvRequestor
+    internal class RtvRequestor
     {
         /// <summary>
         /// List of headers to include in all requests.
         /// </summary>
         public IList<KeyValuePair<string, string>> DefaultHeaders { get; set; }
 
-        /// <summary>
-        /// RTV URL with Source name
-        /// </summary>
-        public string _rtvUrl { get; set; }
+        private readonly string _baseUrl;
 
-        // HttpClient is intended to be instantiated once per application, rather than per-use
-        internal static HttpClient HttpClient = new HttpClient(new HttpClientHandler()
+        private string _rtvUrl { get; set; }
+
+        private static HttpClient _httpClient = new HttpClient(new HttpClientHandler()
         {
             AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
         });
-
-        private readonly string _baseUrl;
 
         /// <summary>
         /// Constructs a Rtv Requestor object
@@ -86,7 +82,7 @@ namespace ProKnow
                 {
                     responseContent = await response.Content.ReadAsStringAsync();
                 }
-                Match match = Regex.Match(responseContent, @"\""rtVisualizerSourceName\"":\s*\""(.+)\""");
+                Match match = Regex.Match(responseContent, @"\""rtVisualizerSourceName\"":\s*\""([^,]+)\""");
                 if (match.Success)
                 {
                     string source = match.Groups[1].Value;
@@ -169,7 +165,7 @@ namespace ProKnow
                 {
                     request.Content = content;
                 }
-                var response = await HttpClient.SendAsync(request);
+                var response = await _httpClient.SendAsync(request);
                 if (!response.IsSuccessStatusCode)
                 {
                     if (response.Content != null)

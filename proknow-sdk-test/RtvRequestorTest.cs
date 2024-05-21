@@ -62,7 +62,7 @@ namespace ProKnow.Test
             var image = imageSetItem.Data.Images.First(i => i.Uid == "1.3.6.1.4.1.22213.2.26558.2.61");
             var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
                 new KeyValuePair<string, string>("Authorization", "Bearer " + imageSetItem.Data.DicomToken) };
-            var bytes = await _proKnow.RtvRequestor.GetBinaryAsync($"/imageset/{imageSetItem.Data.ProcessedId}/image/{image.ProcessedId}", headerKeyValuePairs);
+            var bytes = await _proKnow.RtvRequestor.GetBinaryAsync($"/imageset/{imageSetItem.Data.ProcessedId}/image/{image.Tag}", headerKeyValuePairs);
 
             // Verify the data
             Assert.AreEqual(512 * 512 * 2, bytes.Length);

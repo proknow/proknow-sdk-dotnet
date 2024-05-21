@@ -242,7 +242,7 @@ namespace ProKnow.Patient.Entities
                         image.PositionX = matchingElement.GetProperty("pos_x").GetDouble();
                         image.PositionY = matchingElement.GetProperty("pos_z").GetDouble();
                         image.PositionZ = matchingElement.GetProperty("pos_y").GetDouble() * -1;
-                        image.ProcessedId = matchingElement.GetProperty("processed_id").GetString();
+                        image.Tag = matchingElement.GetProperty("processed_id").GetString();
                     }
                 }
 
@@ -287,7 +287,7 @@ namespace ProKnow.Patient.Entities
                 doseItem.Data.Slices = data.GetProperty("slices").EnumerateArray()
                     .Select(sliceElement => new DoseSlice
                     {
-                        Id = sliceElement.GetProperty("id").GetString(),
+                        Tag = sliceElement.GetProperty("id").GetString(),
                         Position = sliceElement.GetProperty("pos").GetDouble()
                     }).ToList();
 

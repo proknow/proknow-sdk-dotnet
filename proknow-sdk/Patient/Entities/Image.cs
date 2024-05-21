@@ -56,7 +56,7 @@ namespace ProKnow.Patient.Entities
         /// The processed Id for the pixel data in blob storage
         /// </summary>
         [JsonPropertyName("processed_id")]
-        public string ProcessedId { get; set; }
+        public string Tag { get; set; }
 
         /// <summary>
         /// The SOP instance UID

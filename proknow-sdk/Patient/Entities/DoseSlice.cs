@@ -19,7 +19,7 @@ namespace ProKnow.Patient.Entities
         /// The id for the slice data in blob storage
         /// </summary>
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public string Tag { get; set; }
 
         /// <summary>
         /// Provides a string representation of this object

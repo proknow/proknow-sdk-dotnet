@@ -1,0 +1,58 @@
+{
+    "listeners": [
+        {
+            "address": "0.0.0.0",
+            "port": 8988,
+            "https": false
+        }
+    ],
+    "app": {
+        "number_of_threads": 1,
+        "upload_path": "/var/opt/rt-visualizer/uploads",
+        "use_implicit_page": false,
+        "max_connections": 100000,
+        "max_connections_per_ip": 0,
+        "log": {
+            "logfile_base_name": "logfile",
+            "log_size_limit": 100000000,
+            "log_level": "DEBUG"
+        },
+        "run_as_daemon": false,
+        "relaunch_on_error": false,
+        "idle_connection_timeout": 60,
+        "server_header_field": "",
+        "enable_server_header": true,
+        "enable_date_header": true,
+        "client_max_body_size": "1M",
+        "client_max_memory_body_size": "64K",
+        "client_max_websocket_message_size": "128K"
+    },
+    "plugins": [],
+    "custom_config": {
+        "schemas": "./schemas/",
+        "sources": {
+            "proknow-atlas-test": {
+                "s3": {
+                    "endpoint": "http://minio:9000",
+                    "credentials": {
+                        "accessKeyId": "S3_ACCESS_KEY_ID",
+                        "secretAccessKey": "S3_ACCESS_KEY_SECRET"
+                    },
+                    "region": "us-east-1",
+                    "forcePathStyle": true,
+                    "sslEnabled": false,
+                    "bucket": "atlas-test"
+                },
+                "compression": "gzip",
+                "security": {
+                    "key": "/etc/opt/rt-visualizer/certs/localhost.crt"
+                }
+            }
+        },
+        "shared_cache_storage": {
+            "file": {
+                "location": "/var/opt/rt-visualizer/cache/"
+            }
+        }
+    }
+}
