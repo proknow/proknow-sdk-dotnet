@@ -138,7 +138,8 @@
         ]
       }
     ],
-    "forceOrganizationResolve": true
+    "forceOrganizationResolve": true,
+    "rtVisualizerSourceName": "proknow-atlas-test"
   },
   "redis": {
     "host": "redis",
