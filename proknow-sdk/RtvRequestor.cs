@@ -74,6 +74,7 @@ namespace ProKnow
         /// </summary>
         private async Task GetPrefix()
         {
+            Console.WriteLine("Get Prefix: " + _baseUrl + " , " + _rtvUrl);
             if (_rtvUrl == null)
             {
                 var response = await MakeRequest(HttpMethod.Get, _baseUrl + "/ui/variables.js");
@@ -83,8 +84,13 @@ namespace ProKnow
                     responseContent = await response.Content.ReadAsStringAsync();
                 }
                 Match match = Regex.Match(responseContent, @"\""rtVisualizerSourceName\"":\s*\""([^,]+)\""");
+                Console.WriteLine("Get Prefix Groups: " + match.Groups);
+                Console.WriteLine("Get Prefix Groups: " + match.Groups[0]);
+                Console.WriteLine("Get Prefix Groups: " + match.Groups[1]);
                 if (match.Success)
                 {
+                    Console.WriteLine("Get Prefix Success: " + match.Groups[0]);
+                    Console.WriteLine("Get Prefix Success: " + match.Groups[1]);
                     string source = match.Groups[1].Value;
                     _rtvUrl = _baseUrl + "/rtv/" + source;
                 }
@@ -144,6 +150,7 @@ namespace ProKnow
         private async Task<HttpResponseMessage> MakeRequest(HttpMethod method, string route, Dictionary<string, object> queryParameters = null,
             IList<KeyValuePair<string, string>> headerKeyValuePairs = null, HttpContent content = null)
         {
+            Console.WriteLine("Make Request: " + route);
             var request = new HttpRequestMessage(method, BuildUriString($"{route}", queryParameters));
             try
             {
