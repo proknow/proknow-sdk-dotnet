@@ -83,10 +83,8 @@ namespace ProKnow
                 {
                     responseContent = await response.Content.ReadAsStringAsync();
                 }
+                Console.WriteLine("Get Prefix Groups: " + responseContent);
                 Match match = Regex.Match(responseContent, @"\""rtVisualizerSourceName\"":\s*\""([^,]+)\""");
-                Console.WriteLine("Get Prefix Groups: " + match.Groups);
-                Console.WriteLine("Get Prefix Groups: " + match.Groups[0]);
-                Console.WriteLine("Get Prefix Groups: " + match.Groups[1]);
                 if (match.Success)
                 {
                     Console.WriteLine("Get Prefix Success: " + match.Groups[0]);
