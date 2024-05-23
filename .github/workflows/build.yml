@@ -91,11 +91,13 @@ jobs:
         path: ${{ github.workspace }}/TestResults.xml
 
     - name: Build documentation site (see https://github.com/NUnit/docfx-action)
+      if: ${{ always() }}
       uses: nunit/docfx-action@v2.4.0
       with:
         args: docs/docfx.json
         
     - name: Upload documentation site artifact
+      if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
         name: docfx-artifact

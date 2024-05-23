@@ -58,6 +58,7 @@ services:
     volumes:
       - rt-visualizer-cache:/etc/opt/rt-visualizer/cache/
       - ./rtv-etc:/etc/opt/rt-visualizer/config/
+      - ./certs:/etc/opt/rt-visualizer/certs
     entrypoint:
       [
         "/opt/rt-visualizer/server",
