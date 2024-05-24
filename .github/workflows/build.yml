@@ -30,11 +30,16 @@ jobs:
 
     - name: Configure ProKnow
       run: |
-        mkdir ./proknow-sdk-test/TestEnvironment/etc
+        mkdir ./proknow-sdk-test/TestEnvironment/pk-etc
+        mkdir ./proknow-sdk-test/TestEnvironment/rtv-etc
         sed -e "s|S3_ACCESS_KEY_ID|${{ secrets.S3_ACCESS_KEY_ID }}|g" \
             -e "s|S3_ACCESS_KEY_SECRET|${{ secrets.S3_ACCESS_KEY_SECRET }}|g" \
-            ./proknow-sdk-test/TestEnvironment/templates/config.json > \
-            ./proknow-sdk-test/TestEnvironment/etc/config.json
+            ./proknow-sdk-test/TestEnvironment/templates/pk-config.json > \
+            ./proknow-sdk-test/TestEnvironment/pk-etc/config.json
+        sed -e "s|S3_ACCESS_KEY_ID|${{ secrets.S3_ACCESS_KEY_ID }}|g" \
+            -e "s|S3_ACCESS_KEY_SECRET|${{ secrets.S3_ACCESS_KEY_SECRET }}|g" \
+            ./proknow-sdk-test/TestEnvironment/templates/rtv-config.json > \
+            ./proknow-sdk-test/TestEnvironment/rtv-etc/config.json
 
     - name: Login to Azure
       uses: azure/login@v2
@@ -47,6 +52,13 @@ jobs:
         registry: proknow.azurecr.io
         username: ${{ secrets.AZURE_ACR_USERNAME }}
         password: ${{ secrets.AZURE_ACR_PASSWORD }}
+
+    - name: Login to EPG ACR
+      uses: docker/login-action@v3
+      with:
+        registry: epgcr.azurecr.io
+        username: ${{ secrets.AZURE_EPG_ACR_USERNAME }}
+        password: ${{ secrets.AZURE_EPG_ACR_PASSWORD }}
 
     - name: Start dependency containers
       run: |
@@ -78,12 +90,14 @@ jobs:
         name: sdk-test-results
         path: ${{ github.workspace }}/TestResults.xml
 
-    - name: Build documentation site (see https://github.com/nikeee/docfx-action)
-      uses: nikeee/docfx-action@v1.0.0
+    - name: Build documentation site (see https://github.com/NUnit/docfx-action)
+      if: ${{ always() }}
+      uses: nunit/docfx-action@v2.4.0
       with:
         args: docs/docfx.json
         
     - name: Upload documentation site artifact
+      if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
         name: docfx-artifact
@@ -114,7 +128,7 @@ jobs:
         path: docs/_site
 
     - name: Publish documentation site to GitHub Pages (see https://github.com/marketplace/actions/deploy-to-github-pages)
-      uses: JamesIves/github-pages-deploy-action@v4.3.4
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
         folder: docs/_site
         token: ${{ secrets.GITHUB_TOKEN }}

@@ -16,9 +16,9 @@ namespace ProKnow.Patient.Entities
         public double Position { get; set; }
 
         /// <summary>
-        /// The tag for the slice data in blob storage
+        /// The id for the slice data in blob storage
         /// </summary>
-        [JsonPropertyName("tag")]
+        [JsonPropertyName("id")]
         public string Tag { get; set; }
 
         /// <summary>

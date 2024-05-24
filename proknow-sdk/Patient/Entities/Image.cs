@@ -53,9 +53,9 @@ namespace ProKnow.Patient.Entities
         public double PositionZ { get; set; }
 
         /// <summary>
-        /// The tag for the pixel data in blob storage
+        /// The processed Id for the pixel data in blob storage
         /// </summary>
-        [JsonPropertyName("tag")]
+        [JsonPropertyName("processed_id")]
         public string Tag { get; set; }
 
         /// <summary>

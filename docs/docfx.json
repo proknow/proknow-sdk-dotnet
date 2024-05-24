@@ -6,11 +6,10 @@
           "files": [
             "proknow-sdk/proknow-sdk.csproj"
           ],
-          "cwd": ".."
+          "src": ".."
         }
       ],
-      "dest": "api",
-      "force": true
+      "dest": "api"
     }
   ],
   "build": {
@@ -57,10 +56,10 @@
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
-      "default"
+      "default",
+      "modern"
     ],
     "postProcessors": [],
-    "markdownEngineName": "markdig",
     "noLangKeyword": false
   }
 }
