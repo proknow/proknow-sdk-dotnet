@@ -11,6 +11,12 @@ All releases in the v0.x.x series are subject to breaking changes from one versi
 - Updated `EntitySummary.GetAsync` and `EntityItem.GetSliceDataAsync` methods to call into componentized RT Visualization service.
 - Updated docfx package version.
 
+## v0.3.2
+
+*Enhancements*
+
+- Support for .netstandard2.0 and .netstandard2.1.
+
 ## v0.3.1
 
 *Enhancements*
