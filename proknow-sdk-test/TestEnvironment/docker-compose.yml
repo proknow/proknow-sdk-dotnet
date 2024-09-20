@@ -33,7 +33,7 @@ services:
     volumes:
       - keycloak:/opt/keycloak/data
   proknow-init:
-    image: proknow.azurecr.io/proknow:2.0.2-alpha.1-20240521.205803-676a34b
+    image: proknow.azurecr.io/proknow:1.37.0
     command: "upgrade --config /etc/opt/proknow/config.json"
     depends_on:
       - postgres
@@ -43,7 +43,7 @@ services:
     volumes:
       - ./pk-etc:/etc/opt/proknow
   proknow:
-    image: proknow.azurecr.io/proknow:2.0.2-alpha.1-20240521.205803-676a34b
+    image: proknow.azurecr.io/proknow:1.37.0
     depends_on:
       - proknow-init
     environment:
