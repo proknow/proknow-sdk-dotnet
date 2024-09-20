@@ -7,7 +7,7 @@
         }
     ],
     "app": {
-        "number_of_threads": 1,
+        "number_of_threads": 4,
         "upload_path": "/var/opt/rt-visualizer/uploads",
         "use_implicit_page": false,
         "max_connections": 100000,

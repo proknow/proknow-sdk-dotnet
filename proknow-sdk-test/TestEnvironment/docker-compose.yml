@@ -52,19 +52,14 @@ services:
       - ./pk-etc:/etc/opt/proknow
       - proknow-opt:/var/opt/proknow
   rt-visualizer:
-    image: epgcr.azurecr.io/rt-visualizer:0.9.0
+    image: epgcr.azurecr.io/rt-visualizer:1.1.1
     ports:
       - 8998:8988
     volumes:
       - rt-visualizer-cache:/etc/opt/rt-visualizer/cache/
       - ./rtv-etc:/etc/opt/rt-visualizer/config/
       - ./certs:/etc/opt/rt-visualizer/certs
-    entrypoint:
-      [
-        "/opt/rt-visualizer/server",
-        "--config",
-        "/etc/opt/rt-visualizer/config/config.json"
-      ]
+    entrypoint: [ "/opt/rt-visualizer/server", "--config", "/etc/opt/rt-visualizer/config/config.json" ]
   nginx:
     image: nginx:latest
     ports:

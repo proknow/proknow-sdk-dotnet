@@ -177,7 +177,7 @@ namespace ProKnow
             });
             RtvRequestor = new RtvRequestor(baseUrl, new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("Accept-Version", "2"), userAgent
+                new KeyValuePair<string, string>("Accept-Version", "5"), userAgent
             });
             CustomMetrics = new CustomMetrics(this);
             ScorecardTemplates = new ScorecardTemplates(this);
