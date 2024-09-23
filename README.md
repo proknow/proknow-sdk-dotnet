@@ -18,9 +18,10 @@ an earlier version of Windows, PowerShell can be installed following these
 - DocFx - This can be installed using dotnet command from an administrative command prompt with the command `dotnet tool update -g docfx`. The instructions can be found [here](https://dotnet.github.io/docfx/index.html).
 
 ### Previewing Documentation
-In a command prompt, from the project root directory
-- Run `npm install` and `npm run docfx`
-  - This uses npm-watch package to run docfx serve command when files change, and will serve documentation website on *http://localhost:8080*.
+- This requires `Node` and the installer can be found [here](https://nodejs.org/en/download/package-manager).
+- In a command prompt, from the project root directory
+  - Run `npm install` and `npm run docfx`
+    - This uses npm-watch package to run docfx serve command when files change, and will serve documentation website on *http://localhost:8080*.
 - Verify proper content, links, formatting, etc. If there are errors generating the documentation, they will be highlighted in yellow.
 
 ### Verifying Documentation
@@ -62,7 +63,7 @@ The tests require access to ProKnow in order to create temporary custom metrics,
     <RunSettings>
       <!-- Parameters used by tests at run time -->
       <TestRunParameters>
-        <Parameter name="baseUrl" value="https://localhost:3005" />
+        <Parameter name="baseUrl" value="http://localhost:3005" />
         <Parameter name="credentialsFile" value="C:/src/pk/proknow-sdk-dotnet/proknow-sdk-test/TestEnvironment/credentials.json" />
       </TestRunParameters>
     </RunSettings>
