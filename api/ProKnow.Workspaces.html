@@ -1,536 +1,466 @@
 ﻿<!DOCTYPE html>
-<!--[if IE]><![endif]-->
 <html>
-  
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class Workspaces
-   </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class Workspaces
-   ">
-    <meta name="generator" content="docfx 2.56.7.0">
-    
-    <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../styles/docfx.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc.html">
-    <meta property="docfx:tocrel" content="toc.html">
-    
-    
-    
+      <title>Class Workspaces
+ </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class Workspaces
+ ">
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../styles/docfx.min.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Workspaces.md&amp;value=---%0Auid%3A%20ProKnow.Workspaces%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+
+      <script>
+        MathJax = {
+          options: {
+            processHtmlClass: ['tex2jax_process', 'math']
+          }
+        };
+      </script>
+
+      <script type="text/javascript" src="../styles/docfx.min.js"></script>
+      <script type="text/javascript" src="../styles/main.js"></script>
   </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
-    <div id="wrapper">
-      <header>
-        
-        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              
-              <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
-              </a>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
             </div>
-            <div class="collapse navbar-collapse" id="navbar">
-              <form class="navbar-form navbar-right" role="search" id="search">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
-                </div>
-              </form>
-            </div>
-          </div>
-        </nav>
-        
-        <div class="subnav navbar navbar-default">
-          <div class="container hide-when-search" id="breadcrumb">
-            <ul class="breadcrumb">
-              <li></li>
-            </ul>
           </div>
         </div>
-      </header>
-      <div role="main" class="container body-content hide-when-search">
-        
-        <div class="sidenav hide-when-search">
-          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
-          <div class="sidetoggle collapse" id="sidetoggle">
-            <div id="sidetoc"></div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
           </div>
-        </div>
-        <div class="article row grid-right">
-          <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="ProKnow.Workspaces">
-  
-  
-  <h1 id="ProKnow_Workspaces" data-uid="ProKnow.Workspaces" class="text-break">Class Workspaces
-  </h1>
-  <div class="markdown level0 summary"><p>Interacts with workspaces in a ProKnow organization</p>
-</div>
-  <div class="markdown level0 conceptual"></div>
-  <div class="inheritance">
-    <h5>Inheritance</h5>
-    <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">Workspaces</span></div>
-  </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><a class="xref" href="ProKnow.IWorkspaces.html">IWorkspaces</a></div>
-  </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="ProKnow.html">ProKnow</a></h6>
-  <h6><strong>Assembly</strong>: proknow-sdk.dll</h6>
-  <h5 id="ProKnow_Workspaces_syntax">Syntax</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Workspaces : object, IWorkspaces</code></pre>
-  </div>
-  <h3 id="methods">Methods
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Workspaces_CreateAsync_System_String_System_String_System_Boolean_.md&amp;value=---%0Auid%3A%20ProKnow.Workspaces.CreateAsync(System.String%2CSystem.String%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L32">View Source</a>
-  </span>
-  <a id="ProKnow_Workspaces_CreateAsync_" data-uid="ProKnow.Workspaces.CreateAsync*"></a>
-  <h4 id="ProKnow_Workspaces_CreateAsync_System_String_System_String_System_Boolean_" data-uid="ProKnow.Workspaces.CreateAsync(System.String,System.String,System.Boolean)">CreateAsync(String, String, Boolean)</h4>
-  <div class="markdown level1 summary"><p>Creates a workspace asynchronously</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;WorkspaceItem&gt; CreateAsync(string slug, string name, bool isProtected = true)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">slug</span></td>
-        <td><p>The workspace slug. A string with a maximum length of 40 that matches the regular
-expression <code>^[a-z0-9] [a-z0-9]* (-[a-z0-9]+)*$</code></p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">name</span></td>
-        <td><p>The workspace name. A string with a maximum length of 80</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td><span class="parametername">isProtected</span></td>
-        <td><p>Indicates whether the workspace should be protected from accidental
-deletion</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Task</span>&lt;<a class="xref" href="ProKnow.WorkspaceItem.html">WorkspaceItem</a>&gt;</td>
-        <td><p>The new workspace item</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Workspaces_DeleteAsync_System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Workspaces.DeleteAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L45">View Source</a>
-  </span>
-  <a id="ProKnow_Workspaces_DeleteAsync_" data-uid="ProKnow.Workspaces.DeleteAsync*"></a>
-  <h4 id="ProKnow_Workspaces_DeleteAsync_System_String_" data-uid="ProKnow.Workspaces.DeleteAsync(System.String)">DeleteAsync(String)</h4>
-  <div class="markdown level1 summary"><p>Deletes a workspace asynchronously</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task DeleteAsync(string workspaceId)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">workspaceId</span></td>
-        <td><p>The ProKnow ID for the workspace</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Task</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Workspaces_FindAsync_Func_ProKnow_WorkspaceItem_System_Boolean__.md&amp;value=---%0Auid%3A%20ProKnow.Workspaces.FindAsync(Func%7BProKnow.WorkspaceItem%2CSystem.Boolean%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L52">View Source</a>
-  </span>
-  <a id="ProKnow_Workspaces_FindAsync_" data-uid="ProKnow.Workspaces.FindAsync*"></a>
-  <h4 id="ProKnow_Workspaces_FindAsync_Func_ProKnow_WorkspaceItem_System_Boolean__" data-uid="ProKnow.Workspaces.FindAsync(Func{ProKnow.WorkspaceItem,System.Boolean})">FindAsync(Func&lt;WorkspaceItem, Boolean&gt;)</h4>
-  <div class="markdown level1 summary"><p>Finds a workspace item asynchronously based on a predicate</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;WorkspaceItem&gt; FindAsync(Func&lt;WorkspaceItem, bool&gt; predicate)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Func</span>&lt;<a class="xref" href="ProKnow.WorkspaceItem.html">WorkspaceItem</a>, <span class="xref">System.Boolean</span>&gt;</td>
-        <td><span class="parametername">predicate</span></td>
-        <td><p>The predicate for the search</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Task</span>&lt;<a class="xref" href="ProKnow.WorkspaceItem.html">WorkspaceItem</a>&gt;</td>
-        <td><p>The first workspace item that satisfies the predicate or null if the predicate was null or no workspace
-item satisfies the predicate</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Workspaces_QueryAsync.md&amp;value=---%0Auid%3A%20ProKnow.Workspaces.QueryAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L62">View Source</a>
-  </span>
-  <a id="ProKnow_Workspaces_QueryAsync_" data-uid="ProKnow.Workspaces.QueryAsync*"></a>
-  <h4 id="ProKnow_Workspaces_QueryAsync" data-uid="ProKnow.Workspaces.QueryAsync">QueryAsync()</h4>
-  <div class="markdown level1 summary"><p>Queries asynchronously for the collection of workspace items</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;IList&lt;WorkspaceItem&gt;&gt; QueryAsync()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Task</span>&lt;<span class="xref">IList</span>&lt;<a class="xref" href="ProKnow.WorkspaceItem.html">WorkspaceItem</a>&gt;&gt;</td>
-        <td><p>A collection of workspace items</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Workspaces_ResolveAsync_System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Workspaces.ResolveAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L70">View Source</a>
-  </span>
-  <a id="ProKnow_Workspaces_ResolveAsync_" data-uid="ProKnow.Workspaces.ResolveAsync*"></a>
-  <h4 id="ProKnow_Workspaces_ResolveAsync_System_String_" data-uid="ProKnow.Workspaces.ResolveAsync(System.String)">ResolveAsync(String)</h4>
-  <div class="markdown level1 summary"><p>Resolves a workspace asynchronously</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;WorkspaceItem&gt; ResolveAsync(string workspace)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">workspace</span></td>
-        <td><p>The ProKnow ID or name of the workspace</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Task</span>&lt;<a class="xref" href="ProKnow.WorkspaceItem.html">WorkspaceItem</a>&gt;</td>
-        <td><p>The workspace item corresponding to the specified ID or name</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="ProKnow.Exceptions.ProKnowWorkspaceLookupException.html">ProKnowWorkspaceLookupException</a></td>
-        <td><p>If no matching workspace was found</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Workspaces_ResolveByIdAsync_System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Workspaces.ResolveByIdAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L85">View Source</a>
-  </span>
-  <a id="ProKnow_Workspaces_ResolveByIdAsync_" data-uid="ProKnow.Workspaces.ResolveByIdAsync*"></a>
-  <h4 id="ProKnow_Workspaces_ResolveByIdAsync_System_String_" data-uid="ProKnow.Workspaces.ResolveByIdAsync(System.String)">ResolveByIdAsync(String)</h4>
-  <div class="markdown level1 summary"><p>Resolves a workspace by its ProKnow ID asynchronously</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;WorkspaceItem&gt; ResolveByIdAsync(string workspaceId)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">workspaceId</span></td>
-        <td><p>The ProKnow ID of the workspace</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Task</span>&lt;<a class="xref" href="ProKnow.WorkspaceItem.html">WorkspaceItem</a>&gt;</td>
-        <td><p>The workspace item corresponding to the specified ID</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="ProKnow.Exceptions.ProKnowWorkspaceLookupException.html">ProKnowWorkspaceLookupException</a></td>
-        <td><p>If no matching workspace was found</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Workspaces_ResolveByNameAsync_System_String_.md&amp;value=---%0Auid%3A%20ProKnow.Workspaces.ResolveByNameAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L100">View Source</a>
-  </span>
-  <a id="ProKnow_Workspaces_ResolveByNameAsync_" data-uid="ProKnow.Workspaces.ResolveByNameAsync*"></a>
-  <h4 id="ProKnow_Workspaces_ResolveByNameAsync_System_String_" data-uid="ProKnow.Workspaces.ResolveByNameAsync(System.String)">ResolveByNameAsync(String)</h4>
-  <div class="markdown level1 summary"><p>Resolves a workspace by its name asynchronously</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;WorkspaceItem&gt; ResolveByNameAsync(string workspaceName)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">workspaceName</span></td>
-        <td><p>The name of the workspace</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Task</span>&lt;<a class="xref" href="ProKnow.WorkspaceItem.html">WorkspaceItem</a>&gt;</td>
-        <td><p>The workspace item corresponding to the specified name</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="ProKnow.Exceptions.ProKnowWorkspaceLookupException.html">ProKnowWorkspaceLookupException</a></td>
-        <td><p>If no matching workspace was found</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <a class="xref" href="ProKnow.IWorkspaces.html">IWorkspaces</a>
-  </div>
-</article>
-          </div>
-          
-          <div class="hidden-sm col-md-2" role="complementary">
-            <div class="sideaffix">
-              <div class="contribution">
-                <ul class="nav">
-                  <li>
-                    <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Workspaces.md&amp;value=---%0Auid%3A%20ProKnow.Workspaces%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L17" class="contribution-link">View Source</a>
-                  </li>
-                </ul>
-              </div>
-              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
-                <div></div>
-              </nav>
-            </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
           </div>
         </div>
       </div>
-      
-      <footer>
-        <div class="grad-bottom"></div>
-        <div class="footer">
-          <div class="container">
-            <span class="pull-right">
-              <a href="#top">Back to top</a>
-            </span>
-            
-            <span>Generated by <strong>DocFX</strong></span>
-          </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
         </div>
-      </footer>
+
+        <article data-uid="ProKnow.Workspaces">
+
+
+
+  <h1 id="ProKnow_Workspaces" data-uid="ProKnow.Workspaces" class="text-break">
+    Class Workspaces
+  <a class="header-action link-secondary" title="View source" href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L17"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="ProKnow.html">ProKnow</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>proknow-sdk.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Interacts with workspaces in a ProKnow organization</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Workspaces : IWorkspaces</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">Workspaces</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="ProKnow.IWorkspaces.html">IWorkspaces</a></div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist derived">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
     </div>
-    
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
-    <script type="text/javascript" src="../styles/docfx.js"></script>
-    <script type="text/javascript" src="../styles/main.js"></script>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="ProKnow_Workspaces_CreateAsync_" data-uid="ProKnow.Workspaces.CreateAsync*"></a>
+
+  <h3 id="ProKnow_Workspaces_CreateAsync_System_String_System_String_System_Boolean_" data-uid="ProKnow.Workspaces.CreateAsync(System.String,System.String,System.Boolean)">
+  CreateAsync(string, string, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a workspace asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;WorkspaceItem&gt; CreateAsync(string slug, string name, bool isProtected = true)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>slug</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The workspace slug. A string with a maximum length of 40 that matches the regular
+expression <code>^[a-z0-9] [a-z0-9]* (-[a-z0-9]+)*$</code></p>
+</dd>
+    <dt><code>name</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The workspace name. A string with a maximum length of 80</p>
+</dd>
+    <dt><code>isProtected</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Indicates whether the workspace should be protected from accidental
+deletion</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="ProKnow.WorkspaceItem.html">WorkspaceItem</a>&gt;</dt>
+    <dd><p>The new workspace item</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="ProKnow_Workspaces_DeleteAsync_" data-uid="ProKnow.Workspaces.DeleteAsync*"></a>
+
+  <h3 id="ProKnow_Workspaces_DeleteAsync_System_String_" data-uid="ProKnow.Workspaces.DeleteAsync(System.String)">
+  DeleteAsync(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Deletes a workspace asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task DeleteAsync(string workspaceId)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>workspaceId</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The ProKnow ID for the workspace</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="ProKnow_Workspaces_FindAsync_" data-uid="ProKnow.Workspaces.FindAsync*"></a>
+
+  <h3 id="ProKnow_Workspaces_FindAsync_System_Func_ProKnow_WorkspaceItem_System_Boolean__" data-uid="ProKnow.Workspaces.FindAsync(System.Func{ProKnow.WorkspaceItem,System.Boolean})">
+  FindAsync(Func&lt;WorkspaceItem, bool&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Finds a workspace item asynchronously based on a predicate</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;WorkspaceItem&gt; FindAsync(Func&lt;WorkspaceItem, bool&gt; predicate)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>predicate</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;<a class="xref" href="ProKnow.WorkspaceItem.html">WorkspaceItem</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>&gt;</dt>
+    <dd><p>The predicate for the search</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="ProKnow.WorkspaceItem.html">WorkspaceItem</a>&gt;</dt>
+    <dd><p>The first workspace item that satisfies the predicate or null if the predicate was null or no workspace
+item satisfies the predicate</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="ProKnow_Workspaces_QueryAsync_" data-uid="ProKnow.Workspaces.QueryAsync*"></a>
+
+  <h3 id="ProKnow_Workspaces_QueryAsync" data-uid="ProKnow.Workspaces.QueryAsync">
+  QueryAsync()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L62"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Queries asynchronously for the collection of workspace items</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;IList&lt;WorkspaceItem&gt;&gt; QueryAsync()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist-1">IList</a>&lt;<a class="xref" href="ProKnow.WorkspaceItem.html">WorkspaceItem</a>&gt;&gt;</dt>
+    <dd><p>A collection of workspace items</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="ProKnow_Workspaces_ResolveAsync_" data-uid="ProKnow.Workspaces.ResolveAsync*"></a>
+
+  <h3 id="ProKnow_Workspaces_ResolveAsync_System_String_" data-uid="ProKnow.Workspaces.ResolveAsync(System.String)">
+  ResolveAsync(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L70"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Resolves a workspace asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;WorkspaceItem&gt; ResolveAsync(string workspace)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>workspace</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The ProKnow ID or name of the workspace</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="ProKnow.WorkspaceItem.html">WorkspaceItem</a>&gt;</dt>
+    <dd><p>The workspace item corresponding to the specified ID or name</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="ProKnow.Exceptions.ProKnowWorkspaceLookupException.html">ProKnowWorkspaceLookupException</a></dt>
+    <dd><p>If no matching workspace was found</p>
+</dd>
+  </dl>
+
+
+
+  <a id="ProKnow_Workspaces_ResolveByIdAsync_" data-uid="ProKnow.Workspaces.ResolveByIdAsync*"></a>
+
+  <h3 id="ProKnow_Workspaces_ResolveByIdAsync_System_String_" data-uid="ProKnow.Workspaces.ResolveByIdAsync(System.String)">
+  ResolveByIdAsync(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L85"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Resolves a workspace by its ProKnow ID asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;WorkspaceItem&gt; ResolveByIdAsync(string workspaceId)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>workspaceId</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The ProKnow ID of the workspace</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="ProKnow.WorkspaceItem.html">WorkspaceItem</a>&gt;</dt>
+    <dd><p>The workspace item corresponding to the specified ID</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="ProKnow.Exceptions.ProKnowWorkspaceLookupException.html">ProKnowWorkspaceLookupException</a></dt>
+    <dd><p>If no matching workspace was found</p>
+</dd>
+  </dl>
+
+
+
+  <a id="ProKnow_Workspaces_ResolveByNameAsync_" data-uid="ProKnow.Workspaces.ResolveByNameAsync*"></a>
+
+  <h3 id="ProKnow_Workspaces_ResolveByNameAsync_System_String_" data-uid="ProKnow.Workspaces.ResolveByNameAsync(System.String)">
+  ResolveByNameAsync(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Workspaces.cs/#L100"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Resolves a workspace by its name asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;WorkspaceItem&gt; ResolveByNameAsync(string workspaceName)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>workspaceName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The name of the workspace</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="ProKnow.WorkspaceItem.html">WorkspaceItem</a>&gt;</dt>
+    <dd><p>The workspace item corresponding to the specified name</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="ProKnow.Exceptions.ProKnowWorkspaceLookupException.html">ProKnowWorkspaceLookupException</a></dt>
+    <dd><p>If no matching workspace was found</p>
+</dd>
+  </dl>
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/proknow/proknow-sdk-dotnet/new/master/apiSpec/new?filename=ProKnow_Workspaces.md&amp;value=---%0Auid%3A%20ProKnow.Workspaces%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="edit-link">Edit this page</a>
+        </div>
+
+        
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+
+    <footer class="border-top">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>
