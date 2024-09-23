@@ -8,6 +8,18 @@ namespace ProKnow.Patient.Entities
     /// </summary>
     public class DoseData
     {
+        [JsonInclude]
+        [JsonPropertyName("dicom")]
+        internal string[] Dicom { get; set; }
+
+        [JsonInclude]
+        [JsonPropertyName("dicom_token")]
+        internal string DicomToken { get; set; }
+
+        [JsonInclude]
+        [JsonPropertyName("processed_id")]
+        internal string ProcessedId { get; set; }
+
         /// <summary>
         /// The minimum IEC couch x position in mm
         /// </summary>

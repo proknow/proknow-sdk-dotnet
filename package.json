@@ -1,0 +1,32 @@
+{
+    "name": "dotnet-sdk-docs",
+    "scripts": {
+        "docfx": "npm-watch build_serve",
+        "build_serve": "docfx .\\docs\\docfx.json --serve"
+    },
+    "watch": {
+        "build_serve": {
+            "patterns": [
+                "docs/api/index.md",
+                "docs/articles/**/*",
+                "docs/*.md",
+                "docs/index.md",
+                "docs/releaseHistory.md",
+                "proknow-sdk/**/*cs"
+            ],
+            "ignore": [
+                "docs/_site",
+                "**/bin/**/*",
+                "**/obj/**/*"
+            ],
+            "extensions": "md,yml,cs",
+            "quiet": true,
+            "legacyWatch": true,
+            "delay": 500,
+            "runOnChangeOnly": false
+        }
+    },
+    "devDependencies": {
+        "npm-watch": "0.13.0"
+    }
+}

@@ -8,6 +8,18 @@ namespace ProKnow.Patient.Entities
     /// </summary>
     public class ImageSetData
     {
+        [JsonInclude]
+        [JsonPropertyName("dicom")]
+        internal string[] Dicom { get; set; }
+
+        [JsonInclude]
+        [JsonPropertyName("dicom_token")]
+        internal string DicomToken { get; set; }
+
+        [JsonInclude]
+        [JsonPropertyName("processed_id")]
+        internal string ProcessedId { get; set; }
+
         /// <summary>
         /// The maximum scaled pixel value
         /// </summary>

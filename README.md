@@ -15,13 +15,14 @@ Documentation is generated using the tool [DocFx](https://dotnet.github.io/docfx
 an earlier version of Windows, PowerShell can be installed following these
 [instructions](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows).
 - .NET 8+ - The installer for this can be downloaded [here](https://dotnet.microsoft.com/download).
-- Chocolatey - This is a package manager for Windows.  The instructions for installing this can be found [here](https://chocolatey.org/install).
-- DocFx - This can be installed using Chocolatey from an administrative command prompt with the command `choco install docfx`.
+- DocFx - This can be installed using dotnet command from an administrative command prompt with the command `dotnet tool update -g docfx`. The instructions can be found [here](https://dotnet.github.io/docfx/index.html).
 
 ### Previewing Documentation
-In a command prompt, from the project root directory, run `docfx "./docs/docfx.json" --serve`.  This will serve a
-documentation website on *http://localhost:8080* to verify proper content, links, formatting, etc.  If there are errors
-generating the documentation, they will be highlighted in yellow.
+- This requires `Node` and the installer can be found [here](https://nodejs.org/en/download/package-manager).
+- In a command prompt, from the project root directory
+  - Run `npm install` and `npm run docfx`
+    - This uses npm-watch package to run docfx serve command when files change, and will serve documentation website on *http://localhost:8080*.
+- Verify proper content, links, formatting, etc. If there are errors generating the documentation, they will be highlighted in yellow.
 
 ### Verifying Documentation
 Once branch changes have been merged into the master branch, the build pipeline will regenerate the documentation which
@@ -32,13 +33,17 @@ can then be viewed on [Github Pages](http://proknow.github.io/proknow-sdk-dotnet
 ### Access to ProKnow
 The tests require access to ProKnow in order to create temporary custom metrics, scorecard templates, and workspaces. To configure your environment to run tests locally
 
-1. Copy `./proknow-sdk-test/TestEnvironment/templates/config.json` into `./proknow-sdk-test/TestEnvironment/etc` and replace the following values with what is in your Atlas development `config.json`:
+1. Move `./proknow-sdk-test/TestEnvironment/templates/pk-config.json` into `./proknow-sdk-test/TestEnvironment/pk-etc` and rename the file to `config.json`. Replace the following values with what is in your Atlas development `config.json`:
+    - `S3_ACCESS_KEY_ID`
+    - `S3_ACCESS_KEY_SECRET`
+2. Move `./proknow-sdk-test/TestEnvironment/templates/rtv-config.json` into `./proknow-sdk-test/TestEnvironment/rtv-etc` and rename the file to `config.json`. Replace the following values with what is in your Atlas development `config.json`:
     - `S3_ACCESS_KEY_ID`
     - `S3_ACCESS_KEY_SECRET`
 2. Login to the `proknow` Azure Container Registry
     ```sh
     $ az login
     $ az acr login -n proknow
+    $ az acr login -n epgcr
     ```
 3. Open a PowerShell command prompt in the solution folder run the following:
 
@@ -58,7 +63,7 @@ The tests require access to ProKnow in order to create temporary custom metrics,
     <RunSettings>
       <!-- Parameters used by tests at run time -->
       <TestRunParameters>
-        <Parameter name="baseUrl" value="https://localhost:3005" />
+        <Parameter name="baseUrl" value="http://localhost:3005" />
         <Parameter name="credentialsFile" value="C:/src/pk/proknow-sdk-dotnet/proknow-sdk-test/TestEnvironment/credentials.json" />
       </TestRunParameters>
     </RunSettings>

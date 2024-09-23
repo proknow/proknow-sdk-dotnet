@@ -32,14 +32,19 @@ function Invoke-Url {
     } while ($attempts -lt $maxAttempts)
 }
 
-# Step 1: Check if config.json file exists
-$configPath = Join-Path -Path $PSScriptRoot -ChildPath "etc/config.json"
+# Step 1: Check if pk-config.json file exists
+$configPath = Join-Path -Path $PSScriptRoot -ChildPath "pk-etc/config.json"
 if (-not (Test-Path $configPath)) {
-    Write-Host "Config file not found at $configPath" -ForegroundColor Red
+    Write-Host "PK config file not found at $configPath" -ForegroundColor Red
+    exit 1
+}
+$rtvConfigPath = Join-Path -Path $PSScriptRoot -ChildPath "rtv-etc/config.json"
+if (-not (Test-Path $rtvConfigPath)) {
+    Write-Host "RTV config file not found at $rtvConfigPath" -ForegroundColor Red
     exit 1
 }
 
-# Step 2: Get accessKeyId and secretAccessKey from config.json
+# Step 2: Get accessKeyId and secretAccessKey from pk-config.json
 $config = Get-Content $configPath | ConvertFrom-Json
 $accessKeyId = $config.security.accessKeyId
 $secretAccessKey = $config.security.secretAccessKey
@@ -48,6 +53,11 @@ $secretAccessKey = $config.security.secretAccessKey
 $statusResponse = Invoke-Url -Uri "http://localhost:3005/api/status"
 if ($statusResponse.StatusCode -ne 200) {
     Write-Host "Failed to get status of ProKnow. Make sure to run 'docker-compose up -d' first. Status code: $($statusResponse.StatusCode)" -ForegroundColor Red
+    exit 1
+}
+$statusResponse = Invoke-Url -Uri "http://localhost:8998/status"
+if ($statusResponse.StatusCode -ne 200) {
+    Write-Host "Failed to get status of RTV. Make sure to run 'docker-compose up -d' first. Status code: $($statusResponse.StatusCode)" -ForegroundColor Red
     exit 1
 }
 
@@ -66,7 +76,7 @@ if ($organizationsResponse.StatusCode -ne 200) {
 $organizations = $organizationsResponse.Content | ConvertFrom-Json
 $orgExists = $organizations | Where-Object { $_.name -eq ".NET SDK Testing" }
 if ($orgExists) {
-    Write-Host ".NET SDK Testing organization already exists. Exiting." -ForegroundColor Yellow
+    Write-Host "`n.NET SDK Testing organization already exists. Exiting." -ForegroundColor Yellow
     Write-Output $orgExists
     exit 0
 }

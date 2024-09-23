@@ -4,6 +4,13 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.4.0
+
+*Enhancements*
+
+- Updated `EntitySummary.GetAsync` and `EntityItem.GetSliceDataAsync` methods to call into componentized RT Visualization service.
+- Updated docfx package version.
+
 ## v0.3.2
 
 *Enhancements*
