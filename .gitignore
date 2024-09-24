@@ -12,6 +12,8 @@
 credentials.json
 /proknow-sdk-test/TestEnvironment/pk-etc/
 /proknow-sdk-test/TestEnvironment/rtv-etc/
+hooks/
+lfs/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

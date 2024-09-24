@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ProKnow.Exceptions;
 using ProKnow.JsonConverters;
+using System;
 
 namespace ProKnow.Patient.Entities.StructureSet
 {
@@ -55,7 +56,7 @@ namespace ProKnow.Patient.Entities.StructureSet
         /// The number
         /// </summary>
         [JsonPropertyName("number")]
-        public int Number { get; set; }
+        public Nullable<int> Number { get; set; }
 
         /// <summary>
         /// The ProKnow tag

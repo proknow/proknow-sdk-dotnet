@@ -55,7 +55,7 @@ if ($statusResponse.StatusCode -ne 200) {
     Write-Host "Failed to get status of ProKnow. Make sure to run 'docker-compose up -d' first. Status code: $($statusResponse.StatusCode)" -ForegroundColor Red
     exit 1
 }
-$statusResponse = Invoke-Url -Uri "http://localhost:8998/status"
+$statusResponse = Invoke-Url -Uri "http://localhost:8999/status"
 if ($statusResponse.StatusCode -ne 200) {
     Write-Host "Failed to get status of RTV. Make sure to run 'docker-compose up -d' first. Status code: $($statusResponse.StatusCode)" -ForegroundColor Red
     exit 1
@@ -76,7 +76,7 @@ if ($organizationsResponse.StatusCode -ne 200) {
 $organizations = $organizationsResponse.Content | ConvertFrom-Json
 $orgExists = $organizations | Where-Object { $_.name -eq ".NET SDK Testing" }
 if ($orgExists) {
-    Write-Host "`n.NET SDK Testing organization already exists. Exiting." -ForegroundColor Yellow
+    Write-Host "`.NET SDK Testing organization already exists. Exiting." -ForegroundColor Yellow
     Write-Output $orgExists
     exit 0
 }

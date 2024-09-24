@@ -54,7 +54,7 @@ services:
   rt-visualizer:
     image: epgcr.azurecr.io/rt-visualizer:1.1.1
     ports:
-      - 8998:8988
+      - 8999:8988
     volumes:
       - rt-visualizer-cache:/etc/opt/rt-visualizer/cache/
       - ./rtv-etc:/etc/opt/rt-visualizer/config/
