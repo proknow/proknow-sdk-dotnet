@@ -4,6 +4,12 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.4.1
+
+*Bug Fixes*
+
+- Fixed issue with `EntitySummary.GetAsync` failing for structure sets uploaded to ProKnow prior to v2.0.2.0.
+
 ## v0.4.0
 
 *Enhancements*
