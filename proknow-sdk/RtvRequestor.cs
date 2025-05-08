@@ -17,7 +17,6 @@ namespace ProKnow
         #region Enums
         public enum ObjectType
         {
-            Unknown,
             ImageSet,
             StructureSet,
             Plan,
@@ -139,6 +138,10 @@ namespace ProKnow
             }
         }
 
+        /// <summary>
+        /// Gets the status of the RTV server
+        /// </summary>
+        /// <returns></returns>
         private async Task<string> GetStatus()
         {
             var response = await MakeRequest(HttpMethod.Get, $"{_baseUrl}/rtv/status");

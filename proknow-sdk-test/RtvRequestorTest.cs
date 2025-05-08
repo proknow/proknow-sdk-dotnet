@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using static ProKnow.RtvRequestor;
+using System.Text.Json;
 
 namespace ProKnow.Test
 {
@@ -80,6 +81,25 @@ namespace ProKnow.Test
             Assert.AreEqual(00, bytes[408]);
             Assert.AreEqual(48, bytes[409]);
             Assert.AreEqual(0, bytes[410]);
+        }
+
+        [TestMethod]
+        public async Task GetApiVersionTest()
+        {
+            var imageSetVersions = await _proKnow.RtvRequestor.GetApiVersion(ObjectType.ImageSet);
+            var imageVersions = JsonSerializer.Deserialize<JsonElement>(imageSetVersions);
+            Assert.IsTrue(imageVersions.GetProperty("ct").GetInt32() >= 0);
+            Assert.IsTrue(imageVersions.GetProperty("mr").GetInt32() >= 0);
+            Assert.IsTrue(imageVersions.GetProperty("pt").GetInt32() >= 0);
+
+            var structureSetVersion = await _proKnow.RtvRequestor.GetApiVersion(ObjectType.StructureSet);
+            Assert.IsTrue(int.Parse(structureSetVersion) >= 0);
+
+            var planVersion = await _proKnow.RtvRequestor.GetApiVersion(ObjectType.Plan);
+            Assert.IsTrue(int.Parse(planVersion) >= 0);
+
+            var doseVersion = await _proKnow.RtvRequestor.GetApiVersion(ObjectType.Dose);
+            Assert.IsTrue(int.Parse(doseVersion) >= 0);
         }
 
         public class TestStartup
