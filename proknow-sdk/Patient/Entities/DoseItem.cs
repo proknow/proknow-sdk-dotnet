@@ -88,7 +88,7 @@ namespace ProKnow.Patient.Entities
             var headerKeyValuePairs = new List<KeyValuePair<string, string>>() 
             {
                 new KeyValuePair<string, string>("Authorization", "Bearer " + Data.DicomToken),
-                new KeyValuePair<string, string>("Accept-Version", _proKnow.RtvRequestor.ApiVersions[ObjectType.Dose])
+                new KeyValuePair<string, string>("Accept-Version", await _proKnow.RtvRequestor.GetApiVersion(ObjectType.Dose))
             };
             var bytes = await _proKnow.RtvRequestor.GetBinaryAsync(
                 $"/dose/{Data.ProcessedId}/slice/{slice.Tag}", headerKeyValuePairs);
