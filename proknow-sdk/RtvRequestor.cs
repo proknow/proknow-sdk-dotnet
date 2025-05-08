@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ProKnow.Exceptions;
@@ -13,11 +14,27 @@ namespace ProKnow
     /// </summary>
     internal class RtvRequestor
     {
+        #region Enums
+        public enum ObjectType
+        {
+            Unknown,
+            ImageSet,
+            StructureSet,
+            Plan,
+            Dose
+        }
+        #endregion
+
+        #region Public Properties
         /// <summary>
         /// List of headers to include in all requests.
         /// </summary>
         public IList<KeyValuePair<string, string>> DefaultHeaders { get; set; }
 
+        public Dictionary<ObjectType, string> ApiVersions = new Dictionary<ObjectType, string>();
+        #endregion
+
+        #region Private Properties
         private readonly string _baseUrl;
 
         private string _rtvUrl { get; set; }
@@ -26,6 +43,7 @@ namespace ProKnow
         {
             AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
         });
+        #endregion
 
         /// <summary>
         /// Constructs a Rtv Requestor object
@@ -42,6 +60,7 @@ namespace ProKnow
             _baseUrl = baseUrl;
         }
 
+        #region Public Methods
         /// <summary>
         /// Issues an asynchronous HTTP GET request that expects a binary response
         /// </summary>
@@ -68,7 +87,31 @@ namespace ProKnow
         {
             return await MakeRequestForStringResponse(HttpMethod.Post, route, queryParameters: null, headerKeyValuePairs, content);
         }
+        #endregion
 
+        #region Internal Methods
+        /// <summary>
+        /// Gets the API version for a given object type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns>API version</returns>
+        internal async Task<string> GetApiVersion(ObjectType type)
+        {
+            if (ApiVersions.Count > 0)
+            {
+                return ApiVersions[type];
+            }
+            var response = await MakeRequestForStringResponse(HttpMethod.Get, $"/status");
+            var responseJson = JsonSerializer.Deserialize<JsonElement>(response).GetProperty("api_version");
+            ApiVersions.Add(ObjectType.ImageSet, responseJson.GetProperty("imageset").GetString());
+            ApiVersions.Add(ObjectType.StructureSet, responseJson.GetProperty("structureset").GetString());
+            ApiVersions.Add(ObjectType.Plan, responseJson.GetProperty("plan").GetString());
+            ApiVersions.Add(ObjectType.Dose, responseJson.GetProperty("dose").GetString());
+            return ApiVersions[type];
+        }
+        #endregion
+
+        #region Private Methods
         /// <summary>
         /// Gets a Prefix for rtv route with source
         /// </summary>
@@ -216,5 +259,6 @@ namespace ProKnow
             }
             return uri.ToString();
         }
+        #endregion
     }
 }

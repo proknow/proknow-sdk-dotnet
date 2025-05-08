@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using static ProKnow.RtvRequestor;
 
 namespace ProKnow.Test
 {
@@ -60,8 +61,11 @@ namespace ProKnow.Test
 
             // Get the data for the first image
             var image = imageSetItem.Data.Images.First(i => i.Uid == "1.3.6.1.4.1.22213.2.26558.2.61");
-            var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
-                new KeyValuePair<string, string>("Authorization", "Bearer " + imageSetItem.Data.DicomToken) };
+            var headerKeyValuePairs = new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("Authorization", "Bearer " + imageSetItem.Data.DicomToken),
+                new KeyValuePair<string, string>("Accept-Version", await _proKnow.RtvRequestor.GetApiVersion(ObjectType.ImageSet))
+            };
             var bytes = await _proKnow.RtvRequestor.GetBinaryAsync($"/imageset/{imageSetItem.Data.ProcessedId}/image/{image.Tag}", headerKeyValuePairs);
 
             // Verify the data
