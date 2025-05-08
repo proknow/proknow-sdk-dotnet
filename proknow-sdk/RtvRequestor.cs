@@ -101,12 +101,13 @@ namespace ProKnow
             {
                 return ApiVersions[type];
             }
-            var response = await MakeRequestForStringResponse(HttpMethod.Get, $"/status");
-            var responseJson = JsonSerializer.Deserialize<JsonElement>(response).GetProperty("api_version");
-            ApiVersions.Add(ObjectType.ImageSet, responseJson.GetProperty("imageset").GetString());
-            ApiVersions.Add(ObjectType.StructureSet, responseJson.GetProperty("structureset").GetString());
-            ApiVersions.Add(ObjectType.Plan, responseJson.GetProperty("plan").GetString());
-            ApiVersions.Add(ObjectType.Dose, responseJson.GetProperty("dose").GetString());
+            var status = await GetStatus();
+            var responseJson = JsonSerializer.Deserialize<JsonElement>(status);
+            responseJson = JsonSerializer.Deserialize<JsonElement>(responseJson.GetProperty("api_version").GetString());
+            ApiVersions.Add(ObjectType.ImageSet, responseJson.GetProperty("imageset").GetRawText());
+            ApiVersions.Add(ObjectType.StructureSet, responseJson.GetProperty("structureset").GetInt32().ToString());
+            ApiVersions.Add(ObjectType.Plan, responseJson.GetProperty("plan").GetInt32().ToString());
+            ApiVersions.Add(ObjectType.Dose, responseJson.GetProperty("dose").GetInt32().ToString());
             return ApiVersions[type];
         }
         #endregion
@@ -136,6 +137,12 @@ namespace ProKnow
                     throw new Exception("RTV Source not found");
                 }
             }
+        }
+
+        private async Task<string> GetStatus()
+        {
+            var response = await MakeRequest(HttpMethod.Get, $"{_baseUrl}/rtv/status");
+            return await response.Content.ReadAsStringAsync();
         }
 
         /// <summary>

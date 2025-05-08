@@ -75,29 +75,6 @@ namespace ProKnow.Role
         public bool CanExecuteRenamingRules { get; set; }
 
         /// <summary>
-        /// Flag indicating whether role allows creating workflows
-        /// </summary>
-        [JsonPropertyName("workflows_create")]
-        public bool CanCreateWorkflows { get; set; }
-
-        /// <summary>
-        /// Flag indicating whether role allows reading workflows
-        /// </summary>
-        [JsonPropertyName("workflows_read")]
-        public bool CanReadWorkflows { get { return true; } }
-
-        /// <summary>
-        /// Flag indicating whether role allows updating workflows
-        /// </summary>
-        [JsonPropertyName("workflows_update")]
-        public bool CanUpdateWorkflows { get; set; }
-
-        /// <summary>
-        /// Flag indicating whether role allows deleting workflows
-        /// </summary>
-        [JsonPropertyName("workflows_delete")]
-        public bool CanDeleteWorkflows { get; set; }
-        /// <summary>
         /// Flag indicating whether role allows creating checklist templates
         /// </summary>
         [JsonPropertyName("checklist_templates_create")]
@@ -210,18 +187,6 @@ namespace ProKnow.Role
         /// </summary>
         [JsonPropertyName("workspaces_delete")]
         public bool CanDeleteWorkspaces { get; set; }
-
-        /// <summary>
-        /// Flag indicating whether role allows reading workspace algorithms
-        /// </summary>
-        [JsonPropertyName("workspace_algorithms_read")]
-        public bool CanReadWorkspaceAlgorithms { get { return true; } }
-
-        /// <summary>
-        /// Flag indicating whether role allows updating workspace algorithms
-        /// </summary>
-        [JsonPropertyName("workspace_algorithms_update")]
-        public bool CanUpdateWorkspaceAlgorithms { get; set; }
 
         /// <summary>
         /// Flag indicating whether role allows creating groups
@@ -597,9 +562,6 @@ namespace ProKnow.Role
         /// <param name="canUpdateRenamingRules">Flag indicating whether role allows updating renaming rules</param>
         /// <param name="canSearchRenamingRules">Flag indicating whether role allows searching renaming rules</param>
         /// <param name="canExecuteRenamingRules">Flag indicating whether role allows executing renaming rules</param>
-        /// <param name="canCreateWorkflows">Flag indicating whether role allows creating workflows</param>
-        /// <param name="canUpdateWorkflows">Flag indicating whether role allows updating workflows</param>
-        /// <param name="canDeleteWorkflows">Flag indicating whether role allows deleting workflows</param>
         /// <param name="canCreateChecklistTemplates">Flag indicating whether role allows creating checklist templates</param>
         /// <param name="canUpdateChecklistTemplates">Flag indicating whether role allows updating checklist templates</param>
         /// <param name="canDeleteChecklistTemplates">Flag indicating whether role allows deleting checklist templates</param>
@@ -615,7 +577,6 @@ namespace ProKnow.Role
         /// <param name="canReadWorkspaces">Flag indicating whether role allows reading workspaces</param>
         /// <param name="canUpdateWorkspaces">Flag indicating whether role allows updating workspaces</param>
         /// <param name="canDeleteWorkspaces">Flag indicating whether role allows deleting workspaces</param>
-        /// <param name="canUpdateWorkspaceAlgorithms">Flag indicating whether role allows updating workspace algorithms</param>
         /// <param name="canCreateGroups">Flag indicating whether role allows creating groups</param>
         /// <param name="canUpdateGroups">Flag indicating whether role allows updating groups</param>
         /// <param name="canDeleteGroups">Flag indicating whether role allows deleting groups</param>
@@ -673,13 +634,12 @@ namespace ProKnow.Role
             bool canUpdateOrganizations = false, bool canCreateApiKeys = false, bool canManageAuditLogs = false, 
             bool canCreateCustomMetrics = false, bool canUpdateCustomMetrics = false, bool canDeleteCustomMetrics = false, 
             bool canUpdateRenamingRules = false, bool canSearchRenamingRules = false, bool canExecuteRenamingRules = false, 
-            bool canCreateWorkflows = false, bool canUpdateWorkflows = false, bool canDeleteWorkflows = false, 
             bool canCreateChecklistTemplates = false, bool canUpdateChecklistTemplates = false, bool canDeleteChecklistTemplates = false, 
             bool canCreateStructureSetTemplates = false, bool canUpdateStructureSetTemplates = false, bool canDeleteStructureSetTemplates = false,
             bool canCreateScorecardTemplates = false, bool canUpdateScorecardTemplates = false, bool canDeleteScorecardTemplates = false,
             bool canCreateObjectiveTemplates = false, bool canDeleteObjectiveTemplates = false, bool canCreateWorkspaces = false,
             bool canReadWorkspaces = false, bool canUpdateWorkspaces = false, bool canDeleteWorkspaces = false,
-            bool canUpdateWorkspaceAlgorithms = false, bool canCreateGroups = false, bool canUpdateGroups = false,
+            bool canCreateGroups = false, bool canUpdateGroups = false,
             bool canDeleteGroups = false, bool canAddGroupMembers = false, bool canRemoveGroupMembers = false,
             bool canCreateRoles = false, bool canUpdateRoles = false, bool canDeleteRoles = false, bool canCreateUsers = false,
             bool canUpdateUsers = false, bool canDeleteUsers = false, bool canAddResourceAssignments = false,
@@ -707,9 +667,6 @@ namespace ProKnow.Role
             CanUpdateRenamingRules = canUpdateRenamingRules;
             CanSearchRenamingRules = canSearchRenamingRules;
             CanExecuteRenamingRules = canExecuteRenamingRules;
-            CanCreateWorkflows = canCreateWorkflows;
-            CanUpdateWorkflows = canUpdateWorkflows;
-            CanDeleteWorkflows = canDeleteWorkflows;
             CanCreateChecklistTemplates = canCreateChecklistTemplates;
             CanUpdateChecklistTemplates = canUpdateChecklistTemplates;
             CanDeleteChecklistTemplates = canDeleteChecklistTemplates;
@@ -725,7 +682,6 @@ namespace ProKnow.Role
             CanReadWorkspaces = canReadWorkspaces;
             CanUpdateWorkspaces = canUpdateWorkspaces;
             CanDeleteWorkspaces = canDeleteWorkspaces;
-            CanUpdateWorkspaceAlgorithms = canUpdateWorkspaceAlgorithms;
             CanCreateGroups = canCreateGroups;
             CanUpdateGroups = canUpdateGroups;
             CanDeleteGroups = canDeleteGroups;
