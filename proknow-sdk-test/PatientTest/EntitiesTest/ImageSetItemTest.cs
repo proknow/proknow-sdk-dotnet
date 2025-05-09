@@ -96,7 +96,7 @@ namespace ProKnow.Patient.Entities.Test
             Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0032", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData2[204], tolerance);
             Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0028", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData2[205], tolerance);
 
-            // Verify the second image data
+            // Verify the third image data
             var imageData3 = await imageSetItem.GetImageDataAsync(2);
             Assert.AreEqual(imageSetItem.Data.Images[2].Position, 300.5);
             Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0032", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData3[201], tolerance);
@@ -105,7 +105,7 @@ namespace ProKnow.Patient.Entities.Test
             Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0036", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData3[204], tolerance);
             Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0032", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData3[205], tolerance);
 
-            // Verify the second image data
+            // Verify the fourth image data
             var imageData4 = await imageSetItem.GetImageDataAsync(3);
             Assert.AreEqual(imageSetItem.Data.Images[3].Position, 303.5);
             Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0048", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData4[201], tolerance);
@@ -114,7 +114,7 @@ namespace ProKnow.Patient.Entities.Test
             Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0052", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData4[204], tolerance);
             Assert.AreEqual(-1024 + 1.001 * ushort.Parse("004a", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData4[205], tolerance);
 
-            // Verify the second image data
+            // Verify the fifth image data
             var imageData5 = await imageSetItem.GetImageDataAsync(4);
             Assert.AreEqual(imageSetItem.Data.Images[4].Position, 306.5);
             Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0040", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData5[201], tolerance);
