@@ -6814,15 +6814,15 @@ references:
   fullName.vb: ProKnow.Role.Permissions.New()
   nameWithType: Permissions.Permissions()
   nameWithType.vb: Permissions.New()
-- uid: ProKnow.Role.Permissions.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)
-  name: Permissions(bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool)
-  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions__ctor_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_
-  commentId: M:ProKnow.Role.Permissions.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)
-  name.vb: New(Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean)
-  fullName: ProKnow.Role.Permissions.Permissions(bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool)
-  fullName.vb: ProKnow.Role.Permissions.New(Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean)
-  nameWithType: Permissions.Permissions(bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool)
-  nameWithType.vb: Permissions.New(Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean)
+- uid: ProKnow.Role.Permissions.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)
+  name: Permissions(bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool)
+  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions__ctor_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_System_Boolean_
+  commentId: M:ProKnow.Role.Permissions.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)
+  name.vb: New(Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean)
+  fullName: ProKnow.Role.Permissions.Permissions(bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool)
+  fullName.vb: ProKnow.Role.Permissions.New(Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean)
+  nameWithType: Permissions.Permissions(bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool)
+  nameWithType.vb: Permissions.New(Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean)
 - uid: ProKnow.Role.Permissions.#ctor*
   name: Permissions
   href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions__ctor_
@@ -7119,19 +7119,6 @@ references:
   isSpec: "True"
   fullName: ProKnow.Role.Permissions.CanCreateUsers
   nameWithType: Permissions.CanCreateUsers
-- uid: ProKnow.Role.Permissions.CanCreateWorkflows
-  name: CanCreateWorkflows
-  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanCreateWorkflows
-  commentId: P:ProKnow.Role.Permissions.CanCreateWorkflows
-  fullName: ProKnow.Role.Permissions.CanCreateWorkflows
-  nameWithType: Permissions.CanCreateWorkflows
-- uid: ProKnow.Role.Permissions.CanCreateWorkflows*
-  name: CanCreateWorkflows
-  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanCreateWorkflows_
-  commentId: Overload:ProKnow.Role.Permissions.CanCreateWorkflows
-  isSpec: "True"
-  fullName: ProKnow.Role.Permissions.CanCreateWorkflows
-  nameWithType: Permissions.CanCreateWorkflows
 - uid: ProKnow.Role.Permissions.CanCreateWorkspaces
   name: CanCreateWorkspaces
   href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanCreateWorkspaces
@@ -7353,19 +7340,6 @@ references:
   isSpec: "True"
   fullName: ProKnow.Role.Permissions.CanDeleteUsers
   nameWithType: Permissions.CanDeleteUsers
-- uid: ProKnow.Role.Permissions.CanDeleteWorkflows
-  name: CanDeleteWorkflows
-  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanDeleteWorkflows
-  commentId: P:ProKnow.Role.Permissions.CanDeleteWorkflows
-  fullName: ProKnow.Role.Permissions.CanDeleteWorkflows
-  nameWithType: Permissions.CanDeleteWorkflows
-- uid: ProKnow.Role.Permissions.CanDeleteWorkflows*
-  name: CanDeleteWorkflows
-  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanDeleteWorkflows_
-  commentId: Overload:ProKnow.Role.Permissions.CanDeleteWorkflows
-  isSpec: "True"
-  fullName: ProKnow.Role.Permissions.CanDeleteWorkflows
-  nameWithType: Permissions.CanDeleteWorkflows
 - uid: ProKnow.Role.Permissions.CanDeleteWorkspaces
   name: CanDeleteWorkspaces
   href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanDeleteWorkspaces
@@ -7665,32 +7639,6 @@ references:
   isSpec: "True"
   fullName: ProKnow.Role.Permissions.CanReadUsers
   nameWithType: Permissions.CanReadUsers
-- uid: ProKnow.Role.Permissions.CanReadWorkflows
-  name: CanReadWorkflows
-  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanReadWorkflows
-  commentId: P:ProKnow.Role.Permissions.CanReadWorkflows
-  fullName: ProKnow.Role.Permissions.CanReadWorkflows
-  nameWithType: Permissions.CanReadWorkflows
-- uid: ProKnow.Role.Permissions.CanReadWorkflows*
-  name: CanReadWorkflows
-  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanReadWorkflows_
-  commentId: Overload:ProKnow.Role.Permissions.CanReadWorkflows
-  isSpec: "True"
-  fullName: ProKnow.Role.Permissions.CanReadWorkflows
-  nameWithType: Permissions.CanReadWorkflows
-- uid: ProKnow.Role.Permissions.CanReadWorkspaceAlgorithms
-  name: CanReadWorkspaceAlgorithms
-  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanReadWorkspaceAlgorithms
-  commentId: P:ProKnow.Role.Permissions.CanReadWorkspaceAlgorithms
-  fullName: ProKnow.Role.Permissions.CanReadWorkspaceAlgorithms
-  nameWithType: Permissions.CanReadWorkspaceAlgorithms
-- uid: ProKnow.Role.Permissions.CanReadWorkspaceAlgorithms*
-  name: CanReadWorkspaceAlgorithms
-  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanReadWorkspaceAlgorithms_
-  commentId: Overload:ProKnow.Role.Permissions.CanReadWorkspaceAlgorithms
-  isSpec: "True"
-  fullName: ProKnow.Role.Permissions.CanReadWorkspaceAlgorithms
-  nameWithType: Permissions.CanReadWorkspaceAlgorithms
 - uid: ProKnow.Role.Permissions.CanReadWorkspaces
   name: CanReadWorkspaces
   href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanReadWorkspaces
@@ -7990,32 +7938,6 @@ references:
   isSpec: "True"
   fullName: ProKnow.Role.Permissions.CanUpdateUsers
   nameWithType: Permissions.CanUpdateUsers
-- uid: ProKnow.Role.Permissions.CanUpdateWorkflows
-  name: CanUpdateWorkflows
-  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanUpdateWorkflows
-  commentId: P:ProKnow.Role.Permissions.CanUpdateWorkflows
-  fullName: ProKnow.Role.Permissions.CanUpdateWorkflows
-  nameWithType: Permissions.CanUpdateWorkflows
-- uid: ProKnow.Role.Permissions.CanUpdateWorkflows*
-  name: CanUpdateWorkflows
-  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanUpdateWorkflows_
-  commentId: Overload:ProKnow.Role.Permissions.CanUpdateWorkflows
-  isSpec: "True"
-  fullName: ProKnow.Role.Permissions.CanUpdateWorkflows
-  nameWithType: Permissions.CanUpdateWorkflows
-- uid: ProKnow.Role.Permissions.CanUpdateWorkspaceAlgorithms
-  name: CanUpdateWorkspaceAlgorithms
-  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanUpdateWorkspaceAlgorithms
-  commentId: P:ProKnow.Role.Permissions.CanUpdateWorkspaceAlgorithms
-  fullName: ProKnow.Role.Permissions.CanUpdateWorkspaceAlgorithms
-  nameWithType: Permissions.CanUpdateWorkspaceAlgorithms
-- uid: ProKnow.Role.Permissions.CanUpdateWorkspaceAlgorithms*
-  name: CanUpdateWorkspaceAlgorithms
-  href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanUpdateWorkspaceAlgorithms_
-  commentId: Overload:ProKnow.Role.Permissions.CanUpdateWorkspaceAlgorithms
-  isSpec: "True"
-  fullName: ProKnow.Role.Permissions.CanUpdateWorkspaceAlgorithms
-  nameWithType: Permissions.CanUpdateWorkspaceAlgorithms
 - uid: ProKnow.Role.Permissions.CanUpdateWorkspaces
   name: CanUpdateWorkspaces
   href: api/ProKnow.Role.Permissions.html#ProKnow_Role_Permissions_CanUpdateWorkspaces
