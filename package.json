@@ -26,7 +26,10 @@
             "runOnChangeOnly": false
         }
     },
-    "devDependencies": {
-        "npm-watch": "0.13.0"
-    }
+  "devDependencies": {
+    "npm-watch": "0.13.0"
+  },
+  "overrides": {
+    "braces": "^3.0.3"
+  }
 }

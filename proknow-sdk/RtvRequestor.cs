@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ProKnow.Exceptions;
@@ -13,11 +14,26 @@ namespace ProKnow
     /// </summary>
     internal class RtvRequestor
     {
+        #region Enums
+        public enum ObjectType
+        {
+            ImageSet,
+            StructureSet,
+            Plan,
+            Dose
+        }
+        #endregion
+
+        #region Public Properties
         /// <summary>
         /// List of headers to include in all requests.
         /// </summary>
         public IList<KeyValuePair<string, string>> DefaultHeaders { get; set; }
 
+        public Dictionary<ObjectType, string> ApiVersions = new Dictionary<ObjectType, string>();
+        #endregion
+
+        #region Private Properties
         private readonly string _baseUrl;
 
         private string _rtvUrl { get; set; }
@@ -26,6 +42,7 @@ namespace ProKnow
         {
             AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
         });
+        #endregion
 
         /// <summary>
         /// Constructs a Rtv Requestor object
@@ -42,6 +59,7 @@ namespace ProKnow
             _baseUrl = baseUrl;
         }
 
+        #region Public Methods
         /// <summary>
         /// Issues an asynchronous HTTP GET request that expects a binary response
         /// </summary>
@@ -68,7 +86,32 @@ namespace ProKnow
         {
             return await MakeRequestForStringResponse(HttpMethod.Post, route, queryParameters: null, headerKeyValuePairs, content);
         }
+        #endregion
 
+        #region Internal Methods
+        /// <summary>
+        /// Gets the API version for a given object type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns>API version</returns>
+        internal async Task<string> GetApiVersion(ObjectType type)
+        {
+            if (ApiVersions.Count > 0)
+            {
+                return ApiVersions[type];
+            }
+            var status = await GetStatus();
+            var responseJson = JsonSerializer.Deserialize<JsonElement>(status);
+            responseJson = JsonSerializer.Deserialize<JsonElement>(responseJson.GetProperty("api_version").GetString());
+            ApiVersions.Add(ObjectType.ImageSet, responseJson.GetProperty("imageset").GetRawText());
+            ApiVersions.Add(ObjectType.StructureSet, responseJson.GetProperty("structureset").GetInt32().ToString());
+            ApiVersions.Add(ObjectType.Plan, responseJson.GetProperty("plan").GetInt32().ToString());
+            ApiVersions.Add(ObjectType.Dose, responseJson.GetProperty("dose").GetInt32().ToString());
+            return ApiVersions[type];
+        }
+        #endregion
+
+        #region Private Methods
         /// <summary>
         /// Gets a Prefix for rtv route with source
         /// </summary>
@@ -93,6 +136,16 @@ namespace ProKnow
                     throw new Exception("RTV Source not found");
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the status of the RTV server
+        /// </summary>
+        /// <returns></returns>
+        private async Task<string> GetStatus()
+        {
+            var response = await MakeRequest(HttpMethod.Get, $"{_baseUrl}/rtv/status");
+            return await response.Content.ReadAsStringAsync();
         }
 
         /// <summary>
@@ -216,5 +269,6 @@ namespace ProKnow
             }
             return uri.ToString();
         }
+        #endregion
     }
 }

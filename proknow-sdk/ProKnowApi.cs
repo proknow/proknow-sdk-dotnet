@@ -172,12 +172,14 @@ namespace ProKnow
                 $"ProKnow-SDK-dotnet/v{_version.Major}.{_version.Minor}.{_version.Build}"
             );
             Requestor = new Requestor(
-                baseUrl, credentialsId, credentialsSecret, new List<KeyValuePair<string, string>>{
-                userAgent
-            });
+                baseUrl, 
+                credentialsId, 
+                credentialsSecret, 
+                new List<KeyValuePair<string, string>> { userAgent }
+            );
             RtvRequestor = new RtvRequestor(baseUrl, new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("Accept-Version", "5"), userAgent
+                userAgent
             });
             CustomMetrics = new CustomMetrics(this);
             ScorecardTemplates = new ScorecardTemplates(this);

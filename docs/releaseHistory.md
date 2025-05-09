@@ -4,6 +4,13 @@
 
 All releases in the v0.x.x series are subject to breaking changes from one version to another.  After the release of v1.0.0, this project will be subject to [semantic versioning](http://semver.org/).
 
+## v0.4.2
+
+*Enhancements*
+
+- Updated `Patient.Entities.DoseItem`, `Patient.Entities.ImageSetItem`, `Patient.Entities.EntitySummary` and `RtvRequestor` to account for versioning changes to the RT Visualization service.
+- Updated Role.Permissions to remove deprecated permissions `CanCreateWorkflows`, `CanReadWorkflows`, `CanUpdateWorkflows`, `CanDeleteWorkflows`, `CanReadWorkspaceAlgorithms` and `CanUpdateWorkspaceAlgorithms`.
+
 ## v0.4.1
 
 *Bug Fixes*
