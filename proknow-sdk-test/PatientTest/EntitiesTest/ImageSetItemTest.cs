@@ -72,19 +72,56 @@ namespace ProKnow.Patient.Entities.Test
             var entitySummaries = patientItem.FindEntities(e => e.Type == "image_set");
             var imageSetItem = await entitySummaries[0].GetAsync() as ImageSetItem;
 
-            // Get the data for the first image (CT.5.dcm)
-            var imageData = await imageSetItem.GetImageDataAsync(0);
-
-            // Verify the data
-            Assert.AreEqual(imageSetItem.Data.NumberOfRows * imageSetItem.Data.NumberOfColumns, imageData.Length);
             var intercept = imageSetItem.Data.Images[0].RescaleIntercept;
             var slope = imageSetItem.Data.Images[0].RescaleSlope;
             var tolerance = 0.5 * slope; // half of a pixel
-            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0029", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData[201], tolerance);
-            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("002e", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData[202], tolerance);
-            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("002f", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData[203], tolerance);
-            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0030", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData[204], tolerance);
-            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0026", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData[205], tolerance);
+
+            // Get the data for the first image (CT.5.dcm)
+            // Verify the first image data
+            var imageData1 = await imageSetItem.GetImageDataAsync(0);
+            Assert.AreEqual(imageSetItem.Data.Images[0].Position, 294.5);
+            Assert.AreEqual(imageSetItem.Data.NumberOfRows * imageSetItem.Data.NumberOfColumns, imageData1.Length);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0029", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData1[201], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("002e", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData1[202], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("002f", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData1[203], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0030", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData1[204], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0026", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData1[205], tolerance);
+
+            // Verify the second image data
+            var imageData2 = await imageSetItem.GetImageDataAsync(1);
+            Assert.AreEqual(imageSetItem.Data.Images[1].Position, 297.5);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("002e", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData2[201], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0034", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData2[202], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0034", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData2[203], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0032", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData2[204], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0028", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData2[205], tolerance);
+
+            // Verify the second image data
+            var imageData3 = await imageSetItem.GetImageDataAsync(2);
+            Assert.AreEqual(imageSetItem.Data.Images[2].Position, 300.5);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0032", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData3[201], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0036", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData3[202], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("003b", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData3[203], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0036", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData3[204], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0032", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData3[205], tolerance);
+
+            // Verify the second image data
+            var imageData4 = await imageSetItem.GetImageDataAsync(3);
+            Assert.AreEqual(imageSetItem.Data.Images[3].Position, 303.5);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0048", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData4[201], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0050", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData4[202], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0058", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData4[203], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0052", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData4[204], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("004a", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData4[205], tolerance);
+
+            // Verify the second image data
+            var imageData5 = await imageSetItem.GetImageDataAsync(4);
+            Assert.AreEqual(imageSetItem.Data.Images[4].Position, 306.5);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0040", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData5[201], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0044", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData5[202], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("004a", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData5[203], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("0046", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData5[204], tolerance);
+            Assert.AreEqual(-1024 + 1.001 * ushort.Parse("003e", System.Globalization.NumberStyles.AllowHexSpecifier), intercept + slope * imageData5[205], tolerance);
         }
     }
 }

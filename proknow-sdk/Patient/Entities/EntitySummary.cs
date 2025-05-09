@@ -246,7 +246,7 @@ namespace ProKnow.Patient.Entities
                         image.Tag = matchingElement.GetProperty("processed_id").GetString();
                     }
                 }
-
+                imageSetItem.Data.Images = imageSetItem.Data.Images.OrderBy(i => i.Position).ToList();
                 entityItem = imageSetItem;
             }
             else if (Type == "structure_set")
