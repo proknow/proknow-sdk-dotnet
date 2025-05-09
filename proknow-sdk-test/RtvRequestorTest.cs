@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using static ProKnow.RtvRequestor;
+using System.Text.Json;
 
 namespace ProKnow.Test
 {
@@ -60,8 +62,11 @@ namespace ProKnow.Test
 
             // Get the data for the first image
             var image = imageSetItem.Data.Images.First(i => i.Uid == "1.3.6.1.4.1.22213.2.26558.2.61");
-            var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
-                new KeyValuePair<string, string>("Authorization", "Bearer " + imageSetItem.Data.DicomToken) };
+            var headerKeyValuePairs = new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("Authorization", "Bearer " + imageSetItem.Data.DicomToken),
+                new KeyValuePair<string, string>("Accept-Version", await _proKnow.RtvRequestor.GetApiVersion(ObjectType.ImageSet))
+            };
             var bytes = await _proKnow.RtvRequestor.GetBinaryAsync($"/imageset/{imageSetItem.Data.ProcessedId}/image/{image.Tag}", headerKeyValuePairs);
 
             // Verify the data
@@ -76,6 +81,25 @@ namespace ProKnow.Test
             Assert.AreEqual(00, bytes[408]);
             Assert.AreEqual(48, bytes[409]);
             Assert.AreEqual(0, bytes[410]);
+        }
+
+        [TestMethod]
+        public async Task GetApiVersionTest()
+        {
+            var imageSetVersions = await _proKnow.RtvRequestor.GetApiVersion(ObjectType.ImageSet);
+            var imageVersions = JsonSerializer.Deserialize<JsonElement>(imageSetVersions);
+            Assert.IsTrue(imageVersions.GetProperty("ct").GetInt32() >= 0);
+            Assert.IsTrue(imageVersions.GetProperty("mr").GetInt32() >= 0);
+            Assert.IsTrue(imageVersions.GetProperty("pt").GetInt32() >= 0);
+
+            var structureSetVersion = await _proKnow.RtvRequestor.GetApiVersion(ObjectType.StructureSet);
+            Assert.IsTrue(int.Parse(structureSetVersion) >= 0);
+
+            var planVersion = await _proKnow.RtvRequestor.GetApiVersion(ObjectType.Plan);
+            Assert.IsTrue(int.Parse(planVersion) >= 0);
+
+            var doseVersion = await _proKnow.RtvRequestor.GetApiVersion(ObjectType.Dose);
+            Assert.IsTrue(int.Parse(doseVersion) >= 0);
         }
 
         public class TestStartup

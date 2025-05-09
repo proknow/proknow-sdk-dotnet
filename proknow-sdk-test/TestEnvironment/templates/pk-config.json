@@ -74,6 +74,22 @@
       "1": 1,
       "2": 1,
       "10": 2
+    },
+    "failed_jobs_storage": {
+      "type": "s3",
+      "name": "atlas-failed-jobs",
+      "config": {
+        "accessKeyId": "S3_ACCESS_KEY_ID",
+        "secretAccessKey": "S3_ACCESS_KEY_SECRET",
+        "region": "us-east-1",
+        "sslEnabled": false
+      },
+      "client": {
+        "endpoint": "http://minio:9000",
+        "s3ForcePathStyle": true,
+        "sslEnabled": false,
+        "bucket": "atlas-failed-jobs-test"
+      }
     }
   },
   "gc": {

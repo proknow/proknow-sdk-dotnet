@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Linq;
+using static ProKnow.RtvRequestor;
 
 
 namespace ProKnow.Patient.Entities
@@ -197,7 +198,7 @@ namespace ProKnow.Patient.Entities
             if (Type == "image_set")
             {
                 var imageSetItem = JsonSerializer.Deserialize<ImageSetItem>(json);
-                JsonElement body = await processDicom($"/imageset", imageSetItem.Data.Dicom, imageSetItem.Data.DicomToken);
+                JsonElement body = await processDicom($"/imageset", imageSetItem.Data.Dicom, imageSetItem.Data.DicomToken, Type);
                 var data = body.GetProperty("data");
                 imageSetItem.Data.MinX = data.GetProperty("min_x").GetDouble();
                 imageSetItem.Data.MaxX = data.GetProperty("max_x").GetDouble();
@@ -245,7 +246,7 @@ namespace ProKnow.Patient.Entities
                         image.Tag = matchingElement.GetProperty("processed_id").GetString();
                     }
                 }
-
+                imageSetItem.Data.Images = imageSetItem.Data.Images.OrderBy(i => i.Position).ToList();
                 entityItem = imageSetItem;
             }
             else if (Type == "structure_set")
@@ -259,7 +260,7 @@ namespace ProKnow.Patient.Entities
             else if (Type == "dose")
             {
                 var doseItem = JsonSerializer.Deserialize<DoseItem>(json);
-                JsonElement body = await processDicom($"/dose", doseItem.Data.Dicom, doseItem.Data.DicomToken);
+                JsonElement body = await processDicom($"/dose", doseItem.Data.Dicom, doseItem.Data.DicomToken, Type);
                 var data = body.GetProperty("data");
                 doseItem.Data.MinX = data.GetProperty("min_x").GetDouble();
                 doseItem.Data.MaxX = data.GetProperty("max_x").GetDouble();
@@ -302,15 +303,34 @@ namespace ProKnow.Patient.Entities
             return entityItem;
         }
 
-        private async Task<JsonElement> processDicom(string route, string[] dicom, string dicomToken)
+        private async Task<JsonElement> processDicom(string route, string[] dicom, string dicomToken, string type)
         {
 
             // Post request to RTV until the status is completed
             var properties = new Dictionary<string, object>() { { "data", dicom } };
             var content = new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json");
+            ObjectType objectType;
+            switch (type)
+            {
+                case "image_set":
+                    objectType = ObjectType.ImageSet;
+                    break;
+                case "structure_set":
+                    objectType = ObjectType.StructureSet;
+                    break;
+                case "plan":
+                    objectType = ObjectType.Plan;
+                    break;
+                case "dose":
+                    objectType = ObjectType.Dose;
+                    break;
+                default:
+                    throw new ArgumentException($"Argument 'type' must be one of 'image_set', 'structure_set', 'plan', or 'dose'.");
+            }
             var headers = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("Authorization", "Bearer " + dicomToken)
+                new KeyValuePair<string, string>("Authorization", "Bearer " + dicomToken),
+                new KeyValuePair<string, string>("Accept-Version", await _proKnow.RtvRequestor.GetApiVersion(objectType))
             };
             int numberOfRetries = 0;
             JsonElement postResponseJson;

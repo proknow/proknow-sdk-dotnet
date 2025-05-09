@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ProKnow.Exceptions;
+using static ProKnow.RtvRequestor;
 
 namespace ProKnow.Patient.Entities
 {
@@ -84,8 +85,11 @@ namespace ProKnow.Patient.Entities
         public async Task<UInt16[]> GetSliceDataAsync(int index)
         {
             var slice = Data.Slices[index];
-            var headerKeyValuePairs = new List<KeyValuePair<string, string>>() {
-                new KeyValuePair<string, string>("Authorization", "Bearer " + Data.DicomToken) };
+            var headerKeyValuePairs = new List<KeyValuePair<string, string>>() 
+            {
+                new KeyValuePair<string, string>("Authorization", "Bearer " + Data.DicomToken),
+                new KeyValuePair<string, string>("Accept-Version", await _proKnow.RtvRequestor.GetApiVersion(ObjectType.Dose))
+            };
             var bytes = await _proKnow.RtvRequestor.GetBinaryAsync(
                 $"/dose/{Data.ProcessedId}/slice/{slice.Tag}", headerKeyValuePairs);
             if (bytes.Length % 2 != 0)
