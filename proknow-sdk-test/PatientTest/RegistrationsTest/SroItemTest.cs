@@ -142,5 +142,28 @@ namespace ProKnow.Patient.Registrations.Test
             var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm");
             Assert.IsTrue(TestHelper.FileEquals(uploadPath, actualDownloadPath));
         }
+
+        [TestMethod]
+        public async Task DeleteAsyncTest()
+        {
+            var testNumber = 5;
+
+            // Create a test workspace
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, Path.Combine("Sro", "reg.dcm"));
+            var sroItem = await patientItem.Studies[0].Sros[0].GetAsync();
+            Assert.IsNotNull(sroItem);
+
+            // Delete the SRO
+            await sroItem.DeleteAsync();
+            await patientItem.RefreshAsync();
+
+            // Verify that the SRO was deleted
+            var sro = patientItem.FindSros(s => s.Id == sroItem.Id);
+            Assert.AreEqual(0, sro.Count);
+
+        }
     }
 }

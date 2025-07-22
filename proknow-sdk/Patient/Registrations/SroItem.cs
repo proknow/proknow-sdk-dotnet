@@ -95,7 +95,13 @@ namespace ProKnow.Patient.Registrations
         {
         }
 
-        //todo--Add DeleteAsync method
+        /// <summary>
+        /// Deletes this SRO item asynchronously
+        /// </summary>
+        public Task DeleteAsync()
+        {
+            return _proKnow.Requestor.DeleteAsync($"/workspaces/{WorkspaceId}/sros/{Id}");
+        }
 
         /// <summary>
         /// Downloads this spatial registration object asynchronously as a DICOM object to the specified folder or file

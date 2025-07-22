@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ProKnow.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -142,9 +143,39 @@ namespace ProKnow.Upload.Test
         }
 
         [TestMethod]
-        public async Task GetStatusTest_Completed()
+        public async Task FindSroTest_InvalidPathError()
         {
             var testNumber = 4;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Upload test data
+            var uploadPath = Path.Combine(TestSettings.TestDataRootDirectory, "Sro", "reg.dcm");
+            var overrides = new UploadFileOverrides
+            {
+                Patient = new PatientOverridesSchema { Mrn = $"{testNumber}-Mrn", Name = $"{testNumber}-Name" }
+            };
+            var uploadResults = await _proKnow.Uploads.UploadAsync(workspaceItem, uploadPath, overrides);
+            var uploadProcessingResults = await _proKnow.Uploads.GetUploadProcessingResultsAsync(workspaceItem, uploadResults);
+            var uploadBatch = new UploadBatch(_proKnow, workspaceItem.Id, uploadProcessingResults.Results);
+
+            // Try to find the SRO using an invalid path
+            try
+            {
+                var uploadSroSummary = uploadBatch.FindSro(uploadPath + "m");
+                Assert.Fail();
+            }
+            catch (InvalidOperationError ex)
+            {
+                Assert.AreEqual(ex.Message, $"The upload for '{uploadPath + "m"}' was not found in the batch.");
+            }
+        }
+
+        [TestMethod]
+        public async Task GetStatusTest_Completed()
+        {
+            var testNumber = 5;
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -162,7 +193,7 @@ namespace ProKnow.Upload.Test
         [TestMethod]
         public async Task GetStatusTest_Pending_SingleUpload()
         {
-            var testNumber = 5;
+            var testNumber = 6;
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -182,7 +213,7 @@ namespace ProKnow.Upload.Test
         [TestMethod]
         public async Task GetStatusTest_Pending_MultipleUploads()
         {
-            var testNumber = 6;
+            var testNumber = 7;
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -203,7 +234,7 @@ namespace ProKnow.Upload.Test
         [TestMethod]
         public async Task GetStatusTest_Failed()
         {
-            var testNumber = 7;
+            var testNumber = 8;
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
@@ -221,7 +252,7 @@ namespace ProKnow.Upload.Test
         [TestMethod]
         public async Task GetStatusTest_Duplicate()
         {
-            var testNumber = 8;
+            var testNumber = 9;
 
             // Create a test workspace
             var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);

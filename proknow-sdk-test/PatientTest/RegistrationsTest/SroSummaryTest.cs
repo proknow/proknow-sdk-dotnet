@@ -65,5 +65,27 @@ namespace ProKnow.Patient.Registrations.Test
             Assert.AreEqual(ctImageSetItem.FrameOfReferenceUid, sroItem.Target.FrameOfReferenceUid);
             Assert.AreEqual(ctImageSetItem.Id, sroItem.Target.ImageSetId);
         }
+
+        [TestMethod]
+        public async Task DeleteAsyncTest()
+        {
+            int testNumber = 2;
+
+            // Create a test workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create a test patient
+            var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Sro");
+            var sroSummaries = patientItem.FindSros(s => true);
+            Assert.AreEqual(1, sroSummaries.Count);
+
+            // Delete the SRO
+            await sroSummaries[0].DeleteAsync();
+            await patientItem.RefreshAsync();
+
+            // Verify that the SRO was deleted
+            sroSummaries = patientItem.FindSros(s => true);
+            Assert.AreEqual(0, sroSummaries.Count);
+        }
     }
 }
