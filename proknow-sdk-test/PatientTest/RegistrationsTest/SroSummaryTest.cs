@@ -72,7 +72,7 @@ namespace ProKnow.Patient.Registrations.Test
             int testNumber = 2;
 
             // Create a test workspace
-            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+            await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
 
             // Create a test patient
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber, "Sro");

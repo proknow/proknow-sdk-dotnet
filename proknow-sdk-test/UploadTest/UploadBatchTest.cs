@@ -163,7 +163,7 @@ namespace ProKnow.Upload.Test
             // Try to find the SRO using an invalid path
             try
             {
-                var uploadSroSummary = uploadBatch.FindSro(uploadPath + "m");
+                uploadBatch.FindSro(uploadPath + "m");
                 Assert.Fail();
             }
             catch (InvalidOperationError ex)
