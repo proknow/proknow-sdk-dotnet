@@ -53,8 +53,6 @@ The tests require access to ProKnow in order to create temporary custom metrics,
     $ ./test-env-setup.ps1
     ```
 
-    Ensure that you do not have another instance of the ProKnow environment running locally before executing this step.
-
     If you encounter errors running the last command, you may need to adjust the PowerShell execution policy to allow script execution. To do this, run PowerShell as an administrator and execute `$ Set-ExecutionPolicy RemoteSigned`.
 
     A `credentials.json` file will be created in the local directory. Update the `.runsettings` file with the full path to the `credentials.json` file.
@@ -65,7 +63,7 @@ The tests require access to ProKnow in order to create temporary custom metrics,
     <RunSettings>
       <!-- Parameters used by tests at run time -->
       <TestRunParameters>
-        <Parameter name="baseUrl" value="http://localhost:3005" />
+        <Parameter name="baseUrl" value="http://localhost:3021" />
         <Parameter name="credentialsFile" value="C:/src/pk/proknow-sdk-dotnet/proknow-sdk-test/TestEnvironment/credentials.json" />
       </TestRunParameters>
     </RunSettings>

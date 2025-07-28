@@ -1,5 +1,5 @@
 {
-  "hostname": "http://localhost:3005",
+  "hostname": "http://localhost:3021",
   "subdomain": "pk-test",
   "security": {
     "accessKeyId": "proknow",
