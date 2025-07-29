@@ -49,8 +49,8 @@ $config = Get-Content $configPath | ConvertFrom-Json
 $accessKeyId = $config.security.accessKeyId
 $secretAccessKey = $config.security.secretAccessKey
 
-# Step 3: Call GET http://localhost:3005/api/status
-$statusResponse = Invoke-Url -Uri "http://localhost:3005/api/status"
+# Step 3: Call GET http://localhost:3021/api/status
+$statusResponse = Invoke-Url -Uri "http://localhost:3021/api/status"
 if ($statusResponse.StatusCode -ne 200) {
     Write-Host "Failed to get status of ProKnow. Make sure to run 'docker-compose up -d' first. Status code: $($statusResponse.StatusCode)" -ForegroundColor Red
     exit 1
@@ -61,12 +61,12 @@ if ($statusResponse.StatusCode -ne 200) {
     exit 1
 }
 
-# Step 4: Call GET http://localhost:3005/api/organizations using Basic Auth
+# Step 4: Call GET http://localhost:3021/api/organizations using Basic Auth
 $basicAuth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("$($accessKeyId):$($secretAccessKey)"))
 $headers = @{
     Authorization = "Basic $basicAuth"
 }
-$organizationsResponse = Invoke-Url -Uri "http://localhost:3005/api/organizations" -Headers $headers
+$organizationsResponse = Invoke-Url -Uri "http://localhost:3021/api/organizations" -Headers $headers
 if ($organizationsResponse.StatusCode -ne 200) {
     Write-Host "Failed to get list of existing organizations from ProKnow. Status code: $($organizationsResponse.StatusCode)" -ForegroundColor Red
     exit 1
@@ -81,7 +81,7 @@ if ($orgExists) {
     exit 0
 }
 
-# Step 6: Call POST http://localhost:3005/api/organizations using Basic Auth
+# Step 6: Call POST http://localhost:3021/api/organizations using Basic Auth
 $body = @{
     subdomain = "pk-test"
     name = ".NET SDK Testing"
@@ -100,7 +100,7 @@ $headers = @{
     "Content-Type" = "application/json"
 }
 
-$newOrgResponse = Invoke-Url -Uri "http://localhost:3005/api/organizations" -Method Post -Body $body -Headers $headers
+$newOrgResponse = Invoke-Url -Uri "http://localhost:3021/api/organizations" -Method Post -Body $body -Headers $headers
 if ($newOrgResponse.StatusCode -ne 200) {
     Write-Host "Failed to create organization for SDK testing. Status code: $($newOrgResponse.StatusCode)" -ForegroundColor Red
     exit 1

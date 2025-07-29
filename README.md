@@ -63,7 +63,7 @@ The tests require access to ProKnow in order to create temporary custom metrics,
     <RunSettings>
       <!-- Parameters used by tests at run time -->
       <TestRunParameters>
-        <Parameter name="baseUrl" value="http://localhost:3005" />
+        <Parameter name="baseUrl" value="http://localhost:3021" />
         <Parameter name="credentialsFile" value="C:/src/pk/proknow-sdk-dotnet/proknow-sdk-test/TestEnvironment/credentials.json" />
       </TestRunParameters>
     </RunSettings>
