@@ -5765,6 +5765,19 @@ references:
   fullName.vb: ProKnow.Patient.Registrations.SroItem.New
   nameWithType: SroItem.SroItem
   nameWithType.vb: SroItem.New
+- uid: ProKnow.Patient.Registrations.SroItem.DeleteAsync
+  name: DeleteAsync()
+  href: api/ProKnow.Patient.Registrations.SroItem.html#ProKnow_Patient_Registrations_SroItem_DeleteAsync
+  commentId: M:ProKnow.Patient.Registrations.SroItem.DeleteAsync
+  fullName: ProKnow.Patient.Registrations.SroItem.DeleteAsync()
+  nameWithType: SroItem.DeleteAsync()
+- uid: ProKnow.Patient.Registrations.SroItem.DeleteAsync*
+  name: DeleteAsync
+  href: api/ProKnow.Patient.Registrations.SroItem.html#ProKnow_Patient_Registrations_SroItem_DeleteAsync_
+  commentId: Overload:ProKnow.Patient.Registrations.SroItem.DeleteAsync
+  isSpec: "True"
+  fullName: ProKnow.Patient.Registrations.SroItem.DeleteAsync
+  nameWithType: SroItem.DeleteAsync
 - uid: ProKnow.Patient.Registrations.SroItem.DownloadAsync(System.String)
   name: DownloadAsync(string)
   href: api/ProKnow.Patient.Registrations.SroItem.html#ProKnow_Patient_Registrations_SroItem_DownloadAsync_System_String_
@@ -5943,6 +5956,19 @@ references:
   commentId: T:ProKnow.Patient.Registrations.SroSummary
   fullName: ProKnow.Patient.Registrations.SroSummary
   nameWithType: SroSummary
+- uid: ProKnow.Patient.Registrations.SroSummary.DeleteAsync
+  name: DeleteAsync()
+  href: api/ProKnow.Patient.Registrations.SroSummary.html#ProKnow_Patient_Registrations_SroSummary_DeleteAsync
+  commentId: M:ProKnow.Patient.Registrations.SroSummary.DeleteAsync
+  fullName: ProKnow.Patient.Registrations.SroSummary.DeleteAsync()
+  nameWithType: SroSummary.DeleteAsync()
+- uid: ProKnow.Patient.Registrations.SroSummary.DeleteAsync*
+  name: DeleteAsync
+  href: api/ProKnow.Patient.Registrations.SroSummary.html#ProKnow_Patient_Registrations_SroSummary_DeleteAsync_
+  commentId: Overload:ProKnow.Patient.Registrations.SroSummary.DeleteAsync
+  isSpec: "True"
+  fullName: ProKnow.Patient.Registrations.SroSummary.DeleteAsync
+  nameWithType: SroSummary.DeleteAsync
 - uid: ProKnow.Patient.Registrations.SroSummary.ExtensionData
   name: ExtensionData
   href: api/ProKnow.Patient.Registrations.SroSummary.html#ProKnow_Patient_Registrations_SroSummary_ExtensionData
