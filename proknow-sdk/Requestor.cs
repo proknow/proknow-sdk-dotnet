@@ -129,6 +129,23 @@ namespace ProKnow
         }
 
         /// <summary>
+        /// Issues an asynchronous HTTP POST request that expects a string response
+        /// </summary>
+        /// <param name="route">The API route to use in the request</param>
+        /// <param name="headerKeyValuePairs">Optional key-value pairs to be included in the header</param>
+        /// <param name="queryParameters">Optional query parameters</param>
+        /// <param name="strategy">Optional paging strategy</param>
+        /// <param name="content">Optional content for the body</param>
+        /// <returns>A task that returns the response as a string</returns>
+        /// <exception cref="ProKnowHttpException">If the HTTP request is not successful</exception>
+        public async Task<IList<string>> PostAsyncWithPaging(string route, IList<KeyValuePair<string, string>> headerKeyValuePairs = null,
+            Dictionary<string, object> queryParameters = null, string strategy = "next", HttpContent content = null)
+        {
+            // With a POST request, if the base URL is malformed, it's possible that ProKnow will return 200 OK along with its index.html, hence why we request a non-HTML string response
+            return await MakeRequestForNonHtmlStringResponseWithPaging(HttpMethod.Post, route, queryParameters, strategy, headerKeyValuePairs, content);
+        }
+
+        /// <summary>
         /// Issues an asynchronous HTTP PUT request
         /// </summary>
         /// <param name="route">The API route to use in the request</param>

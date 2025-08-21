@@ -158,6 +158,7 @@ namespace ProKnow.Patient
         /// </summary>
         /// <param name="workspace">The ProKnow ID or name of the workspace containing the patients</param>
         /// <param name="searchString">If provided, returns only the patients whose MRN or name match the parameter</param>
+        /// <param name="structure"> If provided, returns only the patients having a structure matching the parameter.</param>
         /// <returns>A collection of patient summaries</returns>
         /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
         /// <example>This example queries the patients belonging to the Clinical workspace and prints the name of each patient:
@@ -173,7 +174,7 @@ namespace ProKnow.Patient
         /// }
         /// </code>
         /// </example>
-        public async Task<IList<PatientSummary>> QueryAsync(string workspace, string searchString = null)
+        public async Task<IList<PatientSummary>> QueryAsync(string workspace, string searchString = null, string structure = null)
         {
             var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
             var workspaceId = workspaceItem.Id;
@@ -182,12 +183,18 @@ namespace ProKnow.Patient
             {
                 queryParameters.Add("page_size", Environment.GetEnvironmentVariable("PATIENTS_PAGE_SIZE"));
             }
+            var content = new Dictionary<string, object>() { };
             if (searchString != null)
             {
-                queryParameters.Add("search", searchString);
+                content["patient"] = searchString;
             }
-            var json = await _proKnow.Requestor.GetAsyncWithPaging($"/workspaces/{workspaceId}/patients", null,
-                                                                   queryParameters, "numbered");
+            if(structure != null)
+            {
+                content["structure"] = structure;
+            }
+            var requestContent = new StringContent(JsonSerializer.Serialize(content), Encoding.UTF8, "application/json");
+            var json = await _proKnow.Requestor.PostAsyncWithPaging(
+                $"/workspaces/{workspaceId}/patients/search", null, queryParameters, "numbered", requestContent);
             return DeserializePatientsWithPaging(workspaceId, json);
         }
 
