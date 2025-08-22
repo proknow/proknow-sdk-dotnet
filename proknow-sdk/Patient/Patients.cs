@@ -157,8 +157,7 @@ namespace ProKnow.Patient
         /// Queries the ProKnow API for the collection of patient summaries
         /// </summary>
         /// <param name="workspace">The ProKnow ID or name of the workspace containing the patients</param>
-        /// <param name="searchString">If provided, returns only the patients whose MRN or name match the parameter</param>
-        /// <param name="structure"> If provided, returns only the patients having a structure matching the parameter.</param>
+        /// <param name="criteria">If provided, returns only the patients whose properties match the criteria</param>
         /// <returns>A collection of patient summaries</returns>
         /// <exception cref="ProKnowWorkspaceLookupException">If no matching workspace was found</exception>
         /// <example>This example queries the patients belonging to the Clinical workspace and prints the name of each patient:
@@ -174,7 +173,7 @@ namespace ProKnow.Patient
         /// }
         /// </code>
         /// </example>
-        public async Task<IList<PatientSummary>> QueryAsync(string workspace, string searchString = null, string structure = null)
+        public async Task<IList<PatientSummary>> QueryAsync(string workspace, PatientsQueryCriteria criteria = null)
         {
             var workspaceItem = await _proKnow.Workspaces.ResolveAsync(workspace);
             var workspaceId = workspaceItem.Id;
@@ -184,13 +183,16 @@ namespace ProKnow.Patient
                 queryParameters.Add("page_size", Environment.GetEnvironmentVariable("PATIENTS_PAGE_SIZE"));
             }
             var content = new Dictionary<string, object>() { };
-            if (searchString != null)
+            if (criteria != null)
             {
-                content["patient"] = searchString;
-            }
-            if(structure != null)
-            {
-                content["structure"] = structure;
+                if (!string.IsNullOrEmpty(criteria.Patient))
+                {
+                    content["patient"] = criteria.Patient;
+                }
+                if (!string.IsNullOrEmpty(criteria.Structure))
+                {
+                    content["structure"] = criteria.Structure;
+                }
             }
             var requestContent = new StringContent(JsonSerializer.Serialize(content), Encoding.UTF8, "application/json");
             var json = await _proKnow.Requestor.PostAsyncWithPaging(
