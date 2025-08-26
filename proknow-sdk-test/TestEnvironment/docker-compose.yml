@@ -33,7 +33,7 @@ services:
     volumes:
       - keycloak:/opt/keycloak/data
   proknow-init:
-    image: proknow.azurecr.io/proknow:2.0.6-0
+    image: proknow.azurecr.io/proknow:rc-test-scan-20250822.112314-5aff46dfc8c8
     command: "upgrade --config /etc/opt/proknow/config.json"
     depends_on:
       - postgres
@@ -43,7 +43,7 @@ services:
     volumes:
       - ./pk-etc:/etc/opt/proknow
   proknow:
-    image: proknow.azurecr.io/proknow:2.0.6-0
+    image: proknow.azurecr.io/proknow:rc-test-scan-20250822.112314-5aff46dfc8c8
     command: "server --config /etc/opt/proknow/config.json --port 8080"
     depends_on:
       - proknow-init

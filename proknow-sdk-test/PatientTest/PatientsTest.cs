@@ -2,6 +2,7 @@
 using ProKnow.Test;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -161,7 +162,10 @@ namespace ProKnow.Patient.Test
             await TestHelper.CreatePatientAsync(_testClassName, testNumber);
 
             // Query with a non-matching search string
-            var patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id, "foobar");
+            var patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id, new PatientsQueryCriteria
+            {
+                Patient = "foobar"
+            });
 
             // Verify that no patient summaries were returned
             Assert.IsTrue(patientSummaries.Count == 0);
@@ -179,18 +183,49 @@ namespace ProKnow.Patient.Test
             var patientItem = await TestHelper.CreatePatientAsync(_testClassName, testNumber);
 
             // Verify with matching MRN
-            var patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id, patientItem.Mrn);
+            var patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id, new PatientsQueryCriteria
+            {
+                Patient = patientItem.Mrn
+            });
             Assert.IsTrue(patientSummaries.Count == 1);
 
             // Verify with matching name
-            patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id, patientItem.Name);
+            patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id, new PatientsQueryCriteria
+            {
+                Patient = patientItem.Name
+            });
             Assert.IsTrue(patientSummaries.Count == 1);
+        }
+
+        [TestMethod]
+        public async Task QueryAsyncTest_MatchingStructureString()
+        {
+            int testNumber = 9;
+
+            // Create a workspace
+            var workspaceItem = await TestHelper.CreateWorkspaceAsync(_testClassName, testNumber);
+
+            // Create 3 patients
+            await TestHelper.CreateMultiPatientAsync(_testClassName, testNumber, 2);
+            await TestHelper.CreatePatientAsync(
+                _testClassName, testNumber, Path.Combine("Becker^Matthew", "RS.dcm"));
+
+            // Verify with structure name
+            var patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id, new PatientsQueryCriteria
+            {
+                Structure ="PAROTID_LT"
+            });
+            Assert.AreEqual(patientSummaries.Count, 1);
+            
+            // Verify without structure name returns all patients
+            patientSummaries = await _proKnow.Patients.QueryAsync(workspaceItem.Id);
+            Assert.AreEqual(patientSummaries.Count, 3);
         }
 
         [TestMethod]
         public async Task QueryAsyncTest_Paging()
         {
-            int testNumber = 9;
+            int testNumber = 10;
 
             Environment.SetEnvironmentVariable("PATIENTS_PAGE_SIZE", "5");
 

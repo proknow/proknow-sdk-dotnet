@@ -97,3 +97,8 @@ The following files need to be updated before each release:
 
 1. `releaseHistory.md`
 2. `proknow-sdk.csproj` - Update the `<Version>` attribute with the new version following the [semantic versioning](https://semver.org/) rules.
+
+**Important**: If there are any breaking changes in ProKnow that require corresponding changes in the SDK:
+
+1. **Always use Release Branch**: Create a release branch and merge all related PRs to the release branch instead of `master` branch.
+2. **Merge Back After Release**: Only after the ProKnow release is complete and successful, merge the release branch back to master.
