@@ -1,7 +1,7 @@
 version: "3"
 services:
   postgres:
-    image: bitnami/postgresql:16.2.0
+    image: bitnamilegacy/postgresql:16.2.0
     ports:
       - 5449:5432
     environment:
