@@ -53,7 +53,7 @@ services:
       - ./pk-etc:/etc/opt/proknow
       - proknow-opt:/var/opt/proknow
   rt-visualizer:
-    image: epgcr.azurecr.io/rt-visualizer:4.0.3
+    image: epgcr.azurecr.io/rt-visualizer:4.0.4
     ports:
       - 8999:8988
     volumes:
