@@ -93,10 +93,7 @@
     }
   },
   "gc": {
-    "cronPattern": "0 0 3 * * *",
-    "cronTimeZone": "America/New_York",
     "batchSize": 100,
-    "visibilityTimeout": 30,
     "concurrency": 4,
     "entityCollectionThreshold": 2592000
   },
@@ -116,8 +113,8 @@
         },
         "name": "Elekta Solutions AB",
         "address": [
-          "Kungstensgatan 18, Box 7593",
-          "SE-103 93 Stockholm",
+          "Hagaplan 4",
+          "113 68 Stockholm",
           "Sweden",
           "Phone: +46 8 587 254 00",
           "Fax: +46 8 587 255 00",
