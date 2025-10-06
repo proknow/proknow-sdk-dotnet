@@ -39,13 +39,16 @@ The tests require access to ProKnow in order to create temporary custom metrics,
 2. Move `./proknow-sdk-test/TestEnvironment/templates/rtv-config.json` into `./proknow-sdk-test/TestEnvironment/rtv-etc` and rename the file to `config.json`. Replace the following values with what is in your Atlas development `config.json`:
     - `S3_ACCESS_KEY_ID`
     - `S3_ACCESS_KEY_SECRET`
-2. Login to the `proknow` Azure Container Registry
+3. Move `./proknow-sdk-test/TestEnvironment/templates/ef-config.json` into `./proknow-sdk-test/TestEnvironment/ef-etc` and rename the file to `config.json`. Replace the following values with what is in your Atlas development `config.json`:
+    - `S3_ACCESS_KEY_ID`
+    - `S3_ACCESS_KEY_SECRET`
+4. Login to the `proknow` Azure Container Registry
     ```sh
     $ az login
     $ az acr login -n proknow
     $ az acr login -n epgcr
     ```
-3. Open a PowerShell command prompt in the solution folder run the following:
+5. Open a PowerShell command prompt in the solution folder run the following:
 
     ```sh
     $ cd ./proknow-sdk-test/TestEnvironment
@@ -57,7 +60,7 @@ The tests require access to ProKnow in order to create temporary custom metrics,
 
     A `credentials.json` file will be created in the local directory. Update the `.runsettings` file with the full path to the `credentials.json` file.
 
-4. If a `.runsettings` file does not yet exist, create one in the solution folder with the following content:
+6. If a `.runsettings` file does not yet exist, create one in the solution folder with the following content:
     ```
     <?xml version="1.0" encoding="utf-8"?>
     <RunSettings>
