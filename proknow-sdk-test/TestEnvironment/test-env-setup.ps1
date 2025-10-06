@@ -32,7 +32,8 @@ function Invoke-Url {
     } while ($attempts -lt $maxAttempts)
 }
 
-# Step 1: Check if pk-config.json file exists
+# Step 1: Check if config.json file exists
+Write-Host "Checking for config files..." -ForegroundColor Cyan
 $configPath = Join-Path -Path $PSScriptRoot -ChildPath "pk-etc/config.json"
 if (-not (Test-Path $configPath)) {
     Write-Host "PK config file not found at $configPath" -ForegroundColor Red
@@ -43,13 +44,20 @@ if (-not (Test-Path $rtvConfigPath)) {
     Write-Host "RTV config file not found at $rtvConfigPath" -ForegroundColor Red
     exit 1
 }
+$efConfigPath = Join-Path -Path $PSScriptRoot -ChildPath "ef-etc/config.json"
+if (-not (Test-Path $efConfigPath)) {
+    Write-Host "EF config file not found at $efConfigPath" -ForegroundColor Red
+    exit 1
+}
 
 # Step 2: Get accessKeyId and secretAccessKey from pk-config.json
+Write-Host "Reading config file..." -ForegroundColor Cyan
 $config = Get-Content $configPath | ConvertFrom-Json
 $accessKeyId = $config.security.accessKeyId
 $secretAccessKey = $config.security.secretAccessKey
 
 # Step 3: Call GET http://localhost:3021/api/status
+Write-Host "Checking that ProKnow and RTV are running..." -ForegroundColor Cyan
 $statusResponse = Invoke-Url -Uri "http://localhost:3021/api/status"
 if ($statusResponse.StatusCode -ne 200) {
     Write-Host "Failed to get status of ProKnow. Make sure to run 'docker-compose up -d' first. Status code: $($statusResponse.StatusCode)" -ForegroundColor Red
@@ -62,6 +70,7 @@ if ($statusResponse.StatusCode -ne 200) {
 }
 
 # Step 4: Call GET http://localhost:3021/api/organizations using Basic Auth
+Write-Host "Checking for existing organizations..." -ForegroundColor Cyan
 $basicAuth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("$($accessKeyId):$($secretAccessKey)"))
 $headers = @{
     Authorization = "Basic $basicAuth"
@@ -73,6 +82,7 @@ if ($organizationsResponse.StatusCode -ne 200) {
 }
 
 # Step 5: Check if organization ".NET SDK Testing" exists
+Write-Host "Checking for .NET SDK Testing organization..." -ForegroundColor Cyan
 $organizations = $organizationsResponse.Content | ConvertFrom-Json
 $orgExists = $organizations | Where-Object { $_.name -eq ".NET SDK Testing" }
 if ($orgExists) {
@@ -82,6 +92,7 @@ if ($orgExists) {
 }
 
 # Step 6: Call POST http://localhost:3021/api/organizations using Basic Auth
+Write-Host "Creating .NET SDK Testing organization..." -ForegroundColor Cyan
 $body = @{
     subdomain = "pk-test"
     name = ".NET SDK Testing"
@@ -107,11 +118,13 @@ if ($newOrgResponse.StatusCode -ne 200) {
 }
 
 # Step 7: Record apiKeyId and apiKeySecret
+Write-Host "Organization created successfully." -ForegroundColor Green
 $newOrgContent = $newOrgResponse.Content | ConvertFrom-Json
 $apiKeyId = $newOrgContent.user.api_key.id
 $apiKeySecret = $newOrgContent.user.api_key.secret
 
 # Step 8: Write credentials to credentials.json
+Write-Host "Writing credentials to credentials.json..." -ForegroundColor Cyan
 $credentialsPath = "credentials.json"
 if (Test-Path $credentialsPath) {
     Remove-Item $credentialsPath -Force

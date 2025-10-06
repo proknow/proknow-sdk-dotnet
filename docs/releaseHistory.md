@@ -8,7 +8,7 @@ All releases in the v0.x.x series are subject to breaking changes from one versi
 
 *Enhancements*
 
-- Updated `Patients.QueryAsync` method to support searching patients by structure, from ProKnow v2.0.7.0.
+- **Breaking Change**: Updated `Patients.QueryAsync` method to support searching patients by structure, introduced in ProKnow version v2.0.7.0.
 
 ## v0.4.3
 
