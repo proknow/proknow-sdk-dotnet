@@ -39,13 +39,16 @@ The tests require access to ProKnow in order to create temporary custom metrics,
 2. Move `./proknow-sdk-test/TestEnvironment/templates/rtv-config.json` into `./proknow-sdk-test/TestEnvironment/rtv-etc` and rename the file to `config.json`. Replace the following values with what is in your Atlas development `config.json`:
     - `S3_ACCESS_KEY_ID`
     - `S3_ACCESS_KEY_SECRET`
-2. Login to the `proknow` Azure Container Registry
+3. Move `./proknow-sdk-test/TestEnvironment/templates/ef-config.json` into `./proknow-sdk-test/TestEnvironment/ef-etc` and rename the file to `config.json`. Replace the following values with what is in your Atlas development `config.json`:
+    - `S3_ACCESS_KEY_ID`
+    - `S3_ACCESS_KEY_SECRET`
+4. Login to the `proknow` Azure Container Registry
     ```sh
     $ az login
     $ az acr login -n proknow
     $ az acr login -n epgcr
     ```
-3. Open a PowerShell command prompt in the solution folder run the following:
+5. Open a PowerShell command prompt in the solution folder run the following:
 
     ```sh
     $ cd ./proknow-sdk-test/TestEnvironment
@@ -57,7 +60,7 @@ The tests require access to ProKnow in order to create temporary custom metrics,
 
     A `credentials.json` file will be created in the local directory. Update the `.runsettings` file with the full path to the `credentials.json` file.
 
-4. If a `.runsettings` file does not yet exist, create one in the solution folder with the following content:
+6. If a `.runsettings` file does not yet exist, create one in the solution folder with the following content:
     ```
     <?xml version="1.0" encoding="utf-8"?>
     <RunSettings>
@@ -97,3 +100,8 @@ The following files need to be updated before each release:
 
 1. `releaseHistory.md`
 2. `proknow-sdk.csproj` - Update the `<Version>` attribute with the new version following the [semantic versioning](https://semver.org/) rules.
+
+**Important**: If there are any breaking changes in ProKnow that require corresponding changes in the SDK:
+
+1. **Always use Release Branch**: Create a release branch and merge all related PRs to the release branch instead of `master` branch.
+2. **Merge Back After Release**: Only after the ProKnow release is complete and successful, merge the release branch back to master.
