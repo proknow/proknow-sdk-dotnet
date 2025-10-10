@@ -446,8 +446,8 @@ using System.Threading.Tasks;
 
   <a id="ProKnow_Patient_Patients_QueryAsync_" data-uid="ProKnow.Patient.Patients.QueryAsync*"></a>
 
-  <h3 id="ProKnow_Patient_Patients_QueryAsync_System_String_System_String_" data-uid="ProKnow.Patient.Patients.QueryAsync(System.String,System.String)">
-  QueryAsync(string, string)
+  <h3 id="ProKnow_Patient_Patients_QueryAsync_System_String_ProKnow_Patient_PatientsQueryCriteria_" data-uid="ProKnow.Patient.Patients.QueryAsync(System.String,ProKnow.Patient.PatientsQueryCriteria)">
+  QueryAsync(string, PatientsQueryCriteria)
   <a class="header-action link-secondary" title="View source" href="https://github.com/proknow/proknow-sdk-dotnet/blob/master/proknow-sdk/Patient/Patients.cs/#L176"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -456,7 +456,7 @@ using System.Threading.Tasks;
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;IList&lt;PatientSummary&gt;&gt; QueryAsync(string workspace, string searchString = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;IList&lt;PatientSummary&gt;&gt; QueryAsync(string workspace, PatientsQueryCriteria criteria = null)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -464,8 +464,8 @@ using System.Threading.Tasks;
     <dt><code>workspace</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
     <dd><p>The ProKnow ID or name of the workspace containing the patients</p>
 </dd>
-    <dt><code>searchString</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd><p>If provided, returns only the patients whose MRN or name match the parameter</p>
+    <dt><code>criteria</code> <a class="xref" href="ProKnow.Patient.PatientsQueryCriteria.html">PatientsQueryCriteria</a></dt>
+    <dd><p>If provided, returns only the patients whose properties match the criteria</p>
 </dd>
   </dl>
 
@@ -481,7 +481,7 @@ using System.Threading.Tasks;
 
 
 
-  <h4 class="section" id="ProKnow_Patient_Patients_QueryAsync_System_String_System_String__examples">Examples</h4>
+  <h4 class="section" id="ProKnow_Patient_Patients_QueryAsync_System_String_ProKnow_Patient_PatientsQueryCriteria__examples">Examples</h4>
   <p>This example queries the patients belonging to the Clinical workspace and prints the name of each patient:
 <pre><code class="lang-csharp">using ProKnow;
 using System.Threading.Tasks;

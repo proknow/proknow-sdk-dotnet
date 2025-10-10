@@ -5244,15 +5244,15 @@ references:
   isSpec: "True"
   fullName: ProKnow.Patient.Patients.LookupAsync
   nameWithType: Patients.LookupAsync
-- uid: ProKnow.Patient.Patients.QueryAsync(System.String,System.String)
-  name: QueryAsync(string, string)
-  href: api/ProKnow.Patient.Patients.html#ProKnow_Patient_Patients_QueryAsync_System_String_System_String_
-  commentId: M:ProKnow.Patient.Patients.QueryAsync(System.String,System.String)
-  name.vb: QueryAsync(String, String)
-  fullName: ProKnow.Patient.Patients.QueryAsync(string, string)
-  fullName.vb: ProKnow.Patient.Patients.QueryAsync(String, String)
-  nameWithType: Patients.QueryAsync(string, string)
-  nameWithType.vb: Patients.QueryAsync(String, String)
+- uid: ProKnow.Patient.Patients.QueryAsync(System.String,ProKnow.Patient.PatientsQueryCriteria)
+  name: QueryAsync(string, PatientsQueryCriteria)
+  href: api/ProKnow.Patient.Patients.html#ProKnow_Patient_Patients_QueryAsync_System_String_ProKnow_Patient_PatientsQueryCriteria_
+  commentId: M:ProKnow.Patient.Patients.QueryAsync(System.String,ProKnow.Patient.PatientsQueryCriteria)
+  name.vb: QueryAsync(String, PatientsQueryCriteria)
+  fullName: ProKnow.Patient.Patients.QueryAsync(string, ProKnow.Patient.PatientsQueryCriteria)
+  fullName.vb: ProKnow.Patient.Patients.QueryAsync(String, ProKnow.Patient.PatientsQueryCriteria)
+  nameWithType: Patients.QueryAsync(string, PatientsQueryCriteria)
+  nameWithType.vb: Patients.QueryAsync(String, PatientsQueryCriteria)
 - uid: ProKnow.Patient.Patients.QueryAsync*
   name: QueryAsync
   href: api/ProKnow.Patient.Patients.html#ProKnow_Patient_Patients_QueryAsync_
@@ -5548,6 +5548,38 @@ references:
   isSpec: "True"
   fullName: ProKnow.Patient.PatientScorecardSummary.ToString
   nameWithType: PatientScorecardSummary.ToString
+- uid: ProKnow.Patient.PatientsQueryCriteria
+  name: PatientsQueryCriteria
+  href: api/ProKnow.Patient.PatientsQueryCriteria.html
+  commentId: T:ProKnow.Patient.PatientsQueryCriteria
+  fullName: ProKnow.Patient.PatientsQueryCriteria
+  nameWithType: PatientsQueryCriteria
+- uid: ProKnow.Patient.PatientsQueryCriteria.Patient
+  name: Patient
+  href: api/ProKnow.Patient.PatientsQueryCriteria.html#ProKnow_Patient_PatientsQueryCriteria_Patient
+  commentId: P:ProKnow.Patient.PatientsQueryCriteria.Patient
+  fullName: ProKnow.Patient.PatientsQueryCriteria.Patient
+  nameWithType: PatientsQueryCriteria.Patient
+- uid: ProKnow.Patient.PatientsQueryCriteria.Patient*
+  name: Patient
+  href: api/ProKnow.Patient.PatientsQueryCriteria.html#ProKnow_Patient_PatientsQueryCriteria_Patient_
+  commentId: Overload:ProKnow.Patient.PatientsQueryCriteria.Patient
+  isSpec: "True"
+  fullName: ProKnow.Patient.PatientsQueryCriteria.Patient
+  nameWithType: PatientsQueryCriteria.Patient
+- uid: ProKnow.Patient.PatientsQueryCriteria.Structure
+  name: Structure
+  href: api/ProKnow.Patient.PatientsQueryCriteria.html#ProKnow_Patient_PatientsQueryCriteria_Structure
+  commentId: P:ProKnow.Patient.PatientsQueryCriteria.Structure
+  fullName: ProKnow.Patient.PatientsQueryCriteria.Structure
+  nameWithType: PatientsQueryCriteria.Structure
+- uid: ProKnow.Patient.PatientsQueryCriteria.Structure*
+  name: Structure
+  href: api/ProKnow.Patient.PatientsQueryCriteria.html#ProKnow_Patient_PatientsQueryCriteria_Structure_
+  commentId: Overload:ProKnow.Patient.PatientsQueryCriteria.Structure
+  isSpec: "True"
+  fullName: ProKnow.Patient.PatientsQueryCriteria.Structure
+  nameWithType: PatientsQueryCriteria.Structure
 - uid: ProKnow.Patient.PatientSummary
   name: PatientSummary
   href: api/ProKnow.Patient.PatientSummary.html
@@ -6787,6 +6819,22 @@ references:
   isSpec: "True"
   fullName: ProKnow.Requestor.PostAsync
   nameWithType: Requestor.PostAsync
+- uid: ProKnow.Requestor.PostAsyncWithPaging(System.String,System.Collections.Generic.IList{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.Dictionary{System.String,System.Object},System.String,System.Net.Http.HttpContent)
+  name: PostAsyncWithPaging(string, IList<KeyValuePair<string, string>>, Dictionary<string, object>, string, HttpContent)
+  href: api/ProKnow.Requestor.html#ProKnow_Requestor_PostAsyncWithPaging_System_String_System_Collections_Generic_IList_System_Collections_Generic_KeyValuePair_System_String_System_String___System_Collections_Generic_Dictionary_System_String_System_Object__System_String_System_Net_Http_HttpContent_
+  commentId: M:ProKnow.Requestor.PostAsyncWithPaging(System.String,System.Collections.Generic.IList{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.Dictionary{System.String,System.Object},System.String,System.Net.Http.HttpContent)
+  name.vb: PostAsyncWithPaging(String, IList(Of KeyValuePair(Of String, String)), Dictionary(Of String, Object), String, HttpContent)
+  fullName: ProKnow.Requestor.PostAsyncWithPaging(string, System.Collections.Generic.IList<System.Collections.Generic.KeyValuePair<string, string>>, System.Collections.Generic.Dictionary<string, object>, string, System.Net.Http.HttpContent)
+  fullName.vb: ProKnow.Requestor.PostAsyncWithPaging(String, System.Collections.Generic.IList(Of System.Collections.Generic.KeyValuePair(Of String, String)), System.Collections.Generic.Dictionary(Of String, Object), String, System.Net.Http.HttpContent)
+  nameWithType: Requestor.PostAsyncWithPaging(string, IList<KeyValuePair<string, string>>, Dictionary<string, object>, string, HttpContent)
+  nameWithType.vb: Requestor.PostAsyncWithPaging(String, IList(Of KeyValuePair(Of String, String)), Dictionary(Of String, Object), String, HttpContent)
+- uid: ProKnow.Requestor.PostAsyncWithPaging*
+  name: PostAsyncWithPaging
+  href: api/ProKnow.Requestor.html#ProKnow_Requestor_PostAsyncWithPaging_
+  commentId: Overload:ProKnow.Requestor.PostAsyncWithPaging
+  isSpec: "True"
+  fullName: ProKnow.Requestor.PostAsyncWithPaging
+  nameWithType: Requestor.PostAsyncWithPaging
 - uid: ProKnow.Requestor.PutAsync(System.String,System.Collections.Generic.IList{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Net.Http.HttpContent)
   name: PutAsync(string, IList<KeyValuePair<string, string>>, HttpContent)
   href: api/ProKnow.Requestor.html#ProKnow_Requestor_PutAsync_System_String_System_Collections_Generic_IList_System_Collections_Generic_KeyValuePair_System_String_System_String___System_Net_Http_HttpContent_
