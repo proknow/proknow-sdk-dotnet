@@ -353,8 +353,16 @@ namespace ProKnow
                         queryParameters["next"] = next;
                     }
                 }
+                             
+                // Create a new StringContent for each request
+                HttpContent requestContent = null;
+                if (content != null)
+                {
+                    requestContent = new StringContent(await content.ReadAsStringAsync(), Encoding.UTF8, "application/json");
+                }
+                
                 var responseContent = string.Empty;
-                var response = await MakeRequest(method, route, queryParameters, headerKeyValuePairs, content);
+                var response = await MakeRequest(method, route, queryParameters, headerKeyValuePairs, requestContent);
                 if (response.Content != null)
                 {
                     responseContent = await response.Content.ReadAsStringAsync();
